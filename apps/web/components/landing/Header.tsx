@@ -32,7 +32,7 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex flex-col">
             <span className="text-xl md:text-2xl font-extrabold tracking-wider text-accent">
-              ELSAAD
+              {company.name}
             </span>
             <span className="text-xs text-muted font-medium">
               {tHeader("logoSubtitle")}

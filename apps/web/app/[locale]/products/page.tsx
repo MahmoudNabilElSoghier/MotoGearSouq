@@ -15,7 +15,7 @@ type PageProps = {
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   return {
-    title: locale === "ar" ? "قطع الغيار | السعد للدراجات النارية" : "Spare Parts | ELSAAD Motorcycle",
+    title: locale === "ar" ? "قطع الغيار | MotoGearSouq" : "Spare Parts | MotoGearSouq",
     description:
       locale === "ar"
         ? "كتالوج قطع الغيار الأصلية — فلاتر، كابلات، بوجيهات، سلاسل وأكثر لكل ماركات الدراجات النارية."

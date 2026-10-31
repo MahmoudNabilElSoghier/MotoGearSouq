@@ -47,16 +47,16 @@ export async function generateMetadata({
       languages: { ar: "/ar", en: "/en" },
     },
     openGraph: {
-      title: "السعد للدراجات النارية",
+      title: "MotoGearSouq",
       description:
         "قطع غيار أصلية، دراجات جديدة ومستعملة، وخدمة صيانة معتمدة من أكبر ماركات العالم. 35+ سنة خبرة.",
       locale: locale === "en" ? "en_US" : "ar_EG",
       type: "website",
-      siteName: "ELSAAD",
+      siteName: "MotoGearSouq",
     },
     twitter: {
       card: "summary_large_image",
-      title: "السعد للدراجات النارية",
+      title: "MotoGearSouq",
       description: "قطع غيار أصلية، دراجات جديدة ومستعملة، وخدمة صيانة معتمدة.",
     },
     robots: {

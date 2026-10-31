@@ -12,9 +12,9 @@ type PageProps = { params: Promise<{ locale: string; slug: string }> };
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, slug } = await params;
   const product = await getProductByCode(slug);
-  if (!product) return { title: locale === "ar" ? "قطعة غير موجودة | السعد للدراجات النارية" : "Part not found | ELSAAD Motorcycle" };
+  if (!product) return { title: locale === "ar" ? "قطعة غير موجودة | MotoGearSouq" : "Part not found | MotoGearSouq" };
   return {
-    title: locale === "ar" ? `${product.name} | قطع الغيار | السعد للدراجات النارية` : `${product.name} | Spare Parts | ELSAAD Motorcycle`,
+    title: locale === "ar" ? `${product.name} | قطع الغيار | MotoGearSouq` : `${product.name} | Spare Parts | MotoGearSouq`,
     description:
       product.description ??
       (locale === "ar"
@@ -32,8 +32,8 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
   const stock = totalStock(product);
   const waText = locale === "ar"
-    ? `مرحبًا، عايز أستفسر عن قطعة "${product.name}" (كود ${product.code}) على موقع السعد للدراجات النارية.`
-    : `Hello, I would like to inquire about "${product.name}" (code ${product.code}) on ELSAAD website.`;
+    ? `مرحبًا، عايز أستفسر عن قطعة "${product.name}" (كود ${product.code}) على موقع MotoGearSouq.`
+    : `Hello, I would like to inquire about "${product.name}" (code ${product.code}) on MotoGearSouq website.`;
   const waHref = `${company.whatsappUrl}?text=${encodeURIComponent(waText)}`;
 
   return (

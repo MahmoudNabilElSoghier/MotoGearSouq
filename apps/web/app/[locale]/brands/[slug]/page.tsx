@@ -11,15 +11,15 @@ type PageProps = { params: Promise<{ locale: string; slug: string }> };
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, slug } = await params;
   const brand = await getBrandBySlug(slug);
-  if (!brand) return { title: locale === "ar" ? "ماركة غير موجودة | السعد للدراجات النارية" : "Brand not found | ELSAAD Motorcycle" };
+  if (!brand) return { title: locale === "ar" ? "ماركة غير موجودة | MotoGearSouq" : "Brand not found | MotoGearSouq" };
   const brandName = brand.nameAr ?? brand.name;
   return {
-    title: locale === "ar" ? `${brandName} | الماركات | السعد للدراجات النارية` : `${brandName} | Brands | ELSAAD Motorcycle`,
+    title: locale === "ar" ? `${brandName} | الماركات | MotoGearSouq` : `${brandName} | Brands | MotoGearSouq`,
     description:
       brand.description ??
       (locale === "ar"
-        ? `موديلات وقطع غيار ${brandName} المتوفرة في السعد للدراجات النارية.`
-        : `Models and spare parts for ${brandName} available at ELSAAD.`),
+        ? `موديلات وقطع غيار ${brandName} المتوفرة في MotoGearSouq.`
+        : `Models and spare parts for ${brandName} available at MotoGearSouq.`),
   };
 }
 

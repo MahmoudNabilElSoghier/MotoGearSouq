@@ -4,9 +4,9 @@ import { Container } from "@/components/ui/Container";
 import { company } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "سياسة الخصوصية | السعد للدراجات النارية",
+  title: "سياسة الخصوصية | MotoGearSouq",
   description:
-    "كيف نجمع بياناتك وكيف نستخدمها عند تواصلك مع موقع السعد للدراجات النارية.",
+    "كيف نجمع بياناتك وكيف نستخدمها عند تواصلك مع موقع MotoGearSouq.",
 };
 
 export default function PrivacyPage() {
@@ -28,7 +28,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-bold text-fg mb-3">مقدمة</h2>
             <p className="text-muted leading-relaxed">
-              نحن في السعد للدراجات النارية نحترم خصوصيتك. توضح هذه السياسة
+              نحن في MotoGearSouq، الشريك الرقمي الرسمي لشركة السعد للدراجات النارية نحترم خصوصيتك. توضح هذه السياسة
               ما نجمعه من بيانات عند استخدامك لموقعنا وكيف نستخدمها ونحميها.
             </p>
           </section>

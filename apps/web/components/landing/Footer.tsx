@@ -7,6 +7,7 @@ import { MessageCircle } from "lucide-react";
 export function Footer() {
   const tFooter = useTranslations("footer");
   const tNav = useTranslations("navigation");
+  const tCommon = useTranslations("common");
 
   const navItems = [
     { label: tNav("home"), href: "/#home" },
@@ -25,12 +26,15 @@ export function Footer() {
           <div className="md:col-span-2 space-y-4">
             <Link href="/" className="inline-block">
               <span className="text-2xl font-extrabold tracking-wider text-accent">
-                ELSAAD
+                {company.name}
               </span>
               <span className="block text-xs text-muted font-medium mt-0.5">
                 {company.name}
               </span>
             </Link>
+            <p className="text-xs text-muted font-medium">
+              {tCommon("tagline")}
+            </p>
             <p className="text-muted text-sm leading-relaxed max-w-sm">
               {tFooter("tagline")}
             </p>
@@ -84,6 +88,7 @@ export function Footer() {
               >
                 <MessageCircle className="w-5 h-5" />
               </a>
+              {/* TODO: Replace with motogearsouq social handles once created */}
               <a
                 href="https://facebook.com/elsaad"
                 target="_blank"

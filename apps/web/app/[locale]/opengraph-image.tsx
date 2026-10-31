@@ -70,7 +70,7 @@ export default async function Image({ params }: Props) {
             fontWeight: 700,
           }}
         >
-          ELSAAD MOTORCYCLE
+          MotoGearSouq
         </div>
 
         {/* Center Content */}
@@ -90,7 +90,7 @@ export default async function Image({ params }: Props) {
               lineHeight: 1.1,
             }}
           >
-            {isAr ? "السعد للدراجات النارية" : "ELSAAD Motorcycle"}
+            {isAr ? "الشريك الرقمي الرسمي للسعد" : "MotoGearSouq"}
           </div>
           <div
             style={{
@@ -113,8 +113,8 @@ export default async function Image({ params }: Props) {
             color: "#6B7280",
           }}
         >
-          <div>{isAr ? "السعد للدراجات النارية — 35 عاماً من الخبرة" : "35 Years of Excellence in Egypt"}</div>
-          <div style={{ color: "#E63946", fontWeight: 600 }}>elsaad.com</div>
+          <div>{isAr ? "الشريك الرقمي الرسمي للسعد — 35 عاماً من الخبرة" : "35 Years of Excellence in Egypt"}</div>
+          <div style={{ color: "#E63946", fontWeight: 600 }}>motogearsouq.com</div>
         </div>
       </div>
     ),

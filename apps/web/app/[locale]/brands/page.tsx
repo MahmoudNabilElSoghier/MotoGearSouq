@@ -10,11 +10,11 @@ type PageProps = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
   return {
-    title: locale === "ar" ? "الماركات | السعد للدراجات النارية" : "Brands | ELSAAD Motorcycle",
+    title: locale === "ar" ? "الماركات | MotoGearSouq" : "Brands | MotoGearSouq",
     description:
       locale === "ar"
-        ? "ماركات الدراجات النارية وقطع غيارها المتوفرة في السعد — SYM، Kymco، Haojue وغيرها."
-        : "Motorcycle brands and spare parts available at ELSAAD.",
+        ? "ماركات الدراجات النارية وقطع غيارها المتوفرة في MotoGearSouq — SYM، Kymco، Haojue وغيرها."
+        : "Motorcycle brands and spare parts available at MotoGearSouq.",
   };
 }
 

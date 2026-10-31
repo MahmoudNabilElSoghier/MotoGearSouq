@@ -64,7 +64,7 @@ export default function AdminLoginPage() {
                 type="email"
                 {...register("email")}
                 className="w-full bg-bg border border-border rounded-lg py-2.5 ps-10 pe-4 text-fg text-sm focus:outline-none focus:border-accent transition-colors"
-                placeholder="admin@elsaad.com"
+                placeholder="admin@motogearsouq.com"
               />
             </div>
             {errors.email && <p className="mt-1 text-xs text-red-400">{errors.email.message}</p>}

@@ -3,9 +3,9 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
-  title: "الشروط والأحكام | السعد للدراجات النارية",
+  title: "الشروط والأحكام | MotoGearSouq",
   description:
-    "شروط وأحكام استخدام موقع السعد للدراجات النارية ومحافظتنا على حقوق الملكية الفكرية.",
+    "شروط وأحكام استخدام موقع MotoGearSouq ومحافظتنا على حقوق الملكية الفكرية.",
 };
 
 export default function TermsPage() {
@@ -48,7 +48,7 @@ export default function TermsPage() {
             </h2>
             <p className="text-muted leading-relaxed">
               جميع محتويات الموقع من نصوص وصور وشعارات وعلامات تجارية مملوكة
-              للسعد للدراجات النارية أو مرخصة لها. لا يجوز نسخ أو إعادة نشر
+              لـMotoGearSouq أو مرخصة لها. لا يجوز نسخ أو إعادة نشر
               أي محتوى دون إذن كتابي مسبق.
             </p>
           </section>

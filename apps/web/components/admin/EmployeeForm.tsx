@@ -138,7 +138,7 @@ export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel
           <Input label={t("form.nameEn")} {...register("nameEn")} error={errors.nameEn?.message} placeholder="Ahmed Mohamed" />
           <Input label={t("form.nationalId")} {...register("nationalId")} error={errors.nationalId?.message} placeholder="29501010101010" />
           <Input label={t("form.phone")} {...register("phone")} error={errors.phone?.message} placeholder="01001234567" />
-          <Input label={t("form.email")} {...register("email")} error={errors.email?.message} placeholder="ahmed@elsaad.com" />
+          <Input label={t("form.email")} {...register("email")} error={errors.email?.message} placeholder="ahmed@motogearsouq.com" />
 
           <div>
             <label className="block text-sm font-medium text-fg mb-1">{t("form.role")}</label>

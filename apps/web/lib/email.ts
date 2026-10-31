@@ -26,12 +26,12 @@ export async function sendContactNotification(
 
   try {
     await resend.emails.send({
-      from: `ELSAAD Website <${from}>`,
+      from: `MotoGearSouq <${from}>`,
       to,
       subject: `رسالة جديدة من ${data.name}`,
       html: `
         <div dir="rtl" style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #E63946;">رسالة جديدة من موقع السعد</h2>
+          <h2 style="color: #E63946;">رسالة جديدة من موقع MotoGearSouq</h2>
           <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
             <tr>
               <td style="padding: 10px; border: 1px solid #ddd; background: #f9f9f9; width: 30%;"><strong>الاسم</strong></td>
@@ -47,7 +47,7 @@ export async function sendContactNotification(
             </tr>
           </table>
           <p style="color: #666; font-size: 12px;">
-            أُرسلت من elsaad.com في ${new Date().toLocaleString("ar-EG")}
+            أُرسلت من motogearsouq.com في ${new Date().toLocaleString("ar-EG")}
           </p>
         </div>
       `,

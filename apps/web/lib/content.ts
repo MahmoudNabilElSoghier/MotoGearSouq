@@ -72,14 +72,14 @@ export const branches: Branch[] = [
 ];
 
 export const meta: PageMeta = {
-  title: "السعد للدراجات النارية | ELSAAD Motorcycle",
+  title: "MotoGearSouq — الشريك الرقمي الرسمي للسعد",
   description:
     "أكثر من 35 سنة خبرة في الدراجات النارية وقطع الغيار الأصلية. 12 فرع في مصر. ضمان، تقسيط، صيانة، وتوصيل لكل المحافظات.",
   keywords: [
     "دراجات نارية",
     "موتوسيكلات",
     "قطع غيار",
-    "السعد",
+    "MotoGearSouq",
     "ELSAAD",
     "motorcycle",
     "Egypt",

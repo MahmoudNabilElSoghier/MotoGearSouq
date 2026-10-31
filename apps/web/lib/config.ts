@@ -4,9 +4,11 @@ import type { CompanyConfig } from "@/types";
 const WHATSAPP_NUMBER = "201000000000";
 
 export const company: CompanyConfig = {
-  name: "السعد للدراجات النارية",
-  nameEn: "ELSAAD Motorcycle",
-  tagline: "شريكك الموثوق في عالم الدراجات النارية",
+  name: "MotoGearSouq",
+  nameEn: "MotoGearSouq",
+  tagline: "الشريك الرقمي الرسمي لشركة السعد للدراجات النارية",
+  partnerName: "شركة السعد للدراجات النارية",
+  partnerNameEn: "ELSAAD Motorcycle",
   established: 1990,
   yearsInBusiness: 35,
   branchesCount: 12,
@@ -17,6 +19,9 @@ export const company: CompanyConfig = {
   whatsappNumber: WHATSAPP_NUMBER,
   whatsappUrl: `https://wa.me/${WHATSAPP_NUMBER}`,
   // TODO: replace with real number from client before launch
-  email: "info@elsaadmotorcycle.com",
+  email: "info@motogearsouq.com",
+  // Partner (ELSAAD) mailbox kept as fallback until MotoGearSouq email hosting is ready
+  // TODO: Set up info@motogearsouq.com email hosting before launch
+  partnerEmail: "info@elsaadmotorcycle.com",
   address: "شارع جامعة الدول العربية، المهندسين، الجيزة",
 };

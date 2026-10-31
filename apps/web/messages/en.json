@@ -1,9 +1,10 @@
 {
   "common": {
     "skipToContent": "Skip to main content",
-    "brandName": "ELSAAD Motorcycle",
-    "brandShort": "Motorcycles",
-    "tagline": "Your trusted partner in the world of motorcycles",
+    "brandName": "MotoGearSouq",
+    "brandShort": "MotoGearSouq",
+    "tagline": "Official Digital Partner of ELSAAD Motorcycle",
+    "partnerName": "ELSAAD Motorcycle",
     "price": "{price} EGP",
     "loading": "Loading...",
     "save": "Save",
@@ -59,7 +60,7 @@
   "header": {
     "navAria": "Main navigation",
     "menuToggle": "Menu",
-    "logoSubtitle": "Motorcycles"
+    "logoSubtitle": "Official Digital Partner of ELSAAD"
   },
   "hero": {
     "headline": "Performance, genuine parts, ELSAAD trust",
@@ -97,7 +98,7 @@
     }
   },
   "whyUs": {
-    "title": "Why choose ELSAAD?",
+    "title": "Why choose MotoGearSouq?",
     "subtitle": "Because we offer more than a motorcycle — we offer a complete experience that starts at selection and continues after the sale",
     "items": {
       "warranty": {
@@ -215,8 +216,8 @@
     }
   },
   "footer": {
-    "tagline": "ELSAAD Motorcycle — your trusted partner since 1990",
-    "copyright": "© 2025 ELSAAD Motorcycle. All rights reserved.",
+    "tagline": "Official Digital Partner of ELSAAD Motorcycle",
+    "copyright": "© 2025 MotoGearSouq — Official Digital Partner of ELSAAD Motorcycle",
     "quickLinks": "Quick links",
     "followUs": "Follow us",
     "privacy": "Privacy Policy",
@@ -229,13 +230,13 @@
     }
   },
   "meta": {
-    "title": "ELSAAD Motorcycle | Genuine Parts & Motorcycles",
+    "title": "MotoGearSouq | Official Digital Partner of ELSAAD",
     "description": "Over 35 years of experience in motorcycles and genuine spare parts. 12 branches across Egypt. Warranty, installments, maintenance, and delivery to every governorate.",
-    "ogTitle": "ELSAAD Motorcycle",
+    "ogTitle": "MotoGearSouq",
     "ogDescription": "Genuine spare parts, new and used motorcycles, and certified maintenance service from the world's top brands. 35+ years of experience."
   },
   "products": {
-    "metaTitle": "Spare Parts | ELSAAD Motorcycle",
+    "metaTitle": "Spare Parts | MotoGearSouq",
     "metaDescription": "Catalog of genuine spare parts — filters, cables, spark plugs, chains and more for every motorcycle brand.",
     "heading": "Spare Parts",
     "countLine": "Parts in catalog: {count} — search by name or code, or filter by brand and category.",
@@ -250,11 +251,11 @@
     "paginationAria": "Product pages"
   },
   "productDetail": {
-    "metaNotFound": "Part not found | ELSAAD Motorcycle",
-    "metaTitle": "{name} | Spare Parts | ELSAAD Motorcycle",
+    "metaNotFound": "Part not found | MotoGearSouq",
+    "metaTitle": "{name} | Spare Parts | MotoGearSouq",
     "metaDescription": "{name} — code {code}{oemPart}Available at ELSAAD Motorcycle branches.",
     "metaOem": ", OEM code {oem}",
-    "whatsappText": "Hello, I would like to inquire about the part \"{name}\" (code {code}) on the ELSAAD Motorcycle website.",
+    "whatsappText": "Hello, I would like to inquire about the part \"{name}\" (code {code}) on the MotoGearSouq website.",
     "backToParts": "All spare parts",
     "descriptionTitle": "Description",
     "fitsTitle": "Fits",
@@ -270,23 +271,23 @@
     "branchesLink": "our branches"
   },
   "brandsPage": {
-    "metaTitle": "Brands | ELSAAD Motorcycle",
-    "metaDescription": "Motorcycle brands and their spare parts available at ELSAAD — SYM, Kymco, Haojue and more.",
+    "metaTitle": "Brands | MotoGearSouq",
+    "metaDescription": "Motorcycle brands and their spare parts available at MotoGearSouq — SYM, Kymco, Haojue and more.",
     "heading": "Brands",
     "countLine": "Brands: {count} — choose your brand to see models and spare parts.",
     "empty": "Brands will appear here soon."
   },
   "brandDetail": {
-    "metaNotFound": "Brand not found | ELSAAD Motorcycle",
-    "metaTitle": "{name} | Brands | ELSAAD Motorcycle",
-    "metaDescription": "Models and spare parts for {name} available at ELSAAD Motorcycle.",
+    "metaNotFound": "Brand not found | MotoGearSouq",
+    "metaTitle": "{name} | Brands | MotoGearSouq",
+    "metaDescription": "Models and spare parts for {name} available at MotoGearSouq.",
     "backToBrands": "All brands",
     "viewParts": "View spare parts ←",
     "empty": "Models for this brand will appear here soon."
   },
   "modelDetail": {
-    "metaNotFound": "Model not found | ELSAAD Motorcycle",
-    "metaTitle": "{name} | Spare Parts | ELSAAD Motorcycle",
+    "metaNotFound": "Model not found | MotoGearSouq",
+    "metaTitle": "{name} | Spare Parts | MotoGearSouq",
     "metaDescription": "Spare parts compatible with {name} — available at ELSAAD Motorcycle branches.",
     "breadcrumbAria": "Breadcrumb",
     "crumbBrands": "Brands",
@@ -296,14 +297,14 @@
     "emptyAfter": "and we will get them for you."
   },
   "privacy": {
-    "metaTitle": "Privacy Policy | ELSAAD Motorcycle",
-    "metaDescription": "How we collect and use your data when you contact the ELSAAD Motorcycle website.",
+    "metaTitle": "Privacy Policy | MotoGearSouq",
+    "metaDescription": "How we collect and use your data when you contact the MotoGearSouq website.",
     "heading": "Privacy Policy",
     "lastUpdated": "Last updated: {date}",
     "sections": {
       "intro": {
         "title": "Introduction",
-        "body": "At ELSAAD Motorcycle we respect your privacy. This policy explains what data we collect when you use our website, how we use it, and how we protect it."
+        "body": "At MotoGearSouq we respect your privacy. This policy explains what data we collect when you use our website, how we use it, and how we protect it."
       },
       "dataCollected": {
         "title": "Data we collect",
@@ -332,8 +333,8 @@
     }
   },
   "terms": {
-    "metaTitle": "Terms and Conditions | ELSAAD Motorcycle",
-    "metaDescription": "Terms and conditions for using the ELSAAD Motorcycle website and our protection of intellectual property rights.",
+    "metaTitle": "Terms and Conditions | MotoGearSouq",
+    "metaDescription": "Terms and conditions for using the MotoGearSouq website and our protection of intellectual property rights.",
     "heading": "Terms and Conditions",
     "lastUpdated": "Last updated: {date}",
     "sections": {
@@ -347,7 +348,7 @@
       },
       "ip": {
         "title": "Intellectual property",
-        "body": "All content on this website, including texts, images, logos, and trademarks, is owned by or licensed to ELSAAD Motorcycle. Reproducing or republishing any content without prior written permission is prohibited."
+        "body": "All content on this website, including texts, images, logos, and trademarks, is owned by or licensed to MotoGearSouq. Reproducing or republishing any content without prior written permission is prohibited."
       },
       "liability": {
         "title": "Limitation of liability",
@@ -374,12 +375,12 @@
   },
   "admin": {
     "layout": {
-      "metaTitle": "Admin Panel | ELSAAD Motorcycle",
-      "panelName": "ELSAAD Admin",
+      "metaTitle": "Admin Panel | MotoGearSouq",
+      "panelName": "MotoGearSouq Admin",
       "demoBadge": "Preview with demo data"
     },
     "login": {
-      "heading": "ELSAAD Control Panel",
+      "heading": "MotoGearSouq Control Panel",
       "subtitle": "Sign in for administration and planning system",
       "emailLabel": "Email address",
       "passwordLabel": "Password",
@@ -420,8 +421,8 @@
       "statusCancelled": "Cancelled"
     },
     "products": {
-      "metaNew": "New product | ELSAAD Motorcycle",
-      "metaEdit": "Edit product | ELSAAD Motorcycle",
+      "metaNew": "New product | MotoGearSouq",
+      "metaEdit": "Edit product | MotoGearSouq",
       "newTitle": "New product",
       "editTitle": "Edit product",
       "backToList": "Back to products",

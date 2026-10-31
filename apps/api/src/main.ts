@@ -15,8 +15,8 @@ async function bootstrap() {
   });
 
   const config = new DocumentBuilder()
-    .setTitle("ELSAAD API")
-    .setDescription("Business API for the ELSAAD motorcycle platform")
+    .setTitle("MotoGearSouq API")
+    .setDescription("Official Digital Partner of ELSAAD Motorcycle")
     .setVersion("0.1.0")
     .build();
   const document = SwaggerModule.createDocument(app, config);

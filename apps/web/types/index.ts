@@ -2,6 +2,8 @@ export interface CompanyConfig {
   name: string;
   nameEn: string;
   tagline: string;
+  partnerName: string;
+  partnerNameEn: string;
   established: number;
   yearsInBusiness: number;
   branchesCount: number;
@@ -11,6 +13,7 @@ export interface CompanyConfig {
   whatsappNumber: string;
   whatsappUrl: string;
   email: string;
+  partnerEmail: string;
   address: string;
 }
 

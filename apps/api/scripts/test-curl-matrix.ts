@@ -51,8 +51,8 @@ function extractCookie(setCookieHeader: string | string[] | undefined, name: str
 
 async function runMatrix() {
   console.log("=== STARTING CURL MATRIX AUTOMATED SCRIPT ====");
-  const bootstrapPassword = process.env.ADMIN_BOOTSTRAP_PASSWORD || "ElsaadSecureAdmin2026!";
-  const bootstrapEmail = process.env.ADMIN_BOOTSTRAP_EMAIL || "admin@elsaad.com";
+  const bootstrapPassword = process.env.ADMIN_BOOTSTRAP_PASSWORD || "MotoGearSouqAdmin2026!";
+  const bootstrapEmail = process.env.ADMIN_BOOTSTRAP_EMAIL || "admin@motogearsouq.com";
 
   let apiProcess: ChildProcess | null = null;
 
@@ -194,7 +194,7 @@ async function runMatrix() {
 
     // STEP 9: Rate limit test: 6 wrong logins -> 401x5 then 429
     console.log("\n[Step 9] Rate limit test (5 fails/5min -> 429)...");
-    const testEmail = "ratelimit.test@elsaad.com";
+    const testEmail = "ratelimit.test@motogearsouq.com";
     let lastStatus = 0;
     for (let i = 1; i <= 6; i++) {
       const r = await request("POST", "/api/auth/login", {}, { email: testEmail, password: "wrongpassword" });

@@ -160,6 +160,13 @@ Routes under `/admin` (RTL sidebar layout):
 - Mock mode shows a "معاينة بيانات تجريبية" badge; all admin routes carry
   `noindex` metadata.
 
+**Two admin accounts exist:**
+
+- `admin@motogearsouq.com` (primary; note: email hosting pending)
+- `admin@elsaad.com` (backup; email hosting active)
+
+Delete the backup after email hosting for @motogearsouq.com is set up.
+
 ## Documents & Storage
 
 The API exposes a documents module (upload ≤50 MB PDF/JPEG/PNG/WebP,

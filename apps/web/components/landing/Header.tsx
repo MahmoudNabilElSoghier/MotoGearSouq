@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { LocaleSwitcher } from "@/components/ui/LocaleSwitcher";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { CartIcon } from "@/components/cart/CartIcon";
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,6 +55,7 @@ export function Header() {
 
           {/* Desktop Actions (Switchers + WhatsApp) */}
           <div className="hidden md:flex items-center gap-3">
+            <CartIcon />
             <LocaleSwitcher />
             <ThemeToggle />
             <Button variant="primary" size="sm" asChild>
@@ -106,6 +108,7 @@ export function Header() {
           </nav>
           <div className="flex items-center justify-between pt-2 border-t border-border">
             <div className="flex items-center gap-2">
+              <CartIcon />
               <LocaleSwitcher />
               <ThemeToggle />
             </div>

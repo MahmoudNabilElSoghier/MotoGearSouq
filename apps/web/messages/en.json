@@ -654,5 +654,48 @@
     "common": {
       "validationFailed": "Validation failed — {details}"
     }
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "emptyCta": "Browse Spare Parts",
+    "subtotal": "Subtotal",
+    "tax": "Tax",
+    "total": "Total",
+    "checkout": "Checkout",
+    "remove": "Remove",
+    "quantity": "Quantity"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "name": "Full Name",
+    "phone": "Phone Number",
+    "email": "Email",
+    "address": "Street Address",
+    "city": "City",
+    "governorate": "Governorate",
+    "notes": "Delivery Notes",
+    "orderSummary": "Order Summary",
+    "confirm": "Confirm Order",
+    "submitting": "Placing order...",
+    "success": "Order placed successfully",
+    "errorGeneric": "An error occurred"
+  },
+  "order": {
+    "title": "Order Tracking",
+    "orderNumber": "Order Number",
+    "status": "Order Status",
+    "total": "Total",
+    "estimatedDelivery": "Estimated Delivery",
+    "tracking": "Tracking",
+    "itemsList": "Items",
+    "contactWhatsApp": "Chat on WhatsApp",
+    "statuses": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    }
   }
 }

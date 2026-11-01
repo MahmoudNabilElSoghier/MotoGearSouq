@@ -654,5 +654,48 @@
     "common": {
       "validationFailed": "فشل التحقق — {details}"
     }
+  },
+  "cart": {
+    "title": "سلة الشراء",
+    "empty": "سلة الشراء فارغة",
+    "emptyCta": "تصفح قطع الغيار",
+    "subtotal": "المجموع الفرعي",
+    "tax": "الضريبة",
+    "total": "الإجمالي",
+    "checkout": "إتمام الطلب",
+    "remove": "حذف",
+    "quantity": "الكمية"
+  },
+  "checkout": {
+    "title": "إتمام الطلب",
+    "name": "الاسم الكامل",
+    "phone": "رقم الهاتف",
+    "email": "البريد الإلكتروني",
+    "address": "العنوان بالتفصيل",
+    "city": "المدينة",
+    "governorate": "المحافظة",
+    "notes": "ملاحظات التوصيل",
+    "orderSummary": "ملخص الطلب",
+    "confirm": "تأكيد الطلب",
+    "submitting": "جاري تأكيد الطلب...",
+    "success": "تم تأكيد الطلب بنجاح",
+    "errorGeneric": "حدث خطأ ما"
+  },
+  "order": {
+    "title": "تتبع الطلب",
+    "orderNumber": "رقم الطلب",
+    "status": "حالة الطلب",
+    "total": "الإجمالي",
+    "estimatedDelivery": "التوصيل المتوقع",
+    "tracking": "تتبع",
+    "itemsList": "المنتجات",
+    "contactWhatsApp": "تواصل عبر واتساب",
+    "statuses": {
+      "pending": "قيد المراجعة",
+      "confirmed": "مؤكد",
+      "shipped": "تم الشحن",
+      "delivered": "تم التوصيل",
+      "cancelled": "ملغي"
+    }
   }
 }

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { company } from "@/lib/config";
 import { getProductByCode, totalStock } from "@motogearsouq/api-client";
+import { ProductAddToCart } from "@/components/cart/ProductAddToCart";
 
 export const dynamic = "force-dynamic";
 
@@ -163,26 +164,10 @@ export default async function ProductDetailPage({ params }: PageProps) {
           </div>
 
           <aside className="space-y-4 lg:sticky lg:top-6 lg:self-start">
-            <div className="rounded-xl border border-border bg-card p-6">
-              <p className="text-sm text-muted">{locale === "ar" ? "سعر التجزئة" : "Retail price"}</p>
-              <p className="mt-1 text-3xl font-extrabold text-fg">
-                {product.retailPrice != null ? (
-                  <span dir="ltr">
-                    {nf.format(product.retailPrice)} {locale === "ar" ? "ج.م" : "EGP"}
-                  </span>
-                ) : (
-                  (locale === "ar" ? "عند التواصل" : "Contact for price")
-                )}
-              </p>
-              <p className="mt-1 text-xs text-muted">
-                {locale === "ar" ? (
-                  <>لا يشمل ض.ق.م (<span dir="ltr">{nf.format(Number(product.taxRate) * 100)}</span>%)</>
-                ) : (
-                  <>Excludes VAT (<span dir="ltr">{nf.format(Number(product.taxRate) * 100)}</span>%)</>
-                )}
-              </p>
+            <ProductAddToCart product={{ id: product.id, code: product.code, name: product.name, retailPrice: product.retailPrice, taxRate: product.taxRate }} />
 
-              <div className="mt-4 flex items-center gap-2 text-sm">
+            <div className="rounded-xl border border-border bg-card p-6">
+              <div className="flex items-center gap-2 text-sm">
                 <span
                   className={`inline-block h-2.5 w-2.5 rounded-full ${
                     stock > 0 ? "bg-emerald-400" : "bg-red-400"
@@ -204,7 +189,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 href={waHref}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-accent-strong px-6 py-3 font-semibold text-white transition-colors hover:bg-accent-strong/90"
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-accent-strong px-6 py-3 font-semibold text-white transition-colors hover:bg-accent-strong/90"
               >
                 {locale === "ar" ? "استعلم على واتساب" : "Inquire on WhatsApp"}
               </a>

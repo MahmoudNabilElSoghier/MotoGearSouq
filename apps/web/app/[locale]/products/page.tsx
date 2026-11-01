@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Input } from "@/components/ui/Input";
 import { getBrands, getPartCategories, getProducts, totalStock } from "@motogearsouq/api-client";
+import { AddToCartButton } from "@/components/cart/AddToCartButton";
 
 export const dynamic = "force-dynamic";
 
@@ -159,7 +160,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
                         .filter(Boolean)
                         .join(" · ")}
                     </p>
-                    <div className="mt-auto flex items-end justify-between pt-2">
+                    <div className="mt-auto flex items-center justify-between pt-2">
                       <p className="text-lg font-extrabold text-fg">
                         {product.retailPrice != null ? (
                           <span dir="ltr">
@@ -169,9 +170,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
                           (locale === "ar" ? "عند التواصل" : "Contact for price")
                         )}
                       </p>
-                      <span className="text-sm font-semibold text-accent">
-                        {locale === "ar" ? "التفاصيل" : "Details"}
-                      </span>
+                      <AddToCartButton product={{ id: product.id, code: product.code, name: product.name, retailPrice: product.retailPrice, taxRate: product.taxRate }} />
                     </div>
                   </Link>
                 </li>

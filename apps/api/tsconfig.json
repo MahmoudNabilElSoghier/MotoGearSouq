@@ -1,5 +1,5 @@
 {
-  "extends": "@elsaad/config/typescript/base.json",
+  "extends": "@motogearsouq/config/typescript/base.json",
   "compilerOptions": {
     "module": "commonjs",
     "moduleResolution": "node10",

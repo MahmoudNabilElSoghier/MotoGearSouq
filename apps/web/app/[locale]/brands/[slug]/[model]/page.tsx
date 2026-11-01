@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
-import { getModelBySlug, totalStock } from "@elsaad/api-client";
+import { getModelBySlug, totalStock } from "@motogearsouq/api-client";
 
 export const dynamic = "force-dynamic";
 

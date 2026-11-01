@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ProductForm } from "@/components/admin/ProductForm";
-import { getBrands, getPartCategories } from "@elsaad/api-client";
+import { getBrands, getPartCategories } from "@motogearsouq/api-client";
 import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata({

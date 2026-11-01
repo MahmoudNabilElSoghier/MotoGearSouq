@@ -17,7 +17,7 @@ import type {
   UpdateBranchInput,
   CreateEmployeeInput,
   UpdateEmployeeInput,
-} from "@elsaad/shared";
+} from "@motogearsouq/shared";
 import { apiGet, apiGetOrNull, apiSend, type ApiResponse } from "./client";
 
 export interface ProductFilter {

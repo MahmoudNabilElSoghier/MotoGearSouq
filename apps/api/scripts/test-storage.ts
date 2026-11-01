@@ -1,7 +1,7 @@
 // Phase 7 storage smoke test. Exercises whichever driver STORAGE_DRIVER selects
 // (default: local). For minio it exits 0 with SKIPPED when the server is
 // unreachable, so CI/dev machines without Docker stay green:
-//   pnpm --filter @elsaad/api test:storage
+//   pnpm --filter @motogearsouq/api test:storage
 import "dotenv/config";
 import { ConfigService } from "@nestjs/config";
 import { LocalStorageProvider } from "../src/storage/local.provider";

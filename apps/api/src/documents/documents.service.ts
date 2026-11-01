@@ -1,6 +1,6 @@
 import { randomUUID, createHash } from "node:crypto";
 import { ConflictException, Inject, Injectable, NotFoundException } from "@nestjs/common";
-import { mockProducts } from "@elsaad/shared";
+import { mockProducts } from "@motogearsouq/shared";
 import { withDb, type DbResult } from "../common/with-db";
 import { PrismaService } from "../prisma/prisma.service";
 import { StorageService } from "../storage/storage.service";

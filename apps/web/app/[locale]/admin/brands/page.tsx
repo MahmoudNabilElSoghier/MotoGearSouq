@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { BrandForm } from "@/components/admin/BrandForm";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { FormBanner } from "@/components/admin/FormBanner";
-import { getBrands, deleteBrand } from "@elsaad/api-client";
-import type { Brand } from "@elsaad/shared";
+import { getBrands, deleteBrand } from "@motogearsouq/api-client";
+import type { Brand } from "@motogearsouq/shared";
 import { useLocale, useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 

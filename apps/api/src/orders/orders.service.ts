@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { fromPrismaOrder, mockOrders } from "@elsaad/shared";
-import type { Order } from "@elsaad/shared";
+import { fromPrismaOrder, mockOrders } from "@motogearsouq/shared";
+import type { Order } from "@motogearsouq/shared";
 import { withDb, type DbResult } from "../common/with-db";
 import { PrismaService } from "../prisma/prisma.service";
 

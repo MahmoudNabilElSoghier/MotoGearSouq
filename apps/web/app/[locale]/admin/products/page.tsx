@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { FormBanner } from "@/components/admin/FormBanner";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
-import { getProducts, deleteProduct, totalStock, type ProductPage } from "@elsaad/api-client";
-import type { Product } from "@elsaad/shared";
+import { getProducts, deleteProduct, totalStock, type ProductPage } from "@motogearsouq/api-client";
+import type { Product } from "@motogearsouq/shared";
 import { Loader2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 

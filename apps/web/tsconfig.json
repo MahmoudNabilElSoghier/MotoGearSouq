@@ -1,5 +1,5 @@
 {
-  "extends": "@elsaad/config/typescript/next.json",
+  "extends": "@motogearsouq/config/typescript/next.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

@@ -4,8 +4,8 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin("./i18n.ts");
 
 const nextConfig: NextConfig = {
-  // @elsaad/* packages ship TypeScript source (no build step) — compile them here.
-  transpilePackages: ["@elsaad/shared", "@elsaad/api-client"],
+  // @motogearsouq/* packages ship TypeScript source (no build step) — compile them here.
+  transpilePackages: ["@motogearsouq/shared", "@motogearsouq/api-client"],
   async rewrites() {
     const origin = process.env.API_ORIGIN ?? "http://localhost:4000";
     return [{ source: "/api/:path*", destination: `${origin}/api/:path*` }];

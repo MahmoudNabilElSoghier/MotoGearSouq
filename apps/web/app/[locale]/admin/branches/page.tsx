@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getBranches } from "@elsaad/api-client";
+import { getBranches } from "@motogearsouq/api-client";
 import { BranchForm } from "@/components/admin/BranchForm";
 import { FormBanner } from "@/components/admin/FormBanner";
-import type { Branch } from "@elsaad/shared";
+import type { Branch } from "@motogearsouq/shared";
 import { Button } from "@/components/ui/Button";
 import { Loader2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";

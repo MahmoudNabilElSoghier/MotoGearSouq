@@ -38,7 +38,7 @@ importers:
       '@aws-sdk/s3-request-presigner':
         specifier: ^3.1158.0
         version: 3.1158.0
-      '@elsaad/shared':
+      '@motogearsouq/shared':
         specifier: workspace:*
         version: link:../../packages/shared
       '@nestjs/common':
@@ -75,12 +75,12 @@ importers:
         specifier: ^4.6.7
         version: 4.6.7
     devDependencies:
-      '@elsaad/config':
-        specifier: workspace:*
-        version: link:../../packages/config
       '@eslint/eslintrc':
         specifier: ^3
         version: 3.3.7
+      '@motogearsouq/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@types/multer':
         specifier: ^2.3.0
         version: 2.3.0
@@ -120,15 +120,15 @@ importers:
 
   apps/web:
     dependencies:
-      '@elsaad/api-client':
-        specifier: workspace:*
-        version: link:../../packages/api-client
-      '@elsaad/shared':
-        specifier: workspace:*
-        version: link:../../packages/shared
       '@hookform/resolvers':
         specifier: ^6.0.1
         version: 6.0.2(@standard-schema/spec@1.1.0)(class-transformer@0.5.1)(class-validator@0.14.4)(react-hook-form@7.91.0(@types/react@19.3.0)(react@19.3.1))(zod@4.6.7)
+      '@motogearsouq/api-client':
+        specifier: workspace:*
+        version: link:../../packages/api-client
+      '@motogearsouq/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@next/third-parties':
         specifier: ^15.5.0
         version: 15.5.28(next@15.5.28(@types/node@20.19.43)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react@19.3.1)
@@ -166,7 +166,7 @@ importers:
         specifier: ^4.6.7
         version: 4.6.7
     devDependencies:
-      '@elsaad/config':
+      '@motogearsouq/config':
         specifier: workspace:*
         version: link:../../packages/config
       '@tailwindcss/postcss':
@@ -193,11 +193,11 @@ importers:
 
   packages/api-client:
     dependencies:
-      '@elsaad/shared':
+      '@motogearsouq/shared':
         specifier: workspace:*
         version: link:../shared
     devDependencies:
-      '@elsaad/config':
+      '@motogearsouq/config':
         specifier: workspace:*
         version: link:../config
       eslint:
@@ -215,7 +215,7 @@ importers:
         specifier: ^4.6.7
         version: 4.6.7
     devDependencies:
-      '@elsaad/config':
+      '@motogearsouq/config':
         specifier: workspace:*
         version: link:../config
 

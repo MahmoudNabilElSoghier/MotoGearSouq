@@ -10,7 +10,7 @@ export function parseOpeningHours(value: unknown): OpeningHours | null {
   if (value == null) return null;
   const parsed = openingHoursSchema.safeParse(value);
   if (parsed.success) return parsed.data;
-  console.warn("[@elsaad/shared] Invalid Branch.openingHours JSON, coercing to null");
+  console.warn("[@motogearsouq/shared] Invalid Branch.openingHours JSON, coercing to null");
   return null;
 }
 

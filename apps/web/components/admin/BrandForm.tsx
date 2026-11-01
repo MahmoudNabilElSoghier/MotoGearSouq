@@ -6,8 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { FormBanner } from "./FormBanner";
-import { brandFormSchema, type BrandFormValues, type UpdateBrandInput, type Brand } from "@elsaad/shared";
-import { createBrand, updateBrand, ApiError } from "@elsaad/api-client";
+import { brandFormSchema, type BrandFormValues, type UpdateBrandInput, type Brand } from "@motogearsouq/shared";
+import { createBrand, updateBrand, ApiError } from "@motogearsouq/api-client";
 import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 

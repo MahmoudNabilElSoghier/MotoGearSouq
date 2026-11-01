@@ -1,5 +1,5 @@
 {
-  "name": "@elsaad/api-client",
+  "name": "@motogearsouq/api-client",
   "version": "0.0.1",
   "private": true,
   "main": "./src/index.ts",
@@ -9,10 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@elsaad/shared": "workspace:*"
+    "@motogearsouq/shared": "workspace:*"
   },
   "devDependencies": {
-    "@elsaad/config": "workspace:*",
+    "@motogearsouq/config": "workspace:*",
     "eslint": "^9.39.5",
     "typescript": "^5"
   }

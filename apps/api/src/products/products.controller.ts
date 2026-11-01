@@ -12,7 +12,7 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { ApiHeader, ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
-import { productFormSchema, type ProductFormValues } from "@elsaad/shared";
+import { productFormSchema, type ProductFormValues } from "@motogearsouq/shared";
 import { AdminAuthGuard } from "../common/guards/admin-auth.guard";
 import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe";
 import { ProductsService, type ProductBody, type ProductFilter } from "./products.service";

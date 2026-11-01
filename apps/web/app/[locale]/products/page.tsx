@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Input } from "@/components/ui/Input";
-import { getBrands, getPartCategories, getProducts, totalStock } from "@elsaad/api-client";
+import { getBrands, getPartCategories, getProducts, totalStock } from "@motogearsouq/api-client";
 
 export const dynamic = "force-dynamic";
 

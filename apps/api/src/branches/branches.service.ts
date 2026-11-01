@@ -1,6 +1,6 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from "@nestjs/common";
-import { fromPrismaBranch, mockBranches, mockInventory } from "@elsaad/shared";
-import type { Branch, CreateBranchInput, UpdateBranchInput } from "@elsaad/shared";
+import { fromPrismaBranch, mockBranches, mockInventory } from "@motogearsouq/shared";
+import type { Branch, CreateBranchInput, UpdateBranchInput } from "@motogearsouq/shared";
 import { withDb, type DbResult } from "../common/with-db";
 import { toDomainError } from "../common/prisma-errors";
 import { PrismaService } from "../prisma/prisma.service";

@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { CategoryManager } from "@/components/admin/CategoryManager";
-import { getCategoryTree } from "@elsaad/api-client";
-import type { PartCategory } from "@elsaad/shared";
+import { getCategoryTree } from "@motogearsouq/api-client";
+import type { PartCategory } from "@motogearsouq/shared";
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 

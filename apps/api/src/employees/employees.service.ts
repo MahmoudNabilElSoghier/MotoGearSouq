@@ -1,6 +1,6 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from "@nestjs/common";
-import { fromPrismaEmployee, mockEmployees } from "@elsaad/shared";
-import type { CreateEmployeeInput, Employee, UpdateEmployeeInput } from "@elsaad/shared";
+import { fromPrismaEmployee, mockEmployees } from "@motogearsouq/shared";
+import type { CreateEmployeeInput, Employee, UpdateEmployeeInput } from "@motogearsouq/shared";
 import { withDb, type DbResult } from "../common/with-db";
 import { toDomainError } from "../common/prisma-errors";
 import { PrismaService } from "../prisma/prisma.service";

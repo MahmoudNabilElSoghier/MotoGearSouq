@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createEmployeeSchema, type CreateEmployeeInput, type UpdateEmployeeInput } from "@elsaad/shared";
-import { createEmployee, updateEmployee, getBranches, ApiError } from "@elsaad/api-client";
-import type { Employee, Branch } from "@elsaad/shared";
+import { createEmployeeSchema, type CreateEmployeeInput, type UpdateEmployeeInput } from "@motogearsouq/shared";
+import { createEmployee, updateEmployee, getBranches, ApiError } from "@motogearsouq/api-client";
+import type { Employee, Branch } from "@motogearsouq/shared";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { FormBanner } from "./FormBanner";

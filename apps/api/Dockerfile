@@ -24,7 +24,7 @@ COPY packages/config ./packages/config
 
 # Generate Prisma client and build API via esbuild bundle
 RUN cd apps/api && pnpm exec prisma generate
-RUN pnpm --filter @elsaad/api build
+RUN pnpm --filter @motogearsouq/api build
 
 # --- Runtime Stage ---
 FROM node:20-alpine AS runtime

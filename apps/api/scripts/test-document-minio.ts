@@ -6,7 +6,7 @@ import { spawn } from "child_process";
 async function main() {
   process.env.STORAGE_DRIVER = "minio";
   console.log("Starting API with STORAGE_DRIVER=minio...");
-  const api = spawn("pnpm", ["--filter", "@elsaad/api", "start"], {
+  const api = spawn("pnpm", ["--filter", "@motogearsouq/api", "start"], {
     stdio: "inherit",
     shell: true,
     env: process.env,

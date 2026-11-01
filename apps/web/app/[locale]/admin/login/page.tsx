@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, type LoginInput } from "@elsaad/shared";
-import { authApi } from "@elsaad/api-client";
+import { loginSchema, type LoginInput } from "@motogearsouq/shared";
+import { authApi } from "@motogearsouq/api-client";
 import { useTranslations } from "next-intl";
 import { Lock, Mail, Loader2, AlertCircle } from "lucide-react";
 

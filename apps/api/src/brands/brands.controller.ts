@@ -16,7 +16,7 @@ import {
   ApiParam,
   ApiTags,
 } from "@nestjs/swagger";
-import { brandFormSchema, type BrandFormValues } from "@elsaad/shared";
+import { brandFormSchema, type BrandFormValues } from "@motogearsouq/shared";
 import { AdminAuthGuard } from "../common/guards/admin-auth.guard";
 import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe";
 import { BrandsService } from "./brands.service";

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { fromPrismaBranchInventory, isLowStock, mockInventory } from "@elsaad/shared";
-import type { BranchInventory } from "@elsaad/shared";
+import { fromPrismaBranchInventory, isLowStock, mockInventory } from "@motogearsouq/shared";
+import type { BranchInventory } from "@motogearsouq/shared";
 import { withDb, type DbResult } from "../common/with-db";
 import { PrismaService } from "../prisma/prisma.service";
 

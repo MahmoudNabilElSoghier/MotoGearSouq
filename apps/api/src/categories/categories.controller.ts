@@ -12,7 +12,7 @@ import {
 } from "@nestjs/common";
 import { ApiHeader, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
-import { categoryFormSchema } from "@elsaad/shared";
+import { categoryFormSchema } from "@motogearsouq/shared";
 import { AdminAuthGuard } from "../common/guards/admin-auth.guard";
 import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe";
 import { CategoriesService, type CategoryBody } from "./categories.service";

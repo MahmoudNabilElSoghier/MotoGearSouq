@@ -1,4 +1,4 @@
-import type { LoginInput } from "@elsaad/shared";
+import type { LoginInput } from "@motogearsouq/shared";
 import { apiGet, apiSend, setAccessToken } from "./client";
 
 export interface AuthUser {

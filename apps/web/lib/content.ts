@@ -5,8 +5,8 @@ import type {
   GalleryImage,
   PageMeta,
 } from "@/types";
-import type { Category, Testimonial } from "@elsaad/shared";
-import { categories as sharedCategories, testimonials as sharedTestimonials } from "@elsaad/shared";
+import type { Category, Testimonial } from "@motogearsouq/shared";
+import { categories as sharedCategories, testimonials as sharedTestimonials } from "@motogearsouq/shared";
 
 export const categories: Category[] = sharedCategories;
 export const testimonials: Testimonial[] = sharedTestimonials;

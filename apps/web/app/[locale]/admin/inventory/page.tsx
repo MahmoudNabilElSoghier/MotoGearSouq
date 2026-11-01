@@ -4,8 +4,8 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { InventoryTable } from "@/components/admin/InventoryTable";
-import { getBranches, getInventory, isLowStock } from "@elsaad/api-client";
-import type { Branch, BranchInventory } from "@elsaad/shared";
+import { getBranches, getInventory, isLowStock } from "@motogearsouq/api-client";
+import type { Branch, BranchInventory } from "@motogearsouq/shared";
 import { Loader2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 

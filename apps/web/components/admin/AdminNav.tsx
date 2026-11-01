@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { authApi, type AuthUser } from "@elsaad/api-client";
+import { authApi, type AuthUser } from "@motogearsouq/api-client";
 import { useTranslations } from "next-intl";
 import { LogOut, User } from "lucide-react";
 

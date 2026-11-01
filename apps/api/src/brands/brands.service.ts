@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { mockBrands, mockModels } from "@elsaad/shared";
-import type { Brand, BrandFormValues } from "@elsaad/shared";
+import { mockBrands, mockModels } from "@motogearsouq/shared";
+import type { Brand, BrandFormValues } from "@motogearsouq/shared";
 import { withDb, type DbResult } from "../common/with-db";
 import { toDomainError } from "../common/prisma-errors";
 import { PrismaService } from "../prisma/prisma.service";

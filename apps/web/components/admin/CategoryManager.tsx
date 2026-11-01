@@ -12,8 +12,8 @@ import {
   type CategoryFormValues,
   type UpdateCategoryInput,
   type PartCategory,
-} from "@elsaad/shared";
-import { createCategory, updateCategory, deleteCategory, ApiError } from "@elsaad/api-client";
+} from "@motogearsouq/shared";
+import { createCategory, updateCategory, deleteCategory, ApiError } from "@motogearsouq/api-client";
 import { useLocale, useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 

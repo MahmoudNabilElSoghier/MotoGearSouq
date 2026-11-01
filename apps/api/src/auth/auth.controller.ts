@@ -15,7 +15,7 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import type { Request, Response } from "express";
-import { loginSchema, type LoginInput } from "@elsaad/shared";
+import { loginSchema, type LoginInput } from "@motogearsouq/shared";
 import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe";
 import { JwtAuthGuard } from "../common/guards/jwt-auth.guard";
 import { AuthService } from "./auth.service";

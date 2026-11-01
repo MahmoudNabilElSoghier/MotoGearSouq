@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { getBrands, getLowStockItems, getOrders, getProducts, type ProductPage, type OrderPage } from "@elsaad/api-client";
-import type { Brand, BranchInventory, Order } from "@elsaad/shared";
+import { getBrands, getLowStockItems, getOrders, getProducts, type ProductPage, type OrderPage } from "@motogearsouq/api-client";
+import type { Brand, BranchInventory, Order } from "@motogearsouq/shared";
 import { useLocale, useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 

@@ -57,7 +57,7 @@ async function runMatrix() {
   let apiProcess: ChildProcess | null = null;
 
   async function startApi() {
-    apiProcess = spawn("pnpm", ["--filter", "@elsaad/api", "start"], {
+    apiProcess = spawn("pnpm", ["--filter", "@motogearsouq/api", "start"], {
       stdio: "inherit",
       shell: true,
       env: process.env,

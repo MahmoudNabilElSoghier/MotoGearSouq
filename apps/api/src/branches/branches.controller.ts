@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { ApiHeader, ApiOperation, ApiParam, ApiTags } from "@nestjs/swagger";
-import { createBranchSchema, updateBranchSchema, type CreateBranchInput, type UpdateBranchInput } from "@elsaad/shared";
+import { createBranchSchema, updateBranchSchema, type CreateBranchInput, type UpdateBranchInput } from "@motogearsouq/shared";
 import { AdminAuthGuard } from "../common/guards/admin-auth.guard";
 import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe";
 import { BranchesService } from "./branches.service";

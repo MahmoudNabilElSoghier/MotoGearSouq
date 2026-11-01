@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { contactSchema } from "@elsaad/shared";
+import { contactSchema } from "@motogearsouq/shared";
 import { sendContactNotification } from "@/lib/email";
 import { rateLimit } from "@/lib/rate-limit";
 

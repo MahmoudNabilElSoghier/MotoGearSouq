@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
-import { getBrands } from "@elsaad/api-client";
+import { getBrands } from "@motogearsouq/api-client";
 
 export const dynamic = "force-dynamic";
 

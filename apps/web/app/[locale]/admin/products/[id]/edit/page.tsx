@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductForm } from "@/components/admin/ProductForm";
-import { getBrands, getPartCategories, getProductById } from "@elsaad/api-client";
+import { getBrands, getPartCategories, getProductById } from "@motogearsouq/api-client";
 import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata({

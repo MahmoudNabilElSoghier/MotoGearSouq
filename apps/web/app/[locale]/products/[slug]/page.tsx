@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { company } from "@/lib/config";
-import { getProductByCode, totalStock } from "@elsaad/api-client";
+import { getProductByCode, totalStock } from "@motogearsouq/api-client";
 
 export const dynamic = "force-dynamic";
 

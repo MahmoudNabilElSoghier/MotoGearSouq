@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getEmployees } from "@elsaad/api-client";
+import { getEmployees } from "@motogearsouq/api-client";
 import { EmployeeForm } from "@/components/admin/EmployeeForm";
 import { FormBanner } from "@/components/admin/FormBanner";
-import type { Employee } from "@elsaad/shared";
+import type { Employee } from "@motogearsouq/shared";
 import { Button } from "@/components/ui/Button";
 import { Loader2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";

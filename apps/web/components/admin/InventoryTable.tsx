@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { BranchInventory } from "@elsaad/shared";
+import type { BranchInventory } from "@motogearsouq/shared";
 import { useLocale, useTranslations } from "next-intl";
 
 function isLow(row: BranchInventory): boolean {

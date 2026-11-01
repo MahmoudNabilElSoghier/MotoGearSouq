@@ -5,8 +5,8 @@ import {
   mockModels,
   mockProducts,
   totalStock,
-} from "@elsaad/shared";
-import type { Product } from "@elsaad/shared";
+} from "@motogearsouq/shared";
+import type { Product } from "@motogearsouq/shared";
 import { withDb, type DbResult } from "../common/with-db";
 import { toDomainError } from "../common/prisma-errors";
 import { PrismaService } from "../prisma/prisma.service";

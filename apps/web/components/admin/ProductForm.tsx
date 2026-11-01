@@ -7,8 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { FormBanner } from "./FormBanner";
-import { productFormSchema, type ProductFormValues, type UpdateProductInput, type Brand, type PartCategory, type Product } from "@elsaad/shared";
-import { createProduct, updateProduct, ApiError } from "@elsaad/api-client";
+import { productFormSchema, type ProductFormValues, type UpdateProductInput, type Brand, type PartCategory, type Product } from "@motogearsouq/shared";
+import { createProduct, updateProduct, ApiError } from "@motogearsouq/api-client";
 import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 

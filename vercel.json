@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "$comment": "TODO Phase 9B: After Railway account renewal, update rewrite destination to new motogearsouq-api Railway URL. Current destination elsaad-api.up.railway.app will be decommissioned.",
   "buildCommand": "pnpm --filter @motogearsouq/web build",
   "outputDirectory": "apps/web/.next",
   "framework": "nextjs",

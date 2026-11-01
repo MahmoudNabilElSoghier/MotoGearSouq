@@ -28,7 +28,7 @@ monorepo migration, Sprint 2D auth + write wiring, and Phases 3-7 (bilingual AR/
   landing content, Prisma→domain mappers
 - `packages/api-client` — `@motogearsouq/api-client`: typed fetch client used by web
 - Local Docker stack: postgres 16 (:5434), redis 7 (:6380), minio (:9010/:9011)
-- Auth: JWT RS256 (node:crypto, no extra deps) + rotating refresh tokens (`elsaad_rt` cookie); `x-admin-api-key` remains a dual-auth alternative for scripts/CI
+- Auth: JWT RS256 (node:crypto, no extra deps) + rotating refresh tokens (`mgs_rt` cookie); `x-admin-api-key` remains a dual-auth alternative for scripts/CI
 
 ## Critical File Access Rules
 1. Never scan the whole repository or recurse into `node_modules`, `.next`, or `.git`.

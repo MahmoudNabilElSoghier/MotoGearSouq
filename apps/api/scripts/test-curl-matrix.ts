@@ -119,8 +119,8 @@ async function runMatrix() {
     if (res2.status !== 200) throw new Error(`Step 2 failed: expected 200, got ${res2.status}`);
     const data2 = JSON.parse(res2.body).data;
     const accessToken = data2.accessToken;
-    const rtCookie = extractCookie(res2.headers["set-cookie"], "elsaad_rt");
-    if (!accessToken || !rtCookie) throw new Error("Step 2 failed: missing accessToken or elsaad_rt cookie");
+    const rtCookie = extractCookie(res2.headers["set-cookie"], "mgs_rt");
+    if (!accessToken || !rtCookie) throw new Error("Step 2 failed: missing accessToken or mgs_rt cookie");
     console.log("✔ Step 2 PASSED (got access token & refresh cookie)");
 
     // STEP 3: GET /api/products with Bearer -> 200
@@ -155,20 +155,20 @@ async function runMatrix() {
     // STEP 5: POST /auth/refresh with valid cookie -> 200 + new access + new cookie
     console.log("\n[Step 5] Refresh token rotation test...");
     const resLogin5 = await request("POST", "/api/auth/login", {}, { email: bootstrapEmail, password: bootstrapPassword });
-    const initialRt = extractCookie(resLogin5.headers["set-cookie"], "elsaad_rt");
+    const initialRt = extractCookie(resLogin5.headers["set-cookie"], "mgs_rt");
 
-    const res5 = await request("POST", "/api/auth/refresh", { Cookie: `elsaad_rt=${initialRt}` });
+    const res5 = await request("POST", "/api/auth/refresh", { Cookie: `mgs_rt=${initialRt}` });
     console.log("Status:", res5.status);
     if (res5.status !== 200) throw new Error(`Step 5 failed: expected 200, got ${res5.status}`);
     const data5 = JSON.parse(res5.body).data;
     const newAccessToken = data5.accessToken;
-    const newRt = extractCookie(res5.headers["set-cookie"], "elsaad_rt");
+    const newRt = extractCookie(res5.headers["set-cookie"], "mgs_rt");
     if (!newAccessToken || !newRt) throw new Error("Step 5 failed: missing rotated token data");
     console.log("✔ Step 5 PASSED (refreshed successfully)");
 
     // STEP 6: Reuse OLD (rotated) refresh cookie -> 401 + family revoked
     console.log("\n[Step 6] Reuse old rotated refresh token (Detection Test)...");
-    const res6 = await request("POST", "/api/auth/refresh", { Cookie: `elsaad_rt=${initialRt}` });
+    const res6 = await request("POST", "/api/auth/refresh", { Cookie: `mgs_rt=${initialRt}` });
     console.log("Status (expect 401):", res6.status, res6.body);
     if (res6.status !== 401) throw new Error(`Step 6 failed: expected 401 on reuse, got ${res6.status}`);
     console.log("✔ Step 6 PASSED (reuse detected and rejected)");
@@ -176,9 +176,9 @@ async function runMatrix() {
     // STEP 7: Logout with NEW cookie -> 200 + cookie cleared
     console.log("\n[Step 7] Logout test...");
     const resLogin7 = await request("POST", "/api/auth/login", {}, { email: bootstrapEmail, password: bootstrapPassword });
-    const logoutRt = extractCookie(resLogin7.headers["set-cookie"], "elsaad_rt");
+    const logoutRt = extractCookie(resLogin7.headers["set-cookie"], "mgs_rt");
 
-    const res7 = await request("POST", "/api/auth/logout", { Cookie: `elsaad_rt=${logoutRt}` });
+    const res7 = await request("POST", "/api/auth/logout", { Cookie: `mgs_rt=${logoutRt}` });
     console.log("Status:", res7.status);
     if (res7.status !== 200) throw new Error(`Step 7 failed: expected 200, got ${res7.status}`);
     const clearCookieHeader = res7.headers["set-cookie"];
@@ -187,7 +187,7 @@ async function runMatrix() {
 
     // STEP 8: Login again -> old family refresh token -> 401 (fully dead)
     console.log("\n[Step 8] Attempt refresh with logged out token...");
-    const res8 = await request("POST", "/api/auth/refresh", { Cookie: `elsaad_rt=${logoutRt}` });
+    const res8 = await request("POST", "/api/auth/refresh", { Cookie: `mgs_rt=${logoutRt}` });
     console.log("Status (expect 401):", res8.status);
     if (res8.status !== 401) throw new Error(`Step 8 failed: expected 401, got ${res8.status}`);
     console.log("✔ Step 8 PASSED");

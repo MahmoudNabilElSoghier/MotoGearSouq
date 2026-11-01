@@ -67,7 +67,7 @@ export class AuthController {
     const refreshTtlSeconds = this.jwtService.parseTtl(refreshTtlStr);
     const isProd = this.config.get<string>("NODE_ENV") === "production";
 
-    res.cookie("elsaad_rt", result.refreshToken, {
+    res.cookie("mgs_rt", result.refreshToken, {
       httpOnly: true,
       sameSite: "lax",
       secure: isProd,
@@ -89,7 +89,7 @@ export class AuthController {
   @ApiOperation({ summary: "Rotate refresh token and get new access token" })
   async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     this.checkKeys();
-    const rawRefreshToken = readCookie(req, "elsaad_rt");
+    const rawRefreshToken = readCookie(req, "mgs_rt");
 
     const result = await this.authService.refresh(rawRefreshToken || "");
 
@@ -97,7 +97,7 @@ export class AuthController {
     const refreshTtlSeconds = this.jwtService.parseTtl(refreshTtlStr);
     const isProd = this.config.get<string>("NODE_ENV") === "production";
 
-    res.cookie("elsaad_rt", result.refreshToken, {
+    res.cookie("mgs_rt", result.refreshToken, {
       httpOnly: true,
       sameSite: "lax",
       secure: isProd,
@@ -117,12 +117,12 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: "Logout user and revoke refresh token" })
   async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-    const rawRefreshToken = readCookie(req, "elsaad_rt");
+    const rawRefreshToken = readCookie(req, "mgs_rt");
     if (rawRefreshToken) {
       await this.authService.logout(rawRefreshToken);
     }
 
-    res.clearCookie("elsaad_rt", { path: "/" });
+    res.clearCookie("mgs_rt", { path: "/" });
 
     return {
       data: { success: true },

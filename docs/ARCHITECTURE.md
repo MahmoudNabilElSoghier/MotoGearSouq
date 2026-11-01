@@ -81,7 +81,7 @@ Build orchestration: turbo (`build`/`lint`/`dev` task graph in `turbo.json`).
   detection** — presenting an already-revoked token revokes the whole
   family (theft signal), so a stolen refresh cookie dies with its
   family.
-- **Cookie `elsaad_rt`:** `httpOnly`, `SameSite=Lax`, `Secure` in
+- **Cookie `mgs_rt`:** `httpOnly`, `SameSite=Lax`, `Secure` in
   production, **`path=/`** (set and cleared at `/` so logout always
   finds it), 7-day max-age. Rotation refresh + logout both rewrite/clear
   it.
@@ -133,7 +133,7 @@ is never reused for different content.
 ## i18n & Theming Architecture
 
 - **next-intl v4:** Request-scoped locale handling with `requestLocale` and localized routes under `/ar/*` and `/en/*`.
-- **Middleware:** Handles locale prefixes, cookie persistence (`NEXT_LOCALE`), and admin auth routing (`elsaad_rt` check for `/[locale]/admin/*`) in a single pass.
+- **Middleware:** Handles locale prefixes, cookie persistence (`NEXT_LOCALE`), and admin auth routing (`mgs_rt` check for `/[locale]/admin/*`) in a single pass.
 - **Message Files:** Located at `apps/web/messages/{ar,en}.json` with matching structure.
 - **RTL/LTR Layout:** Logical CSS properties (`ms-`, `me-`, `ps-`, `pe-`, `start-`, `end-`) and `@custom-variant rtl/ltr` for directional icons and transforms.
 - **Theming:** `next-themes` manages light/dark mode via class-based `.dark` selectors and CSS variables (`:root` for light theme, `.dark` for dark theme overrides). Transitions are cross-faded on surfaces and text (200ms) while respecting `prefers-reduced-motion`.

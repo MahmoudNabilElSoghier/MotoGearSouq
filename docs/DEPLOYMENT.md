@@ -1,5 +1,3 @@
-<!-- TODO Phase 6: update all domain/env references to motogearsouq.com -->
-
 # Deployment Guide
 
 ## Prerequisites
@@ -71,9 +69,9 @@ on production like that. Pick ONE:
   point your local seed at Neon and run it once:
   ```bash
   # in apps/api/.env — temporarily set DATABASE_URL=<Neon URL>, then:
-  ADMIN_BOOTSTRAP_EMAIL=admin@elsaad.com \
+  ADMIN_BOOTSTRAP_EMAIL=admin@motogearsouq.com \
   ADMIN_BOOTSTRAP_PASSWORD=<strong-password> \
-  pnpm --filter @elsaad/api db:seed
+  pnpm --filter @motogearsouq/api db:seed
   ```
 - **Seed inside Railway:** upload `prisma/data/*.json` into the container first
   (`docker cp` / Railway volume), then run `pnpm db:seed` with the
@@ -87,7 +85,7 @@ Verify afterwards: `curl https://<railway-url>/api/health` and
 1. vercel.com/new → Import from GitHub
 2. Root Directory: `apps/web`
 3. Framework: Next.js (auto)
-4. Build Command: `pnpm --filter @elsaad/web build`
+4. Build Command: `pnpm --filter @motogearsouq/web build`
 5. Environment Variables:
    - `API_ORIGIN=https://elsaad-api.up.railway.app`
    - `NEXT_PUBLIC_API_URL=/api`
@@ -106,6 +104,28 @@ Verify afterwards: `curl https://<railway-url>/api/health` and
 - [ ] Admin login works in both `/ar/admin/login` and `/en/admin/login`
 - [ ] OG image preview: share `/ar` and `/en` links on WhatsApp → locale-specific cards
 - [ ] Check API Swagger: `https://elsaad-api.up.railway.app/api/docs`
+
+## Custom Domain Setup (motogearsouq.com)
+
+After the first successful deploy:
+
+1. Purchase motogearsouq.com (if not done) — Namecheap ~$12/year
+2. In Vercel: Project Settings → Domains → Add motogearsouq.com
+   and www.motogearsouq.com
+3. Vercel shows DNS records — add them in Namecheap DNS panel:
+   - A record @ → 76.76.21.21 (or current Vercel IP)
+   - CNAME www → cname.vercel-dns.com
+4. Wait 5-30 minutes for DNS propagation
+5. Update Vercel env vars:
+   - NEXT_PUBLIC_SITE_URL=https://motogearsouq.com
+6. Update Railway env vars:
+   - CORS_ORIGINS=https://motogearsouq.com,https://www.motogearsouq.com
+7. Redeploy both Vercel and Railway
+8. Verify: https://motogearsouq.com → /ar
+   https://motogearsouq.com/ar/products → products
+   https://motogearsouq.com/ar/admin/login → admin login
+9. Test WhatsApp OG preview: share /ar and /en — should show
+   MotoGearSouq cards
 
 ## Rollback
 - Railway: Deployments → Rollback to previous

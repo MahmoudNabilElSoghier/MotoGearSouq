@@ -1,4 +1,18 @@
-# ELSAAD — Motorcycle Parts ERP + Catalog
+# MotoGearSouq — Motorcycle Parts ERP + Catalog
+
+## Brand Structure (Dual Branding)
+
+- **Brand**: MotoGearSouq (motogearsouq.com)
+- **Partner**: شركة السعد للدراجات النارية (ELSAAD Motorcycle)
+- **Relationship**: MotoGearSouq is the Official Digital Partner
+  of ELSAAD — sells genuine ELSAAD products online
+- **Repo name**: `ELSAAD` (kept for continuity; git remote unchanged)
+- **Package scope**: `@motogearsouq/*` (renamed from @elsaad/*)
+- **Admin email**: admin@motogearsouq.com (with admin@elsaad.com as backup)
+
+**For future agents**: Always use MotoGearSouq for customer-facing
+text. Use ELSAAD/السعد only when referring to the partner company,
+their physical branches, or as warranty/guarantee attribution.
 
 ## Project Summary
 ELSAAD (السعد للدراجات النارية) — 35-year motorcycle dealership and parts
@@ -10,9 +24,9 @@ monorepo migration, Sprint 2D auth + write wiring, and Phases 3-7 (bilingual AR/
 - `apps/web` — Next.js 15.5 (App Router) + React 19 + Tailwind v4 + next-intl (v4) + next-themes, bilingual AR/EN under `/ar/*` and `/en/*`, UI at :3000
 - `apps/api` — NestJS 10 + Prisma 6 + Swagger 8, port 4000, base path `/api`
   (built to a single esbuild bundle, `pnpm start` = `node dist/main.js`)
-- `packages/shared` — `@elsaad/shared`: zod schemas, domain types, mock data,
+- `packages/shared` — `@motogearsouq/shared`: zod schemas, domain types, mock data,
   landing content, Prisma→domain mappers
-- `packages/api-client` — `@elsaad/api-client`: typed fetch client used by web
+- `packages/api-client` — `@motogearsouq/api-client`: typed fetch client used by web
 - Local Docker stack: postgres 16 (:5434), redis 7 (:6380), minio (:9010/:9011)
 - Auth: JWT RS256 (node:crypto, no extra deps) + rotating refresh tokens (`elsaad_rt` cookie); `x-admin-api-key` remains a dual-auth alternative for scripts/CI
 

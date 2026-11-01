@@ -1,4 +1,6 @@
-# ELSAAD — Architecture
+# MotoGearSouq — Architecture
+
+> Official digital partner of ELSAAD Motorcycle.
 
 Current state after the Phase 2B → monorepo migration (turbo + pnpm).
 
@@ -9,7 +11,7 @@ Current state after the Phase 2B → monorepo migration (turbo + pnpm).
   browser  ── :3000 ──▶  │  apps/web  (Next.js 15)      │
                          │  pages are force-dynamic     │
                          └──────────────┬───────────────┘
-                                        │  @elsaad/api-client
+                                        │  @motogearsouq/api-client
                                         │  fetch(GET) → { data, isMock }
                                         ▼
                          ┌──────────────────────────────┐
@@ -36,18 +38,18 @@ Current state after the Phase 2B → monorepo migration (turbo + pnpm).
 
 | Path | Package | Role |
 |------|---------|------|
-| `apps/web` | `@elsaad/web` | Next.js UI (landing, catalog, admin) |
-| `apps/api` | `@elsaad/api` | NestJS REST API, Prisma schema + scripts |
-| `packages/shared` | `@elsaad/shared` | zod schemas, domain types, mock data, landing content, pure utils (`totalStock`, `isLowStock`) — TypeScript source, no build step |
-| `packages/api-client` | `@elsaad/api-client` | typed fetch wrapper + endpoint functions; the only way the web app talks to the API |
-| `packages/config` | `@elsaad/config` | shared `tsconfig`/eslint/prettier presets |
+| `apps/web` | `@motogearsouq/web` | Next.js UI (landing, catalog, admin) |
+| `apps/api` | `@motogearsouq/api` | NestJS REST API, Prisma schema + scripts |
+| `packages/shared` | `@motogearsouq/shared` | zod schemas, domain types, mock data, landing content, pure utils (`totalStock`, `isLowStock`) — TypeScript source, no build step |
+| `packages/api-client` | `@motogearsouq/api-client` | typed fetch wrapper + endpoint functions; the only way the web app talks to the API |
+| `packages/config` | `@motogearsouq/config` | shared `tsconfig`/eslint/prettier presets |
 
 Build orchestration: turbo (`build`/`lint`/`dev` task graph in `turbo.json`).
 `apps/web` compiles the TS-source packages through `transpilePackages`.
 
 ## Request Flow (reads)
 
-1. A page imports e.g. `getProducts` from `@elsaad/api-client`.
+1. A page imports e.g. `getProducts` from `@motogearsouq/api-client`.
 2. The client `fetch`es `${NEXT_PUBLIC_API_URL}/products…` with `cache: no-store`.
 3. The NestJS controller validates inputs (`ZodValidationPipe` + zod) and
    delegates to the service.

@@ -1,6 +1,8 @@
-# ELSAAD — السعد للدراجات النارية
+# MotoGearSouq — الشريك الرقمي الرسمي لشركة السعد
 
-Landing page and future ERP system for ELSAAD Motorcycle.
+> Previously branded as ELSAAD. MotoGearSouq is the official digital partner of شركة السعد للدراجات النارية (ELSAAD Motorcycle).
+
+Landing page and future ERP system for MotoGearSouq.
 
 ## Status
 
@@ -21,9 +23,9 @@ apps/
   web/       Next.js 15 (App Router) + React 19 + Tailwind — UI at :3000
   api/       NestJS 10 REST API + Prisma schema/scripts — API at :4000
 packages/
-  shared/        @elsaad/shared — zod schemas, types, mock data, content, utils
-  api-client/    @elsaad/api-client — typed fetch client used by apps/web
-  config/        @elsaad/config — shared tsconfig/eslint/prettier presets
+  shared/        @motogearsouq/shared — zod schemas, types, mock data, content, utils
+  api-client/    @motogearsouq/api-client — typed fetch client used by apps/web
+  config/        @motogearsouq/config — shared tsconfig/eslint/prettier presets
 turbo.json       turbo 2 task graph (build/lint/dev)
 docker-compose.yml  postgres 16 + redis 7 + minio (local dev stack)
 ```
@@ -60,7 +62,7 @@ Optional local services (DB/storage):
 docker compose up -d          # postgres :5434, redis :6380, minio :9010/:9011
 ```
 
-> **Ports:** ELSAAD uses 5434 (Postgres), 6380 (Redis) and 9010–9011 (MinIO)
+> **Ports:** MotoGearSouq uses 5434 (Postgres), 6380 (Redis) and 9010–9011 (MinIO)
 > to avoid conflicts with other local stacks — native PostgreSQL 17 on 5432
 > and ChronicleX on 5433/6379/9000-9001.
 
@@ -99,10 +101,10 @@ but **no database is provisioned yet** — do not run migrations until
 Once you have a connection string (`apps/api/.env`):
 
 ```bash
-pnpm --filter @elsaad/api exec prisma generate   # refresh the Prisma client
-pnpm --filter @elsaad/api db:push                # create tables
-pnpm --filter @elsaad/api db:seed                # idempotent seed
-pnpm --filter @elsaad/api db:studio              # optional data browser
+pnpm --filter @motogearsouq/api exec prisma generate   # refresh the Prisma client
+pnpm --filter @motogearsouq/api db:push                # create tables
+pnpm --filter @motogearsouq/api db:seed                # idempotent seed
+pnpm --filter @motogearsouq/api db:studio              # optional data browser
 ```
 
 Until `DATABASE_URL` is set, the contact API validates and logs to the
@@ -118,11 +120,11 @@ headers):
    (`code,name,name_en,brand,category,oem_code,price,wholesale_price,cost_price,stock,description`).
    Arabic headers (`كود`, `اسم`, `سعر`, `المخزون`, …) and partial columns work
    too.
-2. `pnpm --filter @elsaad/api db:migrate-excel` — parses every sheet in
+2. `pnpm --filter @motogearsouq/api db:migrate-excel` — parses every sheet in
    `apps/api/data/` and writes `apps/api/prisma/data/{brands,categories,models,products,branches}.json`.
-3. `pnpm --filter @elsaad/api db:push` then `db:seed` — the seed prefers
+3. `pnpm --filter @motogearsouq/api db:push` then `db:seed` — the seed prefers
    `prisma/data/*.json` per model and falls back to the built-in demo catalog
-   (`@elsaad/shared` mock) when a file is absent.
+   (`@motogearsouq/shared` mock) when a file is absent.
 
 Notes:
 
@@ -148,12 +150,12 @@ Routes under `/admin` (RTL sidebar layout):
 | `/admin/branches` | Branch cards (hours, WhatsApp links) |
 | `/admin/inventory` | Per-branch stock table with editable quantities |
 
-- All reads go through `@elsaad/api-client` → the NestJS API (each page is
+- All reads go through `@motogearsouq/api-client` → the NestJS API (each page is
   `force-dynamic`).
 - **Admin auth**: `/admin` is gated by `middleware.ts` + `/admin/login` using
   custom JWT RS256 (no next-auth). Writes accept a `Bearer` access token or
   the legacy `x-admin-api-key` header (deprecated, Phase 3).
-- Admin form submissions POST/PATCH/DELETE through `@elsaad/api-client` to
+- Admin form submissions POST/PATCH/DELETE through `@motogearsouq/api-client` to
   the guarded write endpoints (wired in Sprint 2D / B3).
 - Mock mode shows a "معاينة بيانات تجريبية" badge; all admin routes carry
   `noindex` metadata.
@@ -169,7 +171,7 @@ list, 5-minute presigned download URL, soft delete, purge, per-document WORM
 - `STORAGE_DRIVER=local` (default) — files under `apps/api/uploads/`,
   streamed by `GET /api/storage/local/*`; `setRetention` is a no-op (flagged).
 
-Smoke-test: `pnpm --filter @elsaad/api test:storage` (auto-skips when MinIO
+Smoke-test: `pnpm --filter @motogearsouq/api test:storage` (auto-skips when MinIO
 is not running).
 
 ## Known Issues (pre-Phase 2E)
@@ -219,7 +221,7 @@ migrations/seed caveats, smoke test, rollback — lives in
 [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). Variable reference:
 [.env.production.example](.env.production.example).
 
-- API container: `docker build -t elsaad-api -f apps/api/Dockerfile .`
+- API container: `docker build -t motogearsouq-api -f apps/api/Dockerfile .`
   (JWT keys are passed as env vars `JWT_PRIVATE_KEY`/`JWT_PUBLIC_KEY` — the
   `keys/` folder is never baked into the image).
 - **Back up `apps/api/keys/{private,public}.pem` before deploying** — losing
@@ -235,7 +237,7 @@ pnpm build    # tsc (api) + next build (web)
 pnpm lint     # eslint across all packages
 ```
 
-### API scripts (`pnpm --filter @elsaad/api …`)
+### API scripts (`pnpm --filter @motogearsouq/api …`)
 
 - `dev` — `tsx watch src/main.ts`
 - `build` / `start` — typecheck (`tsc --noEmit`) + esbuild bundle → `dist/main.js`, then run it
@@ -261,4 +263,4 @@ pnpm lint     # eslint across all packages
 ---
 
 Contact
-ELSAAD Motorcycle — [add contact info]
+MotoGearSouq — [add contact info]

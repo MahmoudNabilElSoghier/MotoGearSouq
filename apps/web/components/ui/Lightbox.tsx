@@ -107,6 +107,8 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
           <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-bg to-card border border-border flex flex-col items-center justify-center gap-4 text-center">
             <ImageIcon className="w-16 h-16 text-muted" />
             <span className="text-muted font-medium">
+              {/* TODO: Use common.siteName from messages once Lightbox accepts
+                  i18n context (currently hardcoded) */}
               {item.alt || "MotoGearSouq"}
             </span>
           </div>

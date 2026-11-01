@@ -24,17 +24,16 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Company Info */}
           <div className="md:col-span-2 space-y-4">
-            <Link href="/" className="inline-block">
-              <span className="text-2xl font-extrabold tracking-wider text-accent">
-                {company.name}
-              </span>
-              <span className="block text-xs text-muted font-medium mt-0.5">
-                {company.name}
-              </span>
-            </Link>
-            <p className="text-xs text-muted font-medium">
-              {tCommon("tagline")}
-            </p>
+            <div>
+              <Link href="/" className="inline-block">
+                <span className="text-2xl font-extrabold tracking-wider text-accent">
+                  {company.name}
+                </span>
+              </Link>
+              <p className="text-xs text-muted font-medium mt-3">
+                {tCommon("tagline")}
+              </p>
+            </div>
             <p className="text-muted text-sm leading-relaxed max-w-sm">
               {tFooter("tagline")}
             </p>

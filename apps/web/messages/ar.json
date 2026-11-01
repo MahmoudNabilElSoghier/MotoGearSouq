@@ -417,6 +417,7 @@
       "status": "الحالة",
       "statusPending": "قيد الانتظار",
       "statusConfirmed": "مؤكد",
+      "statusShipped": "تم الشحن",
       "statusDelivered": "تم التسليم",
       "statusCancelled": "ملغي"
     },

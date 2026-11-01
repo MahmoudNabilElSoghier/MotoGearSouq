@@ -1,4 +1,4 @@
-import type {
+﻿import type {
   Branch,
   Brand,
   BranchInventory,
@@ -169,3 +169,61 @@ export const createEmployee = (input: CreateEmployeeInput): Promise<ApiResponse<
 
 export const updateEmployee = (id: string, input: UpdateEmployeeInput): Promise<ApiResponse<Employee>> =>
   apiSend<Employee>("PATCH", `/employees/${encode(id)}`, input);
+
+// ---------- Orders: guest checkout + tracking (Sprint 1) ----------
+
+export interface CreateOrderItemInput {
+  productId: string;
+  quantity: number;
+}
+
+export interface CreateOrderCustomerInput {
+  nameAr: string;
+  phone: string;
+  email?: string;
+  address: string;
+  city: string;
+  governorate: string;
+  notes?: string;
+}
+
+export interface CreateOrderPayload {
+  items: CreateOrderItemInput[];
+  customer: CreateOrderCustomerInput;
+}
+
+export interface CreatedOrder {
+  id: string;
+  orderNumber: string;
+  total: number;
+  status: string;
+}
+
+export interface TrackOrderItem {
+  productId: string;
+  name: string;
+  quantity: number;
+  unitPrice: number;
+  lineTotal: number;
+}
+
+export interface TrackOrder {
+  orderNumber: string;
+  status: string;
+  total: number;
+  createdAt: string;
+  estimatedDelivery: string | null;
+  phone: string; // masked server-side (e.g. 010****5678)
+  items: TrackOrderItem[];
+}
+
+export type OrderStatusUpdate = "confirmed" | "shipped" | "delivered" | "cancelled";
+
+export const createOrder = (input: CreateOrderPayload): Promise<ApiResponse<CreatedOrder>> =>
+  apiSend<CreatedOrder>("POST", "/orders", input);
+
+export const trackOrder = (orderNumber: string): Promise<TrackOrder> =>
+  apiGet<TrackOrder>(`/orders/track/${encode(orderNumber)}`);
+
+export const updateOrderStatus = (id: string, status: OrderStatusUpdate): Promise<ApiResponse<Order>> =>
+  apiSend<Order>("PATCH", `/orders/${encode(id)}/status`, { status });

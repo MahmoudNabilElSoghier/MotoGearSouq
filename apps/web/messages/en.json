@@ -417,6 +417,7 @@
       "status": "Status",
       "statusPending": "Pending",
       "statusConfirmed": "Confirmed",
+      "statusShipped": "Shipped",
       "statusDelivered": "Delivered",
       "statusCancelled": "Cancelled"
     },

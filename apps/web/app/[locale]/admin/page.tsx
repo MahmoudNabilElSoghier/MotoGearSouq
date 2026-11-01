@@ -17,6 +17,7 @@ export default function AdminHomePage() {
   const statusStyles: Record<string, string> = {
     pending: "bg-amber-500/15 text-amber-400",
     confirmed: "bg-sky-500/15 text-sky-400",
+    shipped: "bg-violet-500/15 text-violet-400",
     delivered: "bg-emerald-500/15 text-emerald-400",
     cancelled: "bg-red-500/15 text-red-400",
   };
@@ -24,6 +25,7 @@ export default function AdminHomePage() {
   const statusLabels: Record<string, string> = {
     pending: t("statusPending"),
     confirmed: t("statusConfirmed"),
+    shipped: t("statusShipped"),
     delivered: t("statusDelivered"),
     cancelled: t("statusCancelled"),
   };

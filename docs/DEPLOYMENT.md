@@ -1,3 +1,5 @@
+<!-- TODO Phase 6: update all domain/env references to motogearsouq.com -->
+
 # Deployment Guide
 
 ## Prerequisites

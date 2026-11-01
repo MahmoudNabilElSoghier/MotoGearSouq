@@ -28,6 +28,7 @@ RUN pnpm --filter @motogearsouq/api build
 
 # --- Runtime Stage ---
 FROM node:20-alpine AS runtime
+LABEL maintainer="MotoGearSouq <dev@motogearsouq.com>"
 RUN corepack enable && corepack prepare pnpm@9 --activate
 WORKDIR /app
 

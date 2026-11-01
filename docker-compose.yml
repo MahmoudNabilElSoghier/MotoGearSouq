@@ -1,3 +1,5 @@
+# Internal Docker names use "elsaad" for continuity.
+# External branding is MotoGearSouq (motogearsouq.com).
 # Local development stack for ELSAAD (Phase 7).
 # Dev-only credentials — never reuse them outside this compose file.
 name: elsaad

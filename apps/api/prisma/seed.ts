@@ -643,6 +643,38 @@ async function main() {
     seededDocuments += 1;
   }
 
+  // ---------- Shipping Rates ----------
+  const shippingRates = [
+    { governorate: "القاهرة", city: null, standardFee: 50, expressFee: 100, freeOverAmount: 1500, codFee: 25 },
+    { governorate: "الجيزة", city: null, standardFee: 50, expressFee: 100, freeOverAmount: 1500, codFee: 25 },
+    { governorate: "الإسكندرية", city: null, standardFee: 75, expressFee: 150, freeOverAmount: 2000, codFee: 30 },
+    { governorate: "الدقهلية", city: null, standardFee: 65, expressFee: 130, freeOverAmount: 2000, codFee: 25 },
+    { governorate: "أسوان", city: null, standardFee: 85, expressFee: 170, freeOverAmount: 2500, codFee: 30 },
+  ];
+  let seededShippingRates = 0;
+  for (const rate of shippingRates) {
+    const existing = await prisma.shippingRate.findFirst({
+      where: { governorate: rate.governorate, city: rate.city },
+    });
+    if (existing) {
+      await prisma.shippingRate.update({
+        where: { id: existing.id },
+        data: {
+          standardFee: rate.standardFee,
+          expressFee: rate.expressFee,
+          freeOverAmount: rate.freeOverAmount,
+          codFee: rate.codFee,
+          isActive: true,
+        },
+      });
+    } else {
+      await prisma.shippingRate.create({
+        data: rate,
+      });
+    }
+    seededShippingRates += 1;
+  }
+
   const adminUser = await seedAdminUser();
 
   console.log("Seed complete:", {
@@ -662,6 +694,7 @@ async function main() {
     skippedInventory,
     managersLinked,
     seededDocuments,
+    seededShippingRates,
     adminUser,
   });
 }

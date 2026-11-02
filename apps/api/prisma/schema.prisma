@@ -360,8 +360,13 @@ model Order {
   taxAmount           Decimal   @default(0) @db.Decimal(10, 2)
   discount            Decimal   @default(0) @db.Decimal(10, 2)
   total               Decimal   @db.Decimal(10, 2)
-  paymentMethod       String?
-  paymentStatus       String    @default("unpaid")
+  paymentMethod       String    @default("cod")
+  paymentStatus       String    @default("pending")
+  paymentReference    String?
+  paymentReference2   String?
+  paidAt              DateTime?
+  shippingCost        Decimal   @default(0) @db.Decimal(10, 2)
+  shippingMethod      String    @default("standard")
   notes               String?
   shippingAddress     String?
   shippingCity        String?
@@ -371,7 +376,8 @@ model Order {
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
 
-  items OrderItem[]
+  items               OrderItem[]
+  paymentTransactions PaymentTransaction[]
 
   @@index([customerId])
   @@index([branchId])
@@ -490,16 +496,63 @@ model RefreshToken {
 
 // Sprint 3 — Financial Intelligence: singleton row (id always "singleton")
 model CompanySettings {
-  id               String   @id @default("singleton")
+  id                    String   @id @default("singleton")
   // Monthly fixed costs (in EGP)
-  monthlyRent      Decimal  @default(0) @db.Decimal(10, 2)
-  monthlySalaries  Decimal  @default(0) @db.Decimal(10, 2)
-  monthlyUtilities Decimal  @default(0) @db.Decimal(10, 2)
-  monthlyMarketing Decimal  @default(0) @db.Decimal(10, 2)
-  monthlyOther     Decimal  @default(0) @db.Decimal(10, 2)
+  monthlyRent           Decimal  @default(0) @db.Decimal(10, 2)
+  monthlySalaries       Decimal  @default(0) @db.Decimal(10, 2)
+  monthlyUtilities      Decimal  @default(0) @db.Decimal(10, 2)
+  monthlyMarketing      Decimal  @default(0) @db.Decimal(10, 2)
+  monthlyOther          Decimal  @default(0) @db.Decimal(10, 2)
   // Break-even target
-  vatRate          Decimal  @default(0.14) @db.Decimal(5, 4) // 14% VAT (Egypt)
+  vatRate               Decimal  @default(0.14) @db.Decimal(5, 4) // 14% VAT (Egypt)
+  // Shipping & Payment settings
+  shippingEnabled       Boolean  @default(true)
+  codEnabled            Boolean  @default(true)
+  paymobEnabled         Boolean  @default(false)
+  fawryEnabled          Boolean  @default(false)
+  instapayEnabled       Boolean  @default(false)
+  defaultStandardFee    Decimal  @default(50) @db.Decimal(10, 2)
+  defaultExpressFee     Decimal  @default(100) @db.Decimal(10, 2)
+  defaultFreeOverAmount Decimal? @db.Decimal(10, 2)
+  defaultCodFee         Decimal  @default(0) @db.Decimal(10, 2)
   // Timestamps
-  updatedAt        DateTime @updatedAt
-  createdAt        DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  createdAt             DateTime @default(now())
+}
+
+model ShippingRate {
+  id             String   @id @default(cuid())
+  governorate    String
+  city           String?
+  standardFee    Decimal  @db.Decimal(10, 2)
+  expressFee     Decimal? @db.Decimal(10, 2)
+  freeOverAmount Decimal? @db.Decimal(10, 2)
+  codFee         Decimal  @default(0) @db.Decimal(10, 2)
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([governorate, city])
+  @@index([governorate])
+}
+
+model PaymentTransaction {
+  id           String   @id @default(cuid())
+  orderId      String
+  order        Order    @relation(fields: [orderId], references: [id])
+  provider     String
+  providerRef  String?
+  amount       Decimal  @db.Decimal(10, 2)
+  currency     String   @default("EGP")
+  status       String
+  method       String?
+  rawPayload   Json?
+  errorMessage String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([orderId])
+  @@index([provider, providerRef])
+  @@index([status])
+  @@index([createdAt])
 }

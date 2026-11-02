@@ -55,19 +55,7 @@ model Testimonial {
   createdAt DateTime @default(now())
 }
 
-// ---------- Stock audit trail (decision 5A — see header FLAG) ----------
-
-model StockMovement {
-  id        String   @id @default(cuid())
-  productId String
-  product   Product  @relation(fields: [productId], references: [id])
-  delta     Int
-  reason    String?
-  createdAt DateTime @default(now())
-
-  @@index([productId])
-  @@index([createdAt])
-}
+// ---------- Stock audit trail ----------
 
 // ---------- Part catalog: brands / models / categories / suppliers ----------
 
@@ -126,16 +114,21 @@ model PartCategory {
 }
 
 model Supplier {
-  id        String   @id @default(cuid())
-  code      String   @unique
-  name      String
-  phone     String?
-  email     String?
-  address   String?
-  note      String?
-  createdAt DateTime @default(now())
+  id           String   @id @default(cuid())
+  code         String   @unique
+  name         String
+  nameAr       String?
+  nameEn       String?
+  phone        String?
+  email        String?
+  address      String?
+  country      String?  @default("Taiwan")
+  leadTimeDays Int      @default(7)
+  note         String?
+  createdAt    DateTime @default(now())
 
-  products Product[]
+  products       Product[]
+  purchaseOrders PurchaseOrder[]
 }
 
 // ---------- Products ----------
@@ -166,11 +159,12 @@ model Product {
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
 
-  images          ProductImage[]
-  compatibilities ProductCompatibility[]
-  inventory       BranchInventory[]
-  orderItems      OrderItem[]
-  movements       StockMovement[]
+  images             ProductImage[]
+  compatibilities    ProductCompatibility[]
+  inventory          BranchInventory[]
+  orderItems         OrderItem[]
+  movements          StockMovement[]
+  purchaseOrderItems PurchaseOrderItem[]
 
   @@index([partCategoryId])
   @@index([brandId])
@@ -225,10 +219,12 @@ model Branch {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
-  employees   Employee[]
-  assignments EmployeeBranchAssignment[]
-  inventory   BranchInventory[]
-  orders      Order[]
+  employees      Employee[]
+  assignments    EmployeeBranchAssignment[]
+  inventory      BranchInventory[]
+  orders         Order[]
+  purchaseOrders PurchaseOrder[]
+  stockMovements StockMovement[]
 
   @@index([governorate])
   @@index([active])
@@ -397,6 +393,67 @@ model OrderItem {
 
   @@index([orderId])
   @@index([productId])
+}
+
+model PurchaseOrder {
+  id                   String    @id @default(cuid())
+  orderNumber          String    @unique // PO-YYYY-NNNNN
+  supplierId           String
+  supplier             Supplier  @relation(fields: [supplierId], references: [id])
+  branchId             String
+  branch               Branch    @relation(fields: [branchId], references: [id])
+  status               String    @default("draft") // draft, ordered, shipped, received, cancelled
+  subtotal             Decimal   @db.Decimal(10, 2)
+  taxAmount            Decimal   @default(0) @db.Decimal(10, 2)
+  shippingCost         Decimal   @default(0) @db.Decimal(10, 2)
+  customsCost          Decimal   @default(0) @db.Decimal(10, 2)
+  total                Decimal   @db.Decimal(10, 2)
+  notes                String?
+  expectedDeliveryDate DateTime?
+  receivedAt           DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  items          PurchaseOrderItem[]
+  stockMovements StockMovement[]
+
+  @@index([supplierId])
+  @@index([branchId])
+  @@index([status])
+}
+
+model PurchaseOrderItem {
+  id              String        @id @default(cuid())
+  purchaseOrderId String
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  productId       String
+  product         Product       @relation(fields: [productId], references: [id])
+  quantity        Int
+  unitCost        Decimal       @db.Decimal(10, 2)
+  lineTotal       Decimal       @db.Decimal(10, 2)
+
+  @@index([purchaseOrderId])
+  @@index([productId])
+}
+
+model StockMovement {
+  id              String         @id @default(cuid())
+  productId       String
+  product         Product        @relation(fields: [productId], references: [id])
+  branchId        String
+  branch          Branch         @relation(fields: [branchId], references: [id])
+  type            String // purchase, sale, transfer_in, transfer_out, adjustment, return
+  quantityDelta   Int // positive for in, negative for out
+  referenceId     String? // PO id, Order id, or Transfer id
+  purchaseOrderId String?
+  purchaseOrder   PurchaseOrder? @relation(fields: [purchaseOrderId], references: [id], onDelete: SetNull)
+  notes           String?
+  createdAt       DateTime       @default(now())
+
+  @@index([productId])
+  @@index([branchId])
+  @@index([type])
+  @@index([createdAt])
 }
 
 // ---------- Auth (Sprint 2D — JWT RS256 + refresh rotation) ----------

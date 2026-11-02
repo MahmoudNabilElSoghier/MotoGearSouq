@@ -1,4 +1,4 @@
-import { Injectable, ServiceUnavailableException } from "@nestjs/common";
+import { Inject, Injectable, ServiceUnavailableException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import * as crypto from "node:crypto";
 import type { PaymentProvider, InitiatePaymentResult } from "./payment-provider.interface";
@@ -8,7 +8,7 @@ export class FawryProvider implements PaymentProvider {
   readonly name = "fawry";
   private configured: boolean;
 
-  constructor(private config: ConfigService) {
+  constructor(@Inject(ConfigService) private readonly config: ConfigService) {
     const required = ["FAWRY_MERCHANT_CODE", "FAWRY_SECURITY_KEY"];
     this.configured = required.every((k) => !!this.config.get(k));
   }

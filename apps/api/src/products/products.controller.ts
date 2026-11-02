@@ -19,6 +19,12 @@ import { ProductsService, type ProductBody, type ProductFilter } from "./product
 
 const productBody = () => new ZodValidationPipe(productFormSchema);
 
+function toFiniteNumber(value?: string): number | undefined {
+  if (value == null || value === "") return undefined;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : undefined;
+}
+
 function normalize(values: ProductFormValues): ProductBody {
   return {
     code: values.code,
@@ -52,26 +58,44 @@ export class ProductsController {
 
   @Get()
   @ApiQuery({ name: "q", required: false })
+  @ApiQuery({ name: "search", required: false, description: "Alias of q" })
   @ApiQuery({ name: "brandSlug", required: false })
+  @ApiQuery({ name: "brand", required: false, description: "Alias of brandSlug (repeatable)" })
   @ApiQuery({ name: "categorySlug", required: false })
+  @ApiQuery({ name: "category", required: false, description: "Alias of categorySlug (repeatable)" })
+  @ApiQuery({ name: "type", required: false, description: "new | used | spare-parts | accessories" })
+  @ApiQuery({ name: "featured", required: false, description: "true = only featured products" })
+  @ApiQuery({ name: "priceMin", required: false })
+  @ApiQuery({ name: "priceMax", required: false })
   @ApiQuery({ name: "page", required: false })
   @ApiQuery({ name: "pageSize", required: false })
   @ApiQuery({ name: "includeInactive", required: false })
   @ApiOperation({ summary: "Paginated product list with filters" })
   getProducts(
     @Query("q") q?: string,
-    @Query("brandSlug") brandSlug?: string,
-    @Query("categorySlug") categorySlug?: string,
+    @Query("search") search?: string,
+    @Query("brandSlug") brandSlug?: string | string[],
+    @Query("brand") brand?: string | string[],
+    @Query("categorySlug") categorySlug?: string | string[],
+    @Query("category") category?: string | string[],
+    @Query("type") type?: string,
+    @Query("featured") featured?: string,
+    @Query("priceMin") priceMin?: string,
+    @Query("priceMax") priceMax?: string,
     @Query("page") page?: string,
     @Query("pageSize") pageSize?: string,
     @Query("includeInactive") includeInactive?: string,
   ) {
     const filter: ProductFilter = {
-      q: q || undefined,
-      brandSlug: brandSlug || undefined,
-      categorySlug: categorySlug || undefined,
-      page: page ? Number(page) : undefined,
-      pageSize: pageSize ? Number(pageSize) : undefined,
+      q: q || search || undefined,
+      brandSlug: brandSlug || brand || undefined,
+      categorySlug: categorySlug || category || undefined,
+      type: type || undefined,
+      featured: featured === "true" || featured === "1",
+      priceMin: toFiniteNumber(priceMin),
+      priceMax: toFiniteNumber(priceMax),
+      page: toFiniteNumber(page),
+      pageSize: toFiniteNumber(pageSize),
       includeInactive: includeInactive === "true" || includeInactive === "1",
     };
     return this.products.getProducts(filter);

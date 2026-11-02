@@ -11,13 +11,14 @@ type ProductScalars = Prisma.ProductGetPayload<{}>;
 // typed as rows so nested Decimal/JsonValue values get mapped too.
 export type ProductRow = Omit<
   ProductScalars,
-  "costPrice" | "wholesalePrice" | "retailPrice" | "vipPrice" | "taxRate"
+  "costPrice" | "wholesalePrice" | "retailPrice" | "vipPrice" | "taxRate" | "discountPercent"
 > & {
   costPrice: unknown;
   wholesalePrice: unknown;
   retailPrice: unknown;
   vipPrice: unknown;
   taxRate: unknown;
+  discountPercent: unknown;
   inventory?: BranchInventoryRow[];
   compatibilities?: ProductCompatibilityRow[];
 };
@@ -37,6 +38,7 @@ export function fromPrismaProduct(row: ProductRow): Product {
     retailPrice: toNumber(row.retailPrice),
     vipPrice: toNumber(row.vipPrice),
     taxRate: toNumberOrZero(row.taxRate),
+    discountPercent: toNumber(row.discountPercent),
     inventory: row.inventory?.map(fromPrismaBranchInventory),
     compatibilities: row.compatibilities?.map(fromPrismaCompatibility),
   };

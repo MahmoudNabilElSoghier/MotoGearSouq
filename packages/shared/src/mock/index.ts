@@ -232,6 +232,10 @@ const mkProduct = (
   unitOfMeasure: "قطعة",
   reorderLevel: 5,
   tags: [],
+  type: "spare-parts",
+  isFeatured: false,
+  onSale: false,
+  discountPercent: null,
   active: true,
   deletedAt: null,
   createdAt: earlier,
@@ -306,8 +310,9 @@ export const mockInventory: BranchInventory[] = [
   inventoryRow("inv-12", "br-alx", "p-pne-chn-002", 1, 2),
 ];
 
-export const mockProducts: Product[] = productsWithRefs.map((product) => ({
+export const mockProducts: Product[] = productsWithRefs.map((product, index) => ({
   ...product,
+  isFeatured: index < 3,
   inventory: mockInventory.filter((item) => item.productId === product.id),
 }));
 

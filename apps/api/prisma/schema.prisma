@@ -134,30 +134,35 @@ model Supplier {
 // ---------- Products ----------
 
 model Product {
-  id             String        @id @default(cuid())
-  code           String        @unique
-  name           String
-  nameEn         String?
-  description    String?
-  oemCode        String?
-  partCategoryId String?
-  partCategory   PartCategory? @relation(fields: [partCategoryId], references: [id])
-  brandId        String?
-  brand          Brand?        @relation(fields: [brandId], references: [id])
-  supplierId     String?
-  supplier       Supplier?     @relation(fields: [supplierId], references: [id])
-  costPrice      Decimal?      @db.Decimal(10, 2)
-  wholesalePrice Decimal?      @db.Decimal(10, 2)
-  retailPrice    Decimal?      @db.Decimal(10, 2)
-  vipPrice       Decimal?      @db.Decimal(10, 2)
-  taxRate        Decimal       @default(0.14) @db.Decimal(5, 4)
-  unitOfMeasure  String        @default("قطعة")
-  reorderLevel   Int           @default(5)
-  tags           String[]      @default([])
-  active         Boolean       @default(true)
-  deletedAt      DateTime?
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  id              String        @id @default(cuid())
+  code            String        @unique
+  name            String
+  nameEn          String?
+  description     String?
+  oemCode         String?
+  partCategoryId  String?
+  partCategory    PartCategory? @relation(fields: [partCategoryId], references: [id])
+  brandId         String?
+  brand           Brand?        @relation(fields: [brandId], references: [id])
+  supplierId      String?
+  supplier        Supplier?     @relation(fields: [supplierId], references: [id])
+  costPrice       Decimal?      @db.Decimal(10, 2)
+  wholesalePrice  Decimal?      @db.Decimal(10, 2)
+  retailPrice     Decimal?      @db.Decimal(10, 2)
+  vipPrice        Decimal?      @db.Decimal(10, 2)
+  taxRate         Decimal       @default(0.14) @db.Decimal(5, 4)
+  unitOfMeasure   String        @default("قطعة")
+  reorderLevel    Int           @default(5)
+  tags            String[]      @default([])
+  // Store catalog type: new | used | spare-parts | accessories
+  type            String        @default("spare-parts")
+  isFeatured      Boolean       @default(false)
+  onSale          Boolean       @default(false)
+  discountPercent Decimal?      @db.Decimal(5, 2)
+  active          Boolean       @default(true)
+  deletedAt       DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 
   images             ProductImage[]
   compatibilities    ProductCompatibility[]
@@ -169,6 +174,7 @@ model Product {
   @@index([partCategoryId])
   @@index([brandId])
   @@index([active])
+  @@index([type])
 }
 
 model ProductImage {

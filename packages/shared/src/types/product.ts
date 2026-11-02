@@ -69,6 +69,10 @@ export interface Product {
   unitOfMeasure: string;
   reorderLevel: number;
   tags: string[];
+  type: string;
+  isFeatured: boolean;
+  onSale: boolean;
+  discountPercent: number | null;
   active: boolean;
   deletedAt: Dateish | null;
   createdAt: Dateish;

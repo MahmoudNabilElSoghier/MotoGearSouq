@@ -13,8 +13,13 @@ import { PrismaService } from "../prisma/prisma.service";
 
 export interface ProductFilter {
   q?: string;
-  brandSlug?: string;
-  categorySlug?: string;
+  brandSlug?: string | string[];
+  categorySlug?: string | string[];
+  // new | used | spare-parts | accessories (arbitrary values yield an empty list)
+  type?: string;
+  featured?: boolean;
+  priceMin?: number;
+  priceMax?: number;
   page?: number;
   pageSize?: number;
   // Admin lists need inactive rows too; the public catalog keeps active-only.
@@ -48,6 +53,11 @@ export interface ProductBody {
   active: boolean;
 }
 
+function toSlugs(value: string | string[] | undefined): string[] {
+  if (!value) return [];
+  return (Array.isArray(value) ? value : [value]).filter(Boolean);
+}
+
 function buildWhere(filter: ProductFilter): Record<string, unknown> {
   const where: Record<string, unknown> = { deletedAt: null };
   if (!filter.includeInactive) where.active = true;
@@ -59,16 +69,40 @@ function buildWhere(filter: ProductFilter): Record<string, unknown> {
       { oemCode: { contains: q, mode: "insensitive" } },
     ];
   }
-  if (filter.brandSlug) where.brand = { slug: filter.brandSlug };
-  if (filter.categorySlug) where.partCategory = { slug: filter.categorySlug };
+  const brandSlugs = toSlugs(filter.brandSlug);
+  if (brandSlugs.length === 1) where.brand = { slug: brandSlugs[0] };
+  else if (brandSlugs.length > 1) where.brand = { slug: { in: brandSlugs } };
+  const categorySlugs = toSlugs(filter.categorySlug);
+  if (categorySlugs.length === 1) where.partCategory = { slug: categorySlugs[0] };
+  else if (categorySlugs.length > 1) where.partCategory = { slug: { in: categorySlugs } };
+  if (filter.type) where.type = filter.type;
+  if (filter.featured) where.isFeatured = true;
+  const price: Record<string, number> = {};
+  if (filter.priceMin != null) price.gte = filter.priceMin;
+  if (filter.priceMax != null) price.lte = filter.priceMax;
+  if (Object.keys(price).length > 0) where.retailPrice = price;
   return where;
 }
 
 function matchesMock(product: Product, filter: ProductFilter): boolean {
   if (product.deletedAt) return false;
   if (!product.active && !filter.includeInactive) return false;
-  if (filter.brandSlug && product.brand?.slug !== filter.brandSlug) return false;
-  if (filter.categorySlug && product.partCategory?.slug !== filter.categorySlug) return false;
+  const brandSlugs = toSlugs(filter.brandSlug);
+  if (brandSlugs.length > 0) {
+    const slug = product.brand?.slug;
+    if (!slug || !brandSlugs.includes(slug)) return false;
+  }
+  const categorySlugs = toSlugs(filter.categorySlug);
+  if (categorySlugs.length > 0) {
+    const slug = product.partCategory?.slug;
+    if (!slug || !categorySlugs.includes(slug)) return false;
+  }
+  if (filter.type && product.type !== filter.type) return false;
+  if (filter.featured && !product.isFeatured) return false;
+  if (filter.priceMin != null && (product.retailPrice == null || product.retailPrice < filter.priceMin))
+    return false;
+  if (filter.priceMax != null && (product.retailPrice == null || product.retailPrice > filter.priceMax))
+    return false;
   if (filter.q) {
     const needle = filter.q.toLowerCase();
     const haystack = `${product.name} ${product.code} ${product.oemCode ?? ""}`.toLowerCase();

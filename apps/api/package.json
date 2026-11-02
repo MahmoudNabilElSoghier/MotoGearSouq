@@ -10,6 +10,7 @@
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
     "db:migrate-excel": "tsx scripts/migrate-excel.ts",
+    "db:migrate-product-types": "tsx scripts/migrate-product-types.ts",
     "db:studio": "prisma studio",
     "prisma:validate": "prisma validate",
     "test:storage": "tsx scripts/test-storage.ts"

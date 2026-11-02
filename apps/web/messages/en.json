@@ -397,7 +397,20 @@
       "brands": "Brands",
       "employees": "Employees",
       "branches": "Branches",
-      "inventory": "Inventory"
+      "inventory": "Inventory",
+      "orders": "Orders",
+      "suppliers": "Suppliers",
+      "purchases": "Purchase Orders",
+      "stockMovements": "Stock Movements"
+    },
+    "forms": {
+      "common": {
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "save": "Save",
+        "edit": "Edit",
+        "delete": "Delete"
+      }
     },
     "dashboard": {
       "title": "Dashboard",
@@ -696,6 +709,179 @@
     },
     "common": {
       "validationFailed": "Validation failed — {details}"
+    },
+    "suppliers": {
+      "title": "Suppliers",
+      "countLine": "{count} suppliers",
+      "add": "Add Supplier",
+      "createdOk": "Supplier created successfully",
+      "updatedOk": "Supplier updated successfully",
+      "edit": "Edit supplier",
+      "empty": "No suppliers found",
+      "filter": {
+        "searchPlaceholder": "Search by code, name, or phone..."
+      },
+      "table": {
+        "code": "Code",
+        "name": "Name",
+        "phone": "Phone",
+        "email": "Email",
+        "country": "Country",
+        "leadTime": "Lead time (days)",
+        "products": "Products",
+        "pos": "Purchase orders",
+        "actions": "Actions"
+      },
+      "form": {
+        "titleNew": "New supplier",
+        "titleEdit": "Edit supplier",
+        "code": "Code",
+        "name": "Name",
+        "nameAr": "Name (Arabic)",
+        "nameEn": "Name (English)",
+        "phone": "Phone",
+        "email": "Email",
+        "country": "Country",
+        "leadTimeDays": "Lead time (days)",
+        "saving": "Saving...",
+        "save": "Save",
+        "validationFailed": "Validation failed — {details}",
+        "saveError": "Failed to save supplier"
+      }
+    },
+    "purchases": {
+      "title": "Purchase Orders",
+      "countLine": "{count} purchase orders",
+      "add": "New Purchase Order",
+      "createdOk": "Purchase order created successfully",
+      "receivedOk": "Purchase order received — stock updated",
+      "cancelledOk": "Purchase order cancelled",
+      "notFound": "Purchase order not found",
+      "backToList": "Back to list",
+      "empty": "No purchase orders found",
+      "status": {
+        "draft": "Draft",
+        "ordered": "Ordered",
+        "shipped": "Shipped",
+        "received": "Received",
+        "cancelled": "Cancelled"
+      },
+      "filter": {
+        "status": "Status",
+        "all": "All"
+      },
+      "table": {
+        "orderNumber": "Order no.",
+        "supplier": "Supplier",
+        "branch": "Branch",
+        "items": "Items",
+        "total": "Total",
+        "status": "Status",
+        "date": "Date",
+        "product": "Product",
+        "qty": "Qty",
+        "unitCost": "Unit cost",
+        "lineTotal": "Line total",
+        "movementType": "Movement type",
+        "delta": "Qty change"
+      },
+      "pagination": {
+        "page": "Page {page} of {total}",
+        "prev": "Previous",
+        "next": "Next"
+      },
+      "detail": {
+        "supplier": "Supplier",
+        "branch": "Branch",
+        "created": "Created",
+        "receivedAt": "Received",
+        "expected": "Expected delivery",
+        "markReceived": "Mark as Received",
+        "cancelPo": "Cancel Order",
+        "itemsTitle": "Items",
+        "subtotal": "Subtotal",
+        "tax": "Tax",
+        "shipping": "Shipping",
+        "customs": "Customs",
+        "total": "Total",
+        "movementsTitle": "Stock movements from this order",
+        "notes": "Notes",
+        "confirmReceivedTitle": "Mark as received?",
+        "confirmReceivedMsg": "Stock will be increased by the received quantities.",
+        "confirmCancelTitle": "Cancel purchase order?",
+        "confirmCancelMsg": "This order will be cancelled. This cannot be undone."
+      },
+      "form": {
+        "titleNew": "New purchase order",
+        "supplier": "Supplier",
+        "selectSupplier": "Select supplier",
+        "branch": "Branch",
+        "selectBranch": "Select branch",
+        "shippingCost": "Shipping cost",
+        "customsCost": "Customs cost",
+        "expectedDate": "Expected delivery date",
+        "notes": "Notes",
+        "itemsTitle": "Items",
+        "addItem": "Add item",
+        "itemsRequired": "At least one item is required",
+        "product": "Product",
+        "selectProduct": "Select product",
+        "qty": "Qty",
+        "unitCost": "Unit cost",
+        "removeItem": "Remove item",
+        "saving": "Saving...",
+        "save": "Save",
+        "validationFailed": "Validation failed — {details}",
+        "saveError": "Failed to save purchase order"
+      }
+    },
+    "stockMovements": {
+      "title": "Stock Movements",
+      "countLine": "{count} movements",
+      "add": "Manual Adjustment",
+      "createdOk": "Stock adjusted successfully",
+      "empty": "No stock movements found",
+      "type": {
+        "purchase": "Purchase receipt",
+        "sale": "Sale",
+        "adjustment": "Manual adjustment",
+        "return": "Return",
+        "transferIn": "Transfer in",
+        "transferOut": "Transfer out"
+      },
+      "filter": {
+        "searchPlaceholder": "Search product, code, or notes...",
+        "type": "Type",
+        "all": "All"
+      },
+      "table": {
+        "date": "Date",
+        "product": "Product",
+        "branch": "Branch",
+        "type": "Type",
+        "delta": "Qty change",
+        "reference": "Reference",
+        "notes": "Notes"
+      },
+      "pagination": {
+        "page": "Page {page} of {total}",
+        "prev": "Previous",
+        "next": "Next"
+      },
+      "form": {
+        "titleNew": "Manual stock adjustment",
+        "product": "Product",
+        "selectProduct": "Select product",
+        "branch": "Branch",
+        "selectBranch": "Select branch",
+        "quantityDelta": "Quantity change",
+        "quantityDeltaHint": "e.g. 10 or -5",
+        "notes": "Notes",
+        "saving": "Saving...",
+        "save": "Save",
+        "validationFailed": "Validation failed — {details}",
+        "saveError": "Failed to save adjustment"
+      }
     }
   },
   "cart": {

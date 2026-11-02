@@ -398,7 +398,19 @@
       "brands": "الماركات",
       "employees": "الموظفون",
       "branches": "الفروع",
-      "inventory": "المخزون"
+      "inventory": "المخزون",
+      "suppliers": "الموردون",
+      "purchases": "أوامر الشراء",
+      "stockMovements": "حركات المخزون"
+    },
+    "forms": {
+      "common": {
+        "cancel": "إلغاء",
+        "confirm": "تأكيد",
+        "save": "حفظ",
+        "edit": "تعديل",
+        "delete": "حذف"
+      }
     },
     "dashboard": {
       "title": "لوحة التحكم",
@@ -697,6 +709,179 @@
     },
     "common": {
       "validationFailed": "فشل التحقق — {details}"
+    },
+    "suppliers": {
+      "title": "الموردون",
+      "countLine": "{count} موردين",
+      "add": "إضافة مورد",
+      "createdOk": "تم إنشاء المورد بنجاح",
+      "updatedOk": "تم تحديث المورد بنجاح",
+      "edit": "تعديل المورد",
+      "empty": "لا يوجد موردون",
+      "filter": {
+        "searchPlaceholder": "بحث بالكود أو الاسم أو الهاتف..."
+      },
+      "table": {
+        "code": "الكود",
+        "name": "الاسم",
+        "phone": "الهاتف",
+        "email": "البريد الإلكتروني",
+        "country": "الدولة",
+        "leadTime": "مدة التوريد (أيام)",
+        "products": "المنتجات",
+        "pos": "أوامر الشراء",
+        "actions": "إجراءات"
+      },
+      "form": {
+        "titleNew": "مورد جديد",
+        "titleEdit": "تعديل المورد",
+        "code": "الكود",
+        "name": "الاسم",
+        "nameAr": "الاسم (عربي)",
+        "nameEn": "الاسم (إنجليزي)",
+        "phone": "الهاتف",
+        "email": "البريد الإلكتروني",
+        "country": "الدولة",
+        "leadTimeDays": "مدة التوريد (أيام)",
+        "saving": "جارٍ الحفظ...",
+        "save": "حفظ",
+        "validationFailed": "فشل التحقق — {details}",
+        "saveError": "فشل حفظ المورد"
+      }
+    },
+    "purchases": {
+      "title": "أوامر الشراء",
+      "countLine": "{count} أمر شراء",
+      "add": "أمر شراء جديد",
+      "createdOk": "تم إنشاء أمر الشراء بنجاح",
+      "receivedOk": "تم استلام أمر الشراء وتحديث المخزون",
+      "cancelledOk": "تم إلغاء أمر الشراء",
+      "notFound": "أمر الشراء غير موجود",
+      "backToList": "العودة للقائمة",
+      "empty": "لا توجد أوامر شراء",
+      "status": {
+        "draft": "مسودة",
+        "ordered": "تم الطلب",
+        "shipped": "تم الشحن",
+        "received": "مستلم",
+        "cancelled": "ملغي"
+      },
+      "filter": {
+        "status": "الحالة",
+        "all": "الكل"
+      },
+      "table": {
+        "orderNumber": "رقم الأمر",
+        "supplier": "المورد",
+        "branch": "الفرع",
+        "items": "الأصناف",
+        "total": "الإجمالي",
+        "status": "الحالة",
+        "date": "التاريخ",
+        "product": "المنتج",
+        "qty": "الكمية",
+        "unitCost": "تكلفة الوحدة",
+        "lineTotal": "إجمالي السطر",
+        "movementType": "نوع الحركة",
+        "delta": "تغيّر الكمية"
+      },
+      "pagination": {
+        "page": "الصفحة {page} من {total}",
+        "prev": "السابق",
+        "next": "التالي"
+      },
+      "detail": {
+        "supplier": "المورد",
+        "branch": "الفرع",
+        "created": "تاريخ الإنشاء",
+        "receivedAt": "تاريخ الاستلام",
+        "expected": "التسليم المتوقع",
+        "markReceived": "تعليم كمستلم",
+        "cancelPo": "إلغاء الأمر",
+        "itemsTitle": "الأصناف",
+        "subtotal": "المجموع الفرعي",
+        "tax": "الضريبة",
+        "shipping": "الشحن",
+        "customs": "الجمارك",
+        "total": "الإجمالي",
+        "movementsTitle": "حركات المخزون من هذا الأمر",
+        "notes": "ملاحظات",
+        "confirmReceivedTitle": "تعليم كمستلم؟",
+        "confirmReceivedMsg": "سيتم زيادة المخزون بكميات الاستلام.",
+        "confirmCancelTitle": "إلغاء أمر الشراء؟",
+        "confirmCancelMsg": "سيتم إلغاء هذا الأمر ولا يمكن التراجع عن ذلك."
+      },
+      "form": {
+        "titleNew": "أمر شراء جديد",
+        "supplier": "المورد",
+        "selectSupplier": "اختر المورد",
+        "branch": "الفرع",
+        "selectBranch": "اختر الفرع",
+        "shippingCost": "تكلفة الشحن",
+        "customsCost": "تكلفة الجمارك",
+        "expectedDate": "تاريخ التسليم المتوقع",
+        "notes": "ملاحظات",
+        "itemsTitle": "الأصناف",
+        "addItem": "إضافة صنف",
+        "itemsRequired": "يجب إضافة صنف واحد على الأقل",
+        "product": "المنتج",
+        "selectProduct": "اختر المنتج",
+        "qty": "الكمية",
+        "unitCost": "تكلفة الوحدة",
+        "removeItem": "حذف الصنف",
+        "saving": "جارٍ الحفظ...",
+        "save": "حفظ",
+        "validationFailed": "فشل التحقق — {details}",
+        "saveError": "فشل حفظ أمر الشراء"
+      }
+    },
+    "stockMovements": {
+      "title": "حركات المخزون",
+      "countLine": "{count} حركة",
+      "add": "تعديل يدوي",
+      "createdOk": "تم تعديل المخزون بنجاح",
+      "empty": "لا توجد حركات مخزون",
+      "type": {
+        "purchase": "استلام شراء",
+        "sale": "بيع",
+        "adjustment": "تعديل يدوي",
+        "return": "مرتجع",
+        "transferIn": "تحويل وارد",
+        "transferOut": "تحويل صادر"
+      },
+      "filter": {
+        "searchPlaceholder": "بحث بالمنتج أو الكود أو الملاحظات...",
+        "type": "النوع",
+        "all": "الكل"
+      },
+      "table": {
+        "date": "التاريخ",
+        "product": "المنتج",
+        "branch": "الفرع",
+        "type": "النوع",
+        "delta": "تغيّر الكمية",
+        "reference": "المرجع",
+        "notes": "ملاحظات"
+      },
+      "pagination": {
+        "page": "الصفحة {page} من {total}",
+        "prev": "السابق",
+        "next": "التالي"
+      },
+      "form": {
+        "titleNew": "تعديل يدوي للمخزون",
+        "product": "المنتج",
+        "selectProduct": "اختر المنتج",
+        "branch": "الفرع",
+        "selectBranch": "اختر الفرع",
+        "quantityDelta": "تغيّر الكمية",
+        "quantityDeltaHint": "مثال: 10 أو -5",
+        "notes": "ملاحظات",
+        "saving": "جارٍ الحفظ...",
+        "save": "حفظ",
+        "validationFailed": "فشل التحقق — {details}",
+        "saveError": "فشل حفظ التعديل"
+      }
     }
   },
   "cart": {

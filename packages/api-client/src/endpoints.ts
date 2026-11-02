@@ -17,8 +17,12 @@
   UpdateBranchInput,
   CreateEmployeeInput,
   UpdateEmployeeInput,
+  CreateSupplierInput,
+  UpdateSupplierInput,
+  CreatePurchaseOrderInput,
+  StockAdjustmentInput,
 } from "@motogearsouq/shared";
-import { apiGet, apiGetOrNull, apiSend, type ApiResponse } from "./client";
+import { apiGet, apiGetOrNull, apiRaw, apiSend, type ApiResponse } from "./client";
 
 export interface ProductFilter {
   q?: string;
@@ -227,3 +231,168 @@ export const trackOrder = (orderNumber: string): Promise<TrackOrder> =>
 
 export const updateOrderStatus = (id: string, status: OrderStatusUpdate): Promise<ApiResponse<Order>> =>
   apiSend<Order>("PATCH", `/orders/${encode(id)}/status`, { status });
+
+// ---------- ERP: suppliers, purchase orders, stock movements (Sprint 2) ----------
+
+export interface Supplier {
+  id: string;
+  code: string;
+  name: string;
+  nameAr: string | null;
+  nameEn: string | null;
+  phone: string | null;
+  email: string | null;
+  address: string | null;
+  country: string | null;
+  leadTimeDays: number;
+  note: string | null;
+  createdAt: string;
+  _count?: { products: number; purchaseOrders: number };
+}
+
+export type PurchaseStatus = "draft" | "ordered" | "shipped" | "received" | "cancelled";
+
+export interface PurchaseOrderItemRow {
+  id: string;
+  productId: string;
+  quantity: number;
+  unitCost: number | string; // Prisma Decimal serializes to string
+  lineTotal: number | string;
+  product?: { id: string; code: string; name: string; unitOfMeasure: string };
+}
+
+export interface StockMovementRow {
+  id: string;
+  productId: string;
+  branchId: string;
+  type: string;
+  quantityDelta: number;
+  referenceId: string | null;
+  purchaseOrderId: string | null;
+  notes: string | null;
+  createdAt: string;
+  product?: { id: string; code: string; name: string; unitOfMeasure: string };
+  branch?: { id: string; code?: string; nameAr: string };
+  purchaseOrder?: { id: string; orderNumber: string } | null;
+}
+
+export interface PurchaseOrderListItem {
+  id: string;
+  orderNumber: string;
+  supplierId: string;
+  branchId: string;
+  status: PurchaseStatus | string;
+  subtotal: number | string;
+  taxAmount: number | string;
+  shippingCost: number | string;
+  customsCost: number | string;
+  total: number | string;
+  notes: string | null;
+  expectedDeliveryDate: string | null;
+  receivedAt: string | null;
+  createdAt: string;
+  supplier: { id: string; code: string; name: string };
+  branch: { id: string; code: string; nameAr: string };
+  _count?: { items: number };
+}
+
+export interface PurchaseOrderPage {
+  items: PurchaseOrderListItem[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+export interface PurchaseOrderDetail extends Omit<PurchaseOrderListItem, "supplier" | "branch"> {
+  supplier: Supplier;
+  branch: { id: string; code: string; nameAr: string; nameEn?: string | null };
+  items: PurchaseOrderItemRow[];
+  stockMovements: StockMovementRow[];
+}
+
+export interface StockMovementPage {
+  items: StockMovementRow[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+// Suppliers
+export const getSuppliers = (): Promise<Supplier[]> => apiGet<Supplier[]>("/suppliers");
+
+export const getSupplierById = (id: string): Promise<Supplier | null> =>
+  apiGetOrNull<Supplier>(`/suppliers/${encode(id)}`);
+
+export const createSupplier = (
+  input: CreateSupplierInput,
+): Promise<ApiResponse<Supplier>> => apiSend<Supplier>("POST", "/suppliers", input);
+
+export const updateSupplier = (
+  id: string,
+  input: UpdateSupplierInput,
+): Promise<ApiResponse<Supplier>> => apiSend<Supplier>("PATCH", `/suppliers/${encode(id)}`, input);
+
+// Purchase orders
+export interface PurchaseFilter {
+  status?: string;
+  supplierId?: string;
+  branchId?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+export const getPurchases = (filter: PurchaseFilter = {}): Promise<PurchaseOrderPage> => {
+  const params = new URLSearchParams();
+  if (filter.status) params.set("status", filter.status);
+  if (filter.supplierId) params.set("supplierId", filter.supplierId);
+  if (filter.branchId) params.set("branchId", filter.branchId);
+  if (filter.page) params.set("page", String(filter.page));
+  if (filter.pageSize) params.set("pageSize", String(filter.pageSize));
+  const qs = params.toString();
+  return apiRaw<PurchaseOrderPage>(`/purchases${qs ? `?${qs}` : ""}`);
+};
+
+export const getPurchaseById = (id: string): Promise<PurchaseOrderDetail | null> =>
+  apiGetOrNull<PurchaseOrderDetail>(`/purchases/${encode(id)}`);
+
+export const createPurchaseOrder = (
+  input: CreatePurchaseOrderInput,
+): Promise<ApiResponse<PurchaseOrderDetail>> =>
+  apiSend<PurchaseOrderDetail>("POST", "/purchases", input);
+
+export const updatePurchaseStatus = (
+  id: string,
+  status: PurchaseStatus,
+): Promise<ApiResponse<PurchaseOrderDetail>> =>
+  apiSend<PurchaseOrderDetail>("PATCH", `/purchases/${encode(id)}/status`, { status });
+
+// Stock movements
+export interface MovementFilter {
+  productId?: string;
+  branchId?: string;
+  type?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+export const getStockMovements = (filter: MovementFilter = {}): Promise<StockMovementPage> => {
+  const params = new URLSearchParams();
+  if (filter.productId) params.set("productId", filter.productId);
+  if (filter.branchId) params.set("branchId", filter.branchId);
+  if (filter.type) params.set("type", filter.type);
+  if (filter.page) params.set("page", String(filter.page));
+  if (filter.pageSize) params.set("pageSize", String(filter.pageSize));
+  const qs = params.toString();
+  return apiRaw<StockMovementPage>(`/stock-movements${qs ? `?${qs}` : ""}`);
+};
+
+export const createStockAdjustment = (
+  input: StockAdjustmentInput,
+): Promise<ApiResponse<{ movement: StockMovementRow; inventory: { id: string; quantity: number } }>> =>
+  apiSend<{ movement: StockMovementRow; inventory: { id: string; quantity: number } }>(
+    "POST",
+    "/stock-movements",
+    input,
+  );

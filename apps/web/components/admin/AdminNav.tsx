@@ -23,6 +23,9 @@ export function AdminNav() {
     { href: "/admin/employees", label: t("employees") },
     { href: "/admin/branches", label: t("branches") },
     { href: "/admin/inventory", label: t("inventory") },
+    { href: "/admin/suppliers", label: t("suppliers") },
+    { href: "/admin/purchases", label: t("purchases") },
+    { href: "/admin/stock-movements", label: t("stockMovements") },
   ];
 
   useEffect(() => {

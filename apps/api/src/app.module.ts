@@ -13,6 +13,9 @@ import { OrdersModule } from "./orders/orders.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { ProductsModule } from "./products/products.module";
 import { StorageModule } from "./storage/storage.module";
+import { SuppliersModule } from "./suppliers/suppliers.module";
+import { StockMovementsModule } from "./stock-movements/stock-movements.module";
+import { PurchasesModule } from "./purchases/purchases.module";
 
 @Module({
   imports: [
@@ -30,6 +33,9 @@ import { StorageModule } from "./storage/storage.module";
     ModelsModule,
     OrdersModule,
     ProductsModule,
+    SuppliersModule,
+    StockMovementsModule,
+    PurchasesModule,
   ],
 })
 export class AppModule {}

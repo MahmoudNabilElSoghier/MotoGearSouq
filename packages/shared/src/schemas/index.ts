@@ -4,3 +4,6 @@ export * from "./product";
 export * from "./employee";
 export * from "./branch";
 export * from "./auth";
+export * from "./supplier";
+export * from "./purchase";
+export * from "./stock";

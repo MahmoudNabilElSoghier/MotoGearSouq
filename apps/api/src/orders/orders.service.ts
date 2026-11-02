@@ -192,7 +192,7 @@ export class OrdersService {
         where: { productId: { in: [...quantities.keys()] }, quantity: { gt: 0 } },
         orderBy: { quantity: "desc" },
       });
-      const stockPlans: { inventoryId: string; productId: string; productName: string; quantity: number }[] = [];
+      const stockPlans: { inventoryId: string; branchId: string; productId: string; productName: string; quantity: number }[] = [];
       for (const [productId, quantity] of quantities) {
         const row = inventories.find((i) => i.productId === productId && i.quantity >= quantity);
         if (!row) {
@@ -200,6 +200,7 @@ export class OrdersService {
         }
         stockPlans.push({
           inventoryId: row.id,
+          branchId: row.branchId,
           productId,
           productName: byId.get(productId)!.name,
           quantity,
@@ -211,17 +212,7 @@ export class OrdersService {
         const customer = await this.findOrCreateCustomer(tx, input);
         const orderNumber = await this.generateOrderNumber(tx);
 
-        for (const plan of stockPlans) {
-          const deducted = await tx.branchInventory.updateMany({
-            where: { id: plan.inventoryId, quantity: { gte: plan.quantity } },
-            data: { quantity: { decrement: plan.quantity } },
-          });
-          if (deducted.count === 0) {
-            throw new BadRequestException(`Out of stock: ${plan.productName}`);
-          }
-        }
-
-        return tx.order.create({
+        const order = await tx.order.create({
           data: {
             orderNumber,
             customerId: customer.id,
@@ -253,6 +244,29 @@ export class OrdersService {
             },
           },
         });
+
+        for (const plan of stockPlans) {
+          const deducted = await tx.branchInventory.updateMany({
+            where: { id: plan.inventoryId, quantity: { gte: plan.quantity } },
+            data: { quantity: { decrement: plan.quantity } },
+          });
+          if (deducted.count === 0) {
+            throw new BadRequestException(`Out of stock: ${plan.productName}`);
+          }
+
+          await tx.stockMovement.create({
+            data: {
+              productId: plan.productId,
+              branchId: plan.branchId,
+              type: "sale",
+              quantityDelta: -plan.quantity,
+              referenceId: order.id,
+              notes: `Sold via Order ${order.orderNumber}`,
+            },
+          });
+        }
+
+        return order;
       });
 
       return {
@@ -289,7 +303,7 @@ export class OrdersService {
 
       const updated = await db.$transaction(async (tx) => {
         if (status === "cancelled") {
-          await this.restoreStock(tx, existing.items);
+          await this.restoreStock(tx, existing.id, existing.orderNumber, existing.items);
         }
         return tx.order.update({
           where: { id },
@@ -405,6 +419,8 @@ export class OrdersService {
 
   private async restoreStock(
     db: Prisma.TransactionClient,
+    orderId: string,
+    orderNumber: string,
     items: { productId: string; quantity: number }[],
   ): Promise<void> {
     for (const item of items) {
@@ -416,6 +432,17 @@ export class OrdersService {
         await db.branchInventory.update({
           where: { id: row.id },
           data: { quantity: { increment: item.quantity } },
+        });
+
+        await db.stockMovement.create({
+          data: {
+            productId: item.productId,
+            branchId: row.branchId,
+            type: "return",
+            quantityDelta: item.quantity,
+            referenceId: orderId,
+            notes: `Returned via cancelled Order ${orderNumber}`,
+          },
         });
       }
       // No inventory row for this product anymore — nothing to restore.

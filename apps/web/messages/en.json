@@ -651,6 +651,49 @@
       "done": "Saved",
       "qtyAria": "Quantity of {product} at {branch}"
     },
+    "orders": {
+      "title": "Orders Management",
+      "table": {
+        "orderNumber": "Order Number",
+        "customer": "Customer",
+        "phone": "Phone",
+        "total": "Total",
+        "status": "Status",
+        "date": "Date"
+      },
+      "filter": {
+        "all": "All Statuses",
+        "search": "Search",
+        "searchPlaceholder": "Order number or phone"
+      },
+      "empty": "No orders registered.",
+      "pagination": {
+        "page": "Page {page} of {total}",
+        "prev": "Previous",
+        "next": "Next"
+      },
+      "detail": {
+        "title": "Order Details",
+        "customer": "Customer Info",
+        "shipping": "Shipping Address",
+        "items": "Items",
+        "totals": "Totals",
+        "subtotal": "Subtotal",
+        "tax": "VAT",
+        "total": "Total",
+        "timeline": "Timeline",
+        "created": "Created At",
+        "updated": "Last Updated",
+        "notes": "Notes",
+        "statusActions": {
+          "label": "Change Status",
+          "update": "Update Status",
+          "success": "Order status updated successfully",
+          "error": "Error updating order status"
+        },
+        "print": "Print Invoice"
+      }
+    },
     "common": {
       "validationFailed": "Validation failed — {details}"
     }

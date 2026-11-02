@@ -61,10 +61,10 @@ export default function AdminHomePage() {
   }
 
   const cards = [
-    { label: t("cardBrands"), value: brands.length, danger: false },
-    { label: t("cardProducts"), value: productPage?.total ?? 0, danger: false },
-    { label: t("cardOrders"), value: orderPage?.total ?? 0, danger: false },
-    { label: t("cardLowStock"), value: lowStockItems.length, danger: lowStockItems.length > 0 },
+    { label: t("cardBrands"), value: brands.length, danger: false, href: "/admin/brands" },
+    { label: t("cardProducts"), value: productPage?.total ?? 0, danger: false, href: "/admin/products" },
+    { label: t("cardOrders"), value: orderPage?.total ?? 0, danger: false, href: "/admin/orders" },
+    { label: t("cardLowStock"), value: lowStockItems.length, danger: lowStockItems.length > 0, href: "/admin/inventory" },
   ];
 
   return (
@@ -82,23 +82,42 @@ export default function AdminHomePage() {
       </div>
 
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label={t("statsAria")}>
-        {cards.map((card) => (
-          <li
-            key={card.label}
-            className={`rounded-xl border p-5 ${
-              card.danger ? "border-red-500/40 bg-red-500/5" : "border-border bg-card"
-            }`}
-          >
-            <p className="text-sm text-muted">{card.label}</p>
-            <p
-              className={`mt-2 text-3xl font-extrabold ${
-                card.danger ? "text-red-400" : "text-fg"
-              }`}
-            >
-              {nf.format(card.value)}
-            </p>
-          </li>
-        ))}
+        {cards.map((card) => {
+          const content = (
+            <>
+              <p className="text-sm text-muted">{card.label}</p>
+              <p
+                className={`mt-2 text-3xl font-extrabold ${
+                  card.danger ? "text-red-400" : "text-fg"
+                }`}
+              >
+                {nf.format(card.value)}
+              </p>
+            </>
+          );
+          return (
+            <li key={card.label}>
+              {card.href ? (
+                <Link
+                  href={card.href}
+                  className={`block rounded-xl border p-5 transition-colors hover:border-accent ${
+                    card.danger ? "border-red-500/40 bg-red-500/5" : "border-border bg-card"
+                  }`}
+                >
+                  {content}
+                </Link>
+              ) : (
+                <div
+                  className={`rounded-xl border p-5 ${
+                    card.danger ? "border-red-500/40 bg-red-500/5" : "border-border bg-card"
+                  }`}
+                >
+                  {content}
+                </div>
+              )}
+            </li>
+          );
+        })}
       </ul>
 
       <section

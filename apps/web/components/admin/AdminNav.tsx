@@ -16,6 +16,7 @@ export function AdminNav() {
 
   const navItems = [
     { href: "/admin", label: t("dashboard") },
+    { href: "/admin/orders", label: t("orders") },
     { href: "/admin/products", label: t("products") },
     { href: "/admin/categories", label: t("categories") },
     { href: "/admin/brands", label: t("brands") },

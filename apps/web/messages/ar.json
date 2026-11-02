@@ -392,6 +392,7 @@
       "aria": "قائمة الإدارة",
       "logout": "تسجيل الخروج",
       "dashboard": "لوحة التحكم",
+      "orders": "الطلبات",
       "products": "المنتجات",
       "categories": "التصنيفات",
       "brands": "الماركات",
@@ -650,6 +651,49 @@
       "save": "حفظ",
       "done": "تم",
       "qtyAria": "كمية {product} في {branch}"
+    },
+    "orders": {
+      "title": "إدارة الطلبات",
+      "table": {
+        "orderNumber": "رقم الطلب",
+        "customer": "العميل",
+        "phone": "الهاتف",
+        "total": "الإجمالي",
+        "status": "الحالة",
+        "date": "التاريخ"
+      },
+      "filter": {
+        "all": "كل الحالات",
+        "search": "بحث",
+        "searchPlaceholder": "رقم الطلب أو الهاتف"
+      },
+      "empty": "لا توجد طلبات مسجلة.",
+      "pagination": {
+        "page": "صفحة {page} من {total}",
+        "prev": "السابق",
+        "next": "التالي"
+      },
+      "detail": {
+        "title": "تفاصيل الطلب",
+        "customer": "بيانات العميل",
+        "shipping": "عنوان الشحن",
+        "items": "المنتجات",
+        "totals": "المجاميع",
+        "subtotal": "المجموع الفرعي",
+        "tax": "ضريبة القيمة المضافة",
+        "total": "الإجمالي الكلي",
+        "timeline": "التواريخ",
+        "created": "تاريخ الإنشاء",
+        "updated": "آخر تحديث",
+        "notes": "ملاحظات",
+        "statusActions": {
+          "label": "تغيير الحالة",
+          "update": "تحديث الحالة",
+          "success": "تم تحديث حالة الطلب بنجاح",
+          "error": "حدث خطأ أثناء تحديث الحالة"
+        },
+        "print": "طباعة الفاتورة"
+      }
     },
     "common": {
       "validationFailed": "فشل التحقق — {details}"

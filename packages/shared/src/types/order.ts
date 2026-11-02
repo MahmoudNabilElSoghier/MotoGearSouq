@@ -37,6 +37,10 @@ export interface Order {
   paymentMethod: string | null;
   paymentStatus: string;
   notes: string | null;
+  shippingAddress?: string | null;
+  shippingCity?: string | null;
+  shippingGovernorate?: string | null;
+  shippingPhone?: string | null;
   deletedAt: Dateish | null;
   createdAt: Dateish;
   updatedAt: Dateish;

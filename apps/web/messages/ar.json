@@ -1089,5 +1089,85 @@
       "delivered": "تم التوصيل",
       "cancelled": "ملغي"
     }
+  },
+  "customerAuth": {
+    "login": {
+      "title": "تسجيل الدخول",
+      "subtitle": "دخل على حسابك لتتابع طلباتك",
+      "phone": "رقم الموبايل",
+      "password": "كلمة المرور",
+      "submit": "تسجيل الدخول",
+      "loading": "جاري تسجيل الدخول...",
+      "noAccount": "ليس لديك حساب؟",
+      "registerLink": "سجل الآن",
+      "signinShort": "دخول",
+      "showPassword": "إظهار كلمة المرور",
+      "hidePassword": "إخفاء كلمة المرور",
+      "errors": {
+        "invalid": "بيانات غير صحيحة",
+        "pending": "حسابك قيد المراجعة — سيتم تفعيله قريباً",
+        "rejected": "تم رفض طلبك — تواصل معنا"
+      }
+    },
+    "register": {
+      "title": "إنشاء حساب جديد",
+      "tabs": {
+        "retail": "عميل فردي",
+        "wholesale": "تاجر / جملة"
+      },
+      "fields": {
+        "name": "الاسم بالكامل",
+        "phone": "رقم الموبايل",
+        "password": "كلمة المرور",
+        "email": "البريد الإلكتروني (اختياري)",
+        "businessName": "اسم النشاط التجاري",
+        "taxNumber": "الرقم الضريبي",
+        "commercialRegister": "السجل التجاري"
+      },
+      "submit": "إنشاء الحساب",
+      "loading": "جاري إنشاء الحساب...",
+      "wholesaleSuccess": "تم إرسال طلبك. سيتم مراجعته خلال 24-48 ساعة.",
+      "backHome": "العودة للرئيسية",
+      "haveAccount": "لديك حساب بالفعل؟",
+      "loginLink": "سجل الدخول"
+    },
+    "account": {
+      "title": "حسابي",
+      "welcome": "أهلاً، {name}",
+      "wholesaleBadge": "تاجر / جملة",
+      "sidebar": {
+        "overview": "نظرة عامة",
+        "orders": "طلباتي",
+        "logout": "تسجيل الخروج"
+      },
+      "stats": {
+        "totalOrders": "إجمالي الطلبات",
+        "totalSpent": "إجمالي المشتريات",
+        "pendingOrders": "طلبات قيد المراجعة"
+      },
+      "recentOrders": "أحدث الطلبات",
+      "viewAll": "عرض الكل",
+      "noOrders": "لا توجد طلبات بعد",
+      "browseStore": "تصفح المتجر"
+    },
+    "orders": {
+      "title": "طلباتي",
+      "orderNumber": "رقم الطلب",
+      "date": "التاريخ",
+      "total": "الإجمالي",
+      "status": "الحالة",
+      "itemsCount": "{count} منتج",
+      "viewDetails": "عرض التفاصيل",
+      "empty": "لا توجد طلبات بعد",
+      "browseStore": "تصفح المتجر",
+      "filterAll": "الكل",
+      "statuses": {
+        "pending": "قيد المراجعة",
+        "confirmed": "مؤكد",
+        "shipped": "تم الشحن",
+        "delivered": "تم التوصيل",
+        "cancelled": "ملغي"
+      }
+    }
   }
 }

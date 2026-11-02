@@ -1088,5 +1088,85 @@
       "delivered": "Delivered",
       "cancelled": "Cancelled"
     }
+  },
+  "customerAuth": {
+    "login": {
+      "title": "Sign In",
+      "subtitle": "Sign in to your account to track your orders",
+      "phone": "Phone Number",
+      "password": "Password",
+      "submit": "Sign In",
+      "loading": "Signing in...",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Sign up",
+      "signinShort": "Sign in",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "errors": {
+        "invalid": "Invalid credentials",
+        "pending": "Your account is under review — it will be activated soon",
+        "rejected": "Your application was rejected — please contact us"
+      }
+    },
+    "register": {
+      "title": "Create Account",
+      "tabs": {
+        "retail": "Individual",
+        "wholesale": "Merchant / Wholesale"
+      },
+      "fields": {
+        "name": "Full Name",
+        "phone": "Phone Number",
+        "password": "Password",
+        "email": "Email (optional)",
+        "businessName": "Business Name",
+        "taxNumber": "Tax Number",
+        "commercialRegister": "Commercial Register"
+      },
+      "submit": "Create Account",
+      "loading": "Creating account...",
+      "wholesaleSuccess": "Your application has been submitted. It will be reviewed within 24-48 hours.",
+      "backHome": "Back to Home",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Sign in"
+    },
+    "account": {
+      "title": "My Account",
+      "welcome": "Welcome, {name}",
+      "wholesaleBadge": "Merchant / Wholesale",
+      "sidebar": {
+        "overview": "Overview",
+        "orders": "My Orders",
+        "logout": "Sign Out"
+      },
+      "stats": {
+        "totalOrders": "Total Orders",
+        "totalSpent": "Total Spent",
+        "pendingOrders": "Pending Orders"
+      },
+      "recentOrders": "Recent Orders",
+      "viewAll": "View All",
+      "noOrders": "No orders yet",
+      "browseStore": "Browse Store"
+    },
+    "orders": {
+      "title": "My Orders",
+      "orderNumber": "Order #",
+      "date": "Date",
+      "total": "Total",
+      "status": "Status",
+      "itemsCount": "{count} items",
+      "viewDetails": "View Details",
+      "empty": "No orders yet",
+      "browseStore": "Browse Store",
+      "filterAll": "All",
+      "statuses": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled"
+      }
+    }
   }
 }

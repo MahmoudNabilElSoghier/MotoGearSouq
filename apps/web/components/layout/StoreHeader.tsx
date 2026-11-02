@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
+import { Menu, X, UserCircle, LogIn, LogOut, ChevronDown } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { company } from "@/lib/config";
+import { useCustomerAuth } from "@/lib/customer-auth-store";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { LocaleSwitcher } from "@/components/ui/LocaleSwitcher";
@@ -14,10 +15,26 @@ import { CartIcon } from "@/components/cart/CartIcon";
 
 export function StoreHeader() {
   const [isOpen, setIsOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
   const locale = useLocale();
   const pathname = usePathname();
+  const router = useRouter();
   const tNav = useTranslations("navigation");
   const tHeader = useTranslations("header");
+  const tLogin = useTranslations("customerAuth.login");
+  const tAccount = useTranslations("customerAuth.account");
+  const customer = useCustomerAuth((s) => s.customer);
+
+  useEffect(() => {
+    useCustomerAuth.getState().init();
+  }, []);
+
+  const handleLogout = async () => {
+    setAccountOpen(false);
+    await useCustomerAuth.getState().logout();
+    router.push(`/${locale}`);
+    router.refresh();
+  };
 
   const navItems = [
     { label: tNav("home"), href: `/${locale}/products` },
@@ -27,6 +44,74 @@ export function StoreHeader() {
 
   const isActive = (href: string) =>
     !href.includes("#") && (pathname === href || pathname.startsWith(`${href}/`));
+
+  const accountControl = customer ? (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setAccountOpen((v) => !v)}
+        aria-expanded={accountOpen}
+        aria-haspopup="menu"
+        className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold text-fg transition-colors hover:bg-card"
+      >
+        <UserCircle className="h-5 w-5 text-accent" />
+        <span className="hidden max-w-[10ch] truncate sm:inline">{customer.name}</span>
+        <ChevronDown
+          className={`h-4 w-4 text-muted transition-transform ${accountOpen ? "rotate-180" : ""}`}
+        />
+      </button>
+      {accountOpen && (
+        <>
+          <button
+            type="button"
+            aria-hidden="true"
+            tabIndex={-1}
+            onClick={() => setAccountOpen(false)}
+            className="fixed inset-0 z-40 cursor-default"
+          />
+          <div
+            role="menu"
+            className="absolute end-0 top-full z-50 mt-2 w-48 rounded-lg border border-border bg-card p-1 shadow-xl"
+          >
+            <Link
+              role="menuitem"
+              href={`/${locale}/account`}
+              onClick={() => setAccountOpen(false)}
+              className="block rounded-md px-3 py-2 text-sm font-semibold text-fg transition-colors hover:bg-bg"
+            >
+              {tAccount("title")}
+            </Link>
+            <Link
+              role="menuitem"
+              href={`/${locale}/account/orders`}
+              onClick={() => setAccountOpen(false)}
+              className="block rounded-md px-3 py-2 text-sm font-semibold text-fg transition-colors hover:bg-bg"
+            >
+              {tAccount("sidebar.orders")}
+            </Link>
+            <div className="my-1 border-t border-border" />
+            <button
+              type="button"
+              role="menuitem"
+              onClick={handleLogout}
+              className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-red-400 transition-colors hover:bg-red-500/10"
+            >
+              <LogOut className="h-4 w-4" />
+              {tAccount("sidebar.logout")}
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  ) : (
+    <Link
+      href={`/${locale}/login`}
+      className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold text-fg transition-colors hover:bg-card"
+    >
+      <LogIn className="h-5 w-5 text-accent" />
+      <span className="hidden sm:inline">{tLogin("signinShort")}</span>
+    </Link>
+  );
 
   return (
     <header className="sticky top-0 z-50 bg-bg/95 backdrop-blur border-b border-border">
@@ -62,6 +147,7 @@ export function StoreHeader() {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center gap-3">
+            {accountControl}
             <CartIcon />
             <LocaleSwitcher />
             <ThemeToggle />
@@ -106,6 +192,7 @@ export function StoreHeader() {
             ))}
           </nav>
           <div className="flex items-center gap-2 pt-2 border-t border-border">
+            {accountControl}
             <CartIcon />
             <LocaleSwitcher />
             <ThemeToggle />

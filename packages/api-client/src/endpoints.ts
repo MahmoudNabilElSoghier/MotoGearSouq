@@ -575,3 +575,64 @@ export const getProductProfitability = (
   apiGet<ProductProfitabilityItem[]>(
     `/analytics/product-profitability?period=${encode(period)}&limit=${limit}`,
   );
+
+// ---------- Shipping & Payments (Phase 3) ----------
+
+export interface ShippingQuoteInput {
+  orderValue: number;
+  governorate: string;
+  city?: string | null;
+  method: "standard" | "express" | "cod";
+}
+
+export interface ShippingQuoteResult {
+  fee: number;
+  isFree: boolean;
+  reason: string;
+}
+
+export const getShippingQuote = (input: ShippingQuoteInput): Promise<ShippingQuoteResult> => {
+  const params = new URLSearchParams();
+  params.set("orderValue", String(input.orderValue));
+  params.set("governorate", input.governorate);
+  if (input.city) params.set("city", input.city);
+  params.set("method", input.method);
+  return apiGet<ShippingQuoteResult>(`/shipping/quote?${params.toString()}`);
+};
+
+export interface InitiatePaymentInput {
+  orderNumber: string;
+  method: string;
+  returnUrl?: string;
+}
+
+export interface InitiatePaymentResult {
+  success: boolean;
+  redirectUrl?: string;
+  instructions?: string;
+  providerRef?: string;
+}
+
+export const initiatePayment = (input: InitiatePaymentInput): Promise<InitiatePaymentResult> =>
+  apiRaw<InitiatePaymentResult>("/payments/initiate", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+
+export interface MockCompletePaymentInput {
+  providerRef: string;
+  success: boolean;
+}
+
+export interface MockCompletePaymentResult {
+  success: boolean;
+  orderNumber: string;
+  redirectUrl: string;
+}
+
+export const completeMockPayment = (input: MockCompletePaymentInput): Promise<MockCompletePaymentResult> =>
+  apiRaw<MockCompletePaymentResult>("/payments/mock/complete", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+

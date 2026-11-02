@@ -139,6 +139,9 @@ export async function apiSend<T>(
 
 // For endpoints whose body is the payload itself (no { data } wrapper) —
 // e.g. GET /purchases and GET /stock-movements return { items, total, ... }.
-export async function apiRaw<T>(path: string): Promise<T> {
-  return (await request<T>(path)) as unknown as T;
+export async function apiRaw<T>(
+  path: string,
+  init?: RequestInit & { method?: string },
+): Promise<T> {
+  return (await request<T>(path, init)) as unknown as T;
 }

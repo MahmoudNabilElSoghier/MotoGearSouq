@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { useForm } from "react-hook-form";
-import { createOrder, type CreateOrderPayload } from "@motogearsouq/api-client";
+import { createOrder, initiatePayment, type CreateOrderPayload } from "@motogearsouq/api-client";
 import { useCart } from "@/lib/cart-store";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -30,6 +30,7 @@ export default function CheckoutPage() {
   const { items, subtotal, taxAmount, total, clearCart } = useCart();
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<string>("cod");
 
   const {
     register,
@@ -75,7 +76,23 @@ export default function CheckoutPage() {
       const res = await createOrder(payload);
       if (res && res.data && res.data.orderNumber) {
         clearCart();
-        router.push(`/${locale}/orders/${res.data.orderNumber}`);
+        const orderNumber = res.data.orderNumber;
+        if (paymentMethod !== "cod") {
+          try {
+            const payRes = await initiatePayment({
+              orderNumber,
+              method: paymentMethod,
+              returnUrl: `/${locale}/orders/${orderNumber}`,
+            });
+            if (payRes && payRes.redirectUrl) {
+              router.push(payRes.redirectUrl);
+              return;
+            }
+          } catch {
+            // fallback to order tracking page if init fails
+          }
+        }
+        router.push(`/${locale}/orders/${orderNumber}`);
       } else {
         throw new Error(isAr ? "فشل إنشاء الطلب" : "Failed to create order");
       }
@@ -96,7 +113,7 @@ export default function CheckoutPage() {
     <main id="main-content" className="flex-1 py-12 md:py-16">
       <Container>
         <h1 className="mb-8 text-3xl md:text-4xl font-extrabold text-fg">
-          {isAr ? "إتمام الطلب (الدفع عند الاستلام)" : "Checkout (Cash on Delivery)"}
+          {isAr ? "إتمام الطلب والدفع" : "Checkout & Payment"}
         </h1>
 
         {errorMsg && (
@@ -180,6 +197,39 @@ export default function CheckoutPage() {
                 {errors.governorate && (
                   <span className="mt-1 text-xs text-red-400">{errors.governorate.message}</span>
                 )}
+              </div>
+            </div>
+
+            {/* Payment Method Selector */}
+            <div className="space-y-3">
+              <label className="block text-sm font-medium text-fg">
+                {isAr ? "طريقة الدفع" : "Payment Method"}
+              </label>
+              <div className="grid gap-3 sm:grid-cols-3">
+                {[
+                  { id: "cod", labelAr: "الدفع عند الاستلام", labelEn: "Cash on Delivery" },
+                  { id: "mock", labelAr: "الدفع الإلكتروني (تجريبي)", labelEn: "Online Payment (Mock)" },
+                  { id: "instapay", labelAr: "انستاباي (InstaPay)", labelEn: "InstaPay" },
+                ].map((m) => (
+                  <label
+                    key={m.id}
+                    className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-colors ${
+                      paymentMethod === m.id
+                        ? "border-accent bg-accent/10 text-fg font-semibold"
+                        : "border-border bg-bg text-muted hover:border-border/80"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value={m.id}
+                      checked={paymentMethod === m.id}
+                      onChange={() => setPaymentMethod(m.id)}
+                      className="accent-accent"
+                    />
+                    <span className="text-sm">{isAr ? m.labelAr : m.labelEn}</span>
+                  </label>
+                ))}
               </div>
             </div>
 

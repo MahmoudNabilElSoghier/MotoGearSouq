@@ -7,3 +7,4 @@ export * from "./auth";
 export * from "./supplier";
 export * from "./purchase";
 export * from "./stock";
+export * from "./analytics";

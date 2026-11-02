@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { AnalyticsModule } from "./analytics/analytics.module";
 import { AuthModule } from "./auth/auth.module";
 import { BrandsModule } from "./brands/brands.module";
 import { BranchesModule } from "./branches/branches.module";
@@ -22,6 +23,7 @@ import { PurchasesModule } from "./purchases/purchases.module";
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
     StorageModule,
+    AnalyticsModule,
     AuthModule,
     HealthModule,
     BrandsModule,

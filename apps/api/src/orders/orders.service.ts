@@ -11,6 +11,10 @@ import type { CreateOrderInput } from "./dto/create-order.schema";
 
 export interface OrderFilter {
   status?: string;
+  paymentStatus?: string;
+  paymentMethod?: string;
+  dateFrom?: string;
+  dateTo?: string;
   page?: number;
   pageSize?: number;
 }
@@ -83,6 +87,18 @@ export class OrdersService {
     const pageSize = Math.min(100, Math.max(1, filter.pageSize ?? 20));
     const where: Record<string, unknown> = { deletedAt: null };
     if (filter.status) where.status = filter.status;
+    if (filter.paymentStatus) where.paymentStatus = filter.paymentStatus;
+    if (filter.paymentMethod) where.paymentMethod = filter.paymentMethod;
+    if (filter.dateFrom || filter.dateTo) {
+      const createdAt: Record<string, Date> = {};
+      if (filter.dateFrom) createdAt.gte = new Date(filter.dateFrom);
+      if (filter.dateTo) {
+        const d = new Date(filter.dateTo);
+        d.setHours(23, 59, 59, 999);
+        createdAt.lte = d;
+      }
+      where.createdAt = createdAt;
+    }
     const data = await withDb<{ items: Order[]; total: number }>(
       this.prisma,
       async (db) => {

@@ -44,6 +44,10 @@ export interface ProductPage {
 
 export interface OrderFilter {
   status?: string;
+  paymentStatus?: string;
+  paymentMethod?: string;
+  dateFrom?: string;
+  dateTo?: string;
   page?: number;
   pageSize?: number;
 }
@@ -126,6 +130,10 @@ export const getLowStockItems = (branchId?: string): Promise<BranchInventory[]> 
 export const getOrders = (filter: OrderFilter = {}): Promise<OrderPage> => {
   const params = new URLSearchParams();
   if (filter.status) params.set("status", filter.status);
+  if (filter.paymentStatus) params.set("paymentStatus", filter.paymentStatus);
+  if (filter.paymentMethod) params.set("paymentMethod", filter.paymentMethod);
+  if (filter.dateFrom) params.set("dateFrom", filter.dateFrom);
+  if (filter.dateTo) params.set("dateTo", filter.dateTo);
   if (filter.page) params.set("page", String(filter.page));
   if (filter.pageSize) params.set("pageSize", String(filter.pageSize));
   const qs = params.toString();
@@ -635,4 +643,54 @@ export const completeMockPayment = (input: MockCompletePaymentInput): Promise<Mo
     method: "POST",
     body: JSON.stringify(input),
   });
+
+export interface PaymentTransactionItem {
+  id: string;
+  orderId: string;
+  provider: string;
+  providerRef: string | null;
+  amount: number;
+  currency: string;
+  status: string;
+  method: string;
+  rawPayload?: unknown;
+  createdAt: string;
+  order?: { orderNumber: string };
+}
+
+export interface PaymentTransactionPage {
+  items: PaymentTransactionItem[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+export interface PaymentTransactionFilter {
+  orderId?: string;
+  provider?: string;
+  status?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+export const getPaymentTransactions = (
+  filter: PaymentTransactionFilter = {},
+): Promise<PaymentTransactionPage> => {
+  const params = new URLSearchParams();
+  if (filter.orderId) params.set("orderId", filter.orderId);
+  if (filter.provider) params.set("provider", filter.provider);
+  if (filter.status) params.set("status", filter.status);
+  if (filter.page) params.set("page", String(filter.page));
+  if (filter.pageSize) params.set("pageSize", String(filter.pageSize));
+  const qs = params.toString();
+  return apiRaw<PaymentTransactionPage>(`/payments/transactions${qs ? `?${qs}` : ""}`);
+};
+
+export const markOrderPaid = (orderId: string): Promise<ApiResponse<Order>> =>
+  apiSend<Order>("POST", `/payments/orders/${encode(orderId)}/mark-paid`);
+
+export const refundOrder = (orderId: string, reason?: string): Promise<ApiResponse<Order>> =>
+  apiSend<Order>("POST", `/payments/orders/${encode(orderId)}/refund`, { reason });
+
 

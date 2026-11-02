@@ -393,6 +393,7 @@
       "logout": "تسجيل الخروج",
       "dashboard": "لوحة التحكم",
       "orders": "الطلبات",
+      "payments": "المدفوعات",
       "products": "المنتجات",
       "categories": "التصنيفات",
       "brands": "الماركات",
@@ -743,6 +744,47 @@
       "save": "حفظ",
       "done": "تم",
       "qtyAria": "كمية {product} في {branch}"
+    },
+    "payments": {
+      "title": "إدارة المدفوعات والمعاملات",
+      "filters": {
+        "status": "الحالة",
+        "provider": "بوابة الدفع",
+        "dateFrom": "من تاريخ",
+        "dateTo": "إلى تاريخ",
+        "all": "الكل"
+      },
+      "table": {
+        "date": "التاريخ",
+        "orderNumber": "رقم الطلب",
+        "provider": "البوابة",
+        "method": "طريقة الدفع",
+        "amount": "المبلغ",
+        "status": "حالة الدفع",
+        "actions": "إجراءات"
+      },
+      "statuses": {
+        "pending": "قيد الانتظار",
+        "success": "ناجح",
+        "failed": "فشل",
+        "refunded": "مسترد"
+      },
+      "providers": {
+        "mock": "وهمي",
+        "paymob": "باي موب",
+        "fawry": "فوري",
+        "instapay": "انستاباي",
+        "manual": "يدوي"
+      },
+      "methods": {
+        "visa": "فيزا / بطاقة",
+        "cod": "الدفع عند الاستلام",
+        "fawryCode": "كود فوري",
+        "instapay": "انستاباي",
+        "manual": "يدوي"
+      },
+      "empty": "لا توجد معاملات دفع مسجلة",
+      "exportCsv": "تصدير CSV"
     },
     "orders": {
       "title": "إدارة الطلبات",

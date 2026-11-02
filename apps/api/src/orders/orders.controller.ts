@@ -27,16 +27,28 @@ export class OrdersController {
 
   @Get()
   @ApiQuery({ name: "status", required: false })
+  @ApiQuery({ name: "paymentStatus", required: false })
+  @ApiQuery({ name: "paymentMethod", required: false })
+  @ApiQuery({ name: "dateFrom", required: false })
+  @ApiQuery({ name: "dateTo", required: false })
   @ApiQuery({ name: "page", required: false })
   @ApiQuery({ name: "pageSize", required: false })
   @ApiOperation({ summary: "Paginated order list (newest first)" })
   getOrders(
     @Query("status") status?: string,
+    @Query("paymentStatus") paymentStatus?: string,
+    @Query("paymentMethod") paymentMethod?: string,
+    @Query("dateFrom") dateFrom?: string,
+    @Query("dateTo") dateTo?: string,
     @Query("page") page?: string,
     @Query("pageSize") pageSize?: string,
   ) {
     const filter: OrderFilter = {
       status: status || undefined,
+      paymentStatus: paymentStatus || undefined,
+      paymentMethod: paymentMethod || undefined,
+      dateFrom: dateFrom || undefined,
+      dateTo: dateTo || undefined,
       page: page ? Number(page) : undefined,
       pageSize: pageSize ? Number(pageSize) : undefined,
     };

@@ -2,12 +2,18 @@
 
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { getAnalyticsDashboard, type AnalyticsDashboard } from "@motogearsouq/api-client";
+import {
+  getAnalyticsDashboard,
+  getPaymentTransactions,
+  type AnalyticsDashboard,
+  type PaymentTransactionPage,
+} from "@motogearsouq/api-client";
 import Link from "next/link";
-import { Loader2, TrendingUp, DollarSign, ShoppingCart, Users, AlertCircle, ArrowRight, BarChart3 } from "lucide-react";
+import { Loader2, TrendingUp, DollarSign, ShoppingCart, Users, AlertCircle, ArrowRight, BarChart3, CreditCard } from "lucide-react";
 
 export default function AdminReportsDashboardPage() {
   const t = useTranslations("admin.reports");
+  const tPayKpis = useTranslations("admin.reports.paymentKpis");
   const tCommon = useTranslations("common");
   const locale = useLocale();
   const isAr = locale === "ar";
@@ -16,17 +22,42 @@ export default function AdminReportsDashboardPage() {
 
   const [period, setPeriod] = useState("30d");
   const [data, setData] = useState<AnalyticsDashboard | null>(null);
+  const [txPage, setTxPage] = useState<PaymentTransactionPage | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
-    getAnalyticsDashboard(period)
-      .then(setData)
-      .catch(() => setData(null))
+    Promise.all([
+      getAnalyticsDashboard(period).catch(() => null),
+      getPaymentTransactions({ pageSize: 500 }).catch(() => null),
+    ])
+      .then(([dashRes, txRes]) => {
+        setData(dashRes);
+        setTxPage(txRes);
+      })
       .finally(() => setLoading(false));
   }, [period]);
 
   const kpis = data?.kpis;
+  const txItems = txPage?.items ?? [];
+  const totalCollected = txItems
+    .filter((tx) => tx.status === "success")
+    .reduce((acc, tx) => acc + tx.amount, 0);
+  const totalPending = txItems
+    .filter((tx) => tx.status === "pending")
+    .reduce((acc, tx) => acc + tx.amount, 0);
+  const refunded = txItems
+    .filter((tx) => tx.status === "refunded")
+    .reduce((acc, tx) => acc + tx.amount, 0);
+  const codCount = txItems.filter((tx) => tx.method === "cod" || !tx.method).length;
+
+  const methodMap = txItems.reduce((acc: Record<string, { count: number; total: number }>, tx) => {
+    const m = tx.method || "cod";
+    if (!acc[m]) acc[m] = { count: 0, total: 0 };
+    acc[m].count += 1;
+    acc[m].total += tx.amount;
+    return acc;
+  }, {});
 
   return (
     <div className="space-y-6">
@@ -127,6 +158,65 @@ export default function AdminReportsDashboardPage() {
               </div>
               <div className="text-2xl font-black text-fg">{nf.format(kpis?.newCustomers ?? 0)}</div>
               <div className="text-xs text-muted">Active period customers</div>
+            </div>
+          </div>
+
+          {/* Payment KPIs Grid (Task 4) */}
+          <div className="space-y-4">
+            <h2 className="text-xl font-extrabold text-fg flex items-center gap-2">
+              <CreditCard className="w-6 h-6 text-accent" />
+              <span>{isAr ? "مؤشرات الدفع والتحصيل" : "Payment & Collection KPIs"}</span>
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="p-5 rounded-2xl border border-border bg-card shadow-sm space-y-1">
+                <div className="text-xs font-semibold text-muted">{tPayKpis("totalCollected")}</div>
+                <div className="text-2xl font-black text-emerald-500">{currency(totalCollected)}</div>
+              </div>
+              <div className="p-5 rounded-2xl border border-border bg-card shadow-sm space-y-1">
+                <div className="text-xs font-semibold text-muted">{tPayKpis("totalPending")}</div>
+                <div className="text-2xl font-black text-amber-500">{currency(totalPending)}</div>
+              </div>
+              <div className="p-5 rounded-2xl border border-border bg-card shadow-sm space-y-1">
+                <div className="text-xs font-semibold text-muted">{tPayKpis("refunded")}</div>
+                <div className="text-2xl font-black text-purple-500">{currency(refunded)}</div>
+              </div>
+              <div className="p-5 rounded-2xl border border-border bg-card shadow-sm space-y-1">
+                <div className="text-xs font-semibold text-muted">{tPayKpis("codOrders")}</div>
+                <div className="text-2xl font-black text-fg">{nf.format(codCount)}</div>
+              </div>
+            </div>
+
+            {/* Payment Method Breakdown Table */}
+            <div className="rounded-2xl border border-border bg-card p-6 space-y-4">
+              <h3 className="text-lg font-bold text-fg">{tPayKpis("byMethod.title")}</h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-start text-sm">
+                  <thead>
+                    <tr className="border-b border-border text-muted text-xs">
+                      <th className="py-2.5 text-start font-semibold">{tPayKpis("byMethod.method")}</th>
+                      <th className="py-2.5 text-end font-semibold">{tPayKpis("byMethod.count")}</th>
+                      <th className="py-2.5 text-end font-semibold">{tPayKpis("byMethod.total")}</th>
+                      <th className="py-2.5 text-end font-semibold">{tPayKpis("byMethod.avgOrderValue")}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border/60">
+                    {Object.keys(methodMap).length === 0 ? (
+                      <tr>
+                        <td colSpan={4} className="py-6 text-center text-muted">No payment data</td>
+                      </tr>
+                    ) : (
+                      Object.entries(methodMap).map(([method, stats]) => (
+                        <tr key={method} className="hover:bg-bg/50">
+                          <td className="py-3 font-semibold uppercase text-fg">{method}</td>
+                          <td className="py-3 text-end font-mono" dir="ltr">{nf.format(stats.count)}</td>
+                          <td className="py-3 text-end font-bold text-fg" dir="ltr">{currency(stats.total)}</td>
+                          <td className="py-3 text-end font-mono text-muted" dir="ltr">{currency(stats.count > 0 ? stats.total / stats.count : 0)}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
 

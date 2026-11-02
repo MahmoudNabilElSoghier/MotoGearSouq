@@ -744,6 +744,47 @@
       "done": "Saved",
       "qtyAria": "Quantity of {product} at {branch}"
     },
+    "payments": {
+      "title": "Payments & Transactions Management",
+      "filters": {
+        "status": "Status",
+        "provider": "Provider",
+        "dateFrom": "Date From",
+        "dateTo": "Date To",
+        "all": "All"
+      },
+      "table": {
+        "date": "Date",
+        "orderNumber": "Order #",
+        "provider": "Provider",
+        "method": "Method",
+        "amount": "Amount",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "statuses": {
+        "pending": "Pending",
+        "success": "Success",
+        "failed": "Failed",
+        "refunded": "Refunded"
+      },
+      "providers": {
+        "mock": "Mock",
+        "paymob": "Paymob",
+        "fawry": "Fawry",
+        "instapay": "InstaPay",
+        "manual": "Manual"
+      },
+      "methods": {
+        "visa": "Visa / Card",
+        "cod": "Cash on Delivery",
+        "fawryCode": "Fawry Code",
+        "instapay": "InstaPay",
+        "manual": "Manual"
+      },
+      "empty": "No payment transactions found",
+      "exportCsv": "Export CSV"
+    },
     "orders": {
       "title": "Orders Management",
       "table": {

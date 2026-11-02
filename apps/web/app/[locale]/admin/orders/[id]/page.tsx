@@ -3,9 +3,18 @@
 import { useEffect, useState, use, useCallback } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { getOrderById, updateOrderStatus, type OrderStatusUpdate } from "@motogearsouq/api-client";
+import {
+  getOrderById,
+  updateOrderStatus,
+  markOrderPaid,
+  refundOrder,
+  getPaymentTransactions,
+  type OrderStatusUpdate,
+  type PaymentTransactionItem,
+} from "@motogearsouq/api-client";
 import type { Order } from "@motogearsouq/shared";
 import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 import { Loader2, ArrowLeft, ArrowRight, Printer, CheckCircle2, AlertCircle } from "lucide-react";
 
 const statusStyles: Record<string, string> = {
@@ -39,6 +48,7 @@ type OrderItemView = {
 export default function AdminOrderDetailPage({ params }: PageProps) {
   const { locale, id } = use(params);
   const t = useTranslations("admin.orders.detail");
+  const tPayment = useTranslations("admin.orders.detail.payment");
   const tDash = useTranslations("admin.dashboard");
   const isAr = locale === "ar";
   const nf = new Intl.NumberFormat(isAr ? "ar-EG-u-nu-latn" : "en-US");
@@ -50,6 +60,11 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
   const [updating, setUpdating] = useState(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const [transactions, setTransactions] = useState<PaymentTransactionItem[]>([]);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [showRefundModal, setShowRefundModal] = useState(false);
+  const [refundReason, setRefundReason] = useState("");
 
   const fetchOrder = useCallback(async () => {
     try {
@@ -70,9 +85,19 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
     }
   }, [id]);
 
+  const fetchTransactions = useCallback(async () => {
+    try {
+      const res = await getPaymentTransactions({ orderId: id });
+      setTransactions(res.items || []);
+    } catch {
+      setTransactions([]);
+    }
+  }, [id]);
+
   useEffect(() => {
     fetchOrder();
-  }, [fetchOrder]);
+    fetchTransactions();
+  }, [fetchOrder, fetchTransactions]);
 
   const handleUpdateStatus = async () => {
     if (!targetStatus || !order) return;
@@ -89,6 +114,41 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
       setErrorMsg(msg || t("statusActions.error"));
     } finally {
       setUpdating(false);
+    }
+  };
+
+  const handleMarkPaid = async () => {
+    setActionLoading(true);
+    setSuccessMsg(null);
+    setErrorMsg(null);
+    try {
+      await markOrderPaid(id);
+      setSuccessMsg(isAr ? "تم تحديث حالة الدفع إلى مدفوع" : "Payment marked as paid successfully");
+      await fetchOrder();
+      await fetchTransactions();
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : "Failed to mark paid");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleRefund = async () => {
+    if (!refundReason) return;
+    setActionLoading(true);
+    setSuccessMsg(null);
+    setErrorMsg(null);
+    try {
+      await refundOrder(id, refundReason);
+      setSuccessMsg(isAr ? "تم استرداد المبلغ بنجاح" : "Refund processed successfully");
+      setShowRefundModal(false);
+      setRefundReason("");
+      await fetchOrder();
+      await fetchTransactions();
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : "Failed to process refund");
+    } finally {
+      setActionLoading(false);
     }
   };
 
@@ -215,6 +275,127 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
             <p className="text-sm" dir="ltr"><span className="text-muted">Shipping Phone:</span> {order.shippingPhone ?? "—"}</p>
           </div>
         </div>
+
+        {/* Payment Section (Task 3) */}
+        <div className="rounded-xl border border-border bg-bg p-6 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4">
+            <h2 className="text-lg font-bold text-fg">{tPayment("title")}</h2>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted">{tPayment("status")}:</span>
+              <span className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                order.paymentStatus === "paid" ? "bg-emerald-500/15 text-emerald-400" :
+                order.paymentStatus === "refunded" ? "bg-purple-500/15 text-purple-400" :
+                order.paymentStatus === "failed" ? "bg-red-500/15 text-red-400" : "bg-amber-500/15 text-amber-400"
+              }`}>
+                {order.paymentStatus ?? "pending"}
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+            <div>
+              <p className="text-xs text-muted">{tPayment("method")}</p>
+              <p className="font-semibold text-fg uppercase">{order.paymentMethod ?? "cod"}</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted">{tPayment("amount")}</p>
+              <p className="font-bold text-fg" dir="ltr">{formatEgp(order.total)}</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted">{tPayment("paidAt")}</p>
+              <p className="text-fg" dir="ltr">
+                {order.paymentStatus === "paid" ? new Date(order.updatedAt).toLocaleString() : "—"}
+              </p>
+            </div>
+          </div>
+
+          {/* Admin Payment Actions (hidden in print) */}
+          <div className="flex flex-wrap items-center gap-3 pt-2 print:hidden">
+            {order.paymentStatus === "pending" && (
+              <Button
+                variant="primary"
+                size="sm"
+                disabled={actionLoading}
+                onClick={handleMarkPaid}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white"
+              >
+                {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : tPayment("markPaid")}
+              </Button>
+            )}
+
+            {order.paymentStatus === "paid" && (
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={actionLoading}
+                onClick={() => setShowRefundModal(true)}
+                className="border-red-500/30 text-red-400 hover:bg-red-500/10"
+              >
+                {tPayment("refund")}
+              </Button>
+            )}
+          </div>
+
+          {/* Transactions Timeline */}
+          <div className="pt-4 border-t border-border">
+            <h3 className="text-sm font-semibold text-fg mb-3">{tPayment("transactions")}</h3>
+            {transactions.length === 0 ? (
+              <p className="text-xs text-muted">{tPayment("noTransactions")}</p>
+            ) : (
+              <div className="space-y-2">
+                {transactions.map((tx: PaymentTransactionItem) => (
+                  <div key={tx.id} className="flex flex-wrap items-center justify-between rounded-lg border border-border bg-card p-3 text-xs">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold uppercase text-fg">{tx.provider}</span>
+                        <span className="rounded bg-bg px-2 py-0.5 uppercase text-[10px] text-muted">{tx.method}</span>
+                        <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                          tx.status === "success" ? "bg-emerald-500/15 text-emerald-400" : "bg-amber-500/15 text-amber-400"
+                        }`}>{tx.status}</span>
+                      </div>
+                      <p className="text-muted" dir="ltr">Ref: {tx.providerRef ?? "N/A"}</p>
+                    </div>
+                    <div className="text-end">
+                      <p className="font-bold text-fg" dir="ltr">{formatEgp(tx.amount)}</p>
+                      <p className="text-[10px] text-muted" dir="ltr">{new Date(tx.createdAt).toLocaleString()}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Refund Modal */}
+        {showRefundModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 print:hidden">
+            <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 space-y-4 shadow-xl">
+              <h3 className="text-lg font-bold text-fg">{tPayment("refund")}</h3>
+              <p className="text-sm text-muted">{tPayment("refundConfirm")}</p>
+              <div>
+                <label className="block text-xs font-semibold text-muted mb-1">{tPayment("refundReason")}</label>
+                <Input
+                  value={refundReason}
+                  onChange={(e) => setRefundReason(e.target.value)}
+                  placeholder={isAr ? "سبب الاسترداد..." : "Reason for refund..."}
+                />
+              </div>
+              <div className="flex justify-end gap-3 pt-2">
+                <Button variant="secondary" onClick={() => setShowRefundModal(false)}>
+                  {isAr ? "إلغاء" : "Cancel"}
+                </Button>
+                <Button
+                  variant="primary"
+                  disabled={actionLoading || !refundReason}
+                  onClick={handleRefund}
+                  className="bg-red-600 hover:bg-red-700 text-white"
+                >
+                  {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : tPayment("refund")}
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {order.notes && (
           <div className="rounded-xl border border-border/60 bg-bg p-4 text-sm">

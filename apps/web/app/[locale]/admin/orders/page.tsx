@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { getOrders, type OrderPage } from "@motogearsouq/api-client";
 import type { Order } from "@motogearsouq/shared";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { Loader2, Search } from "lucide-react";
+import { exportToCsv } from "@/lib/export-csv";
+import { Loader2, Search, Download, Eye } from "lucide-react";
 
 const statusStyles: Record<string, string> = {
   pending: "bg-amber-500/15 text-amber-400",
@@ -27,6 +29,10 @@ export default function AdminOrdersPage() {
   const [ordersPage, setOrdersPage] = useState<OrderPage | null>(null);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<string>("");
+  const [paymentStatusFilter, setPaymentStatusFilter] = useState<string>("");
+  const [paymentMethodFilter, setPaymentMethodFilter] = useState<string>("");
+  const [dateFrom, setDateFrom] = useState<string>("");
+  const [dateTo, setDateTo] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
   const pageSize = 20;
@@ -36,6 +42,10 @@ export default function AdminOrdersPage() {
     try {
       const res = await getOrders({
         status: statusFilter || undefined,
+        paymentStatus: paymentStatusFilter || undefined,
+        paymentMethod: paymentMethodFilter || undefined,
+        dateFrom: dateFrom || undefined,
+        dateTo: dateTo || undefined,
         page,
         pageSize,
       });
@@ -45,7 +55,7 @@ export default function AdminOrdersPage() {
     } finally {
       setLoading(false);
     }
-  }, [statusFilter, page]);
+  }, [statusFilter, paymentStatusFilter, paymentMethodFilter, dateFrom, dateTo, page]);
 
   useEffect(() => {
     fetchOrders();
@@ -63,21 +73,51 @@ export default function AdminOrdersPage() {
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
     const num = o.orderNumber?.toLowerCase() ?? "";
-    const phone = o.customer?.phone ?? o.shippingPhone ?? "";
+    const phone = o.customer?.phone ?? "";
     const name = o.customer?.name?.toLowerCase() ?? "";
     return num.includes(q) || phone.includes(q) || name.includes(q);
   });
+
+  const handleExportCsv = () => {
+    if (!ordersPage || ordersPage.items.length === 0) return;
+    const headers = {
+      orderNumber: isAr ? "رقم الطلب" : "Order #",
+      customerName: isAr ? "اسم العميل" : "Customer Name",
+      phone: isAr ? "الهاتف" : "Phone",
+      total: isAr ? "الإجمالي" : "Total",
+      status: isAr ? "حالة الطلب" : "Status",
+      paymentStatus: isAr ? "حالة الدفع" : "Payment Status",
+      paymentMethod: isAr ? "طريقة الدفع" : "Payment Method",
+      createdAt: isAr ? "التاريخ" : "Date",
+    };
+    const rows = ordersPage.items.map((o: Order) => ({
+      orderNumber: o.orderNumber,
+      customerName: o.customer?.name ?? "",
+      phone: o.customer?.phone ?? "",
+      total: o.total,
+      status: o.status,
+      paymentStatus: o.paymentStatus ?? "",
+      paymentMethod: o.paymentMethod ?? "",
+      createdAt: o.createdAt,
+    }));
+    exportToCsv(`orders-export-${new Date().toISOString().slice(0, 10)}.csv`, headers, rows);
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
+        <Button variant="secondary" onClick={handleExportCsv} className="inline-flex items-center gap-2">
+          <Download className="w-4 h-4" />
+          <span>{isAr ? "تصدير CSV" : "Export CSV"}</span>
+        </Button>
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between rounded-xl border border-border bg-card p-4">
-        <div className="flex items-center gap-3 w-full sm:w-auto">
-          <div className="relative flex-1 sm:w-80">
+      {/* Filters row */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 rounded-xl border border-border bg-card p-4">
+        <div>
+          <label className="block text-xs font-semibold text-muted mb-1">{isAr ? "بحث" : "Search"}</label>
+          <div className="relative">
             <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
             <Input
               value={searchQuery}
@@ -88,14 +128,15 @@ export default function AdminOrdersPage() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+        <div>
+          <label className="block text-xs font-semibold text-muted mb-1">{isAr ? "حالة الطلب" : "Order Status"}</label>
           <select
             value={statusFilter}
             onChange={(e) => {
               setStatusFilter(e.target.value);
               setPage(1);
             }}
-            className="rounded-lg border border-border bg-bg px-3 py-2 text-sm text-fg focus:border-accent focus:outline-none"
+            className="w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm text-fg focus:border-accent focus:outline-none"
           >
             <option value="">{t("filter.all")}</option>
             <option value="pending">{tDash("statusPending")}</option>
@@ -105,6 +146,62 @@ export default function AdminOrdersPage() {
             <option value="cancelled">{tDash("statusCancelled")}</option>
           </select>
         </div>
+
+        <div>
+          <label className="block text-xs font-semibold text-muted mb-1">{isAr ? "حالة الدفع" : "Payment Status"}</label>
+          <select
+            value={paymentStatusFilter}
+            onChange={(e) => {
+              setPaymentStatusFilter(e.target.value);
+              setPage(1);
+            }}
+            className="w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm text-fg focus:border-accent focus:outline-none"
+          >
+            <option value="">{isAr ? "كل حالات الدفع" : "All Payment Statuses"}</option>
+            <option value="pending">Pending</option>
+            <option value="paid">Paid</option>
+            <option value="failed">Failed</option>
+            <option value="refunded">Refunded</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold text-muted mb-1">{isAr ? "طريقة الدفع" : "Payment Method"}</label>
+          <select
+            value={paymentMethodFilter}
+            onChange={(e) => {
+              setPaymentMethodFilter(e.target.value);
+              setPage(1);
+            }}
+            className="w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm text-fg focus:border-accent focus:outline-none"
+          >
+            <option value="">{isAr ? "كل طرق الدفع" : "All Methods"}</option>
+            <option value="cod">COD</option>
+            <option value="mock">Mock</option>
+            <option value="paymob">Paymob</option>
+            <option value="fawry">Fawry</option>
+            <option value="instapay">InstaPay</option>
+          </select>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          <div>
+            <label className="block text-xs font-semibold text-muted mb-1">{isAr ? "من" : "From"}</label>
+            <Input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-muted mb-1">{isAr ? "إلى" : "To"}</label>
+            <Input
+              type="date"
+              value={dateTo}
+              onChange={(e) => setDateTo(e.target.value)}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Table */}
@@ -113,49 +210,54 @@ export default function AdminOrdersPage() {
           <div className="flex items-center justify-center p-12">
             <Loader2 className="w-8 h-8 animate-spin text-accent" />
           </div>
-        ) : !ordersPage || filteredItems.length === 0 ? (
+        ) : filteredItems.length === 0 ? (
           <p className="p-8 text-center text-muted">{t("empty")}</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-border text-muted">
-                  <th className="px-5 py-3 font-medium text-start">{t("table.orderNumber")}</th>
-                  <th className="px-5 py-3 font-medium text-start">{t("table.customer")}</th>
-                  <th className="px-5 py-3 font-medium text-start">{t("table.phone")}</th>
-                  <th className="px-5 py-3 font-medium text-start">{t("table.total")}</th>
-                  <th className="px-5 py-3 font-medium text-start">{t("table.status")}</th>
-                  <th className="px-5 py-3 font-medium text-start">{t("table.date")}</th>
+                <tr className="border-b border-border text-muted text-xs">
+                  <th className="px-5 py-3 font-semibold text-start">{t("table.orderNumber")}</th>
+                  <th className="px-5 py-3 font-semibold text-start">{t("table.customer")}</th>
+                  <th className="px-5 py-3 font-semibold text-start">{t("table.phone")}</th>
+                  <th className="px-5 py-3 font-semibold text-start">{t("table.total")}</th>
+                  <th className="px-5 py-3 font-semibold text-start">{t("table.status")}</th>
+                  <th className="px-5 py-3 font-semibold text-start">{isAr ? "الدفع" : "Payment"}</th>
+                  <th className="px-5 py-3 font-semibold text-start">{t("table.date")}</th>
+                  <th className="px-5 py-3 font-semibold text-end">{isAr ? "إجراء" : "Action"}</th>
                 </tr>
               </thead>
-              <tbody>
-                {filteredItems.map((order: Order) => (
-                  <tr
-                    key={order.id}
-                    onClick={() => window.location.href = `/${locale}/admin/orders/${order.id}`}
-                    className="border-b border-border/50 last:border-0 cursor-pointer hover:bg-bg/50 transition-colors"
-                  >
-                    <td className="px-5 py-3 font-mono text-xs font-bold text-accent" dir="ltr">
-                      {order.orderNumber}
+              <tbody className="divide-y divide-border/50">
+                {filteredItems.map((o: Order) => (
+                  <tr key={o.id} className="hover:bg-bg/50 transition-colors">
+                    <td className="px-5 py-3 font-mono font-bold text-accent" dir="ltr">
+                      {o.orderNumber}
                     </td>
-                    <td className="px-5 py-3 text-fg">{order.customer?.name ?? "—"}</td>
-                    <td className="px-5 py-3 text-fg" dir="ltr">
-                      {order.customer?.phone ?? order.shippingPhone ?? "—"}
-                    </td>
-                    <td className="px-5 py-3 font-semibold text-fg" dir="ltr">
-                      {formatEgp(order.total)}
+                    <td className="px-5 py-3 font-medium text-fg">{o.customer?.name ?? "—"}</td>
+                    <td className="px-5 py-3 text-muted" dir="ltr">{o.customer?.phone ?? "—"}</td>
+                    <td className="px-5 py-3 font-bold text-fg" dir="ltr">
+                      {formatEgp(o.total)}
                     </td>
                     <td className="px-5 py-3">
-                      <span
-                        className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                          statusStyles[order.status] ?? "bg-bg text-muted"
-                        }`}
-                      >
-                        {statusLabels[order.status] ?? order.status}
+                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusStyles[o.status] ?? "bg-bg text-muted"}`}>
+                        {statusLabels[o.status] ?? o.status}
                       </span>
                     </td>
+                    <td className="px-5 py-3 text-xs">
+                      <span className="font-semibold uppercase text-muted">{o.paymentMethod ?? "cod"}</span>
+                      <span className="block text-[10px] text-accent font-mono">{o.paymentStatus ?? "pending"}</span>
+                    </td>
                     <td className="px-5 py-3 text-muted text-xs" dir="ltr">
-                      {new Date(order.createdAt).toLocaleDateString(isAr ? "ar-EG" : "en-US")}
+                      {new Date(o.createdAt).toLocaleDateString(isAr ? "ar-EG" : "en-US")}
+                    </td>
+                    <td className="px-5 py-3 text-end">
+                      <Link
+                        href={`/${locale}/admin/orders/${o.id}`}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-fg hover:border-accent hover:text-accent transition-colors"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        <span>{isAr ? "عرض" : "View"}</span>
+                      </Link>
                     </td>
                   </tr>
                 ))}

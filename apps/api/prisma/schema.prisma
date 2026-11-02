@@ -487,3 +487,19 @@ model RefreshToken {
   @@index([userId])
   @@index([familyId])
 }
+
+// Sprint 3 — Financial Intelligence: singleton row (id always "singleton")
+model CompanySettings {
+  id               String   @id @default("singleton")
+  // Monthly fixed costs (in EGP)
+  monthlyRent      Decimal  @default(0) @db.Decimal(10, 2)
+  monthlySalaries  Decimal  @default(0) @db.Decimal(10, 2)
+  monthlyUtilities Decimal  @default(0) @db.Decimal(10, 2)
+  monthlyMarketing Decimal  @default(0) @db.Decimal(10, 2)
+  monthlyOther     Decimal  @default(0) @db.Decimal(10, 2)
+  // Break-even target
+  vatRate          Decimal  @default(0.14) @db.Decimal(5, 4) // 14% VAT (Egypt)
+  // Timestamps
+  updatedAt        DateTime @updatedAt
+  createdAt        DateTime @default(now())
+}

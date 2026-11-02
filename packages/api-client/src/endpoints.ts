@@ -27,8 +27,12 @@ import { apiGet, apiGetOrNull, apiRaw, apiSend, type ApiResponse } from "./clien
 
 export interface ProductFilter {
   q?: string;
-  brandSlug?: string;
-  categorySlug?: string;
+  brandSlug?: string | string[];
+  categorySlug?: string | string[];
+  type?: string;
+  featured?: boolean;
+  priceMin?: number;
+  priceMax?: number;
   page?: number;
   pageSize?: number;
   includeInactive?: boolean;
@@ -91,8 +95,20 @@ export const getModelBySlug = (
 export const getProducts = (filter: ProductFilter = {}): Promise<ProductPage> => {
   const params = new URLSearchParams();
   if (filter.q) params.set("q", filter.q);
-  if (filter.brandSlug) params.set("brandSlug", filter.brandSlug);
-  if (filter.categorySlug) params.set("categorySlug", filter.categorySlug);
+  if (Array.isArray(filter.brandSlug)) {
+    filter.brandSlug.forEach((slug) => params.append("brandSlug", slug));
+  } else if (filter.brandSlug) {
+    params.set("brandSlug", filter.brandSlug);
+  }
+  if (Array.isArray(filter.categorySlug)) {
+    filter.categorySlug.forEach((slug) => params.append("categorySlug", slug));
+  } else if (filter.categorySlug) {
+    params.set("categorySlug", filter.categorySlug);
+  }
+  if (filter.type) params.set("type", filter.type);
+  if (filter.featured) params.set("featured", "true");
+  if (filter.priceMin != null) params.set("priceMin", String(filter.priceMin));
+  if (filter.priceMax != null) params.set("priceMax", String(filter.priceMax));
   if (filter.page) params.set("page", String(filter.page));
   if (filter.pageSize) params.set("pageSize", String(filter.pageSize));
   if (filter.includeInactive) params.set("includeInactive", "true");

@@ -271,7 +271,25 @@
     "allCategories": "All categories",
     "empty": "No parts match your search — try another word or change the filters.",
     "vatNote": "Prices exclude VAT (added at checkout).",
-    "paginationAria": "Product pages"
+    "paginationAria": "Product pages",
+    "filters": {
+      "type": "Type",
+      "typeAll": "All",
+      "typeNew": "New",
+      "typeUsed": "Used",
+      "typeSpareParts": "Spare Parts",
+      "typeAccessories": "Accessories",
+      "brand": "Brand",
+      "category": "Category",
+      "priceMin": "Min",
+      "priceMax": "Max",
+      "featured": "Featured",
+      "apply": "Apply",
+      "clearAll": "Clear all",
+      "resultsCount": "{count} products",
+      "empty": "No products match the selected filters.",
+      "viewAll": "View all products"
+    }
   },
   "productDetail": {
     "metaNotFound": "Part not found | MotoGearSouq",

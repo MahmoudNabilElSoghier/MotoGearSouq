@@ -271,7 +271,25 @@
     "allCategories": "كل التصنيفات",
     "empty": "لا توجد قطع مطابقة لبحثك — جرّب كلمة تانية أو غيّر الفلاتر.",
     "vatNote": "الأسعار لا تشمل ضريبة القيمة المضافة (تُضاف عند الفاتورة).",
-    "paginationAria": "صفحات المنتجات"
+    "paginationAria": "صفحات المنتجات",
+    "filters": {
+      "type": "النوع",
+      "typeAll": "الكل",
+      "typeNew": "جديد",
+      "typeUsed": "مستعمل",
+      "typeSpareParts": "قطع غيار",
+      "typeAccessories": "إكسسوارات",
+      "brand": "الماركة",
+      "category": "التصنيف",
+      "priceMin": "من",
+      "priceMax": "إلى",
+      "featured": "مميز",
+      "apply": "تطبيق",
+      "clearAll": "مسح الكل",
+      "resultsCount": "{count} منتج",
+      "empty": "لا توجد منتجات مطابقة للفلاتر المحددة.",
+      "viewAll": "عرض كل المنتجات"
+    }
   },
   "productDetail": {
     "metaNotFound": "قطعة غير موجودة | MotoGearSouq",

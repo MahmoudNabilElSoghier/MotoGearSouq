@@ -49,6 +49,17 @@
     "light": "الفاتح",
     "dark": "الداكن"
   },
+  "landing": {
+    "nav": {
+      "home": "الرئيسية",
+      "models": "الموديلات",
+      "spareParts": "قطع الغيار",
+      "brands": "الماركات",
+      "branches": "الفروع",
+      "contact": "تواصل",
+      "store": "المتجر"
+    }
+  },
   "navigation": {
     "home": "الرئيسية",
     "models": "الموديلات",
@@ -79,7 +90,17 @@
   "categories": {
     "title": "أقسامنا ومنتجاتنا",
     "subtitle": "تخوّل في تشكيلتنا الواسعة من الدراجات الجديدة والمستعملة وقطع الغيار الأصلية",
-    "cta": "متاح في الفروع",
+    "modelsTitle": "الدراجات",
+    "sparePartsTitle": "قطع الغيار",
+    "accessoriesTitle": "الإكسسوارات",
+    "cta": {
+      "explore": "متاح في الفروع",
+      "enterStore": "ادخل المتجر",
+      "browseModels": "تصفح الدراجات",
+      "browseSpareParts": "تصفح قطع الغيار",
+      "browseAccessories": "تصفح الإكسسوارات",
+      "browseAllBrands": "تصفح كل الماركات"
+    },
     "items": {
       "new-motorcycles": {
         "title": "دراجات جديدة",

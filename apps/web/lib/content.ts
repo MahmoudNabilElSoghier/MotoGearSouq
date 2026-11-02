@@ -6,7 +6,11 @@ import type {
   PageMeta,
 } from "@/types";
 import type { Category, Testimonial } from "@motogearsouq/shared";
-import { categories as sharedCategories, testimonials as sharedTestimonials } from "@motogearsouq/shared";
+import {
+  categories as sharedCategories,
+  testimonials as sharedTestimonials,
+  mockBrands,
+} from "@motogearsouq/shared";
 
 export const categories: Category[] = sharedCategories;
 export const testimonials: Testimonial[] = sharedTestimonials;
@@ -27,16 +31,7 @@ export const whyUs = [
   { id: "support" },
 ];
 
-export const brands: Brand[] = [
-  { name: "Honda" },
-  { name: "Yamaha" },
-  { name: "Suzuki" },
-  { name: "Kawasaki" },
-  { name: "BMW Motorrad" },
-  { name: "KTM" },
-  { name: "Ducati" },
-  { name: "Harley-Davidson" },
-];
+export const brands: Brand[] = mockBrands;
 
 export const gallery: GalleryImage[] = [
   { id: "gallery-1", src: "/gallery/placeholder-1.jpg", alt: "" },

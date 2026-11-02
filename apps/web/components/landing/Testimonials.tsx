@@ -9,7 +9,7 @@ export function Testimonials() {
   const t = useTranslations("testimonials");
 
   return (
-    <section className="py-20 md:py-28 bg-bg">
+    <section id="testimonials" className="py-20 md:py-28 bg-bg scroll-mt-24">
       <Container size="xl">
         <FadeIn>
           <div className="text-center max-w-2xl mx-auto mb-16">

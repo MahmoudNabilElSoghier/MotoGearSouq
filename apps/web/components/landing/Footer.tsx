@@ -10,7 +10,7 @@ export function Footer() {
   const tCommon = useTranslations("common");
 
   const navItems = [
-    { label: tNav("home"), href: "/#home" },
+    { label: tNav("home"), href: "/#hero" },
     { label: tNav("models"), href: "/#categories" },
     { label: tNav("parts"), href: "/products" },
     { label: tNav("brands"), href: "/brands" },

@@ -15,7 +15,7 @@ export function Gallery() {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   return (
-    <section className="py-20 md:py-28 bg-card border-y border-border">
+    <section id="gallery" className="py-20 md:py-28 bg-card border-y border-border scroll-mt-24">
       <Container size="xl">
         <FadeIn>
           <div className="text-center max-w-2xl mx-auto mb-16">

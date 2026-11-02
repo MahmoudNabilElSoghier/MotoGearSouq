@@ -54,6 +54,7 @@ export interface Feature {
 
 export interface Brand {
   name: string;
+  slug: string;
   /* TODO: add logo path once real brand assets are provided */
   logo?: string;
 }

@@ -1,16 +1,18 @@
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { company } from "@/lib/config";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 
 export function Hero() {
   const t = useTranslations("hero");
+  const tc = useTranslations("categories");
+  const locale = useLocale();
 
   return (
     <section
-      id="home"
-      className="relative min-h-[85vh] md:min-h-[90vh] flex items-center overflow-hidden scroll-mt-20"
+      id="hero"
+      className="relative min-h-[85vh] md:min-h-[90vh] flex items-center overflow-hidden scroll-mt-24"
     >
       {/* BackgroundImage placeholder */}
       <div className="absolute inset-0 bg-gradient-to-l from-bg via-bg/70 to-bg/30">
@@ -40,6 +42,14 @@ export function Hero() {
               >
                 {t("ctaSecondary")}
               </a>
+            </Button>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 justify-center sm:justify-start">
+            <Button variant="primary" size="lg" asChild>
+              <Link href={`/${locale}/products`}>{tc("cta.enterStore")}</Link>
+            </Button>
+            <Button variant="secondary" size="lg" asChild>
+              <a href="#brands">{tc("cta.browseAllBrands")}</a>
             </Button>
           </div>
         </div>

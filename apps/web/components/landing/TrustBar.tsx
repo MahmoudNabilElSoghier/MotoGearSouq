@@ -39,7 +39,7 @@ function Stat({ item, index }: { item: TrustItem; index: number }) {
 
 export function TrustBar() {
   return (
-    <section className="py-12 bg-card border-y border-border">
+    <section id="trust-bar" className="py-12 bg-card border-y border-border scroll-mt-24">
       <Container size="xl">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {trustBar.map((item, index) => (

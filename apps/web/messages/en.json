@@ -49,6 +49,17 @@
     "light": "Light",
     "dark": "Dark"
   },
+  "landing": {
+    "nav": {
+      "home": "Home",
+      "models": "Models",
+      "spareParts": "Spare Parts",
+      "brands": "Brands",
+      "branches": "Branches",
+      "contact": "Contact",
+      "store": "Shop"
+    }
+  },
   "navigation": {
     "home": "Home",
     "models": "Models",
@@ -79,7 +90,17 @@
   "categories": {
     "title": "Our categories and products",
     "subtitle": "Browse our wide range of new and used motorcycles and genuine spare parts",
-    "cta": "Available at our branches",
+    "modelsTitle": "Motorcycles",
+    "sparePartsTitle": "Spare Parts",
+    "accessoriesTitle": "Accessories",
+    "cta": {
+      "explore": "Available at our branches",
+      "enterStore": "Enter Store",
+      "browseModels": "Browse Motorcycles",
+      "browseSpareParts": "Browse Spare Parts",
+      "browseAccessories": "Browse Accessories",
+      "browseAllBrands": "Browse All Brands"
+    },
     "items": {
       "new-motorcycles": {
         "title": "New motorcycles",

@@ -401,7 +401,87 @@
       "orders": "Orders",
       "suppliers": "Suppliers",
       "purchases": "Purchase Orders",
-      "stockMovements": "Stock Movements"
+      "stockMovements": "Stock Movements",
+      "reports": "Reports",
+      "breakEven": "Break-Even",
+      "abcAnalysis": "ABC Analysis",
+      "deadStock": "Dead Stock",
+      "stockValuation": "Stock Valuation"
+    },
+    "reports": {
+      "title": "Financial Reports & Intelligence",
+      "nav": {
+        "dashboard": "Reports Dashboard",
+        "breakEven": "Break-Even",
+        "abc": "ABC Analysis",
+        "deadStock": "Dead Stock",
+        "stockValuation": "Stock Valuation"
+      },
+      "period": {
+        "last7Days": "Last 7 Days",
+        "last30Days": "Last 30 Days",
+        "last90Days": "Last 90 Days",
+        "last365Days": "Last Year"
+      },
+      "dashboard": {
+        "totalRevenue": "Total Revenue",
+        "totalOrders": "Total Orders",
+        "avgOrderValue": "Average Order Value",
+        "grossProfit": "Gross Profit",
+        "newCustomers": "New Customers",
+        "topProducts": "Top Products",
+        "salesByBranch": "Sales by Branch",
+        "viewDetails": "View Details"
+      },
+      "breakEven": {
+        "title": "Break-Even Analysis & Fixed Costs",
+        "settings": "Monthly Fixed Costs Settings",
+        "rent": "Monthly Rent",
+        "salaries": "Monthly Salaries",
+        "utilities": "Monthly Utilities",
+        "marketing": "Monthly Marketing",
+        "other": "Other Monthly Expenses",
+        "totalMonthly": "Total Monthly Fixed Costs",
+        "save": "Save Settings",
+        "saved": "Settings saved successfully",
+        "currentRevenue": "Current Period Revenue",
+        "breakEvenRevenue": "Break-Even Revenue",
+        "breakEvenUnits": "Break-Even Units Est.",
+        "marginOfSafety": "Margin of Safety",
+        "status": {
+          "below": "Below Break-Even (Loss)",
+          "above": "Above Break-Even (Profitable)",
+          "at": "At Break-Even"
+        }
+      },
+      "abc": {
+        "title": "ABC Analysis (Pareto Principle)",
+        "classA": "Class A (Top 80% Revenue)",
+        "classB": "Class B (Next 15% Revenue)",
+        "classC": "Class C (Bottom 5% Revenue)",
+        "code": "Code",
+        "name": "Product Name",
+        "revenue": "Revenue",
+        "unitsSold": "Units Sold",
+        "cumulative": "Cumulative %"
+      },
+      "deadStock": {
+        "title": "Dead Stock Analysis",
+        "threshold": "Inactivity Threshold (Days)",
+        "productsCount": "Dead Stock Items",
+        "capitalTied": "Capital Tied Up",
+        "lastSoldAt": "Last Sold At",
+        "neverSold": "Never Sold",
+        "exportCsv": "Export CSV"
+      },
+      "stockValuation": {
+        "title": "Inventory Valuation",
+        "totalCostValue": "Total Cost Value",
+        "totalRetailValue": "Total Retail Value",
+        "potentialProfit": "Potential Profit",
+        "byBranch": "Valuation by Branch",
+        "byCategory": "Valuation by Category"
+      }
     },
     "forms": {
       "common": {

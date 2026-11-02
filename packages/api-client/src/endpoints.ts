@@ -21,6 +21,7 @@
   UpdateSupplierInput,
   CreatePurchaseOrderInput,
   StockAdjustmentInput,
+  UpdateCompanySettingsInput,
 } from "@motogearsouq/shared";
 import { apiGet, apiGetOrNull, apiRaw, apiSend, type ApiResponse } from "./client";
 
@@ -395,4 +396,182 @@ export const createStockAdjustment = (
     "POST",
     "/stock-movements",
     input,
+  );
+
+// ---------- Analytics & Financial Intelligence (Sprint 3) ----------
+
+export interface CompanySettings {
+  id: string;
+  monthlyRent: number;
+  monthlySalaries: number;
+  monthlyUtilities: number;
+  monthlyMarketing: number;
+  monthlyOther: number;
+  vatRate: number;
+  updatedAt: string;
+  createdAt: string;
+}
+
+export interface AnalyticsDashboard {
+  period: string;
+  periodDays: number;
+  from: string;
+  to: string;
+  kpis: {
+    totalRevenue: number;
+    totalOrders: number;
+    avgOrderValue: number;
+    grossProfit: number;
+    grossMarginPercent: number;
+    newCustomers: number;
+    cancelledOrders: number;
+    returnedAmount: number;
+  };
+  topProducts: Array<{
+    productId: string;
+    code: string;
+    name: string;
+    unitsSold: number;
+    revenue: number;
+    cost: number;
+    profit: number;
+    marginPercent: number;
+  }>;
+  salesByBranch: Array<{
+    branchId: string;
+    branchName: string;
+    orderCount: number;
+    revenue: number;
+  }>;
+}
+
+export interface BreakEvenAnalysis {
+  period: string;
+  days: number;
+  fixedCosts: {
+    monthlyRent: number;
+    monthlySalaries: number;
+    monthlyUtilities: number;
+    monthlyMarketing: number;
+    monthlyOther: number;
+    totalMonthly: number;
+    periodFixedCosts: number;
+  };
+  variableCosts: {
+    totalRevenue: number;
+    totalCogs: number;
+    variableCostRatio: number;
+  };
+  contribution: {
+    contributionMargin: number;
+    contributionMarginRatio: number;
+    breakEvenRevenue: number;
+    currentRevenue: number;
+    marginOfSafety: number;
+    breakEvenUnitsEstimate: number;
+    status: "below" | "above" | "at";
+  };
+}
+
+export interface AbcProductItem {
+  productId: string;
+  code: string;
+  name: string;
+  revenue: number;
+  unitsSold: number;
+  revenuePercent: number;
+  cumulativePercent: number;
+  class: "A" | "B" | "C";
+}
+
+export interface AbcAnalysis {
+  period: string;
+  totalRevenue: number;
+  summary: {
+    classA: { count: number; revenuePercent: number };
+    classB: { count: number; revenuePercent: number };
+    classC: { count: number; revenuePercent: number };
+  };
+  products: AbcProductItem[];
+}
+
+export interface DeadStockProduct {
+  productId: string;
+  code: string;
+  name: string;
+  currentStock: number;
+  costPrice: number;
+  capitalTied: number;
+  lastSoldAt: string | null;
+  daysSinceLastSale: number | null;
+}
+
+export interface DeadStockResponse {
+  thresholdDays: number;
+  totalProductsChecked: number;
+  deadProductsCount: number;
+  totalCapitalTied: number;
+  products: DeadStockProduct[];
+}
+
+export interface StockValuationResponse {
+  totalValue: number;
+  totalRetailValue: number;
+  potentialProfit: number;
+  byBranch: Array<{
+    branchId: string;
+    branchCode: string;
+    branchNameAr: string;
+    branchNameEn?: string | null;
+    costValue: number;
+    retailValue: number;
+  }>;
+  byCategory: Array<{
+    categoryId: string;
+    categoryName: string;
+    costValue: number;
+    retailValue: number;
+  }>;
+}
+
+export interface ProductProfitabilityItem {
+  productId: string;
+  code: string;
+  name: string;
+  unitsSold: number;
+  revenue: number;
+  cost: number;
+  profit: number;
+  marginPercent: number;
+}
+
+export const getCompanySettings = (): Promise<CompanySettings> =>
+  apiGet<CompanySettings>("/analytics/settings");
+
+export const updateCompanySettings = (
+  input: UpdateCompanySettingsInput,
+): Promise<ApiResponse<CompanySettings>> =>
+  apiSend<CompanySettings>("PATCH", "/analytics/settings", input);
+
+export const getAnalyticsDashboard = (period = "30d"): Promise<AnalyticsDashboard> =>
+  apiGet<AnalyticsDashboard>(`/analytics/dashboard?period=${encode(period)}`);
+
+export const getBreakEvenAnalysis = (period = "30d"): Promise<BreakEvenAnalysis> =>
+  apiGet<BreakEvenAnalysis>(`/analytics/break-even?period=${encode(period)}`);
+
+export const getAbcAnalysis = (period = "90d"): Promise<AbcAnalysis> =>
+  apiGet<AbcAnalysis>(`/analytics/abc-analysis?period=${encode(period)}`);
+
+export const getDeadStock = (days = 90): Promise<DeadStockResponse> =>
+  apiGet<DeadStockResponse>(`/analytics/dead-stock?days=${days}`);
+
+export const getStockValuation = (): Promise<StockValuationResponse> =>
+  apiGet<StockValuationResponse>("/analytics/stock-valuation");
+
+export const getProductProfitability = (
+  period = "90d",
+  limit = 20,
+): Promise<ProductProfitabilityItem[]> =>
+  apiGet<ProductProfitabilityItem[]>(
+    `/analytics/product-profitability?period=${encode(period)}&limit=${limit}`,
   );

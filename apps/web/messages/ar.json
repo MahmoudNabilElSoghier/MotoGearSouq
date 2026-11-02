@@ -401,7 +401,87 @@
       "inventory": "المخزون",
       "suppliers": "الموردون",
       "purchases": "أوامر الشراء",
-      "stockMovements": "حركات المخزون"
+      "stockMovements": "حركات المخزون",
+      "reports": "التقارير",
+      "breakEven": "نقطة التعادل",
+      "abcAnalysis": "تحليل ABC",
+      "deadStock": "البضاعة الراكدة",
+      "stockValuation": "تقييم المخزون"
+    },
+    "reports": {
+      "title": "التقارير المالية والتحليلات الذكية",
+      "nav": {
+        "dashboard": "لوحة التقارير",
+        "breakEven": "نقطة التعادل",
+        "abc": "تحليل ABC",
+        "deadStock": "البضاعة الراكدة",
+        "stockValuation": "تقييم المخزون"
+      },
+      "period": {
+        "last7Days": "آخر 7 أيام",
+        "last30Days": "آخر 30 يوماً",
+        "last90Days": "آخر 90 يوماً",
+        "last365Days": "العام الماضي"
+      },
+      "dashboard": {
+        "totalRevenue": "إجمالي الإيرادات",
+        "totalOrders": "إجمالي الطلبات",
+        "avgOrderValue": "متوسط قيمة الطلب",
+        "grossProfit": "مجمل الربح",
+        "newCustomers": "العملاء الجدد",
+        "topProducts": "المنتجات الأكثر مبيعا",
+        "salesByBranch": "المبيعات حسب الفرع",
+        "viewDetails": "عرض التفاصيل"
+      },
+      "breakEven": {
+        "title": "تحليل نقطة التعادل والتكاليف الثابتة",
+        "settings": "إعدادات التكاليف الشهرية الثابتة",
+        "rent": "الإيجار الشهري",
+        "salaries": "الرواتب الشهرية",
+        "utilities": "المرافق الشهرية",
+        "marketing": "التسويق الشهري",
+        "other": "مصروفات شهرية أخرى",
+        "totalMonthly": "إجمالي التكاليف الثابتة الشهرية",
+        "save": "حفظ الإعدادات",
+        "saved": "تم حفظ الإعدادات بنجاح",
+        "currentRevenue": "إيرادات الفترة الحالية",
+        "breakEvenRevenue": "إيرادات نقطة التعادل",
+        "breakEvenUnits": "تقدير وحدات التعادل",
+        "marginOfSafety": "هامش الأمان",
+        "status": {
+          "below": "دون نقطة التعادل (خسارة)",
+          "above": "فوق نقطة التعادل (ربح)",
+          "at": "عند نقطة التعادل"
+        }
+      },
+      "abc": {
+        "title": "تحليل ABC (مبدأ پارتو)",
+        "classA": "الفئة أ (أعلى 80% إيرادات)",
+        "classB": "الفئة ب (15% التالية)",
+        "classC": "الفئة ج (أقل 5% إيرادات)",
+        "code": "الكود",
+        "name": "اسم المنتج",
+        "revenue": "الإيرادات",
+        "unitsSold": "القطع المباعة",
+        "cumulative": "النسبة التراكمية %"
+      },
+      "deadStock": {
+        "title": "تحليل البضاعة الراكدة",
+        "threshold": "حد عدم النشاط (بالأيام)",
+        "productsCount": "عدد أصناف البضاعة الراكدة",
+        "capitalTied": "رأس المال المجمد",
+        "lastSoldAt": "تاريخ آخر بيع",
+        "neverSold": "لم تُباع قط",
+        "exportCsv": "تصدير CSV"
+      },
+      "stockValuation": {
+        "title": "تقييم المخزون",
+        "totalCostValue": "إجمالي قيمة التكلفة",
+        "totalRetailValue": "إجمالي قيمة التجزئة",
+        "potentialProfit": "الربح المحتمل",
+        "byBranch": "التقييم حسب الفرع",
+        "byCategory": "التقييم حسب التصنيف"
+      }
     },
     "forms": {
       "common": {

@@ -5,12 +5,14 @@ import { JwtService } from "./jwt.service";
 import { RateLimitService } from "./rate-limit.service";
 import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
+import { CustomerAuthService } from "./customer-auth.service";
+import { CustomerAuthController } from "./customer-auth.controller";
 
 @Global()
 @Module({
   imports: [ConfigModule, PrismaModule],
-  controllers: [AuthController],
-  providers: [JwtService, RateLimitService, AuthService],
-  exports: [JwtService, AuthService],
+  controllers: [AuthController, CustomerAuthController],
+  providers: [JwtService, RateLimitService, AuthService, CustomerAuthService],
+  exports: [JwtService, AuthService, CustomerAuthService],
 })
 export class AuthModule {}

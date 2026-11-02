@@ -333,23 +333,36 @@ model Document {
 // ---------- Customers / orders ----------
 
 model Customer {
-  id          String   @id @default(cuid())
-  code        String   @unique
-  name        String
-  phone       String   @unique
-  phone2      String?
-  email       String?
-  type        String   @default("retail")
-  address     String?
-  governorate String?
-  taxNumber   String?
-  creditLimit Decimal? @db.Decimal(10, 2)
-  notes       String?
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  code               String   @unique
+  name               String
+  phone              String   @unique
+  phone2             String?
+  email              String?
+  type               String   @default("retail")
+  // B2C auth: "retail" | "wholesale" (the legacy `type` column stays untouched)
+  customerType       String   @default("retail")
+  // Wholesale approval workflow: "pending" | "approved" | "rejected"
+  approvalStatus     String   @default("approved")
+  passwordHash       String?
+  businessName       String? // B2B only
+  commercialRegister String? // B2B only (taxNumber column above already existed)
+  emailVerified      Boolean  @default(false)
+  phoneVerified      Boolean  @default(false)
+  address            String?
+  governorate        String?
+  taxNumber          String?
+  creditLimit        Decimal? @db.Decimal(10, 2)
+  notes              String?
+  isActive           Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   orders Order[]
+
+  refreshTokens RefreshToken[]
+
+  @@index([approvalStatus])
 }
 
 model Order {
@@ -487,16 +500,19 @@ model User {
 }
 
 model RefreshToken {
-  id        String    @id @default(cuid())
-  userId    String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  familyId  String // rotation family — reuse of a revoked token revokes the family
-  tokenHash String    @unique // sha256 of the opaque token; raw token never stored
-  expiresAt DateTime
-  revokedAt DateTime?
-  createdAt DateTime  @default(now())
+  id         String    @id @default(cuid())
+  userId     String?
+  user       User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  customerId String? // customer sessions (B2C auth) — admin sessions keep userId
+  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  familyId   String // rotation family — reuse of a revoked token revokes the family
+  tokenHash  String    @unique // sha256 of the opaque token; raw token never stored
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  createdAt  DateTime  @default(now())
 
   @@index([userId])
+  @@index([customerId])
   @@index([familyId])
 }
 

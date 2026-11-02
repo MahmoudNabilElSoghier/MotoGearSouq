@@ -31,6 +31,26 @@ export function middleware(request: NextRequest) {
   const isAdminArea = rest[0] === "admin";
   const isLogin = isAdminArea && rest[1] === "login" && rest.length === 2;
 
+  // Customer area (B2C auth) — presence-only check at the edge; real JWT/
+  // session validation happens server-side in the API.
+  const isAccountArea = rest[0] === "account";
+  const isCustomerLogin = rest[0] === "login" && rest.length === 1;
+  const isCustomerRegister = rest[0] === "register" && rest.length === 1;
+
+  if (isAccountArea) {
+    if (!hasRefreshToken) {
+      const loginUrl = new URL(`/${locale}/login`, request.url);
+      loginUrl.searchParams.set("next", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+    return i18nResponse;
+  }
+
+  // Logged-in customers skip login/register pages.
+  if ((isCustomerLogin || isCustomerRegister) && hasRefreshToken) {
+    return NextResponse.redirect(new URL(`/${locale}/account`, request.url));
+  }
+
   if (!isAdminArea) return i18nResponse;
 
   // b) /<locale>/admin/* (except login) requires the auth cookie.

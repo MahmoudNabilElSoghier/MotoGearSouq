@@ -41,13 +41,19 @@ export class AdminAuthGuard implements CanActivate {
     if (authHeader && typeof authHeader === "string") {
       const [type, token] = authHeader.split(" ");
       if (type === "Bearer" && token) {
+        let payload;
         try {
-          const payload = this.jwtService.verify(token);
-          request.user = payload;
-          return true;
+          payload = this.jwtService.verify(token);
         } catch (error) {
           throw new UnauthorizedException(`Invalid or expired token: ${error instanceof Error ? error.message : "unknown"}`);
         }
+        // Customer tokens are rejected here — admin routes require an admin
+        // JWT (all User.role values are "admin" today) or the x-admin-api-key.
+        if (payload.role !== "admin") {
+          throw new UnauthorizedException("role must be admin");
+        }
+        request.user = payload;
+        return true;
       }
     }
 

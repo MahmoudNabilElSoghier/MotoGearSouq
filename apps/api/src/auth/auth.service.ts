@@ -113,7 +113,7 @@ export class AuthService {
 
     const storedToken = await this.prisma.get().refreshToken.findUnique({
       where: { tokenHash },
-      include: { user: true },
+      include: { user: true, customer: true },
     });
 
     if (!storedToken) {
@@ -123,7 +123,7 @@ export class AuthService {
     // Check if already revoked -> REUSE DETECTED
     if (storedToken.revokedAt !== null) {
       this.logger.warn(
-        `[auth] refresh token reuse detected for family ${storedToken.familyId} (user ${storedToken.userId})`,
+        `[auth] refresh token reuse detected for family ${storedToken.familyId} (user ${storedToken.userId ?? storedToken.customerId})`,
       );
       await this.prisma.get().refreshToken.updateMany({
         where: { familyId: storedToken.familyId, revokedAt: null },
@@ -137,8 +137,58 @@ export class AuthService {
       throw new UnauthorizedException("Refresh token expired");
     }
 
+    const accessTtl = process.env.JWT_ACCESS_TTL || "15m";
+    const refreshTtlStr = process.env.JWT_REFRESH_TTL || "7d";
+    const refreshTtlSeconds = this.jwt.parseTtl(refreshTtlStr);
+
+    // ---- Customer session (B2C auth) — same rotation, customer payload ----
+    if (storedToken.customerId) {
+      const customer = storedToken.customer;
+      if (!customer || !customer.isActive) {
+        throw new UnauthorizedException("Customer account is inactive");
+      }
+      if (customer.approvalStatus !== "approved") {
+        throw new UnauthorizedException("Customer account is not approved");
+      }
+
+      await this.prisma.get().refreshToken.update({
+        where: { id: storedToken.id },
+        data: { revokedAt: new Date() },
+      });
+
+      const newRawRefreshToken = crypto.randomBytes(32).toString("base64url");
+      const newTokenHash = crypto.createHash("sha256").update(newRawRefreshToken).digest("hex");
+      await this.prisma.get().refreshToken.create({
+        data: {
+          customerId: storedToken.customerId,
+          familyId: storedToken.familyId,
+          tokenHash: newTokenHash,
+          expiresAt: new Date(Date.now() + refreshTtlSeconds * 1000),
+        },
+      });
+
+      const accessToken = this.jwt.sign(
+        {
+          sub: customer.id,
+          phone: customer.phone,
+          name: customer.name,
+          role: "customer",
+          customerType: customer.customerType,
+          approvalStatus: customer.approvalStatus,
+        },
+        accessTtl,
+      );
+      return { accessToken, refreshToken: newRawRefreshToken };
+    }
+
+    // ---- Admin/employee session (unchanged rotation) ----
+    const user = storedToken.user;
+    if (!user) {
+      throw new UnauthorizedException("Invalid refresh token");
+    }
+
     // Check user active
-    if (!storedToken.user.active) {
+    if (!user.active) {
       throw new UnauthorizedException("User account is inactive");
     }
 
@@ -149,10 +199,6 @@ export class AuthService {
     });
 
     // Create successor in same family
-    const accessTtl = process.env.JWT_ACCESS_TTL || "15m";
-    const refreshTtlStr = process.env.JWT_REFRESH_TTL || "7d";
-    const refreshTtlSeconds = this.jwt.parseTtl(refreshTtlStr);
-
     const newRawRefreshToken = crypto.randomBytes(32).toString("base64url");
     const newTokenHash = crypto.createHash("sha256").update(newRawRefreshToken).digest("hex");
     const newExpiresAt = new Date(Date.now() + refreshTtlSeconds * 1000);
@@ -167,7 +213,7 @@ export class AuthService {
     });
 
     const accessToken = this.jwt.sign(
-      { sub: storedToken.user.id, email: storedToken.user.email, role: storedToken.user.role },
+      { sub: user.id, email: user.email, role: user.role },
       accessTtl,
     );
 

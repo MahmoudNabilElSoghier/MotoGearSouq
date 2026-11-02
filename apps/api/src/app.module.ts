@@ -5,6 +5,7 @@ import { AuthModule } from "./auth/auth.module";
 import { BrandsModule } from "./brands/brands.module";
 import { BranchesModule } from "./branches/branches.module";
 import { CategoriesModule } from "./categories/categories.module";
+import { CustomersModule } from "./customers/customers.module";
 import { DocumentsModule } from "./documents/documents.module";
 import { EmployeesModule } from "./employees/employees.module";
 import { HealthModule } from "./health/health.module";
@@ -31,6 +32,7 @@ import { PaymentsModule } from "./payments/payments.module";
     BrandsModule,
     BranchesModule,
     CategoriesModule,
+    CustomersModule,
     DocumentsModule,
     EmployeesModule,
     InventoryModule,

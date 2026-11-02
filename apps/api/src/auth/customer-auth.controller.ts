@@ -189,4 +189,15 @@ export class CustomerAuthController {
     const customer = await this.customerAuth.me(customerId);
     return { data: customer, isMock: false };
   }
+
+  @Get("orders")
+  @UseGuards(CustomerAuthGuard)
+  @ApiOperation({ summary: "Customer order history" })
+  async getOrders(@Req() req: Request & { user?: { sub: string } }) {
+    const customerId = req.user?.sub;
+    if (!customerId) {
+      throw new UnauthorizedException("Customer ID missing from token");
+    }
+    return this.customerAuth.getOrders(customerId);
+  }
 }

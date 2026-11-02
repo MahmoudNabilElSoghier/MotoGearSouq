@@ -6,9 +6,11 @@ import {
   HttpStatus,
   Inject,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
 import * as crypto from "node:crypto";
+import { fromPrismaOrder } from "@motogearsouq/shared";
 import type {
   CreateRetailCustomerInput,
   CreateWholesaleCustomerInput,
@@ -242,6 +244,25 @@ export class CustomerAuthService {
       throw new ForbiddenException("الحساب موقوف");
     }
     return customer;
+  }
+
+  public async getOrders(customerId: string): Promise<{ data: unknown[]; isMock: false }> {
+    const customer = await this.prisma.get().customer.findUnique({ where: { id: customerId } });
+    if (!customer) {
+      throw new NotFoundException();
+    }
+
+    // Match by phone: guest checkout orders were created with the same phone.
+    const orders = await this.prisma.get().order.findMany({
+      where: {
+        customer: { phone: customer.phone },
+        deletedAt: null,
+      },
+      include: { items: true },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return { data: orders.map(fromPrismaOrder), isMock: false };
   }
 
   // Opaque refresh token (same shape as admin) — stored hashed, rotated on use.

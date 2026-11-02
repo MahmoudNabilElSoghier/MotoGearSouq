@@ -5,6 +5,8 @@ import type { Prisma } from "@prisma/client";
 import { withDb, type DbResult } from "../common/with-db";
 import { toDomainError } from "../common/prisma-errors";
 import { PrismaService } from "../prisma/prisma.service";
+import { ShippingService } from "../shipping/shipping.service";
+import { PaymentsService } from "../payments/payments.service";
 import type { CreateOrderInput } from "./dto/create-order.schema";
 
 export interface OrderFilter {
@@ -26,6 +28,8 @@ export interface CreatedOrder {
   orderNumber: string;
   total: number;
   status: string;
+  redirectUrl?: string;
+  instructions?: string;
 }
 
 export interface TrackOrderItem {
@@ -68,7 +72,11 @@ function maskPhone(phone: string): string {
 
 @Injectable()
 export class OrdersService {
-  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
+  constructor(
+    @Inject(PrismaService) private readonly prisma: PrismaService,
+    @Inject(ShippingService) private readonly shippingService: ShippingService,
+    @Inject(PaymentsService) private readonly paymentsService: PaymentsService,
+  ) {}
 
   async getOrders(filter: OrderFilter = {}): Promise<DbResult<OrderPage>> {
     const page = Math.max(1, filter.page ?? 1);
@@ -143,15 +151,23 @@ export class OrdersService {
       quantities.set(item.productId, (quantities.get(item.productId) ?? 0) + item.quantity);
     }
 
+    const paymentMethod = input.paymentMethod ?? "cod";
+    const shippingMethod = input.shippingMethod ?? "standard";
+
     if (!process.env.DATABASE_URL) {
       // Mock mode: nothing persisted, stable placeholder response.
       const year = new Date().getFullYear();
+      let redirectUrl: string | undefined;
+      if (paymentMethod === "mock") {
+        redirectUrl = `/ar/checkout/mock-pay?order=SO-${year}-00001&ref=mock-${Date.now()}`;
+      }
       return {
         data: {
           id: `tmp-${Date.now()}`,
           orderNumber: `SO-${year}-00001`,
           total: 0,
           status: "pending",
+          redirectUrl,
         },
         isMock: true,
       };
@@ -185,7 +201,16 @@ export class OrdersService {
       }
       subtotal = round2(subtotal);
       tax = round2(tax);
-      const total = round2(subtotal + tax);
+
+      // Calculate shipping cost
+      const shippingQuote = await this.shippingService.calculate(
+        subtotal,
+        input.customer.governorate,
+        input.customer.city,
+        paymentMethod === "cod" ? "cod" : shippingMethod,
+      );
+      const shippingCost = shippingQuote.fee;
+      const total = round2(subtotal + tax + shippingCost);
 
       // 3. Pick a branch inventory row per product that can cover quantity.
       const inventories = await db.branchInventory.findMany({
@@ -221,8 +246,10 @@ export class OrdersService {
             taxAmount: tax,
             discount: 0,
             total,
-            paymentMethod: "cash",
-            paymentStatus: "unpaid",
+            paymentMethod,
+            paymentStatus: "pending",
+            shippingCost,
+            shippingMethod,
             notes: input.customer.notes || null,
             shippingAddress: input.customer.address,
             shippingCity: input.customer.city,
@@ -269,12 +296,27 @@ export class OrdersService {
         return order;
       });
 
+      let redirectUrl: string | undefined;
+      let instructions: string | undefined;
+
+      if (paymentMethod !== "cod") {
+        try {
+          const paymentRes = await this.paymentsService.initiate(created.orderNumber, paymentMethod);
+          redirectUrl = paymentRes.redirectUrl;
+          instructions = paymentRes.instructions;
+        } catch {
+          // Ignore if provider unconfigured in test environment
+        }
+      }
+
       return {
         data: {
           id: created.id,
           orderNumber: created.orderNumber,
           total: Number(created.total),
           status: created.status,
+          redirectUrl,
+          instructions,
         },
         isMock: false,
       };
@@ -445,7 +487,6 @@ export class OrdersService {
           },
         });
       }
-      // No inventory row for this product anymore — nothing to restore.
     }
   }
 }

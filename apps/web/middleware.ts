@@ -29,7 +29,6 @@ export function middleware(request: NextRequest) {
   const [, locale = defaultLocale, ...rest] = pathname.split("/");
   const hasRefreshToken = request.cookies.has("mgs_rt");
   const isAdminArea = rest[0] === "admin";
-  const isLogin = isAdminArea && rest[1] === "login" && rest.length === 2;
 
   // Customer area (B2C auth) — presence-only check at the edge; real JWT/
   // session validation happens server-side in the API.
@@ -53,11 +52,24 @@ export function middleware(request: NextRequest) {
 
   if (!isAdminArea) return i18nResponse;
 
-  // b) /<locale>/admin/* (except login) requires the auth cookie.
-  if (!isLogin) {
+  // Admin auth routes (login) must never be protected — they are the
+  // destination for unauthenticated users, so redirecting them would loop.
+  const isAdminAuthRoute = rest[0] === "login" && rest.length === 1;
+
+  // b) /<locale>/admin/* (except auth routes) requires the auth cookie.
+  if (!isAdminAuthRoute) {
     if (!hasRefreshToken) {
       const loginUrl = new URL(`/${locale}/admin/login`, request.url);
-      loginUrl.searchParams.set("next", pathname);
+      // Never set `next` to a login/auth URL — that would cause an infinite
+      // redirect loop (login → login → …). Fall back to the admin dashboard.
+      let next = pathname;
+      if (
+        next === "/admin/login" ||
+        next.startsWith(`/${locale}/admin/login`)
+      ) {
+        next = `/${locale}/admin`;
+      }
+      loginUrl.searchParams.set("next", next);
       return NextResponse.redirect(loginUrl);
     }
     return i18nResponse;
@@ -68,7 +80,11 @@ export function middleware(request: NextRequest) {
     const nextParam = request.nextUrl.searchParams.get("next");
     const fallback = `/${locale}/admin`;
     const target =
-      nextParam && nextParam.startsWith("/") && !nextParam.startsWith("//")
+      nextParam &&
+      nextParam.startsWith("/") &&
+      !nextParam.startsWith("//") &&
+      nextParam !== "/admin/login" &&
+      !nextParam.startsWith(`/${locale}/admin/login`)
         ? nextParam
         : fallback;
     return NextResponse.redirect(new URL(target, request.url));

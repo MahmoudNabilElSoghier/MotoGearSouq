@@ -5,11 +5,12 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { authApi, getPendingCustomersCount, type AuthUser } from "@motogearsouq/api-client";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { LogOut, User } from "lucide-react";
 
 export function AdminNav() {
   const t = useTranslations("admin.nav");
+  const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -47,7 +48,7 @@ export function AdminNav() {
     try {
       await authApi.logout();
     } catch {}
-    router.push("/admin/login");
+    router.push(`/${locale}/admin/login`);
     router.refresh();
   };
 

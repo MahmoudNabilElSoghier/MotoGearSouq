@@ -13,6 +13,10 @@ export interface CustomerListItem {
   taxNumber: string | null;
   commercialRegister: string | null;
   createdAt: Date;
+  blockedAt: Date | null;
+  blockedReason: string | null;
+  successfulDeliveries: number;
+  failedDeliveries: number;
   _count?: { orders: number };
 }
 
@@ -35,6 +39,10 @@ const LIST_SELECT = {
   taxNumber: true,
   commercialRegister: true,
   createdAt: true,
+  blockedAt: true,
+  blockedReason: true,
+  successfulDeliveries: true,
+  failedDeliveries: true,
 } as const;
 
 @Injectable()
@@ -115,6 +123,41 @@ export class CustomersService {
       select: LIST_SELECT,
     });
     console.log("[admin] rejected wholesale customer:", id, reason, adminId);
+    return updated;
+  }
+
+  async blockCustomer(id: string, reason: string | undefined): Promise<CustomerListItem> {
+    if (!reason || reason.trim().length < 10) {
+      throw new BadRequestException("سبب الحظر مطلوب (10 أحرف على الأقل)");
+    }
+    const existing = await this.prisma.get().customer.findUnique({
+      where: { id },
+      select: { id: true },
+    });
+    if (!existing) throw new NotFoundException(`Customer "${id}" not found`);
+
+    const updated = await this.prisma.get().customer.update({
+      where: { id },
+      data: { blockedAt: new Date(), blockedReason: reason.trim() },
+      select: LIST_SELECT,
+    });
+    console.log("[admin] blocked customer:", id, reason.trim());
+    return updated;
+  }
+
+  async unblockCustomer(id: string): Promise<CustomerListItem> {
+    const existing = await this.prisma.get().customer.findUnique({
+      where: { id },
+      select: { id: true },
+    });
+    if (!existing) throw new NotFoundException(`Customer "${id}" not found`);
+
+    const updated = await this.prisma.get().customer.update({
+      where: { id },
+      data: { blockedAt: null, blockedReason: null },
+      select: LIST_SELECT,
+    });
+    console.log("[admin] unblocked customer:", id);
     return updated;
   }
 }

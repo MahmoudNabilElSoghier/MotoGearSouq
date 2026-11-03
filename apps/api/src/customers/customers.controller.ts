@@ -70,4 +70,18 @@ export class CustomersController {
     const data = await this.customers.reject(id, body?.reason, this.adminId(req));
     return { data, isMock: false };
   }
+
+  @Patch(":id/block")
+  @ApiOperation({ summary: "Block a customer (prevents login and new orders)" })
+  async block(@Param("id") id: string, @Body() body: { reason?: string } | undefined) {
+    const data = await this.customers.blockCustomer(id, body?.reason);
+    return { data, isMock: false };
+  }
+
+  @Patch(":id/unblock")
+  @ApiOperation({ summary: "Unblock a customer" })
+  async unblock(@Param("id") id: string) {
+    const data = await this.customers.unblockCustomer(id);
+    return { data, isMock: false };
+  }
 }

@@ -39,13 +39,28 @@ export type OrderItemRow = Omit<
   product?: ProductRow;
 };
 
+function maskIpAddress(ip: string | null | undefined): string | null {
+  if (!ip) return null;
+  // IPv4: keep first two octets (192.168.*.*) — full IPs never leave the API.
+  const v4 = ip.match(/^(\d{1,3}\.\d{1,3})\.\d{1,3}\.\d{1,3}$/);
+  if (v4) return `${v4[1]}.*.*`;
+  if (ip.includes(":")) {
+    const head = ip.split(":").slice(0, 2).filter(Boolean).join(":");
+    return head ? `${head}::*` : "*";
+  }
+  return "*";
+}
+
 export function fromPrismaOrder(row: OrderRow): Order {
+  const codLimit = row.codLimitAtPurchase;
   return {
     ...row,
     subtotal: toNumberOrZero(row.subtotal),
     taxAmount: toNumberOrZero(row.taxAmount),
     discount: toNumberOrZero(row.discount),
     total: toNumberOrZero(row.total),
+    codLimitAtPurchase: codLimit == null ? null : Number(codLimit),
+    ipAddress: maskIpAddress(row.ipAddress),
     customer: row.customer ? fromPrismaCustomer(row.customer) : undefined,
     branch: row.branch ? fromPrismaBranch(row.branch) : undefined,
     employee: row.employee ? fromPrismaEmployee(row.employee) : undefined,

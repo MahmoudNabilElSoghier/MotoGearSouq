@@ -147,6 +147,9 @@ export class AuthService {
       if (!customer || !customer.isActive) {
         throw new UnauthorizedException("Customer account is inactive");
       }
+      if (customer.blockedAt) {
+        throw new UnauthorizedException("Customer account is blocked");
+      }
       if (customer.approvalStatus !== "approved") {
         throw new UnauthorizedException("Customer account is not approved");
       }

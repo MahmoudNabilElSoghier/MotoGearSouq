@@ -16,6 +16,10 @@ export interface Customer {
   taxNumber: string | null;
   creditLimit: number | null;
   notes: string | null;
+  blockedAt?: Dateish | null;
+  blockedReason?: string | null;
+  successfulDeliveries?: number;
+  failedDeliveries?: number;
   createdAt: Dateish;
   orders?: Order[];
 }
@@ -41,6 +45,12 @@ export interface Order {
   shippingCity?: string | null;
   shippingGovernorate?: string | null;
   shippingPhone?: string | null;
+  codLimitAtPurchase?: number | null;
+  riskScore?: number;
+  riskLevel?: string;
+  riskBreakdown?: unknown;
+  ipAddress?: string | null;
+  userAgentHash?: string | null;
   deletedAt: Dateish | null;
   createdAt: Dateish;
   updatedAt: Dateish;

@@ -58,6 +58,7 @@ export class CustomerAuthGuard implements CanActivate {
         customerType: true,
         approvalStatus: true,
         isActive: true,
+        blockedAt: true,
       },
     });
     if (!customer) {
@@ -68,6 +69,9 @@ export class CustomerAuthGuard implements CanActivate {
     }
     if (!customer.isActive) {
       throw new ForbiddenException("الحساب موقوف");
+    }
+    if (customer.blockedAt) {
+      throw new ForbiddenException("تم إيقاف الحساب — تواصل مع الإدارة");
     }
 
     const user: CustomerUser = {

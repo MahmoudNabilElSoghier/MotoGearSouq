@@ -333,31 +333,35 @@ model Document {
 // ---------- Customers / orders ----------
 
 model Customer {
-  id                   String   @id @default(cuid())
-  code                 String   @unique
+  id                   String    @id @default(cuid())
+  code                 String    @unique
   name                 String
-  phone                String   @unique
+  phone                String    @unique
   phone2               String?
-  email                String?  @unique
-  type                 String   @default("retail")
+  email                String?   @unique
+  type                 String    @default("retail")
   // B2C auth: "retail" | "wholesale" (the legacy `type` column stays untouched)
-  customerType         String   @default("retail")
+  customerType         String    @default("retail")
   // Wholesale approval workflow: "pending" | "approved" | "rejected"
-  approvalStatus       String   @default("approved")
+  approvalStatus       String    @default("approved")
   passwordHash         String?
   businessName         String? // B2B only
   commercialRegister   String? // B2B only (taxNumber column above already existed)
-  emailVerified        Boolean  @default(false)
-  phoneVerified        Boolean  @default(false)
-  successfulDeliveries Int      @default(0)
+  emailVerified        Boolean   @default(false)
+  phoneVerified        Boolean   @default(false)
+  successfulDeliveries Int       @default(0)
+  failedDeliveries     Int       @default(0)
+  blockedAt            DateTime?
+  blockedReason        String?
+  lastOrderAt          DateTime?
   address              String?
   governorate          String?
   taxNumber            String?
-  creditLimit          Decimal? @db.Decimal(10, 2)
+  creditLimit          Decimal?  @db.Decimal(10, 2)
   notes                String?
-  isActive             Boolean  @default(true)
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  isActive             Boolean   @default(true)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 
   orders Order[]
 
@@ -394,6 +398,8 @@ model Order {
   shippingPhone       String?
   codLimitAtPurchase  Decimal?  @db.Decimal(10, 2)
   riskScore           Int       @default(0)
+  riskLevel           String    @default("low")
+  riskBreakdown       Json?
   ipAddress           String?
   userAgentHash       String?
   deletedAt           DateTime?

@@ -12,6 +12,7 @@ import {
   UnauthorizedException,
   UseGuards,
 } from "@nestjs/common";
+import { createHash } from "node:crypto";
 import type { Request } from "express";
 import { ApiHeader, ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { AdminAuthGuard } from "../common/guards/admin-auth.guard";
@@ -23,6 +24,23 @@ import {
   type UpdateOrderStatusInput,
 } from "./dto/update-order-status.schema";
 import { OrdersService, type OrderFilter } from "./orders.service";
+
+// x-forwarded-for (Vercel) wins; normalize IPv6 forms so risk counting is stable.
+function extractIp(req: Request): string {
+  const forwarded = req.headers["x-forwarded-for"];
+  const raw =
+    (typeof forwarded === "string" ? forwarded.split(",")[0].trim() : "") ||
+    req.socket.remoteAddress ||
+    "unknown";
+  if (raw.startsWith("::ffff:")) return raw.slice(7);
+  if (raw === "::1") return "127.0.0.1";
+  return raw;
+}
+
+// Never store raw UA — short SHA-256 fingerprint only.
+function hashUserAgent(userAgent: string): string {
+  return createHash("sha256").update(userAgent || "unknown").digest("hex").slice(0, 16);
+}
 
 @ApiTags("orders")
 @Controller("orders")
@@ -87,7 +105,10 @@ export class OrdersController {
     if (!customerId) {
       throw new UnauthorizedException("Customer ID missing from token");
     }
-    return this.orders.createOrder(body, customerId);
+    return this.orders.createOrder(body, customerId, {
+      ipAddress: extractIp(req),
+      userAgentHash: hashUserAgent(req.headers["user-agent"] || ""),
+    });
   }
 
   @Patch(":id/status")

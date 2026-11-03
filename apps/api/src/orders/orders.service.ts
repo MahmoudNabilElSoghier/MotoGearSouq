@@ -8,7 +8,13 @@ import { PrismaService } from "../prisma/prisma.service";
 import { ShippingService } from "../shipping/shipping.service";
 import { PaymentsService } from "../payments/payments.service";
 import { CodLimitService } from "./cod-limit.service";
+import { RiskScoreService } from "./risk-score.service";
 import type { CreateOrderInput } from "./dto/create-order.schema";
+
+export interface OrderCreateContext {
+  ipAddress: string;
+  userAgentHash: string;
+}
 
 export interface OrderFilter {
   status?: string;
@@ -82,6 +88,7 @@ export class OrdersService {
     @Inject(ShippingService) private readonly shippingService: ShippingService,
     @Inject(PaymentsService) private readonly paymentsService: PaymentsService,
     @Inject(CodLimitService) private readonly codLimit: CodLimitService,
+    @Inject(RiskScoreService) private readonly riskScore: RiskScoreService,
   ) {}
 
   async getOrders(filter: OrderFilter = {}): Promise<DbResult<OrderPage>> {
@@ -162,7 +169,11 @@ export class OrdersService {
 
   // ---------- Authenticated checkout (Sprint 5C-1: no guest orders) ----------
 
-  async createOrder(input: CreateOrderInput, customerId: string): Promise<DbResult<CreatedOrder>> {
+  async createOrder(
+    input: CreateOrderInput,
+    customerId: string,
+    context: OrderCreateContext,
+  ): Promise<DbResult<CreatedOrder>> {
     // Merge duplicate product lines so stock math stays per-product.
     const quantities = new Map<string, number>();
     for (const item of input.items) {
@@ -253,6 +264,28 @@ export class OrdersService {
         codLimitAtPurchase = Number.isFinite(codCheck.limit) ? codCheck.limit : null;
       }
 
+      // 2c. Anti-fraud risk score (before any side effects).
+      const risk = await this.riskScore.calculate({
+        customerId,
+        orderTotal: total,
+        ipAddress: context.ipAddress,
+        userAgentHash: context.userAgentHash,
+      });
+
+      if (paymentMethod === "cod" && risk.blockCod) {
+        throw new BadRequestException("نظامنا لاحظ نشاطاً غير معتاد. يرجى الدفع أونلاين لإتمام الطلب.");
+      }
+
+      let notes = input.notes || null;
+      if (risk.level === "high") {
+        // Admin notification (console for now — Resend in Sprint 6). Never log raw IPs.
+        console.log(
+          `[fraud] high-risk order flagged (score: ${risk.score}) for customer ${customer.id}`,
+        );
+        const flagNote = `Order flagged as high risk (score: ${risk.score})`;
+        notes = notes ? `${notes}\n${flagNote}` : flagNote;
+      }
+
       // 3. Pick a branch inventory row per product that can cover quantity.
       const inventories = await db.branchInventory.findMany({
         where: { productId: { in: [...quantities.keys()] }, quantity: { gt: 0 } },
@@ -290,12 +323,17 @@ export class OrdersService {
             paymentStatus: "pending",
             shippingCost,
             shippingMethod,
-            notes: input.notes || null,
+            notes,
             shippingAddress,
             shippingCity,
             shippingGovernorate,
             shippingPhone: customer.phone,
             codLimitAtPurchase,
+            riskScore: risk.score,
+            riskLevel: risk.level,
+            riskBreakdown: risk.breakdown as unknown as Prisma.InputJsonValue,
+            ipAddress: context.ipAddress,
+            userAgentHash: context.userAgentHash,
             items: {
               create: [...quantities.entries()].map(([productId, quantity]) => {
                 const product = byId.get(productId)!;
@@ -333,6 +371,11 @@ export class OrdersService {
             },
           });
         }
+
+        await tx.customer.update({
+          where: { id: customer.id },
+          data: { lastOrderAt: new Date() },
+        });
 
         return order;
       });
@@ -387,6 +430,20 @@ export class OrdersService {
       const updated = await db.$transaction(async (tx) => {
         if (status === "cancelled") {
           await this.restoreStock(tx, existing.id, existing.orderNumber, existing.items);
+          // Failed delivery: COD order cancelled AFTER it was confirmed/shipped.
+          // User cancel before "confirmed" is not the customer's fault.
+          const wasFailedDelivery =
+            existing.paymentMethod === "cod" &&
+            ["confirmed", "shipped"].includes(existing.status);
+          if (wasFailedDelivery && existing.customerId) {
+            await tx.customer.update({
+              where: { id: existing.customerId },
+              data: { failedDeliveries: { increment: 1 } },
+            });
+            console.log(
+              `[orders] failed delivery counted for customer ${existing.customerId} (order ${existing.orderNumber})`,
+            );
+          }
         }
         if (status === "delivered" && existing.customerId) {
           // Progressive COD limits: a successful delivery raises the next limit.

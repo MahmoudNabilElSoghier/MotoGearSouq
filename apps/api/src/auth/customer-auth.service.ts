@@ -216,6 +216,11 @@ export class CustomerAuthService {
       throw new ForbiddenException("الحساب موقوف");
     }
 
+    if (customer.blockedAt) {
+      this.logFailedLogin(lookup, ip, userAgent, "blocked");
+      throw new ForbiddenException("الحساب محظور");
+    }
+
     if (customer.approvalStatus === "pending") {
       this.logFailedLogin(lookup, ip, userAgent, "pending");
       throw new ForbiddenException("حسابك قيد المراجعة — سيتم تفعيله قريباً");
@@ -363,7 +368,7 @@ export class CustomerAuthService {
     phone: string,
     ip?: string,
     userAgent?: string,
-    reason?: "bad_password" | "no_customer" | "no_password" | "inactive" | "pending" | "rejected" | "rate_limited",
+    reason?: "bad_password" | "no_customer" | "no_password" | "inactive" | "blocked" | "pending" | "rejected" | "rate_limited",
   ): void {
     console.warn(
       "[customer-auth] failed login",

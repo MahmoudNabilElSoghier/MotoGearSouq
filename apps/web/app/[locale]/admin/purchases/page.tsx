@@ -6,7 +6,7 @@ import { getPurchases, type PurchaseOrderPage, type PurchaseStatus } from "@moto
 import { PurchaseOrderForm } from "@/components/admin/PurchaseOrderForm";
 import { FormBanner } from "@/components/admin/FormBanner";
 import { Button } from "@/components/ui/Button";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus, ArrowLeft, ArrowRight } from "lucide-react";
 
 const statusStyles: Record<string, string> = {
   draft: "bg-bg text-muted border border-border",
@@ -70,7 +70,8 @@ export default function AdminPurchasesPage() {
           )}
         </div>
         {!showCreate && (
-          <Button size="sm" onClick={() => setShowCreate(true)}>
+          <Button size="sm" onClick={() => setShowCreate(true)} className="inline-flex items-center gap-1.5">
+            <Plus className="w-3.5 h-3.5" />
             {t("add")}
           </Button>
         )}
@@ -186,7 +187,9 @@ export default function AdminPurchasesPage() {
                 size="sm"
                 disabled={page <= 1}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
+                className="inline-flex items-center gap-1.5"
               >
+                <ArrowLeft className="w-3 h-3" />
                 {t("pagination.prev")}
               </Button>
               <Button
@@ -194,8 +197,10 @@ export default function AdminPurchasesPage() {
                 size="sm"
                 disabled={page >= pageData.totalPages}
                 onClick={() => setPage((p) => p + 1)}
+                className="inline-flex items-center gap-1.5"
               >
                 {t("pagination.next")}
+                <ArrowRight className="w-3 h-3" />
               </Button>
             </div>
           </div>

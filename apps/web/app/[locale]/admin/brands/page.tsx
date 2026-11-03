@@ -7,7 +7,7 @@ import { FormBanner } from "@/components/admin/FormBanner";
 import { getBrands, deleteBrand } from "@motogearsouq/api-client";
 import type { Brand } from "@motogearsouq/shared";
 import { useLocale, useTranslations } from "next-intl";
-import { Loader2 } from "lucide-react";
+import { Loader2, Pencil, Trash2 } from "lucide-react";
 
 export default function AdminBrandsPage() {
   const t = useTranslations("admin.brands");
@@ -140,15 +140,17 @@ export default function AdminBrandsPage() {
                         <button
                           type="button"
                           onClick={() => setEditingBrand(brand)}
-                          className="font-semibold text-accent hover:underline"
+                          className="inline-flex items-center gap-1 font-semibold text-accent hover:underline"
                         >
+                          <Pencil className="w-3.5 h-3.5" />
                           {tCommon("edit")}
                         </button>
                         <button
                           type="button"
                           onClick={() => setDeleteTarget(brand)}
-                          className="text-red-400 hover:text-red-300"
+                          className="inline-flex items-center gap-1 text-red-400 hover:text-red-300"
                         >
+                          <Trash2 className="w-3.5 h-3.5" />
                           {tCommon("delete")}
                         </button>
                       </td>

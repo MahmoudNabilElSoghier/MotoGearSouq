@@ -8,7 +8,7 @@ import { SupplierForm } from "@/components/admin/SupplierForm";
 import { FormBanner } from "@/components/admin/FormBanner";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { Loader2, Pencil, Search } from "lucide-react";
+import { Loader2, Pencil, Search, Plus } from "lucide-react";
 
 export default function AdminSuppliersPage() {
   const t = useTranslations("admin.suppliers");
@@ -56,7 +56,8 @@ export default function AdminSuppliersPage() {
           </p>
         </div>
         {!showCreate && (
-          <Button size="sm" onClick={() => setShowCreate(true)}>
+          <Button size="sm" onClick={() => setShowCreate(true)} className="inline-flex items-center gap-1.5">
+            <Plus className="w-3.5 h-3.5" />
             {t("add")}
           </Button>
         )}

@@ -15,7 +15,7 @@ import {
 } from "@motogearsouq/shared";
 import { createCategory, updateCategory, deleteCategory, ApiError } from "@motogearsouq/api-client";
 import { useLocale, useTranslations } from "next-intl";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, Save, X } from "lucide-react";
 
 type Mode =
   | { type: "edit"; category: PartCategory }
@@ -135,17 +135,21 @@ function CategoryFormPanel({
         />
       </div>
       <div className="flex gap-2">
-        <Button type="submit" size="sm" disabled={isSubmitting}>
+        <Button type="submit" size="sm" disabled={isSubmitting} className="inline-flex items-center gap-1.5">
           {isSubmitting ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin ms-1 inline" />
               <span>{t("form.saving")}</span>
             </>
           ) : (
-            <span>{tCommon("save")}</span>
+            <>
+              <Save className="w-3.5 h-3.5" />
+              <span>{tCommon("save")}</span>
+            </>
           )}
         </Button>
-        <Button type="button" size="sm" variant="secondary" onClick={onCancel}>
+        <Button type="button" size="sm" variant="secondary" onClick={onCancel} className="inline-flex items-center gap-1.5">
+          <X className="w-3.5 h-3.5" />
           {tCommon("cancel")}
         </Button>
       </div>
@@ -208,22 +212,25 @@ export function CategoryManager({ tree, onSuccess }: { tree: PartCategory[]; onS
           <button
             type="button"
             onClick={() => setMode({ type: "edit", category })}
-            className="font-semibold text-accent hover:underline"
+            className="inline-flex items-center gap-1 font-semibold text-accent hover:underline"
           >
+            <Pencil className="w-3.5 h-3.5" />
             {tCommon("edit")}
           </button>
           <button
             type="button"
             onClick={() => setMode({ type: "add", parentId: category.id })}
-            className="text-muted hover:text-fg"
+            className="inline-flex items-center gap-1 text-muted hover:text-fg"
           >
+            <Plus className="w-3.5 h-3.5" />
             {t("addChild")}
           </button>
           <button
             type="button"
             onClick={() => setDeleteTarget(category)}
-            className="text-red-400 hover:text-red-300"
+            className="inline-flex items-center gap-1 text-red-400 hover:text-red-300"
           >
+            <Trash2 className="w-3.5 h-3.5" />
             {tCommon("delete")}
           </button>
         </span>
@@ -257,13 +264,14 @@ export function CategoryManager({ tree, onSuccess }: { tree: PartCategory[]; onS
       {banner && <FormBanner type={banner.type} message={banner.message} onClose={() => setBanner(null)} />}
 
       <div>
-        <button
-          type="button"
-          onClick={() => setMode({ type: "add", parentId: null })}
-          className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-fg hover:border-accent"
-        >
-          {t("addRoot")}
-        </button>
+      <button
+        type="button"
+        onClick={() => setMode({ type: "add", parentId: null })}
+        className="inline-flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-sm font-semibold text-fg hover:border-accent"
+      >
+        <Plus className="w-3.5 h-3.5" />
+        {t("addRoot")}
+      </button>
       </div>
       {mode?.type === "add" && mode.parentId === null && (
         <CategoryFormPanel key="add-root" mode={mode} onCancel={() => setMode(null)} onSuccess={onSuccess} />

@@ -7,7 +7,7 @@ import { getPaymentTransactions, type PaymentTransactionPage, type PaymentTransa
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { exportToCsv } from "@/lib/export-csv";
-import { Loader2, Download, CreditCard } from "lucide-react";
+import { Loader2, Download, CreditCard, ArrowLeft, ArrowRight } from "lucide-react";
 
 const statusStyles: Record<string, string> = {
   pending: "bg-amber-500/15 text-amber-400",
@@ -214,7 +214,9 @@ export default function AdminPaymentsPage() {
                 size="sm"
                 disabled={page <= 1}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
+                className="inline-flex items-center gap-1.5"
               >
+                <ArrowLeft className="w-3 h-3" />
                 Prev
               </Button>
               <Button
@@ -222,8 +224,10 @@ export default function AdminPaymentsPage() {
                 size="sm"
                 disabled={page >= pageData.totalPages}
                 onClick={() => setPage((p) => p + 1)}
+                className="inline-flex items-center gap-1.5"
               >
                 Next
+                <ArrowRight className="w-3 h-3" />
               </Button>
             </div>
           </div>

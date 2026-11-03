@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { InventoryTable } from "@/components/admin/InventoryTable";
 import { getBranches, getInventory, isLowStock } from "@motogearsouq/api-client";
 import type { Branch, BranchInventory } from "@motogearsouq/shared";
-import { Loader2 } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 export default function AdminInventoryPage() {
@@ -89,7 +89,8 @@ export default function AdminInventoryPage() {
             ))}
           </select>
         </div>
-        <Button type="submit" variant="secondary" size="md">
+        <Button type="submit" variant="secondary" size="md" className="inline-flex items-center gap-1.5">
+          <Search className="w-3.5 h-3.5" />
           {t("viewBtn")}
         </Button>
       </form>

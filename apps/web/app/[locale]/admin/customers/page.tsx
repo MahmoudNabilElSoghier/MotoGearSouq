@@ -18,7 +18,7 @@ import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { RejectReasonModal } from "@/components/admin/RejectReasonModal";
 import { BlockCustomerModal } from "@/components/admin/BlockCustomerModal";
 import { FormBanner } from "@/components/admin/FormBanner";
-import { Loader2, Search, Eye, Check, X, Ban, LockOpen } from "lucide-react";
+import { Loader2, Search, Eye, Check, X, Ban, LockOpen, User, ArrowLeft, ArrowRight } from "lucide-react";
 
 type Banner = { type: "success" | "error"; message: string } | null;
 
@@ -190,8 +190,11 @@ export default function AdminCustomersPage() {
             </span>
           )}
         </div>
-        <Button asChild size="sm" variant="secondary">
-          <Link href={`/${locale}/admin/customers/pending`}>{t("pending.title")}</Link>
+        <Button asChild size="sm" variant="secondary" className="inline-flex items-center gap-1.5">
+          <Link href={`/${locale}/admin/customers/pending`}>
+            <User className="w-3.5 h-3.5" />
+            {t("pending.title")}
+          </Link>
         </Button>
       </div>
 
@@ -250,7 +253,8 @@ export default function AdminCustomersPage() {
 
       {hasFilters && (
         <div className="flex justify-end">
-          <Button variant="ghost" size="sm" onClick={clearFilters}>
+          <Button variant="ghost" size="sm" onClick={clearFilters} className="inline-flex items-center gap-1.5">
+            <X className="w-3.5 h-3.5" />
             {t("filters.clearAll")}
           </Button>
         </div>
@@ -395,7 +399,9 @@ export default function AdminCustomersPage() {
                 size="sm"
                 disabled={page <= 1}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
+                className="inline-flex items-center gap-1.5"
               >
+                <ArrowLeft className="w-3 h-3" />
                 {t("pagination.prev")}
               </Button>
               <Button
@@ -403,8 +409,10 @@ export default function AdminCustomersPage() {
                 size="sm"
                 disabled={page >= customerPage.totalPages}
                 onClick={() => setPage((p) => p + 1)}
+                className="inline-flex items-center gap-1.5"
               >
                 {t("pagination.next")}
+                <ArrowRight className="w-3 h-3" />
               </Button>
             </div>
           </div>

@@ -6,7 +6,7 @@ import { EmployeeForm } from "@/components/admin/EmployeeForm";
 import { FormBanner } from "@/components/admin/FormBanner";
 import type { Employee } from "@motogearsouq/shared";
 import { Button } from "@/components/ui/Button";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus, Pencil } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 const roleStyles: Record<string, string> = {
@@ -55,7 +55,8 @@ export default function AdminEmployeesPage() {
           </p>
         </div>
         {!showCreate && (
-          <Button size="sm" onClick={() => setShowCreate(true)}>
+          <Button size="sm" onClick={() => setShowCreate(true)} className="inline-flex items-center gap-1.5">
+            <Plus className="w-3.5 h-3.5" />
             {t("add")}
           </Button>
         )}
@@ -170,8 +171,9 @@ export default function AdminEmployeesPage() {
                         <button
                           type="button"
                           onClick={() => setEditingEmployee(employee)}
-                          className="font-semibold text-accent hover:underline"
+                          className="inline-flex items-center gap-1 font-semibold text-accent hover:underline"
                         >
+                          <Pencil className="w-3.5 h-3.5" />
                           {tCommon("edit")}
                         </button>
                       </td>

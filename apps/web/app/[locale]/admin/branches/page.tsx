@@ -6,7 +6,7 @@ import { BranchForm } from "@/components/admin/BranchForm";
 import { FormBanner } from "@/components/admin/FormBanner";
 import type { Branch } from "@motogearsouq/shared";
 import { Button } from "@/components/ui/Button";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus, Pencil } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 export default function AdminBranchesPage() {
@@ -49,7 +49,8 @@ export default function AdminBranchesPage() {
           </p>
         </div>
         {!showCreate && (
-          <Button size="sm" onClick={() => setShowCreate(true)}>
+          <Button size="sm" onClick={() => setShowCreate(true)} className="inline-flex items-center gap-1.5">
+            <Plus className="w-3.5 h-3.5" />
             {t("add")}
           </Button>
         )}
@@ -123,8 +124,9 @@ export default function AdminBranchesPage() {
                   <button
                     type="button"
                     onClick={() => setEditingBranch(branch)}
-                    className="text-xs font-semibold text-accent hover:underline ms-1"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-accent hover:underline ms-1"
                   >
+                    <Pencil className="w-3 h-3" />
                     {tCommon("edit")}
                   </button>
                 </div>

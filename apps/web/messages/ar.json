@@ -786,7 +786,36 @@
       "low": "منخفض",
       "save": "حفظ",
       "done": "تم",
-      "qtyAria": "كمية {product} في {branch}"
+      "qtyAria": "كمية {product} في {branch}",
+      "recordMovement": "تسجيل حركة",
+      "recordMovementShort": "حركة",
+      "viewHistory": "عرض السجل",
+      "viewHistoryShort": "سجل",
+      "saveShort": "حفظ",
+      "modal": {
+        "title": "تسجيل حركة مخزون",
+        "product": "المنتج",
+        "branch": "الفرع",
+        "currentQty": "الكمية الحالية",
+        "type": "النوع",
+        "type.in": "إدخال (إضافة مخزون)",
+        "type.out": "إخراج (خصم مخزون)",
+        "type.adjustment": "تعديل (ضبط دقيق)",
+        "quantity": "الكمية",
+        "newExactQty": "الكمية الدقيقة الجديدة",
+        "newExactQtyHint": "أدخل الكمية المستهدفة الدقيقة",
+        "currentQtyHint": "المخزون الحالي: {currentQty}",
+        "reason": "السبب (اختياري)",
+        "reasonHint": "مثال: شحنة جديدة، سلع تالفة، تعديل جرد المخزون",
+        "deltaLabel": "التغيير الناتج",
+        "zeroDelta": "لا يوجد تغيير في الكمية",
+        "submit": "تسجيل الحركة",
+        "saving": "جارٍ الحفظ..."
+      },
+      "form": {
+        "validationFailed": "فشل التحقق — {details}",
+        "saveError": "فشل الحفظ"
+      }
     },
     "payments": {
       "title": "إدارة المدفوعات والمعاملات",

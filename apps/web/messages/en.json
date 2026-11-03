@@ -785,7 +785,36 @@
       "low": "Low",
       "save": "Save",
       "done": "Saved",
-      "qtyAria": "Quantity of {product} at {branch}"
+      "qtyAria": "Quantity of {product} at {branch}",
+      "recordMovement": "Record Movement",
+      "recordMovementShort": "Movement",
+      "viewHistory": "View History",
+      "viewHistoryShort": "History",
+      "saveShort": "Save",
+      "modal": {
+        "title": "Record Stock Movement",
+        "product": "Product",
+        "branch": "Branch",
+        "currentQty": "Current Quantity",
+        "type": "Type",
+        "type.in": "IN (Add Stock)",
+        "type.out": "OUT (Remove Stock)",
+        "type.adjustment": "Adjustment (Set Exact)",
+        "quantity": "Quantity",
+        "newExactQty": "New Exact Quantity",
+        "newExactQtyHint": "Enter the exact target quantity",
+        "currentQtyHint": "Current stock: {currentQty}",
+        "reason": "Reason (optional)",
+        "reasonHint": "e.g. New shipment, damaged goods, stock count correction",
+        "deltaLabel": "Resulting change",
+        "zeroDelta": "No change in quantity",
+        "submit": "Record Movement",
+        "saving": "Saving..."
+      },
+      "form": {
+        "validationFailed": "Validation failed — {details}",
+        "saveError": "Failed to save"
+      }
     },
     "payments": {
       "title": "Payments & Transactions Management",

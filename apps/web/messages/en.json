@@ -1223,6 +1223,7 @@
       "loading": "Signing in...",
       "noAccount": "Don't have an account?",
       "registerLink": "Sign up",
+      "forgotPasswordLink": "Forgot password?",
       "signinShort": "Sign in",
       "showPassword": "Show password",
       "hidePassword": "Hide password",
@@ -1240,6 +1241,63 @@
         "access_denied": "Sign in cancelled",
         "email_exists": "Email already registered",
         "default": "An error occurred, please try again"
+      }
+    },
+    "account": {
+      "title": "My Account",
+      "subtitle": "Manage your account details and preferences",
+      "fields": {
+        "status": "Account status",
+        "name": "Full name"
+      },
+      "status": {
+        "approved": "Approved",
+        "pending": "Pending review",
+        "rejected": "Rejected"
+      },
+      "actions": {
+        "logout": "Logout",
+        "backToHome": "Back to",
+        "home": "Home"
+      },
+      "errors": {
+        "logoutFailed": "فشل تسجيل الخروج، حاول تاني"
+      }
+    },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "subtitle": "Enter your email and we'll send you a reset link",
+      "fields": {
+        "email": "Email address"
+      },
+      "actions": {
+        "sending": "Sending...",
+        "sendResetLink": "Send reset link"
+      },
+      "errors": {
+        "requestFailed": "فشل إرسال الطلب، حاول تاني"
+      },
+      "messages": {
+        "linkSent": "إذا كان البريد الإلكتروني موجودًا، سيتم إرسال رابط إعادة التعيين"
+      }
+    },
+    "resetPassword": {
+      "title": "Reset Password",
+      "subtitle": "Enter your new password below",
+      "fields": {
+        "newPassword": "New password",
+        "confirmPassword": "Confirm new password"
+      },
+      "actions": {
+        "resetting": "Resetting...",
+        "resetPassword": "Reset password"
+      },
+      "errors": {
+        "invalidToken": "رابط إعادة التعيين غير صالح",
+        "resetFailed": "فشل إعادة تعيين كلمة المرور، حاول تاني"
+      },
+      "messages": {
+        "passwordUpdated": "تم تحديث كلمة المرور بنجاح"
       }
     },
     "register": {

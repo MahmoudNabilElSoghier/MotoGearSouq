@@ -1224,6 +1224,7 @@
       "loading": "جاري تسجيل الدخول...",
       "noAccount": "ليس لديك حساب؟",
       "registerLink": "سجل الآن",
+      "forgotPasswordLink": "نسيت كلمة المرور؟",
       "signinShort": "دخول",
       "showPassword": "إظهار كلمة المرور",
       "hidePassword": "إخفاء كلمة المرور",
@@ -1241,6 +1242,63 @@
         "access_denied": "تم إلغاء تسجيل الدخول",
         "email_exists": "البريد مسجل بالفعل",
         "default": "حدث خطأ، حاول تاني"
+      }
+    },
+    "account": {
+      "title": "حسابي",
+      "subtitle": "إدارة تفاصيل حسابك وتفضيلاتك",
+      "fields": {
+        "status": "حالة الحساب",
+        "name": "الاسم بالكامل"
+      },
+      "status": {
+        "approved": "مفعل",
+        "pending": "قيد المراجعة",
+        "rejected": "مرفوض"
+      },
+      "actions": {
+        "logout": "تسجيل الخروج",
+        "backToHome": "العودة إلى",
+        "home": "الرئيسية"
+      },
+      "errors": {
+        "logoutFailed": "فشل تسجيل الخروج، حاول تاني"
+      }
+    },
+    "forgotPassword": {
+      "title": "نسيت كلمة المرور",
+      "subtitle": "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين",
+      "fields": {
+        "email": "البريد الإلكتروني"
+      },
+      "actions": {
+        "sending": "جاري الإرسال...",
+        "sendResetLink": "إرسال رابط إعادة التعيين"
+      },
+      "errors": {
+        "requestFailed": "فشل إرسال الطلب، حاول تاني"
+      },
+      "messages": {
+        "linkSent": "إذا كان البريد الإلكتروني موجودًا، سيتم إرسال رابط إعادة التعيين"
+      }
+    },
+    "resetPassword": {
+      "title": "إعادة تعيين كلمة المرور",
+      "subtitle": "أدخل كلمة المرور الجديدة أدناه",
+      "fields": {
+        "newPassword": "كلمة المرور الجديدة",
+        "confirmPassword": "تأكيد كلمة المرور الجديدة"
+      },
+      "actions": {
+        "resetting": "جاري الإعادة...",
+        "resetPassword": "إعادة تعيين كلمة المرور"
+      },
+      "errors": {
+        "invalidToken": "رابط إعادة التعيين غير صالح",
+        "resetFailed": "فشل إعادة تعيين كلمة المرور، حاول تاني"
+      },
+      "messages": {
+        "passwordUpdated": "تم تحديث كلمة المرور بنجاح"
       }
     },
     "register": {

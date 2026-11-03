@@ -1139,7 +1139,17 @@
     "confirm": "Confirm Order",
     "submitting": "Placing order...",
     "success": "Order placed successfully",
-    "errorGeneric": "An error occurred"
+    "errorGeneric": "An error occurred",
+    "authRequired": "You need to sign in to complete your order",
+    "loginCta": "Sign In",
+    "registerCta": "Create Account",
+    "cancel": "Cancel",
+    "signedInAs": "You're signed in as {name}",
+    "changeAccount": "Change account",
+    "codLimitTitle": "Cash on Delivery limit",
+    "codLimitBody": "Max {limit} EGP for order #{count}. Pay online to go beyond the limit.",
+    "codLimitExceeded": "Your order ({total} EGP) exceeds the COD limit ({limit} EGP). Please pay online.",
+    "codLimitProgress": "After {count} successful order(s), your limit rises to {nextLimit} EGP."
   },
   "order": {
     "title": "Order Tracking",
@@ -1163,6 +1173,8 @@
       "title": "Sign In",
       "subtitle": "Sign in to your account to track your orders",
       "phone": "Phone Number",
+      "identifier": "Phone number or email",
+      "identifierPlaceholder": "01xxxxxxxxx or email@example.com",
       "password": "Password",
       "submit": "Sign In",
       "loading": "Signing in...",
@@ -1179,6 +1191,7 @@
     },
     "register": {
       "title": "Create Account",
+      "emailOptional": "Email (optional — for order notifications)",
       "tabs": {
         "retail": "Individual",
         "wholesale": "Merchant / Wholesale"

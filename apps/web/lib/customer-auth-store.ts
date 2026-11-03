@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { mergeCartAfterLogin } from "./cart-merge";
 
 export interface CustomerUser {
   id: string;
@@ -8,6 +9,9 @@ export interface CustomerUser {
   customerType: "retail" | "wholesale";
   approvalStatus: "pending" | "approved" | "rejected";
   isActive: boolean;
+  successfulDeliveries?: number;
+  address?: string | null;
+  governorate?: string | null;
 }
 
 interface RetailInput { name: string; phone: string; password: string; email?: string; }
@@ -18,7 +22,7 @@ interface CustomerAuthState {
   isLoading: boolean;
   isInitialized: boolean;
   init: () => Promise<void>;
-  login: (phone: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  login: (identifier: string, password: string) => Promise<{ success: boolean; error?: string }>;
   registerRetail: (data: RetailInput) => Promise<{ success: boolean; error?: string }>;
   registerWholesale: (data: WholesaleInput) => Promise<{ success: boolean; error?: string; message?: string }>;
   logout: () => Promise<void>;
@@ -48,18 +52,19 @@ export const useCustomerAuth = create<CustomerAuthState>()((set, get) => ({
     }
   },
 
-  login: async (phone, password) => {
+  login: async (identifier, password) => {
     set({ isLoading: true });
     try {
       const res = await fetch("/api/auth/customer/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ phone, password }),
+        body: JSON.stringify({ identifier, password }),
       });
       const data = await res.json();
       if (!res.ok) return { success: false, error: data.message || "حدث خطأ" };
       set({ customer: data.data.customer });
+      mergeCartAfterLogin();
       return { success: true };
     } catch {
       return { success: false, error: "تعذر الاتصال بالخادم" };
@@ -80,6 +85,7 @@ export const useCustomerAuth = create<CustomerAuthState>()((set, get) => ({
       const data = await res.json();
       if (!res.ok) return { success: false, error: data.message || "حدث خطأ" };
       set({ customer: data.data.customer });
+      mergeCartAfterLogin();
       return { success: true };
     } catch {
       return { success: false, error: "تعذر الاتصال بالخادم" };

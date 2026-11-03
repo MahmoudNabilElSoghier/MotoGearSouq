@@ -1140,7 +1140,17 @@
     "confirm": "تأكيد الطلب",
     "submitting": "جاري تأكيد الطلب...",
     "success": "تم تأكيد الطلب بنجاح",
-    "errorGeneric": "حدث خطأ ما"
+    "errorGeneric": "حدث خطأ ما",
+    "authRequired": "تحتاج تسجيل الدخول لإتمام الطلب",
+    "loginCta": "تسجيل الدخول",
+    "registerCta": "إنشاء حساب",
+    "cancel": "إلغاء",
+    "signedInAs": "تشاهد بصفتك {name}",
+    "changeAccount": "تغيير الحساب",
+    "codLimitTitle": "حد الدفع عند الاستلام",
+    "codLimitBody": "الحد الأقصى {limit} ج.م للطلب رقم {count}. لتجاوز الحد، ادفع أونلاين.",
+    "codLimitExceeded": "طلبك ({total} ج.م) يتجاوز حد COD ({limit} ج.م). الرجاء الدفع أونلاين.",
+    "codLimitProgress": "بعد {count} طلب ناجح، يرتفع حدك إلى {nextLimit} ج.م."
   },
   "order": {
     "title": "تتبع الطلب",
@@ -1164,6 +1174,8 @@
       "title": "تسجيل الدخول",
       "subtitle": "دخل على حسابك لتتابع طلباتك",
       "phone": "رقم الموبايل",
+      "identifier": "رقم الموبايل أو البريد الإلكتروني",
+      "identifierPlaceholder": "01xxxxxxxxx أو email@example.com",
       "password": "كلمة المرور",
       "submit": "تسجيل الدخول",
       "loading": "جاري تسجيل الدخول...",
@@ -1180,6 +1192,7 @@
     },
     "register": {
       "title": "إنشاء حساب جديد",
+      "emailOptional": "البريد الإلكتروني (اختياري — لتلقي إشعارات الطلبات)",
       "tabs": {
         "retail": "عميل فردي",
         "wholesale": "تاجر / جملة"

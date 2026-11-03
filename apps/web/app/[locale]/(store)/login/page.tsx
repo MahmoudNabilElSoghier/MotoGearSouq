@@ -41,7 +41,7 @@ export default function LoginPage() {
 
   const onSubmit = async (data: CustomerLoginInput) => {
     setError(null);
-    const result = await login(data.phone, data.password);
+    const result = await login(data.identifier || data.phone || "", data.password);
     if (!result.success) {
       const raw = result.error || "";
       if (raw.includes("قيد المراجعة")) setError(t("errors.pending"));
@@ -71,15 +71,14 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <Input
-              label={t("phone")}
-              type="tel"
+              label={t("identifier")}
+              type="text"
               dir="ltr"
-              inputMode="tel"
-              autoComplete="tel"
-              placeholder="01XXXXXXXXX"
-              error={errors.phone?.message}
+              autoComplete="username"
+              placeholder={t("identifierPlaceholder")}
+              error={errors.identifier?.message}
               disabled={isLoading}
-              {...register("phone")}
+              {...register("identifier")}
             />
 
             <div className="relative">

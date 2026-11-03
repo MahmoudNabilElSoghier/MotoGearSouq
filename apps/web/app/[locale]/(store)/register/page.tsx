@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocale, useTranslations } from "next-intl";
@@ -21,11 +21,19 @@ import { FormBanner } from "@/components/admin/FormBanner";
 
 type Tab = "retail" | "wholesale";
 
+function safeNext(next: string | null, fallback: string): string {
+  if (next && next.startsWith("/") && !next.startsWith("//") && !next.includes("\\")) {
+    return next;
+  }
+  return fallback;
+}
+
 export default function RegisterPage() {
   const t = useTranslations("customerAuth.register");
   const tLogin = useTranslations("customerAuth.login");
   const locale = useLocale();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { registerRetail, registerWholesale, isLoading } = useCustomerAuth();
 
   const [tab, setTab] = useState<Tab>("retail");
@@ -64,7 +72,8 @@ export default function RegisterPage() {
       setError(result.error || "حدث خطأ");
       return;
     }
-    router.push(`/${locale}/account`);
+    const next = safeNext(searchParams.get("next"), `/${locale}/account`);
+    router.push(next);
     router.refresh();
   };
 
@@ -177,6 +186,7 @@ export default function RegisterPage() {
                 disabled={isLoading}
                 {...retailForm.register("email")}
               />
+              <p className="-mt-2 text-xs text-muted">{t("emailOptional")}</p>
               <Button type="submit" fullWidth disabled={isLoading}>
                 {isLoading ? (
                   <>
@@ -232,6 +242,7 @@ export default function RegisterPage() {
                 disabled={isLoading}
                 {...wholesaleForm.register("email")}
               />
+              <p className="-mt-2 text-xs text-muted">{t("emailOptional")}</p>
               <Input
                 label={t("fields.businessName")}
                 autoComplete="organization"

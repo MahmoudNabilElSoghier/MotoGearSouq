@@ -2,32 +2,40 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
+import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { createOrder, initiatePayment, type CreateOrderPayload } from "@motogearsouq/api-client";
 import { useCart } from "@/lib/cart-store";
+import { useCustomerAuth } from "@/lib/customer-auth-store";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Container } from "@/components/ui/Container";
-import { Loader2, AlertCircle } from "lucide-react";
+import { Loader2, AlertCircle, Pencil } from "lucide-react";
 
 type CheckoutFormValues = {
-  nameAr: string;
-  phone: string;
-  email?: string;
   address: string;
   city: string;
   governorate: string;
   notes?: string;
 };
 
+function codLimitFor(successfulDeliveries: number): number {
+  if (successfulDeliveries === 0) return 5000;
+  if (successfulDeliveries === 1) return 15000;
+  if (successfulDeliveries === 2) return 30000;
+  return Infinity;
+}
+
 export default function CheckoutPage() {
+  const t = useTranslations("checkout");
   const locale = useLocale();
   const router = useRouter();
   const isAr = locale === "ar";
   const nf = new Intl.NumberFormat(isAr ? "ar-EG-u-nu-latn" : "en-US");
 
   const { items, subtotal, taxAmount, total, clearCart } = useCart();
+  const { customer, isLoading: authLoading, init } = useCustomerAuth();
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<string>("cod");
@@ -35,8 +43,31 @@ export default function CheckoutPage() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<CheckoutFormValues>();
+
+  useEffect(() => {
+    init();
+  }, [init]);
+
+  // Force login: no guest checkout (5C-1).
+  useEffect(() => {
+    if (!authLoading && !customer) {
+      router.replace(`/${locale}/login?next=/${locale}/checkout`);
+    }
+  }, [authLoading, customer, locale, router]);
+
+  // Pre-fill shipping from the customer profile (editable).
+  useEffect(() => {
+    if (customer) {
+      reset({
+        address: customer.address ?? "",
+        city: "",
+        governorate: customer.governorate ?? "",
+      });
+    }
+  }, [customer, reset]);
 
   useEffect(() => {
     if (items.length === 0) {
@@ -44,13 +75,34 @@ export default function CheckoutPage() {
     }
   }, [items, locale, router]);
 
-  if (items.length === 0) {
-    return null;
-  }
+  const successfulDeliveries = customer?.successfulDeliveries ?? 0;
+  const codLimit = codLimitFor(successfulDeliveries);
+  const nextLimit = codLimitFor(successfulDeliveries + 1);
+  const orderNumber = successfulDeliveries + 1;
 
   const sub = subtotal();
   const tax = taxAmount();
   const tot = total();
+  const codExceeded = Number.isFinite(codLimit) && tot > codLimit;
+
+  // Order total exceeds COD limit → force an online method.
+  useEffect(() => {
+    if (codExceeded && paymentMethod === "cod") {
+      setPaymentMethod("mock");
+    }
+  }, [codExceeded, paymentMethod]);
+
+  if (authLoading || !customer || items.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <Loader2 className="w-8 h-8 animate-spin text-accent" aria-hidden />
+        <span className="sr-only">Loading</span>
+      </div>
+    );
+  }
+
+  const formatLimit = (limit: number) =>
+    Number.isFinite(limit) ? nf.format(limit) : isAr ? "بلا حدود" : "Unlimited";
 
   const onSubmit = async (data: CheckoutFormValues) => {
     setSubmitting(true);
@@ -62,15 +114,11 @@ export default function CheckoutPage() {
           productId: i.productId,
           quantity: i.quantity,
         })),
-        customer: {
-          nameAr: data.nameAr,
-          phone: data.phone,
-          email: data.email || undefined,
-          address: data.address,
-          city: data.city,
-          governorate: data.governorate,
-          notes: data.notes || undefined,
-        },
+        shippingAddress: data.address,
+        shippingCity: data.city,
+        shippingGovernorate: data.governorate,
+        notes: data.notes || undefined,
+        paymentMethod: paymentMethod as CreateOrderPayload["paymentMethod"],
       };
 
       const res = await createOrder(payload);
@@ -130,39 +178,29 @@ export default function CheckoutPage() {
               {isAr ? "بيانات الشحن والتواصل" : "Shipping & Contact Details"}
             </h2>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              <div>
-                <Input
-                  label={isAr ? "الاسم الكامل" : "Full Name"}
-                  {...register("nameAr", { required: isAr ? "الاسم مطلوب" : "Name is required" })}
-                  placeholder={isAr ? "محمد أحمد" : "Mohamed Ahmed"}
-                />
-                {errors.nameAr && (
-                  <span className="mt-1 text-xs text-red-400">{errors.nameAr.message}</span>
-                )}
+            {/* Signed-in customer (read-only) */}
+            <div className="rounded-xl border border-border bg-bg p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs text-muted">{t("signedInAs", { name: customer.name })}</p>
+                  <p className="mt-1 font-semibold text-fg" dir="ltr">
+                    {customer.name}
+                  </p>
+                  <p className="text-sm text-muted" dir="ltr">
+                    {customer.phone}
+                    {customer.email ? ` · ${customer.email}` : ""}
+                  </p>
+                </div>
+                <Button asChild variant="secondary" size="sm">
+                  <Link
+                    href={`/${locale}/account`}
+                    className="inline-flex items-center gap-1.5"
+                  >
+                    <Pencil className="w-3.5 h-3.5" />
+                    <span>{t("changeAccount")}</span>
+                  </Link>
+                </Button>
               </div>
-
-              <div>
-                <Input
-                  label={isAr ? "رقم الهاتف" : "Phone Number"}
-                  {...register("phone", { required: isAr ? "رقم الهاتف مطلوب" : "Phone is required" })}
-                  placeholder="01012345678"
-                  dir="ltr"
-                />
-                {errors.phone && (
-                  <span className="mt-1 text-xs text-red-400">{errors.phone.message}</span>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <Input
-                label={isAr ? "البريد الإلكتروني (اختياري)" : "Email (Optional)"}
-                type="email"
-                {...register("email")}
-                placeholder="name@example.com"
-                dir="ltr"
-              />
             </div>
 
             <div>
@@ -210,26 +248,68 @@ export default function CheckoutPage() {
                   { id: "cod", labelAr: "الدفع عند الاستلام", labelEn: "Cash on Delivery" },
                   { id: "mock", labelAr: "الدفع الإلكتروني (تجريبي)", labelEn: "Online Payment (Mock)" },
                   { id: "instapay", labelAr: "انستاباي (InstaPay)", labelEn: "InstaPay" },
-                ].map((m) => (
-                  <label
-                    key={m.id}
-                    className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-colors ${
-                      paymentMethod === m.id
-                        ? "border-accent bg-accent/10 text-fg font-semibold"
-                        : "border-border bg-bg text-muted hover:border-border/80"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value={m.id}
-                      checked={paymentMethod === m.id}
-                      onChange={() => setPaymentMethod(m.id)}
-                      className="accent-accent"
-                    />
-                    <span className="text-sm">{isAr ? m.labelAr : m.labelEn}</span>
-                  </label>
-                ))}
+                ].map((m) => {
+                  const disabled = m.id === "cod" && codExceeded;
+                  return (
+                    <label
+                      key={m.id}
+                      className={`flex items-center gap-3 p-4 rounded-xl border transition-colors ${
+                        disabled
+                          ? "border-border bg-bg text-muted opacity-60 cursor-not-allowed"
+                          : paymentMethod === m.id
+                            ? "border-accent bg-accent/10 text-fg font-semibold cursor-pointer"
+                            : "border-border bg-bg text-muted hover:border-border/80 cursor-pointer"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value={m.id}
+                        checked={paymentMethod === m.id}
+                        disabled={disabled}
+                        onChange={() => setPaymentMethod(m.id)}
+                        className="accent-accent"
+                      />
+                      <span className="text-sm">{isAr ? m.labelAr : m.labelEn}</span>
+                    </label>
+                  );
+                })}
+              </div>
+
+              {/* COD limit info */}
+              <div
+                className={`rounded-xl border p-4 text-sm ${
+                  codExceeded
+                    ? "border-red-500/40 bg-red-500/10 text-red-400"
+                    : "border-amber-500/30 bg-amber-500/10 text-amber-400"
+                }`}
+              >
+                <p className="font-semibold">{t("codLimitTitle")}</p>
+                {codExceeded ? (
+                  <p className="mt-1">
+                    {t("codLimitExceeded", {
+                      total: `${nf.format(tot)} ${isAr ? "ج.م" : "EGP"}`,
+                      limit: `${nf.format(codLimit)} ${isAr ? "ج.م" : "EGP"}`,
+                    })}
+                  </p>
+                ) : (
+                  <>
+                    <p className="mt-1">
+                      {t("codLimitBody", {
+                        limit: formatLimit(codLimit),
+                        count: orderNumber,
+                      })}
+                    </p>
+                    {successfulDeliveries < 3 && (
+                      <p className="mt-1 text-xs opacity-80">
+                        {t("codLimitProgress", {
+                          count: orderNumber,
+                          nextLimit: formatLimit(nextLimit),
+                        })}
+                      </p>
+                    )}
+                  </>
+                )}
               </div>
             </div>
 
@@ -259,7 +339,15 @@ export default function CheckoutPage() {
                   <span>{isAr ? "جاري تأكيد الطلب..." : "Placing order..."}</span>
                 </>
               ) : (
-                <span>{isAr ? "تأكيد الطلب (الدفع عند الاستلام)" : "Confirm Order (COD)"}</span>
+                <span>
+                  {paymentMethod === "cod"
+                    ? isAr
+                      ? "تأكيد الطلب (الدفع عند الاستلام)"
+                      : "Confirm Order (COD)"
+                    : isAr
+                      ? "تأكيد الطلب والدفع"
+                      : "Confirm Order & Pay"}
+                </span>
               )}
             </Button>
           </div>

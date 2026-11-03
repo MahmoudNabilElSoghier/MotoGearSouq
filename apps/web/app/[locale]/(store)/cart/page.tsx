@@ -1,19 +1,28 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Trash2, ShoppingCart, ArrowRight, ArrowLeft } from "lucide-react";
 import { useCart } from "@/lib/cart-store";
+import { useCustomerAuth } from "@/lib/customer-auth-store";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 
 export default function CartPage() {
   const locale = useLocale();
   const isAr = locale === "ar";
+  const tCheckout = useTranslations("checkout");
   const nf = new Intl.NumberFormat(isAr ? "ar-EG-u-nu-latn" : "en-US");
 
   const { items, removeItem, updateQuantity, clearCart, subtotal, taxAmount, total } =
     useCart();
+  const { customer, init } = useCustomerAuth();
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  useEffect(() => {
+    init();
+  }, [init]);
 
   const sub = subtotal();
   const tax = taxAmount();
@@ -150,7 +159,16 @@ export default function CartPage() {
 
               <div className="pt-2">
                 <Button variant="primary" size="lg" asChild className="w-full">
-                  <Link href={`/${locale}/checkout`} className="inline-flex items-center justify-center gap-2">
+                  <Link
+                    href={`/${locale}/checkout`}
+                    onClick={(e) => {
+                      if (!customer) {
+                        e.preventDefault();
+                        setShowLoginModal(true);
+                      }
+                    }}
+                    className="inline-flex items-center justify-center gap-2"
+                  >
                     <span>{isAr ? "إتمام الطلب" : "Proceed to Checkout"}</span>
                     {isAr ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
                   </Link>
@@ -160,6 +178,37 @@ export default function CartPage() {
           </aside>
         </div>
       </Container>
+
+      {/* Login required modal */}
+      {showLoginModal && (
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="cart-login-title"
+            className="w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-2xl space-y-4"
+          >
+            <h2 id="cart-login-title" className="text-lg font-bold text-fg text-center">
+              {tCheckout("authRequired")}
+            </h2>
+            <div className="flex flex-col gap-2">
+              <Button asChild variant="primary" fullWidth>
+                <Link href={`/${locale}/login?next=/${locale}/checkout`}>
+                  {tCheckout("loginCta")}
+                </Link>
+              </Button>
+              <Button asChild variant="secondary" fullWidth>
+                <Link href={`/${locale}/register?next=/${locale}/checkout`}>
+                  {tCheckout("registerCta")}
+                </Link>
+              </Button>
+              <Button variant="ghost" fullWidth onClick={() => setShowLoginModal(false)}>
+                {tCheckout("cancel")}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

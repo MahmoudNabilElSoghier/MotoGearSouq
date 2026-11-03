@@ -4,5 +4,6 @@ export * from "./model";
 export * from "./product";
 export * from "./employee";
 export * from "./branch";
+export * from "./cart";
 export * from "./order";
 export * from "./content";

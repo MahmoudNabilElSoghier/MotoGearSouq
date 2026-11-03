@@ -2,6 +2,8 @@
   Branch,
   Brand,
   BranchInventory,
+  Cart,
+  CartItem,
   Employee,
   MachineModel,
   Order,
@@ -252,6 +254,29 @@ export const trackOrder = (orderNumber: string): Promise<TrackOrder> =>
 
 export const updateOrderStatus = (id: string, status: OrderStatusUpdate): Promise<ApiResponse<Order>> =>
   apiSend<Order>("PATCH", `/orders/${encode(id)}/status`, { status });
+
+// ---------- Cart (authenticated) ----------
+
+export interface CartRow {
+  id: string;
+  customerId: string;
+  items: CartItem[];
+}
+
+export const getCart = (): Promise<CartRow> =>
+  apiGet<CartRow>("/cart");
+
+export const addToCart = (input: { productId: string; quantity: number }): Promise<ApiResponse<CartRow>> =>
+  apiSend<CartRow>("POST", "/cart/items", input);
+
+export const updateCartItem = (
+  id: string,
+  quantity: number,
+): Promise<ApiResponse<CartRow | null>> =>
+  apiSend<CartRow | null>("PATCH", `/cart/items/${encode(id)}`, { quantity });
+
+export const removeCartItem = (id: string): Promise<ApiResponse<boolean>> =>
+  apiSend<boolean>("DELETE", `/cart/items/${encode(id)}`);
 
 // ---------- ERP: suppliers, purchase orders, stock movements (Sprint 2) ----------
 

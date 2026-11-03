@@ -168,6 +168,7 @@ model Product {
   compatibilities    ProductCompatibility[]
   inventory          BranchInventory[]
   orderItems         OrderItem[]
+  cartItems          CartItem[]
   movements          StockMovement[]
   purchaseOrderItems PurchaseOrderItem[]
 
@@ -367,20 +368,22 @@ model Customer {
 
   orders Order[]
 
-  refreshTokens RefreshToken[]
+  cart Cart[]
+
+  refreshTokens  RefreshToken[]
   passwordResets PasswordReset[]
 
   @@index([approvalStatus])
 }
 
 model PasswordReset {
-  id        String   @id @default(cuid())
-  token     String   @unique
-  customer  Customer @relation(fields: [customerId], references: [id])
+  id         String    @id @default(cuid())
+  token      String    @unique
+  customer   Customer  @relation(fields: [customerId], references: [id])
   customerId String
-  expiresAt DateTime
-  usedAt    DateTime?
-  createdAt DateTime @default(now())
+  expiresAt  DateTime
+  usedAt     DateTime?
+  createdAt  DateTime  @default(now())
 
   @@index([token])
   @@index([customerId])
@@ -445,6 +448,30 @@ model OrderItem {
   note      String?
 
   @@index([orderId])
+  @@index([productId])
+}
+
+model Cart {
+  id         String     @id @default(cuid())
+  customerId String
+  customer   Customer   @relation(fields: [customerId], references: [id])
+  items      CartItem[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@index([customerId])
+}
+
+model CartItem {
+  id        String  @id @default(cuid())
+  cartId    String
+  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int     @default(1)
+
+  @@unique([cartId, productId])
+  @@index([cartId])
   @@index([productId])
 }
 

@@ -796,10 +796,7 @@
         "product": "Product",
         "branch": "Branch",
         "currentQty": "Current Quantity",
-        "type": "Type",
-        "type.in": "IN (Add Stock)",
-        "type.out": "OUT (Remove Stock)",
-        "type.adjustment": "Adjustment (Set Exact)",
+        "typeLabel": "Type",
         "quantity": "Quantity",
         "newExactQty": "New Exact Quantity",
         "newExactQtyHint": "Enter the exact target quantity",
@@ -810,6 +807,11 @@
         "zeroDelta": "No change in quantity",
         "submit": "Record Movement",
         "saving": "Saving..."
+      },
+      "type": {
+        "in": "IN (Add Stock)",
+        "out": "OUT (Remove Stock)",
+        "adjustment": "Adjustment (Set Exact)"
       },
       "form": {
         "validationFailed": "Validation failed — {details}",

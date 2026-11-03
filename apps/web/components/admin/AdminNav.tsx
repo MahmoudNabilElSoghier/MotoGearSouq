@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { authApi, type AuthUser } from "@motogearsouq/api-client";
+import { authApi, getPendingCustomersCount, type AuthUser } from "@motogearsouq/api-client";
 import { useTranslations } from "next-intl";
 import { LogOut, User } from "lucide-react";
 
@@ -13,10 +13,12 @@ export function AdminNav() {
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<AuthUser | null>(null);
+  const [pendingCount, setPendingCount] = useState(0);
 
   const navItems = [
     { href: "/admin", label: t("dashboard") },
     { href: "/admin/orders", label: t("orders") },
+    { href: "/admin/customers", label: t("customers"), badge: pendingCount },
     { href: "/admin/payments", label: t("payments") },
     { href: "/admin/products", label: t("products") },
     { href: "/admin/categories", label: t("categories") },
@@ -36,6 +38,9 @@ export function AdminNav() {
 
   useEffect(() => {
     authApi.me().then(setUser).catch(() => {});
+    getPendingCustomersCount()
+      .then((res) => setPendingCount(res.count))
+      .catch(() => {});
   }, []);
 
   const handleLogout = async () => {
@@ -60,13 +65,21 @@ export function AdminNav() {
               href={item.href}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "rounded-lg px-3 py-2 text-sm transition-colors",
+                "flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm transition-colors",
                 active
                   ? "bg-accent-strong/20 font-semibold text-fg"
                   : "text-muted hover:bg-bg hover:text-fg"
               )}
             >
-              {item.label}
+              <span className="flex-1">{item.label}</span>
+              {typeof item.badge === "number" && item.badge > 0 && (
+                <span
+                  aria-label={`${item.badge}`}
+                  className="inline-flex min-w-[1.25rem] items-center justify-center rounded-full bg-red-500 px-1.5 py-0.5 text-[11px] font-bold text-white"
+                >
+                  {item.badge > 99 ? "99+" : item.badge}
+                </span>
+              )}
             </Link>
           );
         })}

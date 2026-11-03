@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { getBrands, getLowStockItems, getOrders, getProducts, type ProductPage, type OrderPage } from "@motogearsouq/api-client";
+import { getBrands, getLowStockItems, getOrders, getProducts, getPendingCustomersCount, type ProductPage, type OrderPage } from "@motogearsouq/api-client";
 import type { Brand, BranchInventory, Order } from "@motogearsouq/shared";
 import { useLocale, useTranslations } from "next-intl";
-import { Loader2 } from "lucide-react";
+import { Loader2, Users } from "lucide-react";
 
 export default function AdminHomePage() {
   const t = useTranslations("admin.dashboard");
@@ -34,6 +34,7 @@ export default function AdminHomePage() {
   const [productPage, setProductPage] = useState<ProductPage | null>(null);
   const [lowStockItems, setLowStockItems] = useState<BranchInventory[]>([]);
   const [orderPage, setOrderPage] = useState<OrderPage | null>(null);
+  const [pendingCustomers, setPendingCustomers] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -42,12 +43,14 @@ export default function AdminHomePage() {
       getProducts({ pageSize: 1 }),
       getLowStockItems(),
       getOrders({ pageSize: 5 }),
+      getPendingCustomersCount().catch(() => ({ count: 0 })),
     ])
-      .then(([b, p, l, o]) => {
+      .then(([b, p, l, o, pc]) => {
         setBrands(b);
         setProductPage(p);
         setLowStockItems(l);
         setOrderPage(o);
+        setPendingCustomers(pc.count);
       })
       .finally(() => setLoading(false));
   }, []);
@@ -60,11 +63,26 @@ export default function AdminHomePage() {
     );
   }
 
-  const cards = [
+  const cards: Array<{
+    label: string;
+    value: number;
+    danger: boolean;
+    href?: string;
+    amber?: boolean;
+    icon?: React.ComponentType<{ className?: string }>;
+  }> = [
     { label: t("cardBrands"), value: brands.length, danger: false, href: "/admin/brands" },
     { label: t("cardProducts"), value: productPage?.total ?? 0, danger: false, href: "/admin/products" },
     { label: t("cardOrders"), value: orderPage?.total ?? 0, danger: false, href: "/admin/orders" },
     { label: t("cardLowStock"), value: lowStockItems.length, danger: lowStockItems.length > 0, href: "/admin/inventory" },
+    {
+      label: t("pendingCustomers"),
+      value: pendingCustomers,
+      danger: false,
+      href: "/admin/customers/pending",
+      amber: pendingCustomers > 0,
+      icon: Users,
+    },
   ];
 
   return (
@@ -81,14 +99,18 @@ export default function AdminHomePage() {
         </div>
       </div>
 
-      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label={t("statsAria")}>
+      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5" aria-label={t("statsAria")}>
         {cards.map((card) => {
+          const Icon = card.icon;
           const content = (
             <>
-              <p className="text-sm text-muted">{card.label}</p>
+              <p className="flex items-center gap-1.5 text-sm text-muted">
+                {Icon && <Icon className="w-4 h-4" />}
+                {card.label}
+              </p>
               <p
                 className={`mt-2 text-3xl font-extrabold ${
-                  card.danger ? "text-red-400" : "text-fg"
+                  card.danger ? "text-red-400" : card.amber ? "text-amber-400" : "text-fg"
                 }`}
               >
                 {nf.format(card.value)}
@@ -101,7 +123,11 @@ export default function AdminHomePage() {
                 <Link
                   href={card.href}
                   className={`block rounded-xl border p-5 transition-colors hover:border-accent ${
-                    card.danger ? "border-red-500/40 bg-red-500/5" : "border-border bg-card"
+                    card.danger
+                      ? "border-red-500/40 bg-red-500/5"
+                      : card.amber
+                        ? "border-amber-500/40 bg-amber-500/5"
+                        : "border-border bg-card"
                   }`}
                 >
                   {content}

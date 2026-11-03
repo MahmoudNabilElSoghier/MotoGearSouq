@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { getOrders, type OrderPage } from "@motogearsouq/api-client";
 import type { Order } from "@motogearsouq/shared";
@@ -33,7 +34,8 @@ export default function AdminOrdersPage() {
   const [paymentMethodFilter, setPaymentMethodFilter] = useState<string>("");
   const [dateFrom, setDateFrom] = useState<string>("");
   const [dateTo, setDateTo] = useState<string>("");
-  const [searchQuery, setSearchQuery] = useState("");
+  const searchParams = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(() => searchParams.get("search") ?? "");
   const [page, setPage] = useState(1);
   const pageSize = 20;
 

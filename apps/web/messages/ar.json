@@ -434,6 +434,7 @@
       "logout": "تسجيل الخروج",
       "dashboard": "لوحة التحكم",
       "orders": "الطلبات",
+      "customers": "العملاء",
       "payments": "المدفوعات",
       "products": "المنتجات",
       "categories": "التصنيفات",
@@ -543,6 +544,7 @@
       "cardProducts": "المنتجات",
       "cardOrders": "الطلبات",
       "cardLowStock": "مخزون منخفض",
+      "pendingCustomers": "طلبات تفعيل التجار",
       "recentOrders": "أحدث الطلبات",
       "noOrders": "لا توجد طلبات بعد.",
       "orderNo": "رقم الطلب",
@@ -868,6 +870,73 @@
           "error": "حدث خطأ أثناء تحديث الحالة"
         },
         "print": "طباعة الفاتورة"
+      }
+    },
+    "customers": {
+      "title": "العملاء",
+      "subtitle": "{count} عميل",
+      "filters": {
+        "all": "الكل",
+        "type": "النوع",
+        "typeRetail": "عميل فردي",
+        "typeWholesale": "تاجر / جملة",
+        "status": "الحالة",
+        "statusPending": "قيد المراجعة",
+        "statusApproved": "موافق عليه",
+        "statusRejected": "مرفوض",
+        "search": "بحث",
+        "searchPlaceholder": "الاسم أو الموبايل",
+        "clearAll": "مسح الكل"
+      },
+      "table": {
+        "name": "الاسم",
+        "phone": "الموبايل",
+        "type": "النوع",
+        "status": "الحالة",
+        "orders": "الطلبات",
+        "created": "تاريخ التسجيل",
+        "actions": "الإجراءات",
+        "badgeRetail": "فردي",
+        "badgeWholesale": "تاجر"
+      },
+      "actions": {
+        "view": "عرض",
+        "approve": "قبول",
+        "reject": "رفض"
+      },
+      "approve": {
+        "title": "تأكيد القبول",
+        "message": "هل أنت متأكد من قبول {name} كتاجر جملة؟",
+        "confirm": "نعم، اقبل",
+        "success": "تم قبول التاجر بنجاح"
+      },
+      "reject": {
+        "title": "رفض الطلب",
+        "message": "سيتم إبلاغ {name} بالرفض. الرجاء ذكر السبب.",
+        "reasonLabel": "سبب الرفض",
+        "reasonMin": "السبب مطلوب (10 أحرف على الأقل)",
+        "reasonPlaceholder": "مثال: السجل التجاري غير صالح...",
+        "confirm": "تأكيد الرفض",
+        "success": "تم رفض الطلب"
+      },
+      "empty": "لا يوجد عملاء",
+      "emptyFiltered": "لا يوجد عملاء مطابقين للفلاتر",
+      "pagination": {
+        "page": "صفحة {page} من {total}",
+        "prev": "السابق",
+        "next": "التالي"
+      },
+      "pending": {
+        "title": "طلبات تفعيل التجار",
+        "subtitle": "{count} طلب قيد المراجعة",
+        "empty": "لا توجد طلبات قيد المراجعة",
+        "emptyCta": "عرض كل العملاء",
+        "card": {
+          "businessName": "اسم الشركة",
+          "taxNumber": "الرقم الضريبي",
+          "commercialRegister": "السجل التجاري",
+          "appliedAt": "تاريخ التقديم"
+        }
       }
     },
     "common": {

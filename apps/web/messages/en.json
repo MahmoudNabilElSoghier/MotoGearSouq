@@ -440,6 +440,7 @@
       "branches": "Branches",
       "inventory": "Inventory",
       "orders": "Orders",
+      "customers": "Customers",
       "suppliers": "Suppliers",
       "purchases": "Purchase Orders",
       "stockMovements": "Stock Movements",
@@ -542,6 +543,7 @@
       "cardProducts": "Products",
       "cardOrders": "Orders",
       "cardLowStock": "Low stock",
+      "pendingCustomers": "Pending Wholesale Applications",
       "recentOrders": "Recent orders",
       "noOrders": "No orders yet.",
       "orderNo": "Order no.",
@@ -867,6 +869,73 @@
           "error": "Error updating order status"
         },
         "print": "Print Invoice"
+      }
+    },
+    "customers": {
+      "title": "Customers",
+      "subtitle": "{count} customers",
+      "filters": {
+        "all": "All",
+        "type": "Type",
+        "typeRetail": "Individual",
+        "typeWholesale": "Merchant / Wholesale",
+        "status": "Status",
+        "statusPending": "Pending",
+        "statusApproved": "Approved",
+        "statusRejected": "Rejected",
+        "search": "Search",
+        "searchPlaceholder": "Name or phone",
+        "clearAll": "Clear all"
+      },
+      "table": {
+        "name": "Name",
+        "phone": "Phone",
+        "type": "Type",
+        "status": "Status",
+        "orders": "Orders",
+        "created": "Registered On",
+        "actions": "Actions",
+        "badgeRetail": "Retail",
+        "badgeWholesale": "Merchant"
+      },
+      "actions": {
+        "view": "View",
+        "approve": "Approve",
+        "reject": "Reject"
+      },
+      "approve": {
+        "title": "Confirm Approval",
+        "message": "Are you sure you want to approve {name} as a wholesale merchant?",
+        "confirm": "Yes, approve",
+        "success": "Merchant approved successfully"
+      },
+      "reject": {
+        "title": "Reject Application",
+        "message": "{name} will be notified of the rejection. Please provide a reason.",
+        "reasonLabel": "Rejection reason",
+        "reasonMin": "Reason is required (min 10 characters)",
+        "reasonPlaceholder": "e.g: Commercial register is not valid...",
+        "confirm": "Confirm rejection",
+        "success": "Application rejected"
+      },
+      "empty": "No customers",
+      "emptyFiltered": "No customers match the filters",
+      "pagination": {
+        "page": "Page {page} of {total}",
+        "prev": "Previous",
+        "next": "Next"
+      },
+      "pending": {
+        "title": "Wholesale Applications",
+        "subtitle": "{count} applications under review",
+        "empty": "No pending applications",
+        "emptyCta": "View all customers",
+        "card": {
+          "businessName": "Business Name",
+          "taxNumber": "Tax Number",
+          "commercialRegister": "Commercial Register",
+          "appliedAt": "Applied On"
+        }
       }
     },
     "common": {

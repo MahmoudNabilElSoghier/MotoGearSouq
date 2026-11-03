@@ -1,4 +1,5 @@
-import { Inject, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable, NotFoundException } from "@nestjs/common";
+import type { Prisma } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 
 export interface CustomerListItem {
@@ -45,12 +46,20 @@ export class CustomersService {
     pageSize?: number;
     customerType?: string;
     approvalStatus?: string;
+    search?: string;
   }): Promise<CustomerPage> {
     const page = Math.max(1, params.page ?? 1);
     const pageSize = Math.min(100, Math.max(1, params.pageSize ?? 20));
-    const where: Record<string, string> = {};
+    const where: Prisma.CustomerWhereInput = {};
     if (params.customerType) where.customerType = params.customerType;
     if (params.approvalStatus) where.approvalStatus = params.approvalStatus;
+    if (params.search?.trim()) {
+      const q = params.search.trim();
+      where.OR = [
+        { name: { contains: q, mode: "insensitive" } },
+        { phone: { contains: q, mode: "insensitive" } },
+      ];
+    }
 
     const [items, total] = await Promise.all([
       this.prisma.get().customer.findMany({
@@ -70,6 +79,10 @@ export class CustomersService {
     return this.list({ page, pageSize, approvalStatus: "pending" });
   }
 
+  async countPending(): Promise<number> {
+    return this.prisma.get().customer.count({ where: { approvalStatus: "pending" } });
+  }
+
   async approve(id: string, adminId: string): Promise<CustomerListItem> {
     const existing = await this.prisma.get().customer.findUnique({
       where: { id },
@@ -87,6 +100,9 @@ export class CustomersService {
   }
 
   async reject(id: string, reason: string | undefined, adminId: string): Promise<CustomerListItem> {
+    if (!reason || reason.trim().length < 10) {
+      throw new BadRequestException("سبب الرفض مطلوب (10 أحرف على الأقل)");
+    }
     const existing = await this.prisma.get().customer.findUnique({
       where: { id },
       select: { id: true },

@@ -709,4 +709,60 @@ export const markOrderPaid = (orderId: string): Promise<ApiResponse<Order>> =>
 export const refundOrder = (orderId: string, reason?: string): Promise<ApiResponse<Order>> =>
   apiSend<Order>("POST", `/payments/orders/${encode(orderId)}/refund`, { reason });
 
+// ---------- Admin: customers & wholesale approvals (Sprint 5B-3) ----------
+
+export interface AdminCustomerItem {
+  id: string;
+  name: string;
+  phone: string;
+  email: string | null;
+  customerType: string;
+  approvalStatus: string;
+  businessName: string | null;
+  taxNumber: string | null;
+  commercialRegister: string | null;
+  createdAt: string;
+  _count?: { orders: number };
+}
+
+export interface AdminCustomerPage {
+  items: AdminCustomerItem[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+export interface AdminCustomerFilter {
+  customerType?: string;
+  approvalStatus?: string;
+  search?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+export const getAdminCustomers = (params: AdminCustomerFilter = {}): Promise<AdminCustomerPage> => {
+  const qs = new URLSearchParams();
+  if (params.customerType) qs.set("customerType", params.customerType);
+  if (params.approvalStatus) qs.set("approvalStatus", params.approvalStatus);
+  if (params.search) qs.set("search", params.search);
+  if (params.page) qs.set("page", String(params.page));
+  if (params.pageSize) qs.set("pageSize", String(params.pageSize));
+  const query = qs.toString();
+  return apiGet<AdminCustomerPage>(`/admin/customers${query ? `?${query}` : ""}`);
+};
+
+export const getAdminCustomersPending = (params: { page?: number; pageSize?: number } = {}): Promise<AdminCustomerPage> =>
+  getAdminCustomers({ ...params, approvalStatus: "pending" });
+
+export const getPendingCustomersCount = (): Promise<{ count: number }> =>
+  apiGet<{ count: number }>("/admin/customers/pending/count");
+
+export const approveCustomer = (id: string): Promise<ApiResponse<AdminCustomerItem>> =>
+  apiSend<AdminCustomerItem>("PATCH", `/admin/customers/${encode(id)}/approve`);
+
+export const rejectCustomer = (id: string, reason: string): Promise<ApiResponse<AdminCustomerItem>> =>
+  apiSend<AdminCustomerItem>("PATCH", `/admin/customers/${encode(id)}/reject`, { reason });
+
+
 

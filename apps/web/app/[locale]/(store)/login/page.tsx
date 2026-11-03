@@ -147,6 +147,14 @@ export default function LoginPage() {
                 t("submit")
               )}
             </Button>
+            <p className="mt-4 text-center text-sm">
+              <Link
+                href={`/${locale}/forgot-password`}
+                className="text-accent hover:underline font-medium"
+              >
+                {t("forgotPasswordLink")}
+              </Link>
+            </p>
           </form>
 
           <p className="mt-6 text-center text-sm text-muted">

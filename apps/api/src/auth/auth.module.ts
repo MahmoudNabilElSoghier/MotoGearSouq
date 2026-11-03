@@ -9,12 +9,14 @@ import { CustomerAuthService } from "./customer-auth.service";
 import { CustomerAuthController } from "./customer-auth.controller";
 import { GoogleAuthService } from "./google-auth.service";
 import { GoogleAuthController } from "./google-auth.controller";
+import { PasswordResetService } from "./password-reset.service";
+import { PasswordResetController } from "./password-reset.controller";
 
 @Global()
 @Module({
   imports: [ConfigModule, PrismaModule],
-  controllers: [AuthController, CustomerAuthController, GoogleAuthController],
-  providers: [JwtService, RateLimitService, AuthService, CustomerAuthService, GoogleAuthService],
-  exports: [JwtService, AuthService, CustomerAuthService, GoogleAuthService],
+  controllers: [AuthController, CustomerAuthController, GoogleAuthController, PasswordResetController],
+  providers: [JwtService, RateLimitService, AuthService, CustomerAuthService, GoogleAuthService, PasswordResetService],
+  exports: [JwtService, AuthService, CustomerAuthService, GoogleAuthService, PasswordResetService],
 })
 export class AuthModule {}

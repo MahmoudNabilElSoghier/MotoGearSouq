@@ -368,8 +368,23 @@ model Customer {
   orders Order[]
 
   refreshTokens RefreshToken[]
+  passwordResets PasswordReset[]
 
   @@index([approvalStatus])
+}
+
+model PasswordReset {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  customer  Customer @relation(fields: [customerId], references: [id])
+  customerId String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([token])
+  @@index([customerId])
+  @@index([expiresAt])
 }
 
 model Order {

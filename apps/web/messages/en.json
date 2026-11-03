@@ -1191,6 +1191,7 @@
   },
   "cart": {
     "title": "Shopping Cart",
+    "label": "Cart",
     "empty": "Your cart is empty",
     "emptyCta": "Browse Spare Parts",
     "subtotal": "Subtotal",

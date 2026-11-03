@@ -3,7 +3,17 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, X, UserCircle, LogIn, LogOut, ChevronDown } from "lucide-react";
+import {
+  Menu,
+  X,
+  UserCircle,
+  LogIn,
+  LogOut,
+  ChevronDown,
+  House,
+  Tag,
+  Mail,
+} from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { company } from "@/lib/config";
 import { useCustomerAuth } from "@/lib/customer-auth-store";
@@ -23,6 +33,7 @@ export function StoreHeader() {
   const tHeader = useTranslations("header");
   const tLogin = useTranslations("customerAuth.login");
   const tAccount = useTranslations("customerAuth.account");
+  const tCart = useTranslations("cart");
   const customer = useCustomerAuth((s) => s.customer);
 
   useEffect(() => {
@@ -37,9 +48,9 @@ export function StoreHeader() {
   };
 
   const navItems = [
-    { label: tNav("home"), href: `/${locale}/products` },
-    { label: tNav("brands"), href: `/${locale}/brands` },
-    { label: tNav("contact"), href: `/${locale}#contact` },
+    { label: tNav("home"), href: `/${locale}/products`, Icon: House },
+    { label: tNav("brands"), href: `/${locale}/brands`, Icon: Tag },
+    { label: tNav("contact"), href: `/${locale}#contact`, Icon: Mail },
   ];
 
   const isActive = (href: string) =>
@@ -128,27 +139,31 @@ export function StoreHeader() {
           </Link>
 
           {/* Desktop Nav */}
-          <nav aria-label={tHeader("navAria")} className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => (
-              <Link
-                key={item.href + item.label}
-                href={item.href}
-                aria-current={isActive(item.href) ? "page" : undefined}
-                className={`relative text-lg font-semibold transition-colors after:absolute after:-bottom-1 after:start-0 after:h-[2px] after:w-full after:origin-left rtl:after:origin-right after:bg-accent after:transition-transform after:duration-300 focus-visible:outline-none ${
-                  isActive(item.href)
-                    ? "text-accent after:scale-x-100"
-                    : "text-fg/90 hover:text-fg after:scale-x-0 hover:after:scale-x-100 focus-visible:after:scale-x-100"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+          <nav aria-label={tHeader("navAria")} className="hidden md:flex items-center gap-6">
+            {navItems.map((item) => {
+              const Icon = item.Icon;
+              return (
+                <Link
+                  key={item.href + item.label}
+                  href={item.href}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  className={`relative inline-flex items-center gap-2 text-base font-semibold transition-colors after:absolute after:-bottom-1 after:-start-1 after:h-[2px] after:w-full after:origin-left rtl:after:origin-right after:bg-accent after:transition-transform after:duration-300 focus-visible:outline-none ${
+                    isActive(item.href)
+                      ? "text-accent after:scale-x-100"
+                      : "text-fg/90 hover:text-fg after:scale-x-0 hover:after:scale-x-100 focus-visible:after:scale-x-100"
+                  }`}
+                >
+                  <Icon className="w-4 h-4 flex-shrink-0" />
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center gap-3">
             {accountControl}
-            <CartIcon />
+            <CartIcon label={tCart("label")} />
             <LocaleSwitcher />
             <ThemeToggle />
           </div>
@@ -177,23 +192,27 @@ export function StoreHeader() {
           className="md:hidden bg-card border-b border-border px-4 pt-4 pb-6 space-y-4 animate-in fade-in slide-in-from-top-2 duration-200"
         >
           <nav aria-label={tHeader("navAria")} className="flex flex-col space-y-3">
-            {navItems.map((item) => (
-              <Link
-                key={item.href + item.label}
-                href={item.href}
-                onClick={() => setIsOpen(false)}
-                aria-current={isActive(item.href) ? "page" : undefined}
-                className={`text-base font-medium transition-colors px-2 py-1 rounded-md hover:bg-bg/50 ${
-                  isActive(item.href) ? "text-accent" : "text-muted hover:text-fg"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const Icon = item.Icon;
+              return (
+                <Link
+                  key={item.href + item.label}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  className={`flex items-center gap-2 text-base font-medium transition-colors px-2 py-1 rounded-md hover:bg-bg/50 ${
+                    isActive(item.href) ? "text-accent" : "text-muted hover:text-fg"
+                  }`}
+                >
+                  <Icon className="w-4 h-4 flex-shrink-0" />
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
           <div className="flex items-center gap-2 pt-2 border-t border-border">
             {accountControl}
-            <CartIcon />
+            <CartIcon label={tCart("label")} />
             <LocaleSwitcher />
             <ThemeToggle />
           </div>

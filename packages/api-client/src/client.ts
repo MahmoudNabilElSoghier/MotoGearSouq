@@ -90,7 +90,10 @@ async function request<T>(
       } catch {
         inMemoryAccessToken = null;
         if (typeof window !== "undefined") {
-          window.location.href = `/admin/login?next=${encodeURIComponent(window.location.pathname)}`;
+          // Customer-facing routes (cart, orders, products, etc.) must redirect
+          // to the customer login, NOT the admin login.
+          const loginPath = path.startsWith("/admin") ? "/admin/login" : "/login";
+          window.location.href = `${loginPath}?next=${encodeURIComponent(window.location.pathname)}`;
         }
       }
     }

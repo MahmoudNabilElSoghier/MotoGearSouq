@@ -1,21 +1,33 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { BranchInventory } from "@motogearsouq/shared";
 import { useLocale, useTranslations } from "next-intl";
+import { RecordMovementDialog } from "./RecordMovementDialog";
 
 function isLow(row: BranchInventory): boolean {
   const threshold = row.reorderLevel ?? row.product?.reorderLevel ?? 0;
   return row.quantity <= threshold;
 }
 
-export function InventoryTable({ rows }: { rows: BranchInventory[] }) {
+interface InventoryTableProps {
+  rows: BranchInventory[];
+  onRefresh?: () => void;
+}
+
+export function InventoryTable({ rows, onRefresh }: InventoryTableProps) {
   const t = useTranslations("admin.inventory");
   const locale = useLocale();
   const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
+  const router = useRouter();
 
   const [edits, setEdits] = useState<Record<string, string>>({});
   const [savedId, setSavedId] = useState<string | null>(null);
+
+  // Movement dialog state
+  const [movementOpen, setMovementOpen] = useState(false);
+  const [movementRow, setMovementRow] = useState<BranchInventory | null>(null);
 
   const setQty = (id: string, value: string) =>
     setEdits((prev) => ({ ...prev, [id]: value }));
@@ -36,6 +48,25 @@ export function InventoryTable({ rows }: { rows: BranchInventory[] }) {
       return next;
     });
     setSavedId(row.id);
+  };
+
+  const openMovementDialog = (row: BranchInventory) => {
+    setMovementRow(row);
+    setMovementOpen(true);
+  };
+
+  const closeMovementDialog = () => {
+    setMovementOpen(false);
+    setMovementRow(null);
+  };
+
+  const handleMovementSuccess = () => {
+    closeMovementDialog();
+    onRefresh?.();
+  };
+
+  const viewHistory = (productId: string, branchId: string) => {
+    router.push(`/${locale}/admin/stock-movements?productId=${productId}&branchId=${branchId}`);
   };
 
   if (rows.length === 0) {
@@ -108,18 +139,36 @@ export function InventoryTable({ rows }: { rows: BranchInventory[] }) {
                     )}
                   </td>
                   <td className="px-4 py-3">
-                    <button
-                      type="button"
-                      onClick={() => handleSave(row)}
-                      disabled={!dirty}
-                      className={`rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors ${
-                        dirty
-                          ? "border-accent text-fg hover:bg-accent-strong/20"
-                          : "border-border text-muted opacity-60"
-                      }`}
-                    >
-                      {savedId === row.id && !dirty ? t("done") : t("save")}
-                    </button>
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => openMovementDialog(row)}
+                        className="rounded-lg border px-2 py-1.5 text-xs font-semibold transition-colors border-amber-500 bg-amber-500/10 text-amber-700 hover:bg-amber-500/20"
+                        title={t("recordMovement")}
+                      >
+                        {t("recordMovementShort")}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => viewHistory(row.productId, row.branchId)}
+                        className="rounded-lg border px-2 py-1.5 text-xs font-semibold transition-colors border-border bg-bg text-muted hover:border-accent hover:text-fg"
+                        title={t("viewHistory")}
+                      >
+                        {t("viewHistoryShort")}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleSave(row)}
+                        disabled={!dirty}
+                        className={`rounded-lg border px-2 py-1.5 text-xs font-semibold transition-colors ${
+                          dirty
+                            ? "border-accent text-fg hover:bg-accent-strong/20"
+                            : "border-border text-muted opacity-60"
+                        }`}
+                      >
+                        {savedId === row.id && !dirty ? t("done") : t("saveShort")}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               );
@@ -127,6 +176,19 @@ export function InventoryTable({ rows }: { rows: BranchInventory[] }) {
           </tbody>
         </table>
       </div>
+
+      {movementOpen && movementRow && (
+        <RecordMovementDialog
+          productId={movementRow.productId}
+          branchId={movementRow.branchId}
+          productName={movementRow.product?.name ?? movementRow.productId}
+          branchName={movementRow.branch?.nameAr ?? movementRow.branchId}
+          currentQty={movementRow.quantity}
+          open={movementOpen}
+          onClose={closeMovementDialog}
+          onSuccess={handleMovementSuccess}
+        />
+      )}
     </div>
   );
 }

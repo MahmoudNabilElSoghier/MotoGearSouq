@@ -37,6 +37,20 @@ export default function AdminInventoryPage() {
 
   const lowCount = rows.filter(isLowStock).length;
 
+  const refetch = async () => {
+    setLoading(true);
+    try {
+      const [b, r] = await Promise.all([
+        getBranches(),
+        getInventory(branch || undefined),
+      ]);
+      setBranches(b);
+      setRows(r);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
@@ -85,7 +99,7 @@ export default function AdminInventoryPage() {
           <Loader2 className="w-8 h-8 animate-spin text-accent" />
         </div>
       ) : (
-        <InventoryTable rows={rows} />
+        <InventoryTable rows={rows} onRefresh={refetch} />
       )}
     </div>
   );

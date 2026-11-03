@@ -141,7 +141,7 @@ export class CustomerAuthController {
 
   @Post("login")
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: "Customer login (phone + password)" })
+  @ApiOperation({ summary: "Customer login (phone OR email + password)" })
   async login(
     @Body(new ZodValidationPipe(customerLoginSchema)) body: CustomerLoginInput,
     @Req() req: Request,

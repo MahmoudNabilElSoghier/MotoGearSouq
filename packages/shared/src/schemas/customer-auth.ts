@@ -15,10 +15,17 @@ export const createWholesaleCustomerSchema = createRetailCustomerSchema.extend({
   commercialRegister: z.string().min(3).max(50),
 });
 
-export const customerLoginSchema = z.object({
-  phone: z.string().regex(egyptPhone, "رقم موبايل مصري غير صحيح"),
-  password: z.string().min(1),
-});
+export const customerLoginSchema = z
+  .object({
+    // identifier = phone OR email (5C-1). `phone` kept for backward compat with older clients.
+    identifier: z.string().trim().min(3).optional(),
+    phone: z.string().trim().min(3).optional(),
+    password: z.string().min(1),
+  })
+  .refine((data) => Boolean(data.identifier || data.phone), {
+    message: "رقم الموبايل أو البريد الإلكتروني مطلوب",
+    path: ["identifier"],
+  });
 
 export type CreateRetailCustomerInput = z.infer<typeof createRetailCustomerSchema>;
 export type CreateWholesaleCustomerInput = z.infer<typeof createWholesaleCustomerSchema>;

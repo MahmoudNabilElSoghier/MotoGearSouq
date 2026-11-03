@@ -1,12 +1,13 @@
 import { BadRequestException, Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { fromPrismaOrder, mockOrders } from "@motogearsouq/shared";
-import type { Customer, Order } from "@motogearsouq/shared";
+import type { Order } from "@motogearsouq/shared";
 import type { Prisma } from "@prisma/client";
 import { withDb, type DbResult } from "../common/with-db";
 import { toDomainError } from "../common/prisma-errors";
 import { PrismaService } from "../prisma/prisma.service";
 import { ShippingService } from "../shipping/shipping.service";
 import { PaymentsService } from "../payments/payments.service";
+import { CodLimitService } from "./cod-limit.service";
 import type { CreateOrderInput } from "./dto/create-order.schema";
 
 export interface OrderFilter {
@@ -80,6 +81,7 @@ export class OrdersService {
     @Inject(PrismaService) private readonly prisma: PrismaService,
     @Inject(ShippingService) private readonly shippingService: ShippingService,
     @Inject(PaymentsService) private readonly paymentsService: PaymentsService,
+    @Inject(CodLimitService) private readonly codLimit: CodLimitService,
   ) {}
 
   async getOrders(filter: OrderFilter = {}): Promise<DbResult<OrderPage>> {
@@ -158,9 +160,9 @@ export class OrdersService {
     );
   }
 
-  // ---------- Guest checkout (Sprint 1) ----------
+  // ---------- Authenticated checkout (Sprint 5C-1: no guest orders) ----------
 
-  async createOrder(input: CreateOrderInput): Promise<DbResult<CreatedOrder>> {
+  async createOrder(input: CreateOrderInput, customerId: string): Promise<DbResult<CreatedOrder>> {
     // Merge duplicate product lines so stock math stays per-product.
     const quantities = new Map<string, number>();
     for (const item of input.items) {
@@ -192,6 +194,19 @@ export class OrdersService {
     try {
       const db = this.prisma.get();
 
+      // 0. Identity comes from the authenticated customer — never from the body.
+      const customer = await db.customer.findUnique({ where: { id: customerId } });
+      if (!customer) throw new NotFoundException("Customer not found");
+      if (!customer.isActive) throw new BadRequestException("الحساب موقوف");
+
+      // Shipping: body wins (editable form), profile is the fallback/pre-fill.
+      const shippingAddress = input.shippingAddress?.trim() || customer.address || null;
+      const shippingCity = input.shippingCity?.trim() || null;
+      const shippingGovernorate = input.shippingGovernorate?.trim() || customer.governorate || null;
+      if (!shippingAddress || !shippingCity || !shippingGovernorate) {
+        throw new BadRequestException("بيانات الشحن غير مكتملة (العنوان والمدينة والمحافظة مطلوبة)");
+      }
+
       // 1. Validate products exist, are active, and have a retail price.
       const products = await db.product.findMany({
         where: { id: { in: [...quantities.keys()] }, active: true, deletedAt: null },
@@ -221,12 +236,22 @@ export class OrdersService {
       // Calculate shipping cost
       const shippingQuote = await this.shippingService.calculate(
         subtotal,
-        input.customer.governorate,
-        input.customer.city,
+        shippingGovernorate,
+        shippingCity,
         paymentMethod === "cod" ? "cod" : shippingMethod,
       );
       const shippingCost = shippingQuote.fee;
       const total = round2(subtotal + tax + shippingCost);
+
+      // 2b. COD limit enforcement (progressive: 5k → 15k → 30k → unlimited).
+      let codLimitAtPurchase: number | null = null;
+      if (paymentMethod === "cod") {
+        const codCheck = await this.codLimit.validateCodOrder(customer.id, total);
+        if (!codCheck.allowed) {
+          throw new BadRequestException(codCheck.message);
+        }
+        codLimitAtPurchase = Number.isFinite(codCheck.limit) ? codCheck.limit : null;
+      }
 
       // 3. Pick a branch inventory row per product that can cover quantity.
       const inventories = await db.branchInventory.findMany({
@@ -248,9 +273,8 @@ export class OrdersService {
         });
       }
 
-      // 4. Create customer + order + items + stock deduction atomically.
+      // 4. Create order + items + stock deduction atomically.
       const created = await db.$transaction(async (tx) => {
-        const customer = await this.findOrCreateCustomer(tx, input);
         const orderNumber = await this.generateOrderNumber(tx);
 
         const order = await tx.order.create({
@@ -266,11 +290,12 @@ export class OrdersService {
             paymentStatus: "pending",
             shippingCost,
             shippingMethod,
-            notes: input.customer.notes || null,
-            shippingAddress: input.customer.address,
-            shippingCity: input.customer.city,
-            shippingGovernorate: input.customer.governorate,
-            shippingPhone: input.customer.phone,
+            notes: input.notes || null,
+            shippingAddress,
+            shippingCity,
+            shippingGovernorate,
+            shippingPhone: customer.phone,
+            codLimitAtPurchase,
             items: {
               create: [...quantities.entries()].map(([productId, quantity]) => {
                 const product = byId.get(productId)!;
@@ -363,6 +388,13 @@ export class OrdersService {
         if (status === "cancelled") {
           await this.restoreStock(tx, existing.id, existing.orderNumber, existing.items);
         }
+        if (status === "delivered" && existing.customerId) {
+          // Progressive COD limits: a successful delivery raises the next limit.
+          await tx.customer.update({
+            where: { id: existing.customerId },
+            data: { successfulDeliveries: { increment: 1 } },
+          });
+        }
         return tx.order.update({
           where: { id },
           data: { status },
@@ -453,26 +485,6 @@ export class OrdersService {
     const prefix = `SO-${year}-`;
     const count = await db.order.count({ where: { orderNumber: { startsWith: prefix } } });
     return `${prefix}${String(count + 1).padStart(5, "0")}`;
-  }
-
-  private async findOrCreateCustomer(
-    db: Prisma.TransactionClient,
-    input: CreateOrderInput,
-  ): Promise<Customer> {
-    const existing = await db.customer.findUnique({ where: { phone: input.customer.phone } });
-    if (existing) return existing as Customer;
-    const count = await db.customer.count();
-    const created = await db.customer.create({
-      data: {
-        code: `CUS-${String(count + 1).padStart(5, "0")}`,
-        name: input.customer.nameAr,
-        phone: input.customer.phone,
-        email: input.customer.email || null,
-        address: input.customer.address,
-        governorate: input.customer.governorate,
-      },
-    });
-    return created as Customer;
   }
 
   private async restoreStock(

@@ -199,26 +199,22 @@ export const createEmployee = (input: CreateEmployeeInput): Promise<ApiResponse<
 export const updateEmployee = (id: string, input: UpdateEmployeeInput): Promise<ApiResponse<Employee>> =>
   apiSend<Employee>("PATCH", `/employees/${encode(id)}`, input);
 
-// ---------- Orders: guest checkout + tracking (Sprint 1) ----------
+// ---------- Orders: authenticated checkout + tracking (Sprint 5C-1) ----------
 
 export interface CreateOrderItemInput {
   productId: string;
   quantity: number;
 }
 
-export interface CreateOrderCustomerInput {
-  nameAr: string;
-  phone: string;
-  email?: string;
-  address: string;
-  city: string;
-  governorate: string;
-  notes?: string;
-}
-
 export interface CreateOrderPayload {
   items: CreateOrderItemInput[];
-  customer: CreateOrderCustomerInput;
+  // Shipping only — customer identity comes from the authenticated session (5C-1).
+  shippingAddress?: string;
+  shippingCity?: string;
+  shippingGovernorate?: string;
+  notes?: string;
+  paymentMethod?: "cod" | "mock" | "paymob" | "fawry" | "instapay";
+  shippingMethod?: "standard" | "express";
 }
 
 export interface CreatedOrder {

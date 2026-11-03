@@ -28,8 +28,10 @@ export interface PublicCustomer {
   id: string;
   name: string;
   phone: string;
+  email: string | null;
   customerType: string;
   approvalStatus: string;
+  successfulDeliveries: number;
 }
 
 @Injectable()
@@ -48,6 +50,17 @@ export class CustomerAuthService {
       throw new BadRequestException("رقم موبايل مصري غير صحيح");
     }
 
+    const email = input.email?.trim().toLowerCase() || null;
+    if (email) {
+      const existingEmail = await this.prisma.get().customer.findFirst({
+        where: { email: { equals: email, mode: "insensitive" } },
+      });
+      if (existingEmail) {
+        throw new ConflictException("البريد الإلكتروني مستخدم بالفعل");
+      }
+      // TODO(sprint-6): send verification email via Resend
+    }
+
     const existing = await this.prisma.get().customer.findUnique({ where: { phone } });
     if (existing) {
       throw new ConflictException("رقم الموبايل مسجل بالفعل");
@@ -60,7 +73,7 @@ export class CustomerAuthService {
           code: await this.nextCode(),
           name: input.name.trim(),
           phone,
-          email: input.email || null,
+          email,
           passwordHash: hashPassword(input.password),
           approvalStatus: "approved",
           customerType: "retail",
@@ -68,7 +81,7 @@ export class CustomerAuthService {
         },
       });
     } catch (error) {
-      toDomainError(error); // phone/code unique race → 409
+      toDomainError(error); // phone/code/email unique race → 409
     }
 
     console.log("[customer-auth] new retail customer:", phone);
@@ -85,8 +98,10 @@ export class CustomerAuthService {
         id: created.id,
         name: created.name,
         phone: created.phone,
+        email: created.email,
         customerType: created.customerType,
         approvalStatus: created.approvalStatus,
+        successfulDeliveries: created.successfulDeliveries,
       },
       accessToken,
       refreshToken,
@@ -104,6 +119,17 @@ export class CustomerAuthService {
       throw new BadRequestException("بيانات النشاط التجاري غير مكتملة");
     }
 
+    const email = input.email?.trim().toLowerCase() || null;
+    if (email) {
+      const existingEmail = await this.prisma.get().customer.findFirst({
+        where: { email: { equals: email, mode: "insensitive" } },
+      });
+      if (existingEmail) {
+        throw new ConflictException("البريد الإلكتروني مستخدم بالفعل");
+      }
+      // TODO(sprint-6): send verification email via Resend
+    }
+
     const existing = await this.prisma.get().customer.findUnique({ where: { phone } });
     if (existing) {
       throw new ConflictException("رقم الموبايل مسجل بالفعل");
@@ -116,7 +142,7 @@ export class CustomerAuthService {
           code: await this.nextCode(),
           name: input.name.trim(),
           phone,
-          email: input.email || null,
+          email,
           passwordHash: hashPassword(input.password),
           approvalStatus: "pending",
           customerType: "wholesale",
@@ -137,8 +163,10 @@ export class CustomerAuthService {
         id: created.id,
         name: created.name,
         phone: created.phone,
+        email: created.email,
         customerType: created.customerType,
         approvalStatus: created.approvalStatus,
+        successfulDeliveries: created.successfulDeliveries,
       },
       message: "قيد المراجعة — سيتم إبلاغك عند الموافقة",
     };
@@ -149,52 +177,62 @@ export class CustomerAuthService {
     ip?: string,
     userAgent?: string,
   ): Promise<{ customer: PublicCustomer; accessToken: string; refreshToken: string }> {
-    const phone = input.phone.trim();
+    // identifier = phone OR email (falls back to legacy `phone` field)
+    const identifier = (input.identifier ?? input.phone ?? "").trim();
+    if (!identifier) {
+      throw new BadRequestException("رقم الموبايل أو البريد الإلكتروني مطلوب");
+    }
+    const isEmail = identifier.includes("@");
+    const lookup = isEmail ? identifier.toLowerCase() : identifier;
 
-    // Rate limit BEFORE password verification (5 fails / 5 min / phone)
-    if (this.rateLimit.isRateLimited(phone)) {
-      this.logFailedLogin(phone, ip, userAgent, "rate_limited");
+    // Rate limit BEFORE password verification (5 fails / 5 min / identifier)
+    if (this.rateLimit.isRateLimited(lookup)) {
+      this.logFailedLogin(lookup, ip, userAgent, "rate_limited");
       throw new HttpException(
         { message: "Too many failed login attempts. Please try again later.", error: "Too Many Requests" },
         HttpStatus.TOO_MANY_REQUESTS,
       );
     }
 
-    const customer = await this.prisma.get().customer.findUnique({ where: { phone } });
+    const customer = isEmail
+      ? await this.prisma.get().customer.findFirst({
+          where: { email: { equals: lookup, mode: "insensitive" } },
+        })
+      : await this.prisma.get().customer.findUnique({ where: { phone: lookup } });
     if (!customer) {
-      this.rateLimit.recordFailure(phone);
-      this.logFailedLogin(phone, ip, userAgent, "no_customer");
+      this.rateLimit.recordFailure(lookup);
+      this.logFailedLogin(lookup, ip, userAgent, "no_customer");
       throw new UnauthorizedException("بيانات غير صحيحة");
     }
 
     if (!customer.passwordHash) {
-      this.rateLimit.recordFailure(phone);
-      this.logFailedLogin(phone, ip, userAgent, "no_password");
+      this.rateLimit.recordFailure(lookup);
+      this.logFailedLogin(lookup, ip, userAgent, "no_password");
       throw new UnauthorizedException("بيانات غير صحيحة");
     }
 
     if (!customer.isActive) {
-      this.logFailedLogin(phone, ip, userAgent, "inactive");
+      this.logFailedLogin(lookup, ip, userAgent, "inactive");
       throw new ForbiddenException("الحساب موقوف");
     }
 
     if (customer.approvalStatus === "pending") {
-      this.logFailedLogin(phone, ip, userAgent, "pending");
+      this.logFailedLogin(lookup, ip, userAgent, "pending");
       throw new ForbiddenException("حسابك قيد المراجعة — سيتم تفعيله قريباً");
     }
 
     if (customer.approvalStatus === "rejected") {
-      this.logFailedLogin(phone, ip, userAgent, "rejected");
+      this.logFailedLogin(lookup, ip, userAgent, "rejected");
       throw new ForbiddenException("تم رفض طلبك — تواصل معنا");
     }
 
     if (!verifyPassword(input.password, customer.passwordHash)) {
-      this.rateLimit.recordFailure(phone);
-      this.logFailedLogin(phone, ip, userAgent, "bad_password");
+      this.rateLimit.recordFailure(lookup);
+      this.logFailedLogin(lookup, ip, userAgent, "bad_password");
       throw new UnauthorizedException("بيانات غير صحيحة");
     }
 
-    this.rateLimit.reset(phone);
+    this.rateLimit.reset(lookup);
 
     const { accessToken, refreshToken } = await this.issueTokens(customer.id, {
       phone: customer.phone,
@@ -208,8 +246,10 @@ export class CustomerAuthService {
         id: customer.id,
         name: customer.name,
         phone: customer.phone,
+        email: customer.email,
         customerType: customer.customerType,
         approvalStatus: customer.approvalStatus,
+        successfulDeliveries: customer.successfulDeliveries,
       },
       accessToken,
       refreshToken,
@@ -224,6 +264,9 @@ export class CustomerAuthService {
     customerType: string;
     approvalStatus: string;
     isActive: boolean;
+    successfulDeliveries: number;
+    address: string | null;
+    governorate: string | null;
   }> {
     const customer = await this.prisma.get().customer.findUnique({
       where: { id: customerId },
@@ -235,6 +278,9 @@ export class CustomerAuthService {
         customerType: true,
         approvalStatus: true,
         isActive: true,
+        successfulDeliveries: true,
+        address: true,
+        governorate: true,
       },
     });
     if (!customer) {

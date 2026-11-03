@@ -8,10 +8,14 @@ import {
   Patch,
   Post,
   Query,
+  Req,
+  UnauthorizedException,
   UseGuards,
 } from "@nestjs/common";
+import type { Request } from "express";
 import { ApiHeader, ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { AdminAuthGuard } from "../common/guards/admin-auth.guard";
+import { CustomerAuthGuard } from "../common/guards/customer-auth.guard";
 import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe";
 import { createOrderSchema, type CreateOrderInput } from "./dto/create-order.schema";
 import {
@@ -73,9 +77,17 @@ export class OrdersController {
   }
 
   @Post()
-  @ApiOperation({ summary: "Create order (guest checkout, cash on delivery)" })
-  create(@Body(new ZodValidationPipe(createOrderSchema)) body: CreateOrderInput) {
-    return this.orders.createOrder(body);
+  @UseGuards(CustomerAuthGuard)
+  @ApiOperation({ summary: "Create order (authenticated checkout only, COD limits enforced)" })
+  create(
+    @Body(new ZodValidationPipe(createOrderSchema)) body: CreateOrderInput,
+    @Req() req: Request & { user?: { sub?: string } },
+  ) {
+    const customerId = req.user?.sub;
+    if (!customerId) {
+      throw new UnauthorizedException("Customer ID missing from token");
+    }
+    return this.orders.createOrder(body, customerId);
   }
 
   @Patch(":id/status")

@@ -33,9 +33,9 @@ export function Hero() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8 justify-center sm:justify-start">
             <Button variant="primary" size="lg" asChild className="inline-flex items-center justify-center gap-2">
-              <Link href="#categories">
+              <Link href={`/${locale}/products`}>
                 <ArrowRight className="w-4 h-4" />
-                {t("ctaPrimary")}
+                {tc("cta.enterStore")}
               </Link>
             </Button>
             <Button variant="secondary" size="lg" asChild className="inline-flex items-center justify-center gap-2">
@@ -49,11 +49,11 @@ export function Hero() {
               </a>
             </Button>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 justify-center sm:justify-start">
+          {/* <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 justify-center sm:justify-start">
             <Button variant="primary" size="lg" asChild className="inline-flex items-center justify-center gap-2">
-              <Link href={`/${locale}/products`}>
+              <Link href="#categories">
                 <ArrowRight className="w-4 h-4" />
-                {tc("cta.enterStore")}
+                {t("ctaPrimary")}
               </Link>
             </Button>
             <Button variant="secondary" size="lg" asChild className="inline-flex items-center justify-center gap-2">
@@ -62,7 +62,7 @@ export function Hero() {
                 {tc("cta.browseAllBrands")}
               </a>
             </Button>
-          </div>
+          </div> */}
         </div>
       </Container>
     </section>

@@ -831,6 +831,12 @@
     },
     "orders": {
       "title": "إدارة الطلبات",
+      "riskLabel": "المخاطر",
+      "riskLevels": {
+        "low": "منخفض",
+        "medium": "متوسط",
+        "high": "خطر"
+      },
       "table": {
         "orderNumber": "رقم الطلب",
         "customer": "العميل",
@@ -863,6 +869,23 @@
         "created": "تاريخ الإنشاء",
         "updated": "آخر تحديث",
         "notes": "ملاحظات",
+        "risk": {
+          "title": "تحليل المخاطر",
+          "score": "النتيجة",
+          "level": "المستوى",
+          "breakdownTitle": "عنصر التقييم",
+          "flagged": "أوردر عالي المخاطر — راجع قبل الشحن",
+          "ipAddress": "IP",
+          "userAgent": "بصمة الجهاز",
+          "breakdown": {
+            "accountAge": "عمر الحساب",
+            "emailVerified": "البريد موثق",
+            "deliveryHistory": "سجل التوصيل",
+            "amountVsLimit": "المبلغ / الحد",
+            "sameIpToday": "أوردرات نفس IP اليوم",
+            "sameDeviceToday": "أوردرات نفس الجهاز اليوم"
+          }
+        },
         "statusActions": {
           "label": "تغيير الحالة",
           "update": "تحديث الحالة",
@@ -893,6 +916,9 @@
         "phone": "الموبايل",
         "type": "النوع",
         "status": "الحالة",
+        "blocked": "محظور",
+        "blockedBadge": "محظور",
+        "deliveryHistory": "سجل التوصيل",
         "orders": "الطلبات",
         "created": "تاريخ التسجيل",
         "actions": "الإجراءات",
@@ -902,7 +928,24 @@
       "actions": {
         "view": "عرض",
         "approve": "قبول",
-        "reject": "رفض"
+        "reject": "رفض",
+        "block": "حظر",
+        "unblock": "إلغاء الحظر"
+      },
+      "block": {
+        "title": "حظر العميل",
+        "message": "سيتم منع {name} من تسجيل الدخول وإنشاء أوردرات جديدة. الرجاء ذكر السبب.",
+        "reasonLabel": "سبب الحظر",
+        "reasonMin": "السبب مطلوب (10 أحرف على الأقل)",
+        "reasonPlaceholder": "مثال: أوردرات وهمية متكررة...",
+        "confirm": "تأكيد الحظر",
+        "success": "تم حظر العميل بنجاح"
+      },
+      "unblock": {
+        "title": "إلغاء الحظر",
+        "message": "هل أنت متأكد من إلغاء حظر {name}؟",
+        "confirm": "نعم، ألغِ الحظر",
+        "success": "تم إلغاء حظر العميل بنجاح"
       },
       "approve": {
         "title": "تأكيد القبول",

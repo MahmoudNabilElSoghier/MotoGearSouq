@@ -830,6 +830,12 @@
     },
     "orders": {
       "title": "Orders Management",
+      "riskLabel": "Risk",
+      "riskLevels": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
       "table": {
         "orderNumber": "Order Number",
         "customer": "Customer",
@@ -862,6 +868,23 @@
         "created": "Created At",
         "updated": "Last Updated",
         "notes": "Notes",
+        "risk": {
+          "title": "Risk Analysis",
+          "score": "Score",
+          "level": "Level",
+          "breakdownTitle": "Evaluation Factor",
+          "flagged": "High risk order — review before dispatch",
+          "ipAddress": "IP Address",
+          "userAgent": "Device Fingerprint",
+          "breakdown": {
+            "accountAge": "Account Age",
+            "emailVerified": "Email Verified",
+            "deliveryHistory": "Delivery History",
+            "amountVsLimit": "Amount / Limit",
+            "sameIpToday": "Orders from same IP today",
+            "sameDeviceToday": "Orders from same device today"
+          }
+        },
         "statusActions": {
           "label": "Change Status",
           "update": "Update Status",
@@ -892,6 +915,9 @@
         "phone": "Phone",
         "type": "Type",
         "status": "Status",
+        "blocked": "Status",
+        "blockedBadge": "Blocked",
+        "deliveryHistory": "Deliveries",
         "orders": "Orders",
         "created": "Registered On",
         "actions": "Actions",
@@ -901,7 +927,24 @@
       "actions": {
         "view": "View",
         "approve": "Approve",
-        "reject": "Reject"
+        "reject": "Reject",
+        "block": "Block",
+        "unblock": "Unblock"
+      },
+      "block": {
+        "title": "Block Customer",
+        "message": "{name} will be prevented from logging in and creating new orders. Please provide a reason.",
+        "reasonLabel": "Reason for blocking",
+        "reasonMin": "Reason is required (min 10 characters)",
+        "reasonPlaceholder": "e.g: Repeated fake orders...",
+        "confirm": "Confirm Block",
+        "success": "Customer blocked successfully"
+      },
+      "unblock": {
+        "title": "Unblock Customer",
+        "message": "Are you sure you want to unblock {name}?",
+        "confirm": "Yes, Unblock",
+        "success": "Customer unblocked successfully"
       },
       "approve": {
         "title": "Confirm Approval",

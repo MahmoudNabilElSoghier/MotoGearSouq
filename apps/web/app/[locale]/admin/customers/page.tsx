@@ -7,6 +7,8 @@ import {
   getAdminCustomers,
   approveCustomer,
   rejectCustomer,
+  blockCustomer,
+  unblockCustomer,
   type AdminCustomerPage,
   type AdminCustomerItem,
 } from "@motogearsouq/api-client";
@@ -14,8 +16,9 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { RejectReasonModal } from "@/components/admin/RejectReasonModal";
+import { BlockCustomerModal } from "@/components/admin/BlockCustomerModal";
 import { FormBanner } from "@/components/admin/FormBanner";
-import { Loader2, Search, Eye, Check, X } from "lucide-react";
+import { Loader2, Search, Eye, Check, X, Ban, LockOpen } from "lucide-react";
 
 type Banner = { type: "success" | "error"; message: string } | null;
 
@@ -35,6 +38,8 @@ export default function AdminCustomersPage() {
   const [banner, setBanner] = useState<Banner>(null);
   const [approveTarget, setApproveTarget] = useState<AdminCustomerItem | null>(null);
   const [rejectTarget, setRejectTarget] = useState<AdminCustomerItem | null>(null);
+  const [blockTarget, setBlockTarget] = useState<AdminCustomerItem | null>(null);
+  const [unblockTarget, setUnblockTarget] = useState<AdminCustomerItem | null>(null);
   const [actionBusy, setActionBusy] = useState(false);
   const pageSize = 20;
 
@@ -106,6 +111,38 @@ export default function AdminCustomersPage() {
     } catch (err) {
       setBanner({ type: "error", message: err instanceof Error ? err.message : "حدث خطأ" });
       setRejectTarget(null);
+    } finally {
+      setActionBusy(false);
+    }
+  };
+
+  const handleBlock = async (reason: string) => {
+    if (!blockTarget) return;
+    setActionBusy(true);
+    try {
+      await blockCustomer(blockTarget.id, reason);
+      setBanner({ type: "success", message: t("block.success") });
+      setBlockTarget(null);
+      await fetchCustomers();
+    } catch (err) {
+      setBanner({ type: "error", message: err instanceof Error ? err.message : "حدث خطأ" });
+      setBlockTarget(null);
+    } finally {
+      setActionBusy(false);
+    }
+  };
+
+  const handleUnblock = async () => {
+    if (!unblockTarget) return;
+    setActionBusy(true);
+    try {
+      await unblockCustomer(unblockTarget.id);
+      setBanner({ type: "success", message: t("unblock.success") });
+      setUnblockTarget(null);
+      await fetchCustomers();
+    } catch (err) {
+      setBanner({ type: "error", message: err instanceof Error ? err.message : "حدث خطأ" });
+      setUnblockTarget(null);
     } finally {
       setActionBusy(false);
     }
@@ -238,6 +275,8 @@ export default function AdminCustomersPage() {
                   <th className="px-5 py-3 font-semibold text-start">{t("table.phone")}</th>
                   <th className="px-5 py-3 font-semibold text-start">{t("table.type")}</th>
                   <th className="px-5 py-3 font-semibold text-start">{t("table.status")}</th>
+                  <th className="px-5 py-3 font-semibold text-start">{t("table.blocked")}</th>
+                  <th className="px-5 py-3 font-semibold text-start">{t("table.deliveryHistory")}</th>
                   <th className="px-5 py-3 font-semibold text-start">{t("table.orders")}</th>
                   <th className="px-5 py-3 font-semibold text-start">{t("table.created")}</th>
                   <th className="px-5 py-3 font-semibold text-end">{t("table.actions")}</th>
@@ -257,6 +296,26 @@ export default function AdminCustomersPage() {
                     </td>
                     <td className="px-5 py-3">{typeBadge(c.customerType)}</td>
                     <td className="px-5 py-3">{statusBadge(c.approvalStatus)}</td>
+                    <td className="px-5 py-3">
+                      {c.blockedAt ? (
+                        <span className="rounded-full border border-red-500/30 bg-red-500/15 px-2.5 py-0.5 text-xs font-semibold text-red-400">
+                          {t("table.blockedBadge")}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-muted">—</span>
+                      )}
+                    </td>
+                    <td className="px-5 py-3 text-xs" dir="ltr">
+                      <span className="text-emerald-400 font-semibold">
+                        ✓{nf.format(c.successfulDeliveries ?? 0)}
+                      </span>
+                      <span className="text-muted"> / </span>
+                      <span
+                        className={`font-semibold ${(c.failedDeliveries ?? 0) > 0 ? "text-red-400" : "text-muted"}`}
+                      >
+                        ✗{nf.format(c.failedDeliveries ?? 0)}
+                      </span>
+                    </td>
                     <td className="px-5 py-3 text-fg" dir="ltr">
                       {nf.format(c._count?.orders ?? 0)}
                     </td>
@@ -293,6 +352,27 @@ export default function AdminCustomersPage() {
                               <span>{t("actions.reject")}</span>
                             </button>
                           </>
+                        )}
+                        {c.blockedAt ? (
+                          <button
+                            type="button"
+                            onClick={() => setUnblockTarget(c)}
+                            disabled={actionBusy}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-colors disabled:opacity-50"
+                          >
+                            <LockOpen className="w-3.5 h-3.5" />
+                            <span>{t("actions.unblock")}</span>
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => setBlockTarget(c)}
+                            disabled={actionBusy}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-red-500/40 bg-red-500/10 px-3 py-1.5 text-xs font-semibold text-red-400 hover:bg-red-500/20 transition-colors disabled:opacity-50"
+                          >
+                            <Ban className="w-3.5 h-3.5" />
+                            <span>{t("actions.block")}</span>
+                          </button>
                         )}
                       </div>
                     </td>
@@ -349,6 +429,25 @@ export default function AdminCustomersPage() {
         onConfirm={handleReject}
         customerName={rejectTarget?.name ?? ""}
       />
+
+      {/* Block modal */}
+      <BlockCustomerModal
+        isOpen={!!blockTarget}
+        onClose={() => setBlockTarget(null)}
+        onConfirm={handleBlock}
+        customerName={blockTarget?.name ?? ""}
+      />
+
+      {/* Unblock confirm */}
+      {unblockTarget && (
+        <ConfirmDialog
+          title={t("unblock.title")}
+          message={t("unblock.message", { name: unblockTarget.name })}
+          onConfirm={handleUnblock}
+          onCancel={() => setUnblockTarget(null)}
+          isDanger={false}
+        />
+      )}
     </div>
   );
 }

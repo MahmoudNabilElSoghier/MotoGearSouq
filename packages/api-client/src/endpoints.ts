@@ -718,6 +718,10 @@ export interface AdminCustomerItem {
   taxNumber: string | null;
   commercialRegister: string | null;
   createdAt: string;
+  blockedAt: string | null;
+  blockedReason: string | null;
+  successfulDeliveries: number;
+  failedDeliveries: number;
   _count?: { orders: number };
 }
 
@@ -759,6 +763,14 @@ export const approveCustomer = (id: string): Promise<ApiResponse<AdminCustomerIt
 
 export const rejectCustomer = (id: string, reason: string): Promise<ApiResponse<AdminCustomerItem>> =>
   apiSend<AdminCustomerItem>("PATCH", `/admin/customers/${encode(id)}/reject`, { reason });
+
+// ---------- Anti-fraud: customer blocking (Sprint 5C-2) ----------
+
+export const blockCustomer = (id: string, reason: string): Promise<ApiResponse<AdminCustomerItem>> =>
+  apiSend<AdminCustomerItem>("PATCH", `/admin/customers/${encode(id)}/block`, { reason });
+
+export const unblockCustomer = (id: string): Promise<ApiResponse<AdminCustomerItem>> =>
+  apiSend<AdminCustomerItem>("PATCH", `/admin/customers/${encode(id)}/unblock`);
 
 
 

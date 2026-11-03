@@ -45,9 +45,20 @@ type OrderItemView = {
   lineTotal: number;
 };
 
+type RiskBreakdownView = {
+  accountAge?: { score: number; days: number };
+  emailVerified?: { score: number; verified: boolean };
+  deliveryHistory?: { score: number; successful: number; failed: number };
+  orderAmount?: { score: number; total: number; limit: number | null };
+  sameIpToday?: { score: number; count: number };
+  sameDeviceToday?: { score: number; count: number };
+};
+
 export default function AdminOrderDetailPage({ params }: PageProps) {
   const { locale, id } = use(params);
   const t = useTranslations("admin.orders.detail");
+  const tRisk = useTranslations("admin.orders.detail.risk");
+  const tRiskLevels = useTranslations("admin.orders");
   const tPayment = useTranslations("admin.orders.detail.payment");
   const tDash = useTranslations("admin.dashboard");
   const isAr = locale === "ar";
@@ -275,6 +286,131 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
             <p className="text-sm" dir="ltr"><span className="text-muted">Shipping Phone:</span> {order.shippingPhone ?? "—"}</p>
           </div>
         </div>
+
+        {/* Risk Analysis (Sprint 5C-2) */}
+        {(order.riskBreakdown != null || (order.riskScore ?? 0) > 0) && (() => {
+          const level = order.riskLevel ?? "low";
+          const bd = (order.riskBreakdown ?? {}) as RiskBreakdownView;
+          const riskLabels: Record<string, string> = {
+            low: tRiskLevels("riskLevels.low"),
+            medium: tRiskLevels("riskLevels.medium"),
+            high: tRiskLevels("riskLevels.high"),
+          };
+          const levelCls =
+            level === "high"
+              ? "border-red-500/30 bg-red-500/15 text-red-400"
+              : level === "medium"
+                ? "border-amber-500/30 bg-amber-500/15 text-amber-400"
+                : "border-emerald-500/30 bg-emerald-500/15 text-emerald-400";
+          const scoreCls =
+            level === "high" ? "text-red-400" : level === "medium" ? "text-amber-400" : "text-emerald-400";
+          const rows: { label: string; value: string; score: number; ok?: boolean }[] = [
+            {
+              label: tRisk("breakdown.accountAge"),
+              value: `${nf.format(bd.accountAge?.days ?? 0)} ${isAr ? "يوم" : "days"}`,
+              score: bd.accountAge?.score ?? 0,
+            },
+            {
+              label: tRisk("breakdown.emailVerified"),
+              value: bd.emailVerified?.verified ? "✓" : "✗",
+              score: bd.emailVerified?.score ?? 0,
+              ok: bd.emailVerified?.verified,
+            },
+            {
+              label: tRisk("breakdown.deliveryHistory"),
+              value: `${nf.format(bd.deliveryHistory?.successful ?? 0)} ✓ / ${nf.format(bd.deliveryHistory?.failed ?? 0)} ✗`,
+              score: bd.deliveryHistory?.score ?? 0,
+            },
+            {
+              label: tRisk("breakdown.amountVsLimit"),
+              value: `${nf.format(bd.orderAmount?.total ?? order.total)} / ${
+                bd.orderAmount?.limit == null ? "∞" : nf.format(bd.orderAmount.limit)
+              }`,
+              score: bd.orderAmount?.score ?? 0,
+            },
+            {
+              label: tRisk("breakdown.sameIpToday"),
+              value: nf.format(bd.sameIpToday?.count ?? 0),
+              score: bd.sameIpToday?.score ?? 0,
+            },
+            {
+              label: tRisk("breakdown.sameDeviceToday"),
+              value: nf.format(bd.sameDeviceToday?.count ?? 0),
+              score: bd.sameDeviceToday?.score ?? 0,
+            },
+          ];
+          return (
+            <div className="rounded-xl border border-border bg-bg p-6 space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4">
+                <h2 className="text-lg font-bold text-fg">{tRisk("title")}</h2>
+                <div className="flex items-center gap-3">
+                  <div className="text-end">
+                    <p className="text-[10px] uppercase text-muted">{tRisk("score")}</p>
+                    <p className={`text-3xl font-extrabold leading-none ${scoreCls}`} dir="ltr">
+                      {order.riskScore ?? 0}
+                    </p>
+                  </div>
+                  <div className="text-end space-y-1">
+                    <p className="text-[10px] uppercase text-muted">{tRisk("level")}</p>
+                    <span className={`inline-block rounded-full border px-3 py-1 text-xs font-bold ${levelCls}`}>
+                      {riskLabels[level] ?? level}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {level === "high" && (
+                <div className="flex items-center gap-2 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm font-semibold text-red-400">
+                  <span aria-hidden>🔴</span>
+                  {tRisk("flagged")}
+                </div>
+              )}
+
+              <div className="overflow-hidden rounded-lg border border-border/60">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border text-muted text-xs">
+                      <th className="px-4 py-2.5 font-semibold text-start">{tRisk("breakdownTitle")}</th>
+                      <th className="px-4 py-2.5 font-semibold text-start">{isAr ? "القيمة" : "Value"}</th>
+                      <th className="px-4 py-2.5 font-semibold text-end">{tRisk("score")}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border/40">
+                    {rows.map((row) => (
+                      <tr key={row.label}>
+                        <td className="px-4 py-2.5 text-muted">{row.label}</td>
+                        <td
+                          className={`px-4 py-2.5 font-semibold ${
+                            row.ok === false ? "text-red-400" : row.ok === true ? "text-emerald-400" : "text-fg"
+                          }`}
+                          dir="ltr"
+                        >
+                          {row.value}
+                        </td>
+                        <td className="px-4 py-2.5 text-end font-mono text-xs text-fg" dir="ltr">
+                          {row.score > 0 ? `+${row.score}` : row.score}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p className="text-xs text-muted">{tRisk("ipAddress")}</p>
+                  <p className="font-mono text-fg" dir="ltr">{order.ipAddress ?? "—"}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted">{tRisk("userAgent")}</p>
+                  <p className="font-mono text-fg" dir="ltr">
+                    {order.userAgentHash ? `${order.userAgentHash.slice(0, 16)}…` : "—"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Payment Section (Task 3) */}
         <div className="rounded-xl border border-border bg-bg p-6 space-y-4">

@@ -71,6 +71,32 @@ export default function AdminOrdersPage() {
     cancelled: tDash("statusCancelled"),
   };
 
+  const riskLabels: Record<string, string> = {
+    low: t("riskLevels.low"),
+    medium: t("riskLevels.medium"),
+    high: t("riskLevels.high"),
+  };
+
+  const riskBadge = (o: Order) => {
+    const level = o.riskLevel ?? "low";
+    if (level === "low") return <span className="text-xs text-muted">—</span>;
+    const cls =
+      level === "high"
+        ? "border-red-500/30 bg-red-500/15 text-red-400"
+        : "border-amber-500/30 bg-amber-500/15 text-amber-400";
+    return (
+      <span
+        className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold ${cls}`}
+      >
+        <span aria-hidden>{level === "high" ? "🔴" : "🟡"}</span>
+        {riskLabels[level] ?? level}
+        {typeof o.riskScore === "number" && (
+          <span className="font-mono text-[10px] opacity-80">{o.riskScore}</span>
+        )}
+      </span>
+    );
+  };
+
   const filteredItems = (ordersPage?.items ?? []).filter((o: Order) => {
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
@@ -224,6 +250,7 @@ export default function AdminOrdersPage() {
                   <th className="px-5 py-3 font-semibold text-start">{t("table.phone")}</th>
                   <th className="px-5 py-3 font-semibold text-start">{t("table.total")}</th>
                   <th className="px-5 py-3 font-semibold text-start">{t("table.status")}</th>
+                  <th className="px-5 py-3 font-semibold text-start">{t("riskLabel")}</th>
                   <th className="px-5 py-3 font-semibold text-start">{isAr ? "الدفع" : "Payment"}</th>
                   <th className="px-5 py-3 font-semibold text-start">{t("table.date")}</th>
                   <th className="px-5 py-3 font-semibold text-end">{isAr ? "إجراء" : "Action"}</th>
@@ -245,6 +272,7 @@ export default function AdminOrdersPage() {
                         {statusLabels[o.status] ?? o.status}
                       </span>
                     </td>
+                    <td className="px-5 py-3">{riskBadge(o)}</td>
                     <td className="px-5 py-3 text-xs">
                       <span className="font-semibold uppercase text-muted">{o.paymentMethod ?? "cod"}</span>
                       <span className="block text-[10px] text-accent font-mono">{o.paymentStatus ?? "pending"}</span>

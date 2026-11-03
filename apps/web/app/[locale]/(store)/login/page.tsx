@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocale, useTranslations } from "next-intl";
-import { Eye, EyeOff, Loader2, LogIn } from "lucide-react";
+import { Eye, EyeOff, Loader2, LogIn, ArrowRight } from "lucide-react";
 import { customerLoginSchema, type CustomerLoginInput } from "@motogearsouq/shared";
 import { useCustomerAuth } from "@/lib/customer-auth-store";
 import { Input } from "@/components/ui/Input";
@@ -137,14 +137,17 @@ export default function LoginPage() {
               </button>
             </div>
 
-            <Button type="submit" fullWidth disabled={isLoading}>
+            <Button type="submit" fullWidth disabled={isLoading} className="inline-flex items-center justify-center gap-2">
               {isLoading ? (
                 <>
                   <Loader2 className="me-2 h-4 w-4 animate-spin" />
                   {t("loading")}
                 </>
               ) : (
-                t("submit")
+                <>
+                  <ArrowRight className="w-4 h-4" />
+                  {t("submit")}
+                </>
               )}
             </Button>
             <p className="mt-4 text-center text-sm">

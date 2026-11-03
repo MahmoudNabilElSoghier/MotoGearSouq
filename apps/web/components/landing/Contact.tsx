@@ -159,11 +159,12 @@ export function Contact() {
                     </div>
                   </div>
                 </div>
-                <Button variant="secondary" size="sm" asChild>
-                  <a href={company.whatsappUrl} target="_blank" rel="noopener noreferrer">
-                    {t("messageUs")}
-                  </a>
-                </Button>
+              <Button variant="secondary" size="sm" asChild className="inline-flex items-center justify-center gap-2">
+                <a href={company.whatsappUrl} target="_blank" rel="noopener noreferrer">
+                  <Phone className="w-4 h-4" />
+                  <span>{t("messageUs")}</span>
+                </a>
+              </Button>
               </Card>
 
               <Card padding="md" className="bg-card border-border flex items-center justify-between">
@@ -178,9 +179,12 @@ export function Contact() {
                     </div>
                   </div>
                 </div>
-                <Button variant="secondary" size="sm" asChild>
-                  <a href={`tel:${company.phone}`}>{t("callUs")}</a>
-                </Button>
+              <Button variant="secondary" size="sm" asChild className="inline-flex items-center justify-center gap-2">
+                <a href={`tel:${company.phone}`}>
+                  <Phone className="w-4 h-4" />
+                  <span>{t("callUs")}</span>
+                </a>
+              </Button>
               </Card>
 
               <Card padding="md" className="bg-card border-border">

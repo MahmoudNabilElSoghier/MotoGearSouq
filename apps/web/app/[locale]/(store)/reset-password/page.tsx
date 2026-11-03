@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, Key } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -125,14 +125,17 @@ export default function ResetPasswordPage() {
               disabled={isLoading}
               {...register("confirmPassword")}
             />
-            <Button type="submit" fullWidth disabled={isLoading || !token}>
+            <Button type="submit" fullWidth disabled={isLoading || !token} className="inline-flex items-center justify-center gap-2">
               {isLoading ? (
                 <>
                   <Loader2 className="me-2 h-4 w-4 animate-spin" />
                   {t("actions.resetting")}
                 </>
               ) : (
-                t("actions.resetPassword")
+                <>
+                  <Key className="w-4 h-4" />
+                  {t("actions.resetPassword")}
+                </>
               )}
             </Button>
           </form>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Phone } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { company } from "@/lib/config";
 import { getProductByCode, totalStock } from "@motogearsouq/api-client";
@@ -191,6 +192,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 rel="noreferrer"
                 className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-accent-strong px-6 py-3 font-semibold text-white transition-colors hover:bg-accent-strong/90"
               >
+                <Phone className="w-4 h-4" />
                 {locale === "ar" ? "استعلم على واتساب" : "Inquire on WhatsApp"}
               </a>
               <p className="mt-3 text-center text-xs text-muted">

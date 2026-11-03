@@ -11,7 +11,7 @@ import { useCustomerAuth } from "@/lib/customer-auth-store";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Container } from "@/components/ui/Container";
-import { Loader2, AlertCircle, Pencil } from "lucide-react";
+import { Loader2, AlertCircle, Pencil, CheckCircle2 } from "lucide-react";
 
 type CheckoutFormValues = {
   address: string;
@@ -339,15 +339,18 @@ export default function CheckoutPage() {
                   <span>{isAr ? "جاري تأكيد الطلب..." : "Placing order..."}</span>
                 </>
               ) : (
-                <span>
-                  {paymentMethod === "cod"
-                    ? isAr
-                      ? "تأكيد الطلب (الدفع عند الاستلام)"
-                      : "Confirm Order (COD)"
-                    : isAr
-                      ? "تأكيد الطلب والدفع"
-                      : "Confirm Order & Pay"}
-                </span>
+                <>
+                  <CheckCircle2 className="w-5 h-5" />
+                  <span>
+                    {paymentMethod === "cod"
+                      ? isAr
+                        ? "تأكيد الطلب (الدفع عند الاستلام)"
+                        : "Confirm Order (COD)"
+                      : isAr
+                        ? "تأكيد الطلب والدفع"
+                        : "Confirm Order & Pay"}
+                  </span>
+                </>
               )}
             </Button>
           </div>

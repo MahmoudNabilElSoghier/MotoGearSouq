@@ -3,6 +3,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { company } from "@/lib/config";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { ArrowRight, Phone } from "lucide-react";
 
 export function Hero() {
   const t = useTranslations("hero");
@@ -31,25 +32,35 @@ export function Hero() {
             {t("subheadline")}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8 justify-center sm:justify-start">
-            <Button variant="primary" size="lg" asChild>
-              <Link href="#categories">{t("ctaPrimary")}</Link>
+            <Button variant="primary" size="lg" asChild className="inline-flex items-center justify-center gap-2">
+              <Link href="#categories">
+                <ArrowRight className="w-4 h-4" />
+                {t("ctaPrimary")}
+              </Link>
             </Button>
-            <Button variant="secondary" size="lg" asChild>
+            <Button variant="secondary" size="lg" asChild className="inline-flex items-center justify-center gap-2">
               <a
                 href={company.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >
+                <Phone className="w-4 h-4" />
                 {t("ctaSecondary")}
               </a>
             </Button>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 justify-center sm:justify-start">
-            <Button variant="primary" size="lg" asChild>
-              <Link href={`/${locale}/products`}>{tc("cta.enterStore")}</Link>
+            <Button variant="primary" size="lg" asChild className="inline-flex items-center justify-center gap-2">
+              <Link href={`/${locale}/products`}>
+                <ArrowRight className="w-4 h-4" />
+                {tc("cta.enterStore")}
+              </Link>
             </Button>
-            <Button variant="secondary" size="lg" asChild>
-              <a href="#brands">{tc("cta.browseAllBrands")}</a>
+            <Button variant="secondary" size="lg" asChild className="inline-flex items-center justify-center gap-2">
+              <a href="#brands">
+                <ArrowRight className="w-4 h-4" />
+                {tc("cta.browseAllBrands")}
+              </a>
             </Button>
           </div>
         </div>

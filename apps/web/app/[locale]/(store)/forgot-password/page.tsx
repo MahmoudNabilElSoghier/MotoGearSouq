@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, Mail } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
@@ -89,14 +89,17 @@ export default function ForgotPasswordPage() {
               error={error ?? undefined}
               required
             />
-            <Button type="submit" fullWidth disabled={isLoading}>
+            <Button type="submit" fullWidth disabled={isLoading} className="inline-flex items-center justify-center gap-2">
               {isLoading ? (
                 <>
                   <Loader2 className="me-2 h-4 w-4 animate-spin" />
                   {t("actions.sending")}
                 </>
               ) : (
-                t("actions.sendResetLink")
+                <>
+                  <Mail className="w-4 h-4" />
+                  {t("actions.sendResetLink")}
+                </>
               )}
             </Button>
           </form>

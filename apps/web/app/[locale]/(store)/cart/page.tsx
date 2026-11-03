@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { Trash2, ShoppingCart, ArrowRight, ArrowLeft } from "lucide-react";
+import { Trash2, ShoppingCart, ArrowRight, ArrowLeft, LogIn, UserPlus, X } from "lucide-react";
 import { useCart } from "@/lib/cart-store";
 import { useCustomerAuth } from "@/lib/customer-auth-store";
 import { Button } from "@/components/ui/Button";
@@ -65,7 +65,8 @@ export default function CartPage() {
           <h1 className="text-3xl md:text-4xl font-extrabold text-fg">
             {isAr ? "سلة الشراء" : "Shopping Cart"}
           </h1>
-          <Button variant="ghost" size="sm" onClick={clearCart} className="text-red-400 hover:text-red-500">
+          <Button variant="ghost" size="sm" onClick={clearCart} className="text-red-400 hover:text-red-500 inline-flex items-center gap-1.5">
+            <Trash2 className="w-3.5 h-3.5" />
             {isAr ? "إفراغ السلة" : "Clear cart"}
           </Button>
         </div>
@@ -192,17 +193,20 @@ export default function CartPage() {
               {tCheckout("authRequired")}
             </h2>
             <div className="flex flex-col gap-2">
-              <Button asChild variant="primary" fullWidth>
+              <Button asChild variant="primary" fullWidth className="inline-flex items-center justify-center gap-2">
                 <Link href={`/${locale}/login?next=/${locale}/checkout`}>
-                  {tCheckout("loginCta")}
+                  <LogIn className="w-4 h-4" />
+                  <span>{tCheckout("loginCta")}</span>
                 </Link>
               </Button>
-              <Button asChild variant="secondary" fullWidth>
+              <Button asChild variant="secondary" fullWidth className="inline-flex items-center justify-center gap-2">
                 <Link href={`/${locale}/register?next=/${locale}/checkout`}>
-                  {tCheckout("registerCta")}
+                  <UserPlus className="w-4 h-4" />
+                  <span>{tCheckout("registerCta")}</span>
                 </Link>
               </Button>
-              <Button variant="ghost" fullWidth onClick={() => setShowLoginModal(false)}>
+              <Button variant="ghost" fullWidth className="inline-flex items-center justify-center gap-2" onClick={() => setShowLoginModal(false)}>
+                <X className="w-4 h-4" />
                 {tCheckout("cancel")}
               </Button>
             </div>

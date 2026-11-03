@@ -82,8 +82,11 @@ export function Categories() {
         {entries.map(renderCard)}
       </div>
       <div className="mt-6">
-        <Button variant="primary" asChild>
-          <Link href={ctaHref}>{t(ctaKey)}</Link>
+        <Button variant="primary" asChild className="inline-flex items-center justify-center gap-2">
+          <Link href={ctaHref}>
+            <ArrowRight className="w-4 h-4" />
+            {t(ctaKey)}
+          </Link>
         </Button>
       </div>
     </div>

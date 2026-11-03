@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocale, useTranslations } from "next-intl";
-import { Eye, EyeOff, Loader2, UserPlus } from "lucide-react";
+import { Eye, EyeOff, Loader2, UserPlus, ArrowRight, Home, LogIn } from "lucide-react";
 import {
   createRetailCustomerSchema,
   createWholesaleCustomerSchema,
@@ -203,14 +203,17 @@ export default function RegisterPage() {
                 {...retailForm.register("email")}
               />
               <p className="-mt-2 text-xs text-muted">{t("emailOptional")}</p>
-              <Button type="submit" fullWidth disabled={isLoading}>
+              <Button type="submit" fullWidth disabled={isLoading} className="inline-flex items-center justify-center gap-2">
                 {isLoading ? (
                   <>
                     <Loader2 className="me-2 h-4 w-4 animate-spin" />
                     {t("loading")}
                   </>
                 ) : (
-                  t("submit")
+                  <>
+                    <ArrowRight className="w-4 h-4" />
+                    {t("submit")}
+                  </>
                 )}
               </Button>
             </form>
@@ -280,14 +283,17 @@ export default function RegisterPage() {
                 disabled={isLoading}
                 {...wholesaleForm.register("commercialRegister")}
               />
-              <Button type="submit" fullWidth disabled={isLoading}>
+              <Button type="submit" fullWidth disabled={isLoading} className="inline-flex items-center justify-center gap-2">
                 {isLoading ? (
                   <>
                     <Loader2 className="me-2 h-4 w-4 animate-spin" />
                     {t("loading")}
                   </>
                 ) : (
-                  t("submit")
+                  <>
+                    <ArrowRight className="w-4 h-4" />
+                    {t("submit")}
+                  </>
                 )}
               </Button>
             </form>
@@ -295,7 +301,8 @@ export default function RegisterPage() {
 
           {wholesaleDone && tab === "wholesale" && (
             <div className="mt-4">
-              <Button variant="secondary" fullWidth onClick={() => router.push(`/${locale}`)}>
+              <Button variant="secondary" fullWidth className="inline-flex items-center justify-center gap-2" onClick={() => router.push(`/${locale}`)}>
+                <Home className="w-4 h-4" />
                 {t("backHome")}
               </Button>
             </div>
@@ -303,7 +310,8 @@ export default function RegisterPage() {
 
           <p className="mt-6 text-center text-sm text-muted">
             {t("haveAccount")}{" "}
-            <Link href={`/${locale}/login`} className="font-semibold text-accent hover:underline">
+            <Link href={`/${locale}/login`} className="inline-flex items-center gap-1 font-semibold text-accent hover:underline">
+              <LogIn className="w-3.5 h-3.5" />
               {t("loginLink")}
             </Link>
           </p>

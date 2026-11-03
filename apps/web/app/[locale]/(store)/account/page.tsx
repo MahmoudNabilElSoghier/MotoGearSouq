@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { LogOut, User, Mail, Phone, ShieldCheck } from "lucide-react";
+import { LogOut, User, Mail, Phone, ShieldCheck, Home } from "lucide-react";
 import { useCustomerAuth } from "@/lib/customer-auth-store";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -105,8 +105,9 @@ export default function AccountPage() {
             <button
               type="button"
               onClick={() => router.push(`/${locale}`)}
-              className="font-semibold text-accent hover:underline"
+              className="inline-flex items-center gap-1 font-semibold text-accent hover:underline"
             >
+              <Home className="w-3.5 h-3.5" />
               {t("actions.home")}
             </button>
           </p>

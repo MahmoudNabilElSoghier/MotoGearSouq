@@ -349,6 +349,8 @@ model Customer {
   commercialRegister   String? // B2B only (taxNumber column above already existed)
   emailVerified        Boolean   @default(false)
   phoneVerified        Boolean   @default(false)
+  googleId             String?   @unique
+  avatarUrl            String?
   successfulDeliveries Int       @default(0)
   failedDeliveries     Int       @default(0)
   blockedAt            DateTime?

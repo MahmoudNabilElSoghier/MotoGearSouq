@@ -1233,6 +1233,16 @@
         "rejected": "تم رفض طلبك — تواصل معنا"
       }
     },
+    "google": {
+      "loginButton": "تسجيل الدخول بـ Google",
+      "registerButton": "التسجيل بـ Google",
+      "or": "أو",
+      "errors": {
+        "access_denied": "تم إلغاء تسجيل الدخول",
+        "email_exists": "البريد مسجل بالفعل",
+        "default": "حدث خطأ، حاول تاني"
+      }
+    },
     "register": {
       "title": "إنشاء حساب جديد",
       "emailOptional": "البريد الإلكتروني (اختياري — لتلقي إشعارات الطلبات)",

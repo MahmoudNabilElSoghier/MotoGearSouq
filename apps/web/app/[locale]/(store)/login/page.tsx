@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { FormBanner } from "@/components/admin/FormBanner";
+import { GoogleButton } from "@/components/auth/GoogleButton";
 
 function safeNext(next: string | null, fallback: string): string {
   if (next && next.startsWith("/") && !next.startsWith("//") && !next.includes("\\")) {
@@ -23,13 +24,35 @@ function safeNext(next: string | null, fallback: string): string {
 
 export default function LoginPage() {
   const t = useTranslations("customerAuth.login");
+  const tGoogle = useTranslations("customerAuth.google");
   const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
   const login = useCustomerAuth((s) => s.login);
+  const initAuth = useCustomerAuth((s) => s.init);
   const isLoading = useCustomerAuth((s) => s.isLoading);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    const googleStatus = searchParams.get("google");
+    const msg = searchParams.get("msg");
+    if (googleStatus === "success") {
+      initAuth().then(() => {
+        const next = safeNext(sessionStorage.getItem("google_oauth_next") || searchParams.get("next"), `/${locale}/account`);
+        sessionStorage.removeItem("google_oauth_next");
+        router.push(next);
+        router.refresh();
+      });
+    } else if (googleStatus === "error" && msg) {
+      const decoded = decodeURIComponent(msg);
+      const errorMap: Record<string, string> = {
+        access_denied: tGoogle("errors.access_denied"),
+        email_exists: tGoogle("errors.email_exists"),
+      };
+      setError(errorMap[decoded] || tGoogle("errors.default"));
+    }
+  }, [searchParams, initAuth, locale, router, tGoogle]);
 
   const {
     register,
@@ -68,6 +91,18 @@ export default function LoginPage() {
           </div>
 
           {error && <FormBanner type="error" message={error} onClose={() => setError(null)} />}
+
+          <div className="mb-6">
+            <GoogleButton mode="login" />
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-border"></div>
+              </div>
+              <div className="relative flex justify-center text-xs">
+                <span className="bg-card px-3 text-muted">{tGoogle("or")}</span>
+              </div>
+            </div>
+          </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <Input

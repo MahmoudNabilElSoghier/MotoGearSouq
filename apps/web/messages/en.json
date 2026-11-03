@@ -1232,6 +1232,16 @@
         "rejected": "Your application was rejected — please contact us"
       }
     },
+    "google": {
+      "loginButton": "Sign in with Google",
+      "registerButton": "Sign up with Google",
+      "or": "or",
+      "errors": {
+        "access_denied": "Sign in cancelled",
+        "email_exists": "Email already registered",
+        "default": "An error occurred, please try again"
+      }
+    },
     "register": {
       "title": "Create Account",
       "emailOptional": "Email (optional — for order notifications)",

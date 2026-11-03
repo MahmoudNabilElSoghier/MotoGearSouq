@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { FormBanner } from "@/components/admin/FormBanner";
+import { GoogleButton } from "@/components/auth/GoogleButton";
 
 type Tab = "retail" | "wholesale";
 
@@ -31,6 +32,7 @@ function safeNext(next: string | null, fallback: string): string {
 export default function RegisterPage() {
   const t = useTranslations("customerAuth.register");
   const tLogin = useTranslations("customerAuth.login");
+  const tGoogle = useTranslations("customerAuth.google");
   const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -142,6 +144,20 @@ export default function RegisterPage() {
               message={t("wholesaleSuccess")}
               onClose={() => setWholesaleDone(false)}
             />
+          )}
+
+          {tab === "retail" && (
+            <div className="mb-6">
+              <GoogleButton mode="register" />
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-border"></div>
+                </div>
+                <div className="relative flex justify-center text-xs">
+                  <span className="bg-card px-3 text-muted">{tGoogle("or")}</span>
+                </div>
+              </div>
+            </div>
           )}
 
           {tab === "retail" && (

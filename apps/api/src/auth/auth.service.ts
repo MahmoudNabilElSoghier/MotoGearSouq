@@ -33,7 +33,7 @@ export class AuthService {
     const normalizedEmail = email.toLowerCase().trim();
 
     // 1. Rate limit check BEFORE password verification
-    if (this.rateLimit.isRateLimited(normalizedEmail)) {
+    if (await this.rateLimit.isRateLimited(normalizedEmail)) {
       this.logFailedLogin(normalizedEmail, ip, userAgent, "rate_limited");
       throw new HttpException(
         { message: "Too many failed login attempts. Please try again later.", error: "Too Many Requests" },
@@ -47,13 +47,13 @@ export class AuthService {
     });
 
     if (!user) {
-      this.rateLimit.recordFailure(normalizedEmail);
+      await this.rateLimit.recordFailure(normalizedEmail);
       this.logFailedLogin(normalizedEmail, ip, userAgent, "no_user");
       throw new UnauthorizedException("Invalid email or password");
     }
 
     if (!user.active) {
-      this.rateLimit.recordFailure(normalizedEmail);
+      await this.rateLimit.recordFailure(normalizedEmail);
       this.logFailedLogin(normalizedEmail, ip, userAgent, "inactive");
       throw new UnauthorizedException("User account is inactive");
     }
@@ -61,13 +61,13 @@ export class AuthService {
     // 3. Verify password
     const isValidPassword = verifyPassword(pass, user.passwordHash);
     if (!isValidPassword) {
-      this.rateLimit.recordFailure(normalizedEmail);
+      await this.rateLimit.recordFailure(normalizedEmail);
       this.logFailedLogin(normalizedEmail, ip, userAgent, "bad_password");
       throw new UnauthorizedException("Invalid email or password");
     }
 
     // 4. Successful login -> reset rate limit
-    this.rateLimit.reset(normalizedEmail);
+    await this.rateLimit.reset(normalizedEmail);
 
     // 5. Generate tokens
     const accessTtl = process.env.JWT_ACCESS_TTL || "15m";

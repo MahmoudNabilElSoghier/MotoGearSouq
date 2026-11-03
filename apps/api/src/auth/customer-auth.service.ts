@@ -186,7 +186,7 @@ export class CustomerAuthService {
     const lookup = isEmail ? identifier.toLowerCase() : identifier;
 
     // Rate limit BEFORE password verification (5 fails / 5 min / identifier)
-    if (this.rateLimit.isRateLimited(lookup)) {
+    if (await this.rateLimit.isRateLimited(lookup)) {
       this.logFailedLogin(lookup, ip, userAgent, "rate_limited");
       throw new HttpException(
         { message: "Too many failed login attempts. Please try again later.", error: "Too Many Requests" },
@@ -200,13 +200,13 @@ export class CustomerAuthService {
         })
       : await this.prisma.get().customer.findUnique({ where: { phone: lookup } });
     if (!customer) {
-      this.rateLimit.recordFailure(lookup);
+      await this.rateLimit.recordFailure(lookup);
       this.logFailedLogin(lookup, ip, userAgent, "no_customer");
       throw new UnauthorizedException("بيانات غير صحيحة");
     }
 
     if (!customer.passwordHash) {
-      this.rateLimit.recordFailure(lookup);
+      await this.rateLimit.recordFailure(lookup);
       this.logFailedLogin(lookup, ip, userAgent, "no_password");
       throw new UnauthorizedException("بيانات غير صحيحة");
     }
@@ -232,12 +232,12 @@ export class CustomerAuthService {
     }
 
     if (!verifyPassword(input.password, customer.passwordHash)) {
-      this.rateLimit.recordFailure(lookup);
+      await this.rateLimit.recordFailure(lookup);
       this.logFailedLogin(lookup, ip, userAgent, "bad_password");
       throw new UnauthorizedException("بيانات غير صحيحة");
     }
 
-    this.rateLimit.reset(lookup);
+    await this.rateLimit.reset(lookup);
 
     const { accessToken, refreshToken } = await this.issueTokens(customer.id, {
       phone: customer.phone,

@@ -14,6 +14,7 @@ import {
   type CreateWholesaleCustomerInput,
 } from "@motogearsouq/shared";
 import { useCustomerAuth } from "@/lib/customer-auth-store";
+import { useCart } from "@/lib/cart-store";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -37,6 +38,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { registerRetail, registerWholesale, isLoading } = useCustomerAuth();
+  const syncGuestCart = useCart((s) => s.syncGuestCart);
 
   const [tab, setTab] = useState<Tab>("retail");
   const [error, setError] = useState<string | null>(null);
@@ -74,6 +76,8 @@ export default function RegisterPage() {
       setError(result.error || "حدث خطأ");
       return;
     }
+    // Sync any guest cart items (localStorage) into the authenticated server cart.
+    void syncGuestCart();
     const next = safeNext(searchParams.get("next"), `/${locale}/account`);
     router.push(next);
     router.refresh();

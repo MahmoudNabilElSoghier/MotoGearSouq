@@ -263,20 +263,27 @@ export interface CartRow {
   items: CartItem[];
 }
 
-export const getCart = (): Promise<CartRow> =>
-  apiGet<CartRow>("/cart");
+export const getCart = (skipAuthRedirect = false): Promise<CartRow> =>
+  apiGet<CartRow>("/cart", skipAuthRedirect);
 
-export const addToCart = (input: { productId: string; quantity: number }): Promise<ApiResponse<CartRow>> =>
-  apiSend<CartRow>("POST", "/cart/items", input);
+export const addToCart = (
+  input: { productId: string; quantity: number },
+  skipAuthRedirect = false,
+): Promise<ApiResponse<CartRow>> =>
+  apiSend<CartRow>("POST", "/cart/items", input, skipAuthRedirect);
 
 export const updateCartItem = (
   id: string,
   quantity: number,
+  skipAuthRedirect = false,
 ): Promise<ApiResponse<CartRow | null>> =>
-  apiSend<CartRow | null>("PATCH", `/cart/items/${encode(id)}`, { quantity });
+  apiSend<CartRow | null>("PATCH", `/cart/items/${encode(id)}`, { quantity }, skipAuthRedirect);
 
-export const removeCartItem = (id: string): Promise<ApiResponse<boolean>> =>
-  apiSend<boolean>("DELETE", `/cart/items/${encode(id)}`);
+export const removeCartItem = (
+  id: string,
+  skipAuthRedirect = false,
+): Promise<ApiResponse<boolean>> =>
+  apiSend<boolean>("DELETE", `/cart/items/${encode(id)}`, undefined, skipAuthRedirect);
 
 // ---------- ERP: suppliers, purchase orders, stock movements (Sprint 2) ----------
 

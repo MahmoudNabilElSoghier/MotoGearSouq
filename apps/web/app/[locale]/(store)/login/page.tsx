@@ -9,6 +9,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Eye, EyeOff, Loader2, LogIn, ArrowRight } from "lucide-react";
 import { customerLoginSchema, type CustomerLoginInput } from "@motogearsouq/shared";
 import { useCustomerAuth } from "@/lib/customer-auth-store";
+import { useCart } from "@/lib/cart-store";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -31,6 +32,7 @@ export default function LoginPage() {
   const login = useCustomerAuth((s) => s.login);
   const initAuth = useCustomerAuth((s) => s.init);
   const isLoading = useCustomerAuth((s) => s.isLoading);
+  const syncGuestCart = useCart((s) => s.syncGuestCart);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -73,6 +75,8 @@ export default function LoginPage() {
       else setError(raw);
       return;
     }
+    // Sync any guest cart items (localStorage) into the authenticated server cart.
+    void syncGuestCart();
     const next = safeNext(searchParams.get("next"), `/${locale}/account`);
     router.push(next);
     router.refresh();

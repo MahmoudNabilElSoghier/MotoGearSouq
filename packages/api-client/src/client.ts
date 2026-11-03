@@ -35,6 +35,7 @@ async function request<T>(
   path: string,
   init: RequestInit & { method?: string } = {},
   isRetry = false,
+  skipAuthRedirect = false,
 ): Promise<ApiResponse<T>> {
   const headers = new Headers(init.headers);
   if (init.body && !headers.has("content-type")) {
@@ -89,11 +90,14 @@ async function request<T>(
         return request<T>(path, { ...init, headers }, true);
       } catch {
         inMemoryAccessToken = null;
-        if (typeof window !== "undefined") {
+        if (typeof window !== "undefined" && !skipAuthRedirect) {
           // Customer-facing routes (cart, orders, products, etc.) must redirect
           // to the customer login, NOT the admin login.
           const loginPath = path.startsWith("/admin") ? "/admin/login" : "/login";
           window.location.href = `${loginPath}?next=${encodeURIComponent(window.location.pathname)}`;
+        } else if (typeof window !== "undefined") {
+          // skipAuthRedirect: throw so the caller can handle the 401 without redirecting.
+          throw new ApiError(401, "Authentication required");
         }
       }
     }
@@ -116,8 +120,8 @@ async function request<T>(
   return (await response.json()) as ApiResponse<T>;
 }
 
-export async function apiGet<T>(path: string): Promise<T> {
-  return (await request<T>(path)).data;
+export async function apiGet<T>(path: string, skipAuthRedirect = false): Promise<T> {
+  return (await request<T>(path, {}, false, skipAuthRedirect)).data;
 }
 
 export async function apiGetOrNull<T>(path: string): Promise<T | null> {
@@ -133,11 +137,12 @@ export async function apiSend<T>(
   method: "POST" | "PATCH" | "PUT" | "DELETE",
   path: string,
   body?: unknown,
+  skipAuthRedirect = false,
 ): Promise<ApiResponse<T>> {
   return request<T>(path, {
     method,
     body: body === undefined ? undefined : JSON.stringify(body),
-  });
+  }, false, skipAuthRedirect);
 }
 
 // For endpoints whose body is the payload itself (no { data } wrapper) —

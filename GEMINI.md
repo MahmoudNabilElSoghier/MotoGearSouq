@@ -59,6 +59,12 @@ monorepo migration, Sprint 2D auth + write wiring, and Phases 3-7 (bilingual AR/
 - Deferred: Phase 2C cart/checkout; Phase 2E (password reset, session UI,
   auth unit tests, Redis-backed rate limit, stock movements, orders admin).
 
+## Security Note (Phase 2E)
+- Google OAuth callback currently redirects with `?token=...` in the URL.
+  Frontend relies on httpOnly cookie (`mgs_rt`) for session. Task: Remove
+  token from redirect URL in a future sprint to prevent token leakage via
+  logs/history.
+
 ## Do-NOT List
 - Do not push to `main`.
 - Do not touch Phase 1 landing components.

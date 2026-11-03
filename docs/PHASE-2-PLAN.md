@@ -89,6 +89,7 @@ Deliverables:
       post-deploy edit or an env-var-driven next.config rewrite)
 - [ ] Pre-emptive refresh in `AdminNav` to silence the one-time 401 from
       `/api/auth/me` on first admin page load
+- [ ] Remove access token from Google OAuth callback redirect URL
 
 ## Tech decisions to confirm
 1. Hosted Postgres: Vercel Postgres vs Neon vs Supabase

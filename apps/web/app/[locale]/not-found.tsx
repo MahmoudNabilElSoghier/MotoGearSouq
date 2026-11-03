@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { Home } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 export default function NotFound() {
@@ -17,7 +18,10 @@ export default function NotFound() {
         </h1>
         <p className="text-muted mb-8">{t("text")}</p>
         <Button size="lg" asChild>
-          <Link href="/">{t("button")}</Link>
+          <Link href="/" className="inline-flex items-center gap-2">
+            <Home className="w-4 h-4" />
+            {t("button")}
+          </Link>
         </Button>
       </Container>
     </main>

@@ -12,7 +12,7 @@ import {
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { FormBanner } from "@/components/admin/FormBanner";
 import { Button } from "@/components/ui/Button";
-import { ArrowRight, Loader2, PackageCheck, XCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, Loader2, PackageCheck, XCircle } from "lucide-react";
 
 const statusStyles: Record<string, string> = {
   draft: "bg-bg text-muted border border-border",
@@ -95,7 +95,8 @@ export default function PurchaseDetailPage({ params }: PageProps) {
       <div className="p-8 text-center text-muted">
         {t("notFound")}
         <div className="mt-4">
-          <Link href={`/${locale}/admin/purchases`} className="text-accent hover:underline text-sm">
+          <Link href={`/${locale}/admin/purchases`} className="inline-flex items-center gap-1 text-sm text-accent hover:underline">
+            <ArrowLeft className="w-3.5 h-3.5" />
             {t("backToList")}
           </Link>
         </div>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useCart } from "@/lib/cart-store";
 import { Button } from "@/components/ui/Button";
-import { ShoppingCart, Check } from "lucide-react";
+import { ShoppingCart, Check, Minus, Plus } from "lucide-react";
 import { useLocale } from "next-intl";
 
 interface ProductAddToCartProps {
@@ -56,9 +56,9 @@ export function ProductAddToCart({ product }: ProductAddToCartProps) {
           <button
             type="button"
             onClick={() => setQty(Math.max(1, qty - 1))}
-            className="px-3 py-1.5 text-fg hover:bg-card transition-colors"
+            className="px-3 py-1.5 text-fg hover:bg-card transition-colors inline-flex items-center justify-center"
           >
-            -
+            <Minus className="w-4 h-4" />
           </button>
           <input
             id="qty"
@@ -72,9 +72,9 @@ export function ProductAddToCart({ product }: ProductAddToCartProps) {
           <button
             type="button"
             onClick={() => setQty(qty + 1)}
-            className="px-3 py-1.5 text-fg hover:bg-card transition-colors"
+            className="px-3 py-1.5 text-fg hover:bg-card transition-colors inline-flex items-center justify-center"
           >
-            +
+            <Plus className="w-4 h-4" />
           </button>
         </div>
       </div>

@@ -9,7 +9,7 @@ import { FormBanner } from "./FormBanner";
 import { brandFormSchema, type BrandFormValues, type UpdateBrandInput, type Brand } from "@motogearsouq/shared";
 import { createBrand, updateBrand, ApiError } from "@motogearsouq/api-client";
 import { useTranslations } from "next-intl";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus, Save, X } from "lucide-react";
 
 interface BrandFormProps {
   mode?: "create" | "edit";
@@ -114,8 +114,9 @@ export function BrandForm({ mode = "create", initialData, onSuccess, onCancel }:
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-fg hover:border-accent"
+        className="inline-flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-sm font-semibold text-fg hover:border-accent"
       >
+        <Plus className="w-3.5 h-3.5" />
         {t("newBtn")}
       </button>
     );
@@ -159,14 +160,17 @@ export function BrandForm({ mode = "create", initialData, onSuccess, onCancel }:
       </div>
       <Input label={t("form.description")} {...register("description")} />
       <div className="flex gap-2">
-        <Button type="submit" size="sm" disabled={isSubmitting}>
+        <Button type="submit" size="sm" disabled={isSubmitting} className="inline-flex items-center gap-1.5">
           {isSubmitting ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin ms-1 inline" />
               <span>{t("form.saving")}</span>
             </>
           ) : (
-            <span>{tCommon("save")}</span>
+            <>
+              <Save className="w-3.5 h-3.5" />
+              <span>{tCommon("save")}</span>
+            </>
           )}
         </Button>
         <Button
@@ -178,7 +182,9 @@ export function BrandForm({ mode = "create", initialData, onSuccess, onCancel }:
             setOpen(false);
             if (onCancel) onCancel();
           }}
+          className="inline-flex items-center gap-1.5"
         >
+          <X className="w-3.5 h-3.5" />
           {tCommon("cancel")}
         </Button>
       </div>

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { Loader2, PackageSearch, ShoppingBag } from "lucide-react";
+import { Loader2, PackageSearch, ShoppingBag, ArrowLeft, ArrowRight } from "lucide-react";
 import type { Order } from "@motogearsouq/shared";
 import { useCustomerAuth } from "@/lib/customer-auth-store";
 import { Card } from "@/components/ui/Card";
@@ -98,9 +98,10 @@ export default function CustomerOrdersPage() {
           <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
           <Link
             href={`/${locale}/account`}
-            className="text-sm font-semibold text-accent hover:underline"
+            className="inline-flex items-center gap-1 text-sm font-semibold text-accent hover:underline"
           >
-            ← {tAccount("title")}
+            <ArrowLeft className="w-3.5 h-3.5" />
+            {tAccount("title")}
           </Link>
         </div>
 
@@ -134,7 +135,10 @@ export default function CustomerOrdersPage() {
               <ShoppingBag className="mx-auto mb-4 h-12 w-12 text-muted/50" />
               <p className="mb-6 text-muted">{t("empty")}</p>
               <Button asChild>
-                <Link href={`/${locale}/products`}>{t("browseStore")}</Link>
+                <Link href={`/${locale}/products`} className="inline-flex items-center gap-2">
+                  <ArrowRight className="w-3.5 h-3.5" />
+                  {t("browseStore")}
+                </Link>
               </Button>
             </div>
           </Card>
@@ -181,7 +185,11 @@ export default function CustomerOrdersPage() {
                         {statusLabel(order.status)}
                       </span>
                       <Button asChild variant="secondary" size="sm">
-                        <Link href={`/${locale}/orders/${order.orderNumber}`}>
+                        <Link
+                          href={`/${locale}/orders/${order.orderNumber}`}
+                          className="inline-flex items-center gap-2"
+                        >
+                          <ArrowRight className="w-3.5 h-3.5" />
                           {t("viewDetails")}
                         </Link>
                       </Button>

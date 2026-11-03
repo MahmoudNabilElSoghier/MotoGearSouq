@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { getBrands, getLowStockItems, getOrders, getProducts, getPendingCustomersCount, type ProductPage, type OrderPage } from "@motogearsouq/api-client";
 import type { Brand, BranchInventory, Order } from "@motogearsouq/shared";
 import { useLocale, useTranslations } from "next-intl";
-import { Loader2, Users } from "lucide-react";
+import { Loader2, Users, Plus, Home } from "lucide-react";
 
 export default function AdminHomePage() {
   const t = useTranslations("admin.dashboard");
@@ -91,10 +91,16 @@ export default function AdminHomePage() {
         <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
         <div className="flex gap-3">
           <Button asChild size="sm">
-            <Link href="/admin/products/new">{t("newProduct")}</Link>
+            <Link href="/admin/products/new" className="inline-flex items-center gap-2">
+              <Plus className="w-4 h-4" />
+              {t("newProduct")}
+            </Link>
           </Button>
           <Button asChild size="sm" variant="secondary">
-            <Link href="/">{t("viewSite")}</Link>
+            <Link href="/" className="inline-flex items-center gap-2">
+              <Home className="w-4 h-4" />
+              {t("viewSite")}
+            </Link>
           </Button>
         </div>
       </div>

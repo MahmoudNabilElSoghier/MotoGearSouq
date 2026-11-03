@@ -9,7 +9,7 @@ import {
   type PaymentTransactionPage,
 } from "@motogearsouq/api-client";
 import Link from "next/link";
-import { Loader2, TrendingUp, DollarSign, ShoppingCart, Users, AlertCircle, ArrowRight, BarChart3, CreditCard } from "lucide-react";
+import { Loader2, TrendingUp, DollarSign, ShoppingCart, Users, AlertCircle, ArrowRight, BarChart3, CreditCard, Clock } from "lucide-react";
 
 export default function AdminReportsDashboardPage() {
   const t = useTranslations("admin.reports");
@@ -77,6 +77,7 @@ export default function AdminReportsDashboardPage() {
                 period === p ? "bg-accent text-fg shadow-sm" : "text-muted hover:text-fg"
               }`}
             >
+              <Clock className="w-3 h-3 mr-1.5 shrink-0" />
               {t(`period.last${p.replace("d", "Days").replace("365Days", "365Days")}`)}
             </button>
           ))}

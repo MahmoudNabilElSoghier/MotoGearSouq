@@ -9,7 +9,7 @@ import { FormBanner } from "@/components/admin/FormBanner";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { getProducts, deleteProduct, totalStock, type ProductPage } from "@motogearsouq/api-client";
 import type { Product } from "@motogearsouq/shared";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, ArrowLeft, ArrowRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 export default function AdminProductsPage() {
@@ -80,7 +80,10 @@ export default function AdminProductsPage() {
           </p>
         </div>
         <Button asChild size="sm">
-          <Link href="/admin/products/new">{t("add")}</Link>
+          <Link href="/admin/products/new" className="inline-flex items-center gap-2">
+            <Plus className="w-3.5 h-3.5" />
+            {t("add")}
+          </Link>
         </Button>
       </div>
 
@@ -171,15 +174,17 @@ export default function AdminProductsPage() {
                           <td className="px-4 py-3 flex gap-3 text-sm">
                             <Link
                               href={`/admin/products/${product.id}/edit`}
-                              className="font-semibold text-accent hover:underline"
+                              className="inline-flex items-center gap-1 font-semibold text-accent hover:underline"
                             >
+                              <Pencil className="w-3.5 h-3.5 shrink-0" />
                               {tCommon("edit")}
                             </Link>
                             <button
                               type="button"
                               onClick={() => setDeleteTarget(product)}
-                              className="text-red-400 hover:text-red-300"
+                              className="inline-flex items-center gap-1 text-red-400 hover:text-red-300"
                             >
+                              <Trash2 className="w-3.5 h-3.5 shrink-0" />
                               {tCommon("delete")}
                             </button>
                           </td>
@@ -200,12 +205,13 @@ export default function AdminProductsPage() {
               <Link
                 href={pageHref(result.page - 1)}
                 aria-disabled={result.page <= 1}
-                className={`rounded-lg border border-border px-4 py-2 font-semibold ${
+                className={`rounded-lg border border-border px-4 py-2 font-semibold inline-flex items-center gap-1.5 ${
                   result.page <= 1
                     ? "pointer-events-none opacity-40"
                     : "text-fg hover:border-accent"
                 }`}
               >
+                <ArrowLeft className={`w-3.5 h-3.5 ${result.page <= 1 ? "opacity-40" : ""}`} />
                 {tCommon("prev")}
               </Link>
               <span className="text-muted">
@@ -214,13 +220,14 @@ export default function AdminProductsPage() {
               <Link
                 href={pageHref(result.page + 1)}
                 aria-disabled={result.page >= result.totalPages}
-                className={`rounded-lg border border-border px-4 py-2 font-semibold ${
+                className={`rounded-lg border border-border px-4 py-2 font-semibold inline-flex items-center gap-1.5 ${
                   result.page >= result.totalPages
                     ? "pointer-events-none opacity-40"
                     : "text-fg hover:border-accent"
                 }`}
               >
                 {tCommon("next")}
+                <ArrowRight className={`w-3.5 h-3.5 ${result.page >= result.totalPages ? "opacity-40" : ""}`} />
               </Link>
             </nav>
           )}

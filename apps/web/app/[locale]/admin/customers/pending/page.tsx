@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { RejectReasonModal } from "@/components/admin/RejectReasonModal";
 import { FormBanner } from "@/components/admin/FormBanner";
-import { Loader2, Check, X, Store } from "lucide-react";
+import { Loader2, Check, X, Store, Users, ArrowLeft } from "lucide-react";
 
 type Banner = { type: "success" | "error"; message: string } | null;
 
@@ -124,7 +124,10 @@ export default function AdminPendingCustomersPage() {
           )}
         </div>
         <Button asChild size="sm" variant="secondary">
-          <Link href={`/${locale}/admin/customers`}>{t("title")}</Link>
+          <Link href={`/${locale}/admin/customers`} className="inline-flex items-center gap-2">
+            <Users className="w-3.5 h-3.5" />
+            {t("title")}
+          </Link>
         </Button>
       </div>
 
@@ -141,7 +144,10 @@ export default function AdminPendingCustomersPage() {
           <Store className="mx-auto h-10 w-10 text-muted/50" />
           <p className="text-muted">{tPending("empty")}</p>
           <Button asChild variant="secondary" size="sm">
-            <Link href={`/${locale}/admin/customers`}>{tPending("emptyCta")}</Link>
+            <Link href={`/${locale}/admin/customers`} className="inline-flex items-center gap-2">
+              <ArrowLeft className="w-3.5 h-3.5" />
+              {tPending("emptyCta")}
+            </Link>
           </Button>
         </div>
       ) : (

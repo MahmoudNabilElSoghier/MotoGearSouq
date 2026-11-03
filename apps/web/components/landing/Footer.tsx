@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { company } from "@/lib/config";
 import { Container } from "@/components/ui/Container";
+import { Home, Bike, Wrench, Tag, MapPin, Mail, Shield, FileText } from "lucide-react";
 import { MessageCircle } from "lucide-react";
 
 export function Footer() {
@@ -9,13 +10,22 @@ export function Footer() {
   const tNav = useTranslations("navigation");
   const tCommon = useTranslations("common");
 
+  const NAV_ICONS: Record<string, React.ElementType> = {
+    home: Home,
+    models: Bike,
+    parts: Wrench,
+    brands: Tag,
+    branches: MapPin,
+    contact: Mail,
+  };
+
   const navItems = [
-    { label: tNav("home"), href: "/#hero" },
-    { label: tNav("models"), href: "/#categories" },
-    { label: tNav("parts"), href: "/products" },
-    { label: tNav("brands"), href: "/brands" },
-    { label: tNav("branches"), href: "/#branches" },
-    { label: tNav("contact"), href: "/#contact" },
+    { label: tNav("home"), href: "/#hero", icon: "home" },
+    { label: tNav("models"), href: "/#categories", icon: "models" },
+    { label: tNav("parts"), href: "/products", icon: "parts" },
+    { label: tNav("brands"), href: "/brands", icon: "brands" },
+    { label: tNav("branches"), href: "/#branches", icon: "branches" },
+    { label: tNav("contact"), href: "/#contact", icon: "contact" },
   ];
 
   return (
@@ -44,32 +54,38 @@ export function Footer() {
             <h3 className="text-fg font-bold text-base">{tFooter("quickLinks")}</h3>
             <nav aria-label={tFooter("quickLinks")}>
               <ul className="space-y-2.5">
-              {navItems.map((item) => (
-                <li key={item.href + item.label}>
+                {navItems.map((item) => {
+                  const Icon = NAV_ICONS[item.icon];
+                  return (
+                    <li key={item.href + item.label}>
+                      <Link
+                        href={item.href}
+                        className="inline-flex items-center gap-2 text-sm text-muted hover:text-fg transition-colors"
+                      >
+                        <Icon className="w-4 h-4 shrink-0" />
+                        {item.label}
+                      </Link>
+                    </li>
+                  );
+                })}
+                <li>
                   <Link
-                    href={item.href}
-                    className="text-sm text-muted hover:text-fg transition-colors"
+                    href="/privacy"
+                    className="inline-flex items-center gap-2 text-sm text-muted hover:text-fg transition-colors"
                   >
-                    {item.label}
+                    <Shield className="w-4 h-4 shrink-0" />
+                    {tFooter("privacy")}
                   </Link>
                 </li>
-              ))}
-              <li>
-                <Link
-                  href="/privacy"
-                  className="text-sm text-muted hover:text-fg transition-colors"
-                >
-                  {tFooter("privacy")}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/terms"
-                  className="text-sm text-muted hover:text-fg transition-colors"
-                >
-                  {tFooter("terms")}
-                </Link>
-              </li>
+                <li>
+                  <Link
+                    href="/terms"
+                    className="inline-flex items-center gap-2 text-sm text-muted hover:text-fg transition-colors"
+                  >
+                    <FileText className="w-4 h-4 shrink-0" />
+                    {tFooter("terms")}
+                  </Link>
+                </li>
               </ul>
             </nav>
           </div>

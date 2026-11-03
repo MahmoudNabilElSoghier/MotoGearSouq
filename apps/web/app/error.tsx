@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { Home } from "lucide-react";
 
 export default function Error({
   error,
@@ -31,7 +32,10 @@ export default function Error({
             حاول تاني
           </Button>
           <Button variant="secondary" size="lg" asChild>
-            <Link href="/">ارجع للرئيسية</Link>
+            <Link href="/" className="inline-flex items-center gap-2">
+              <Home className="w-4 h-4" />
+              ارجع للرئيسية
+            </Link>
           </Button>
         </div>
       </Container>

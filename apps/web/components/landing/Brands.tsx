@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { FadeIn } from "@/components/ui/FadeIn";
+import { ArrowRight } from "lucide-react";
 
 export function Brands() {
   const t = useTranslations("brands");
@@ -53,7 +54,10 @@ export function Brands() {
 
         <div className="flex justify-center mt-12">
           <Button variant="primary" size="lg" asChild>
-            <Link href={`/${locale}/brands`}>{tc("cta.browseAllBrands")}</Link>
+            <Link href={`/${locale}/brands`} className="inline-flex items-center gap-2">
+              <ArrowRight className="w-4 h-4" />
+              {tc("cta.browseAllBrands")}
+            </Link>
           </Button>
         </div>
       </Container>

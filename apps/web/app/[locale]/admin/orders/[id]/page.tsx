@@ -15,7 +15,7 @@ import {
 import type { Order } from "@motogearsouq/shared";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { Loader2, ArrowLeft, ArrowRight, Printer, CheckCircle2, AlertCircle } from "lucide-react";
+import { Loader2, ArrowLeft, ArrowRight, Printer, CheckCircle2, AlertCircle, X, CreditCard, RefreshCw } from "lucide-react";
 
 const statusStyles: Record<string, string> = {
   pending: "bg-amber-500/15 text-amber-400 border-amber-500/30",
@@ -184,7 +184,10 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
       <div className="p-8 text-center text-muted">
         <p>Order not found</p>
         <Button variant="secondary" className="mt-4" asChild>
-          <Link href={`/${locale}/admin/orders`}>Back to orders</Link>
+          <Link href={`/${locale}/admin/orders`} className="inline-flex items-center gap-2">
+            <ArrowLeft className="w-4 h-4" />
+            Back to orders
+          </Link>
         </Button>
       </div>
     );
@@ -263,7 +266,8 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
               disabled={updating || !targetStatus}
               onClick={handleUpdateStatus}
             >
-              {updating ? <Loader2 className="w-4 h-4 animate-spin" /> : t("statusActions.update")}
+              {updating ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+              {t("statusActions.update")}
             </Button>
           </div>
         )}
@@ -455,7 +459,8 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
                 onClick={handleMarkPaid}
                 className="bg-emerald-600 hover:bg-emerald-700 text-white"
               >
-                {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : tPayment("markPaid")}
+                {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
+                {tPayment("markPaid")}
               </Button>
             )}
 
@@ -467,6 +472,7 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
                 onClick={() => setShowRefundModal(true)}
                 className="border-red-500/30 text-red-400 hover:bg-red-500/10"
               >
+                {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
                 {tPayment("refund")}
               </Button>
             )}
@@ -517,7 +523,8 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
                 />
               </div>
               <div className="flex justify-end gap-3 pt-2">
-                <Button variant="secondary" onClick={() => setShowRefundModal(false)}>
+                <Button variant="secondary" onClick={() => setShowRefundModal(false)} className="inline-flex items-center gap-2">
+                  <X className="w-4 h-4" />
                   {isAr ? "إلغاء" : "Cancel"}
                 </Button>
                 <Button

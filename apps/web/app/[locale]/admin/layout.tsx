@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { AdminNav } from "@/components/admin/AdminNav";
 
@@ -27,7 +28,7 @@ export default async function AdminLayout({
   children: ReactNode;
   params: Promise<{ locale: string }>;
 }) {
-  await params;
+  const { locale } = await params;
   const t = await getTranslations("admin.layout");
   const dbConfigured = !!process.env.DATABASE_URL;
 
@@ -35,6 +36,14 @@ export default async function AdminLayout({
     <div className="flex min-h-screen flex-1">
       <aside className="w-64 shrink-0 border-e border-border bg-card flex flex-col sticky top-0 h-screen">
         <div className="space-y-2 border-b border-border p-4 shrink-0">
+          <Image
+            src={locale === "ar" ? "/brand/Logo_Icon_Name_AR_Large.png" : "/brand/Logo_Icon_Name_EN_Large.png"}
+            alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
+            width={120}
+            height={48}
+            className="max-w-full h-auto max-h-16 object-contain mb-2"
+            priority
+          />
           <p className="text-lg font-bold text-fg">{t("panelName")}</p>
           {!dbConfigured && (
             <span className="inline-block rounded-full bg-amber-500/15 px-3 py-1 text-xs font-semibold text-amber-400">

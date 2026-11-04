@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { ArrowLeft, Loader2, Mail } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -55,6 +56,14 @@ export default function ForgotPasswordPage() {
       <div className="mx-auto w-full max-w-md">
         <Card padding="lg" className="shadow-2xl">
           <div className="mb-8">
+            <Image
+              src={locale === "ar" ? "/brand/Logo_Icon_Name_Desc_AR_Large.png" : "/brand/Logo_Icon_Name_Desc_EN_Large.png"}
+              alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
+              width={250}
+              height={100}
+              className="max-w-[250px] w-full h-auto object-contain mx-auto mb-6"
+              priority
+            />
             <button
               type="button"
               onClick={() => router.push(`/${locale}/login`)}

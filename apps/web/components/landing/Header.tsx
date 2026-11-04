@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X, ShoppingCart, Home, Bike, Wrench, Tag, MapPin, Mail } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { company } from "@/lib/config";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { LocaleSwitcher } from "@/components/ui/LocaleSwitcher";
@@ -57,13 +57,15 @@ export function Header() {
       <Container size="xl" as="div">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link href={`/${locale}`} className="flex flex-col">
-            <span className="text-xl md:text-2xl font-extrabold tracking-wider text-accent">
-              {company.name}
-            </span>
-            <span className="text-xs text-muted font-medium">
-              {tHeader("logoSubtitle")}
-            </span>
+          <Link href={`/${locale}`} className="flex flex-col items-start">
+            <Image
+              src={locale === "ar" ? "/brand/Logo_Icon_Name_AR_Large.png" : "/brand/Logo_Icon_Name_EN_Large.png"}
+              alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
+              width={150}
+              height={60}
+              className="h-12 w-auto object-contain"
+              priority
+            />
           </Link>
 
           {/* Desktop Nav */}

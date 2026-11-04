@@ -13,8 +13,13 @@
   --color-fg: #111827;
 
   /* Brand colors — same in both modes */
-  --color-accent: #e63946;
-  --color-accent-strong: #c1121f;
+  --color-brand-red: #D90429;
+  --color-brand-gold: #FCA311;
+  --color-brand-silver: #CED4DA;
+  --color-brand-dark: #0A0A0A;
+
+  --color-accent: var(--color-brand-red);
+  --color-accent-strong: var(--color-brand-red);
 }
 
 .dark {
@@ -35,6 +40,10 @@
   --color-accent-strong: var(--color-accent-strong);
   --color-muted: var(--color-muted);
   --color-fg: var(--color-fg);
+  --color-brand-red: var(--color-brand-red);
+  --color-brand-gold: var(--color-brand-gold);
+  --color-brand-silver: var(--color-brand-silver);
+  --color-brand-dark: var(--color-brand-dark);
   --font-sans: var(--font-cairo), system-ui, sans-serif;
 }
 

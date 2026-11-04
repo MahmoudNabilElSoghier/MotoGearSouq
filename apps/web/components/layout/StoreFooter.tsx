@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 import { MessageCircle } from "lucide-react";
 import { company } from "@/lib/config";
@@ -8,7 +9,6 @@ export async function StoreFooter() {
   const locale = await getLocale();
   const tFooter = await getTranslations("footer");
   const tNav = await getTranslations("navigation");
-  const tCommon = await getTranslations("common");
 
   const navItems = [
     { label: tNav("shop"), href: `/${locale}/products` },
@@ -25,13 +25,14 @@ export async function StoreFooter() {
           <div className="md:col-span-2 space-y-4">
             <div>
               <Link href={`/${locale}`} className="inline-block">
-                <span className="text-2xl font-extrabold tracking-wider text-accent">
-                  {company.name}
-                </span>
+                <Image
+                  src={locale === "ar" ? "/brand/Logo_Icon_Name_Desc_AR_Large.png" : "/brand/Logo_Icon_Name_Desc_EN_Large.png"}
+                  alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
+                  width={200}
+                  height={80}
+                  className="h-20 w-auto object-contain"
+                />
               </Link>
-              <p className="text-xs text-muted font-medium mt-3">
-                {tCommon("tagline")}
-              </p>
             </div>
           </div>
 

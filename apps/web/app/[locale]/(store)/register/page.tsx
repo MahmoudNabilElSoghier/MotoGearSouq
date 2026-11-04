@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
-import { Eye, EyeOff, Loader2, UserPlus, ArrowRight, Home, LogIn } from "lucide-react";
+import { Eye, EyeOff, Loader2, ArrowRight, Home, LogIn } from "lucide-react";
 import {
   createRetailCustomerSchema,
   createWholesaleCustomerSchema,
@@ -110,9 +111,14 @@ export default function RegisterPage() {
       <div className="mx-auto w-full max-w-lg">
         <Card padding="lg" className="shadow-2xl">
           <div className="mb-6 text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent">
-              <UserPlus className="h-6 w-6" />
-            </div>
+            <Image
+              src={locale === "ar" ? "/brand/Logo_Icon_Name_Desc_AR_Large.png" : "/brand/Logo_Icon_Name_Desc_EN_Large.png"}
+              alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
+              width={250}
+              height={100}
+              className="max-w-[250px] w-full h-auto object-contain mx-auto"
+              priority
+            />
             <h1 className="text-2xl font-bold text-fg">{t("title")}</h1>
           </div>
 

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { useTranslations, useLocale } from "next-intl";
 import { company } from "@/lib/config";
 import { Container } from "@/components/ui/Container";
 import { Home, Bike, Wrench, Tag, MapPin, Mail, Shield, FileText } from "lucide-react";
@@ -8,7 +9,7 @@ import { MessageCircle } from "lucide-react";
 export function Footer() {
   const tFooter = useTranslations("footer");
   const tNav = useTranslations("navigation");
-  const tCommon = useTranslations("common");
+  const locale = useLocale();
 
   const NAV_ICONS: Record<string, React.ElementType> = {
     home: Home,
@@ -36,13 +37,14 @@ export function Footer() {
           <div className="md:col-span-2 space-y-4">
             <div>
               <Link href="/" className="inline-block">
-                <span className="text-2xl font-extrabold tracking-wider text-accent">
-                  {company.name}
-                </span>
+                <Image
+                  src={locale === "ar" ? "/brand/Logo_Icon_Name_Desc_AR_Large.png" : "/brand/Logo_Icon_Name_Desc_EN_Large.png"}
+                  alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
+                  width={200}
+                  height={80}
+                  className="h-20 w-auto object-contain"
+                />
               </Link>
-              <p className="text-xs text-muted font-medium mt-3">
-                {tCommon("tagline")}
-              </p>
             </div>
             <p className="text-muted text-sm leading-relaxed max-w-sm">
               {tFooter("tagline")}

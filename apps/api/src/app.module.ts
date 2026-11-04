@@ -11,6 +11,7 @@ import { DocumentsModule } from "./documents/documents.module";
 import { EmployeesModule } from "./employees/employees.module";
 import { HealthModule } from "./health/health.module";
 import { InventoryModule } from "./inventory/inventory.module";
+import { LandingModule } from "./landing/landing.module";
 import { ModelsModule } from "./models/models.module";
 import { OrdersModule } from "./orders/orders.module";
 import { PrismaModule } from "./prisma/prisma.module";
@@ -38,6 +39,7 @@ import { PaymentsModule } from "./payments/payments.module";
     DocumentsModule,
     EmployeesModule,
     InventoryModule,
+    LandingModule,
     ModelsModule,
     OrdersModule,
     ProductsModule,

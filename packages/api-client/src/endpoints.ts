@@ -5,6 +5,8 @@
   Cart,
   CartItem,
   Employee,
+  LandingCard,
+  LandingSection,
   MachineModel,
   Order,
   PartCategory,
@@ -284,6 +286,92 @@ export const removeCartItem = (
   skipAuthRedirect = false,
 ): Promise<ApiResponse<boolean>> =>
   apiSend<boolean>("DELETE", `/cart/items/${encode(id)}`, undefined, skipAuthRedirect);
+
+// ---------- Landing page CMS ----------
+export interface LandingSectionRow {
+  id: string;
+  slug: string;
+  titleAr: string;
+  titleEn: string;
+  subtitleAr: string | null;
+  subtitleEn: string | null;
+  ctaLabelAr: string;
+  ctaLabelEn: string;
+  ctaLink: string;
+  order: number;
+  createdAt: string;
+  updatedAt: string;
+  cards: LandingCardRow[];
+}
+
+export interface LandingCardRow {
+  id: string;
+  sectionId: string;
+  titleAr: string;
+  titleEn: string;
+  descAr: string | null;
+  descEn: string | null;
+  link: string;
+  order: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export const getLandingSections = (): Promise<LandingSectionRow[]> =>
+  apiGet<LandingSectionRow[]>("/landing");
+
+export interface UpdateLandingSectionInput {
+  slug?: string;
+  titleAr?: string;
+  titleEn?: string;
+  subtitleAr?: string | null;
+  subtitleEn?: string | null;
+  ctaLabelAr?: string;
+  ctaLabelEn?: string;
+  ctaLink?: string;
+  order?: number;
+}
+
+export const updateLandingSection = (
+  id: string,
+  input: UpdateLandingSectionInput,
+): Promise<ApiResponse<LandingSectionRow | null>> =>
+  apiSend<LandingSectionRow | null>("PUT", `/landing/${encode(id)}`, input);
+
+export interface CreateLandingCardInput {
+  sectionId: string;
+  titleAr: string;
+  titleEn: string;
+  descAr?: string | null;
+  descEn?: string | null;
+  link: string;
+  order?: number;
+}
+
+export const addLandingCard = (
+  input: CreateLandingCardInput,
+): Promise<ApiResponse<LandingCardRow>> =>
+  apiSend<LandingCardRow>("POST", `/landing/${encode(input.sectionId)}/cards`, input);
+
+export interface UpdateLandingCardInput {
+  titleAr?: string;
+  titleEn?: string;
+  descAr?: string | null;
+  descEn?: string | null;
+  link?: string;
+  order?: number;
+}
+
+export const updateLandingCard = (
+  id: string,
+  input: UpdateLandingCardInput,
+): Promise<ApiResponse<LandingCardRow | null>> =>
+  apiSend<LandingCardRow | null>("PATCH", `/landing/cards/${encode(id)}`, input);
+
+export const removeLandingCard = (
+  id: string,
+): Promise<ApiResponse<{ id: string }>> =>
+  apiSend<{ id: string }>("DELETE", `/landing/cards/${encode(id)}`);
 
 // ---------- ERP: suppliers, purchase orders, stock movements (Sprint 2) ----------
 

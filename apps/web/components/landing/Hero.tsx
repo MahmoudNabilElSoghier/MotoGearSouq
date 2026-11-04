@@ -1,68 +1,79 @@
+import Image from "next/image";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { company } from "@/lib/config";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { ArrowRight, Phone } from "lucide-react";
+import { ArrowRight, ShoppingBag } from "lucide-react";
 
 export function Hero() {
   const t = useTranslations("hero");
   const tc = useTranslations("categories");
   const locale = useLocale();
+  const isAr = locale === "ar";
 
   return (
     <section
       id="hero"
-      className="relative min-h-[85vh] md:min-h-[90vh] flex items-center overflow-hidden scroll-mt-24"
+      className="relative min-h-screen flex items-center overflow-hidden scroll-mt-24"
     >
-      {/* BackgroundImage placeholder */}
-      <div className="absolute inset-0 bg-gradient-to-l from-bg via-bg/70 to-bg/30">
-        {/* TODO: replace with next/image of motorcycle hero shot */}
-      </div>
+      {/* Background image */}
+      <Image
+        src="/images/hero-bg.jpg"
+        alt="Hero background"
+        fill
+        sizes="100vw"
+        objectFit="cover"
+        className="object-cover"
+        priority
+      />
 
-      {/* Radial accent overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(230,57,70,0.15),transparent_60%)]" />
+      {/* Dark overlay for text legibility */}
+      <div className="absolute inset-0 bg-black/60" />
 
-      <Container size="xl" className="relative z-10 py-20 md:py-32">
-        <div className="max-w-2xl text-center md:text-start">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-6">
-            {t("headline")}
+      {/* Bottom gradient fade to blend into next section */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
+
+      <Container size="xl" className="relative z-10 flex flex-col items-center justify-center py-20 md:py-32 text-center md:text-right">
+        <div className="max-w-2xl md:max-w-3xl">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-8 text-white">
+            <span className="text-brand-red">{isAr ? "أداء" : "Performance"}</span>
+            <span className="text-white">{isAr ? "، " : ", "}</span>
+            <span className="text-brand-gold">{isAr ? "قطع غيار أصلية" : "genuine parts"}</span>
+            <span className="text-white">{isAr ? "، وثقة " : ", "}</span>
+            <span className="text-brand-red">{isAr ? "السعد" : "ELSAAD trust"}</span>
           </h1>
-          <p className="text-lg md:text-xl text-muted leading-relaxed mb-8 max-w-xl">
+          <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-10 max-w-2xl mx-auto md:mx-0">
             {t("subheadline")}
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8 justify-center sm:justify-start">
-            <Button variant="primary" size="lg" asChild className="inline-flex items-center justify-center gap-2">
+          <div className="flex flex-col sm:flex-row gap-4 mt-10 justify-center">
+            <Button
+              variant="primary"
+              size="lg"
+              asChild
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold bg-brand-red hover:bg-red-700"
+            >
               <Link href={`/${locale}/products`}>
-                <ArrowRight className="w-4 h-4" />
+                <ShoppingBag className="w-5 h-5" />
                 {tc("cta.enterStore")}
               </Link>
             </Button>
-            <Button variant="secondary" size="lg" asChild className="inline-flex items-center justify-center gap-2">
+            <Button
+              variant="secondary"
+              size="lg"
+              asChild
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold border-2 border-brand-silver text-white hover:bg-white/10"
+            >
               <a
                 href={company.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Phone className="w-4 h-4" />
+                <ArrowRight className="w-5 h-5" />
                 {t("ctaSecondary")}
               </a>
             </Button>
           </div>
-          {/* <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 justify-center sm:justify-start">
-            <Button variant="primary" size="lg" asChild className="inline-flex items-center justify-center gap-2">
-              <Link href="#categories">
-                <ArrowRight className="w-4 h-4" />
-                {t("ctaPrimary")}
-              </Link>
-            </Button>
-            <Button variant="secondary" size="lg" asChild className="inline-flex items-center justify-center gap-2">
-              <a href="#brands">
-                <ArrowRight className="w-4 h-4" />
-                {tc("cta.browseAllBrands")}
-              </a>
-            </Button>
-          </div> */}
         </div>
       </Container>
     </section>

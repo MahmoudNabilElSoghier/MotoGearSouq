@@ -118,7 +118,8 @@
         "title": "Accessories",
         "description": "Everything your bike needs — helmets, riding gear, and protective equipment"
       }
-    }
+    },
+    "noSections": "No categories configured yet. Add them from the Admin → Landing Page CMS."
   },
   "whyUs": {
     "title": "Why choose MotoGearSouq?",
@@ -444,11 +445,35 @@
       "suppliers": "Suppliers",
       "purchases": "Purchase Orders",
       "stockMovements": "Stock Movements",
+      "landing": "Landing Page",
       "reports": "Reports",
       "breakEven": "Break-Even",
       "abcAnalysis": "ABC Analysis",
       "deadStock": "Dead Stock",
       "stockValuation": "Stock Valuation"
+    },
+    "landing": {
+      "title": "Landing Page CMS",
+      "subtitle": "Manage sections, cards, and CTAs shown on the store landing page.",
+      "empty": "No landing sections found.",
+      "edit": "Edit",
+      "collapse": "Collapse",
+      "save": "Save changes",
+      "cardCount": "{count} cards",
+      "fields": {
+        "titleAr": "Title (Arabic)",
+        "titleEn": "Title (English)",
+        "subtitleAr": "Subtitle (Arabic)",
+        "subtitleEn": "Subtitle (English)",
+        "ctaLabelAr": "CTA label (Arabic)",
+        "ctaLabelEn": "CTA label (English)",
+        "ctaLink": "CTA link",
+        "order": "Order"
+      },
+      "cards": {
+        "title": "Cards",
+        "add": "Add card"
+      }
     },
     "reports": {
       "title": "Financial Reports & Intelligence",

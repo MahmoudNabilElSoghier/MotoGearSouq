@@ -1,6 +1,7 @@
 import { Hero } from "@/components/landing/Hero";
 import { TrustBar } from "@/components/landing/TrustBar";
 import { Categories } from "@/components/landing/Categories";
+import { ShowroomGallery } from "@/components/landing/ShowroomGallery";
 import { WhyUs } from "@/components/landing/WhyUs";
 import { Brands } from "@/components/landing/Brands";
 import { Gallery } from "@/components/landing/Gallery";
@@ -14,6 +15,7 @@ export default function Home() {
       <Hero />
       <TrustBar />
       <Categories />
+      <ShowroomGallery />
       <WhyUs />
       <Brands />
       <Gallery />

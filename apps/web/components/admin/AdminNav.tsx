@@ -30,6 +30,7 @@ export function AdminNav() {
     { href: "/admin/suppliers", label: t("suppliers") },
     { href: "/admin/purchases", label: t("purchases") },
     { href: "/admin/stock-movements", label: t("stockMovements") },
+    { href: "/admin/landing", label: t("landing") },
     { href: "/admin/reports", label: t("reports") },
     { href: "/admin/reports/break-even", label: t("breakEven") },
     { href: "/admin/reports/abc", label: t("abcAnalysis") },

@@ -101,7 +101,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={tFooter("social.whatsapp")}
-                className="w-10 h-10 rounded-lg bg-bg border border-border flex items-center justify-center text-muted hover:text-accent hover:border-accent transition-colors"
+                className="w-10 h-10 rounded-lg bg-[#25D366] flex items-center justify-center text-white hover:bg-[#20bd5a] transition-colors"
               >
                 <MessageCircle className="w-5 h-5" />
               </a>

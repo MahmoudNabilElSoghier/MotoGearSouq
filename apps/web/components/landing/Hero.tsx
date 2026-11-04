@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { company } from "@/lib/config";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { ArrowRight, ShoppingBag } from "lucide-react";
+import { MessageCircle, ShoppingBag } from "lucide-react";
 
 export function Hero() {
   const t = useTranslations("hero");
@@ -62,14 +62,14 @@ export function Hero() {
               variant="secondary"
               size="lg"
               asChild
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold bg-black/50 backdrop-blur-sm text-white border border-white/20 hover:bg-black/70 transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold bg-[#25D366] text-white hover:bg-[#20bd5a] border-none rounded-lg transition-colors"
             >
               <a
                 href={company.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <ArrowRight className="w-5 h-5" />
+                <MessageCircle className="w-5 h-5" />
                 {t("ctaSecondary")}
               </a>
             </Button>

@@ -159,7 +159,7 @@ export function Contact() {
                     </div>
                   </div>
                 </div>
-              <Button variant="secondary" size="sm" asChild className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold hover:bg-[#20bd5a] border-none rounded-lg transition-colors">
+              <Button variant="secondary" size="sm" asChild className="inline-flex items-center justify-center gap-2 !bg-[#25D366] !text-white font-bold hover:!bg-[#20bd5a] border-none rounded-lg transition-colors">
                 <a href={company.whatsappUrl} target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="w-4 h-4" />
                   <span>{t("messageUs")}</span>

@@ -24,19 +24,19 @@ export function ShowroomGallery() {
   return (
     <section
       id="showroom"
-      className="py-20 md:py-28 bg-brand-dark border-y border-brand-silver/20 scroll-mt-24"
+      className="py-20 md:py-28 bg-white dark:bg-brand-dark border-y border-border dark:border-brand-silver/20 scroll-mt-24"
     >
       {/* Subtle radial gradient decoration */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(252,163,17,0.10),transparent_70%)] pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(217,4,41,0.08),transparent_70%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(252,163,17,0.05),transparent_70%)] dark:opacity-20 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(217,4,41,0.05),transparent_70%)] dark:opacity-20 pointer-events-none" />
 
       <Container size="xl" className="relative z-10">
         <FadeIn>
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-fg mb-4">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-4">
               {t("title")}
             </h2>
-            <p className="text-muted text-lg">
+            <p className="text-gray-600 dark:text-gray-400 text-lg">
               {t("subtitle")}
             </p>
           </div>
@@ -53,9 +53,9 @@ export function ShowroomGallery() {
                 type="button"
                 onClick={() => setSelectedIndex(index)}
                 aria-label={t("viewImage", { n: index + 1 })}
-                className="group relative block w-full h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-dark"
+                className="group relative block w-full h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-brand-dark"
               >
-                <div className="overflow-hidden rounded-xl border border-white/10 group-hover:border-brand-gold/50 transition-colors duration-300 aspect-[4/3] bg-brand-dark">
+                <div className="overflow-hidden rounded-xl border border-black/10 dark:border-white/10 group-hover:border-brand-gold/50 transition-colors duration-300 aspect-[4/3] bg-white dark:bg-brand-dark">
                   <Image
                     src={src}
                     alt={t("viewImage", { n: index + 1 })}

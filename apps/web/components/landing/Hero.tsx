@@ -62,7 +62,7 @@ export function Hero() {
               variant="secondary"
               size="lg"
               asChild
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold border-2 border-brand-silver text-white hover:bg-white/10"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold bg-black/50 backdrop-blur-sm text-white border border-white/20 hover:bg-black/70 transition-colors"
             >
               <a
                 href={company.whatsappUrl}

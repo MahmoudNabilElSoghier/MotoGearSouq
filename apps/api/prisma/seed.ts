@@ -335,6 +335,159 @@ async function main() {
     }
   }
 
+  // ---------- Landing page CMS: sections + cards ----------
+  const landingSections = [
+    {
+      slug: "motorcycles",
+      titleAr: "الدراجات النارية",
+      titleEn: "Motorcycles",
+      subtitleAr: null,
+      subtitleEn: null,
+      ctaLabelAr: "تصفح الدراجات",
+      ctaLabelEn: "Browse Motorcycles",
+      ctaLink: "/products?type=new",
+      order: 1,
+      cards: [
+        {
+          titleAr: "دراجات جديدة",
+          titleEn: "New motorcycles",
+          descAr: null,
+          descEn: null,
+          link: "/products?type=new",
+          order: 1,
+        },
+        {
+          titleAr: "دراجات مستعملة",
+          titleEn: "Used motorcycles",
+          descAr: null,
+          descEn: null,
+          link: "/products?type=used",
+          order: 2,
+        },
+      ],
+    },
+    {
+      slug: "spare-parts",
+      titleAr: "قطع الغيار",
+      titleEn: "Spare Parts",
+      subtitleAr: null,
+      subtitleEn: null,
+      ctaLabelAr: "تصفح قطع الغيار",
+      ctaLabelEn: "Browse Spare Parts",
+      ctaLink: "/products?type=spare-parts",
+      order: 2,
+      cards: [
+        {
+          titleAr: "قطع غيار أصلية",
+          titleEn: "Spare parts",
+          descAr: null,
+          descEn: null,
+          link: "/products?type=spare-parts",
+          order: 1,
+        },
+      ],
+    },
+    {
+      slug: "accessories",
+      titleAr: "الإكسسوارات",
+      titleEn: "Accessories",
+      subtitleAr: null,
+      subtitleEn: null,
+      ctaLabelAr: "تصفح الإكسسوارات",
+      ctaLabelEn: "Browse Accessories",
+      ctaLink: "/products?type=accessories",
+      order: 3,
+      cards: [
+        {
+          titleAr: "إكسسوارات الدراجات",
+          titleEn: "Accessories",
+          descAr: null,
+          descEn: null,
+          link: "/products?type=accessories",
+          order: 1,
+        },
+      ],
+    },
+  ];
+  for (const section of landingSections) {
+    const existing = await prisma.landingSection.findUnique({
+      where: { slug: section.slug },
+    });
+    if (existing) {
+      await prisma.landingSection.update({
+        where: { id: existing.id },
+        data: {
+          titleAr: section.titleAr,
+          titleEn: section.titleEn,
+          subtitleAr: section.subtitleAr,
+          subtitleEn: section.subtitleEn,
+          ctaLabelAr: section.ctaLabelAr,
+          ctaLabelEn: section.ctaLabelEn,
+          ctaLink: section.ctaLink,
+          order: section.order,
+        },
+      });
+      // Upsert cards
+      for (const card of section.cards) {
+        const existingCard = await prisma.landingCard.findFirst({
+          where: { sectionId: existing.id, titleEn: card.titleEn },
+        });
+        if (existingCard) {
+          await prisma.landingCard.update({
+            where: { id: existingCard.id },
+            data: {
+              titleAr: card.titleAr,
+              titleEn: card.titleEn,
+              descAr: card.descAr,
+              descEn: card.descEn,
+              link: card.link,
+              order: card.order,
+            },
+          });
+        } else {
+          await prisma.landingCard.create({
+            data: {
+              sectionId: existing.id,
+              titleAr: card.titleAr,
+              titleEn: card.titleEn,
+              descAr: card.descAr,
+              descEn: card.descEn,
+              link: card.link,
+              order: card.order,
+            },
+          });
+        }
+      }
+    } else {
+      const created = await prisma.landingSection.create({
+        data: {
+          slug: section.slug,
+          titleAr: section.titleAr,
+          titleEn: section.titleEn,
+          subtitleAr: section.subtitleAr,
+          subtitleEn: section.subtitleEn,
+          ctaLabelAr: section.ctaLabelAr,
+          ctaLabelEn: section.ctaLabelEn,
+          ctaLink: section.ctaLink,
+          order: section.order,
+          cards: {
+            create: section.cards.map((card) => ({
+              titleAr: card.titleAr,
+              titleEn: card.titleEn,
+              descAr: card.descAr,
+              descEn: card.descEn,
+              link: card.link,
+              order: card.order,
+            })),
+          },
+        },
+      });
+      console.log(
+        `  [landing] section "${section.slug}" created with ${section.cards.length} cards`,
+      );
+    }
+  }
+
   const branchByCode = new Map<string, { id: string; slug: string }>();
   const seededBranches: { id: string; code: string; displayOrder: number }[] = [];
   for (const branch of seedBranches) {

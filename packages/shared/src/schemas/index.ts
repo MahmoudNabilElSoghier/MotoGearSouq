@@ -11,3 +11,4 @@ export * from "./stock";
 export * from "./analytics";
 export * from "./order";
 export * from "./customer-auth";
+export * from "./landing";

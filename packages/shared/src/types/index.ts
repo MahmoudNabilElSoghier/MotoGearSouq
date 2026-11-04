@@ -7,3 +7,4 @@ export * from "./branch";
 export * from "./cart";
 export * from "./order";
 export * from "./content";
+export * from "./landing";

@@ -24,6 +24,7 @@ type Banner = { type: "success" | "error"; message: string } | null;
 
 export default function AdminCustomersPage() {
   const t = useTranslations("admin.customers");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const isAr = locale === "ar";
   const nf = new Intl.NumberFormat(isAr ? "ar-EG-u-nu-latn" : "en-US");
@@ -93,7 +94,7 @@ export default function AdminCustomersPage() {
       setApproveTarget(null);
       await fetchCustomers();
     } catch (err) {
-      setBanner({ type: "error", message: err instanceof Error ? err.message : "حدث خطأ" });
+      setBanner({ type: "error", message: err instanceof Error ? err.message : tCommon("errorGeneric") });
       setApproveTarget(null);
     } finally {
       setActionBusy(false);
@@ -109,7 +110,7 @@ export default function AdminCustomersPage() {
       setRejectTarget(null);
       await fetchCustomers();
     } catch (err) {
-      setBanner({ type: "error", message: err instanceof Error ? err.message : "حدث خطأ" });
+      setBanner({ type: "error", message: err instanceof Error ? err.message : tCommon("errorGeneric") });
       setRejectTarget(null);
     } finally {
       setActionBusy(false);
@@ -125,7 +126,7 @@ export default function AdminCustomersPage() {
       setBlockTarget(null);
       await fetchCustomers();
     } catch (err) {
-      setBanner({ type: "error", message: err instanceof Error ? err.message : "حدث خطأ" });
+      setBanner({ type: "error", message: err instanceof Error ? err.message : tCommon("errorGeneric") });
       setBlockTarget(null);
     } finally {
       setActionBusy(false);
@@ -141,7 +142,7 @@ export default function AdminCustomersPage() {
       setUnblockTarget(null);
       await fetchCustomers();
     } catch (err) {
-      setBanner({ type: "error", message: err instanceof Error ? err.message : "حدث خطأ" });
+      setBanner({ type: "error", message: err instanceof Error ? err.message : tCommon("errorGeneric") });
       setUnblockTarget(null);
     } finally {
       setActionBusy(false);

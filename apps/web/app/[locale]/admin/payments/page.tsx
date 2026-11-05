@@ -16,6 +16,20 @@ const statusStyles: Record<string, string> = {
   refunded: "bg-purple-500/15 text-purple-400",
 };
 
+const providerLabels: Record<string, string> = {
+  mock: "Mock Payment",
+  paymob: "Paymob",
+  fawry: "Fawry",
+  instapay: "InstaPay",
+  manual: "Manual",
+};
+
+const methodLabels: Record<string, string> = {
+  cod: "Cash on Delivery",
+  cash: "Cash",
+  card: "Credit Card",
+};
+
 export default function AdminPaymentsPage() {
   const t = useTranslations("admin.payments");
   const locale = useLocale();
@@ -56,23 +70,23 @@ export default function AdminPaymentsPage() {
   const handleExportCsv = () => {
     if (!pageData || pageData.items.length === 0) return;
     const headers = {
-      id: "ID",
-      orderNumber: isAr ? "رقم الطلب" : "Order #",
-      provider: isAr ? "البوابة" : "Provider",
-      method: isAr ? "طريقة الدفع" : "Method",
-      amount: isAr ? "المبلغ" : "Amount",
-      currency: "Currency",
-      status: isAr ? "الحالة" : "Status",
-      createdAt: isAr ? "التاريخ" : "Date",
+      id: t("table.id"),
+      orderNumber: t("table.orderNumber"),
+      provider: t("table.provider"),
+      method: t("table.method"),
+      amount: t("table.amount"),
+      currency: t("table.currency"),
+      status: t("table.status"),
+      createdAt: t("table.createdAt"),
     };
     const rows = pageData.items.map((item: PaymentTransactionItem) => ({
       id: item.id,
       orderNumber: item.order?.orderNumber ?? item.orderId,
-      provider: item.provider,
-      method: item.method,
+      provider: providerLabels[item.provider] ?? item.provider,
+      method: methodLabels[item.method] ?? item.method,
       amount: item.amount,
       currency: item.currency,
-      status: item.status,
+      status: t(`statuses.${item.status}`) ?? item.status,
       createdAt: item.createdAt,
     }));
     exportToCsv(`payments-export-${new Date().toISOString().slice(0, 10)}.csv`, headers, rows);
@@ -185,14 +199,14 @@ export default function AdminPaymentsPage() {
                         {item.order?.orderNumber ?? item.orderId.slice(0, 8)}
                       </Link>
                     </td>
-                    <td className="px-5 py-3 capitalize text-fg font-medium">{item.provider}</td>
-                    <td className="px-5 py-3 uppercase text-xs font-semibold text-muted">{item.method}</td>
+                    <td className="px-5 py-3 capitalize text-fg font-medium">{providerLabels[item.provider] ?? item.provider}</td>
+                    <td className="px-5 py-3 uppercase text-xs font-semibold text-muted">{methodLabels[item.method] ?? item.method}</td>
                     <td className="px-5 py-3 font-bold text-fg" dir="ltr">
                       {formatEgp(item.amount)}
                     </td>
                     <td className="px-5 py-3">
                       <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusStyles[item.status] ?? "bg-bg text-muted"}`}>
-                        {item.status}
+                        {t(`statuses.${item.status}`) ?? item.status}
                       </span>
                     </td>
                   </tr>
@@ -206,7 +220,7 @@ export default function AdminPaymentsPage() {
         {pageData && pageData.totalPages > 1 && (
           <div className="flex items-center justify-between border-t border-border px-5 py-3 text-sm">
             <span className="text-muted">
-              Page {pageData.page} of {pageData.totalPages}
+              {t("pagination.page", { page: pageData.page, total: pageData.totalPages })}
             </span>
             <div className="flex gap-2">
               <Button
@@ -217,7 +231,7 @@ export default function AdminPaymentsPage() {
                 className="inline-flex items-center gap-1.5"
               >
                 <ArrowLeft className="w-3 h-3" />
-                Prev
+                {t("pagination.prev")}
               </Button>
               <Button
                 variant="secondary"
@@ -226,7 +240,7 @@ export default function AdminPaymentsPage() {
                 onClick={() => setPage((p) => p + 1)}
                 className="inline-flex items-center gap-1.5"
               >
-                Next
+                {t("pagination.next")}
                 <ArrowRight className="w-3 h-3" />
               </Button>
             </div>

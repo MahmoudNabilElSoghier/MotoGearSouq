@@ -1,19 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { authApi, getPendingCustomersCount, type AuthUser } from "@motogearsouq/api-client";
-import { useTranslations, useLocale } from "next-intl";
-import { LogOut, User } from "lucide-react";
+import { getPendingCustomersCount } from "@motogearsouq/api-client";
+import { useTranslations } from "next-intl";
 
 export function AdminNav() {
   const t = useTranslations("admin.nav");
-  const locale = useLocale();
   const pathname = usePathname();
-  const router = useRouter();
-  const [user, setUser] = useState<AuthUser | null>(null);
   const [pendingCount, setPendingCount] = useState(0);
 
   const navItems = [
@@ -39,22 +35,13 @@ export function AdminNav() {
   ];
 
   useEffect(() => {
-    authApi.me().then(setUser).catch(() => {});
     getPendingCustomersCount()
       .then((res) => setPendingCount(res.count))
       .catch(() => {});
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await authApi.logout();
-    } catch {}
-    router.push(`/${locale}/admin/login`);
-    router.refresh();
-  };
-
   return (
-    <div className="flex flex-col h-full justify-between p-3">
+    <div className="flex flex-col h-full p-3">
       <nav aria-label={t("aria")} className="flex flex-col gap-1">
         {navItems.map((item) => {
           const active =
@@ -86,22 +73,6 @@ export function AdminNav() {
           );
         })}
       </nav>
-
-      <div className="pt-4 border-t border-border mt-auto">
-        {user && (
-          <div className="flex items-center gap-2 px-3 py-2 mb-2 text-xs text-muted truncate">
-            <User className="w-3.5 h-3.5 shrink-0" />
-            <span className="truncate">{user.email}</span>
-          </div>
-        )}
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-red-400 hover:bg-red-500/10 transition-colors"
-        >
-          <LogOut className="w-4 h-4" />
-          <span>{t("logout")}</span>
-        </button>
-      </div>
     </div>
   );
 }

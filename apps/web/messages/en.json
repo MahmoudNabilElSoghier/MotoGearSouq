@@ -520,6 +520,7 @@
         "phone": "Phone",
         "total": "Total",
         "status": "Status",
+        "paymentMethod": "Payment Method",
         "date": "Date"
       },
       "filter": {
@@ -586,6 +587,15 @@
         "unpaid": "Unpaid",
         "failed": "Failed",
         "refunded": "Refunded"
+      },
+      "filters": {
+        "searchPlaceholder": "Order number or phone",
+        "all": "All Statuses",
+        "allPayments": "All Payment Statuses",
+        "allMethods": "All Payment Methods"
+      },
+      "actions": {
+        "view": "View"
       }
     },
     "reports": {

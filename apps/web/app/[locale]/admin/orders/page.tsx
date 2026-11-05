@@ -140,9 +140,9 @@ export default function AdminOrdersPage() {
       phone: t("table.phone"),
       total: t("table.total"),
       status: t("table.status"),
-      paymentStatus: t("statuses.pending"),
+      paymentStatus: isAr ? "حالة الدفع" : "Payment Status",
       paymentMethod: t("table.paymentMethod"),
-      createdAt: t("table.createdAt"),
+      createdAt: t("table.date"),
     };
     const rows = ordersPage.items.map((o: Order) => ({
       orderNumber: o.orderNumber,
@@ -176,7 +176,7 @@ export default function AdminOrdersPage() {
             <Input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={t("filter.searchPlaceholder")}
+              placeholder={t("filters.searchPlaceholder")}
               className="ps-9"
             />
           </div>
@@ -192,7 +192,7 @@ export default function AdminOrdersPage() {
             }}
             className="w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm text-fg focus:border-accent focus:outline-none"
           >
-            <option value="">{t("filter.all")}</option>
+            <option value="">{t("filters.all")}</option>
             <option value="pending">{tDash("statusPending")}</option>
             <option value="confirmed">{tDash("statusConfirmed")}</option>
             <option value="shipped">{tDash("statusShipped")}</option>
@@ -211,7 +211,7 @@ export default function AdminOrdersPage() {
             }}
             className="w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm text-fg focus:border-accent focus:outline-none"
           >
-            <option value="">{t("filters.all")}</option>
+            <option value="">{t("filters.allPayments")}</option>
             <option value="pending">{t("paymentStatuses.pending")}</option>
             <option value="paid">{t("paymentStatuses.paid")}</option>
             <option value="failed">{t("paymentStatuses.failed")}</option>
@@ -229,7 +229,7 @@ export default function AdminOrdersPage() {
             }}
             className="w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm text-fg focus:border-accent focus:outline-none"
           >
-            <option value="">{t("filters.all")}</option>
+            <option value="">{t("filters.allMethods")}</option>
             <option value="cod">{t("paymentMethods.cod")}</option>
             <option value="mock">{t("paymentMethods.mock")}</option>
             <option value="paymob">{t("paymentMethods.paymob")}</option>

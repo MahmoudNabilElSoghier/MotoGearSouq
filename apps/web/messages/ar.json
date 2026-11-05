@@ -1025,12 +1025,13 @@
         "refunded": "مسترجع"
       },
       "table": {
-        "orderNumber": "Order Number",
-        "customer": "Customer",
-        "phone": "Phone",
-        "total": "Total",
-        "status": "Status",
-        "date": "Date"
+        "orderNumber": "رقم الطلب",
+        "customer": "العميل",
+        "phone": "الهاتف",
+        "total": "الإجمالي",
+        "status": "الحالة",
+        "paymentMethod": "طريقة الدفع",
+        "date": "التاريخ"
       },
       "filter": {
         "all": "All Statuses",
@@ -1080,6 +1081,15 @@
           "error": "Error updating order status"
         },
         "print": "Print Invoice"
+      },
+      "filters": {
+        "searchPlaceholder": "بحث برقم الطلب أو الهاتف",
+        "all": "كل الحالات",
+        "allPayments": "كل حالات الدفع",
+        "allMethods": "كل طرق الدفع"
+      },
+      "actions": {
+        "view": "عرض"
       }
     },
     "table": {

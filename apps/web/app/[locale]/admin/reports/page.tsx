@@ -18,7 +18,7 @@ export default function AdminReportsDashboardPage() {
   const locale = useLocale();
   const isAr = locale === "ar";
   const nf = new Intl.NumberFormat(isAr ? "ar-EG-u-nu-latn" : "en-US");
-  const currency = (n: number) => `${nf.format(n)} EGP`;
+  const currency = (n: number) => `${nf.format(Number.isFinite(n) ? n : 0)} EGP`;
 
   const [period, setPeriod] = useState("30d");
   const [data, setData] = useState<AnalyticsDashboard | null>(null);
@@ -282,8 +282,8 @@ export default function AdminReportsDashboardPage() {
                       data.salesByBranch.map((b) => (
                         <tr key={b.branchId} className="hover:bg-accent/5">
                           <td className="py-3 font-bold text-fg">{t("dashboard.branch")}: {b.branchName}</td>
-                          <td className="py-3 text-end font-semibold">{t("dashboard.orders")}: {nf.format(b.orderCount)}</td>
-                          <td className="py-3 text-end font-semibold">{t("dashboard.revenue")}: {currency(b.revenue)}</td>
+                          <td className="py-3 text-end font-semibold">{t("dashboard.orders")}: {nf.format(b.orderCount ?? 0)}</td>
+                          <td className="py-3 text-end font-semibold">{t("dashboard.revenue")}: {currency(b.revenue ?? 0)}</td>
                         </tr>
                       ))
                     )}

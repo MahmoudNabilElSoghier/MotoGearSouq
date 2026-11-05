@@ -11,7 +11,7 @@ export default function AdminStockValuationPage() {
   const locale = useLocale();
   const isAr = locale === "ar";
   const nf = new Intl.NumberFormat(isAr ? "ar-EG-u-nu-latn" : "en-US");
-  const currency = (n: number) => `${nf.format(n)} EGP`;
+  const currency = (n: number) => `${nf.format(Number.isFinite(n) ? n : 0)} EGP`;
 
   const [data, setData] = useState<StockValuationResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -93,8 +93,8 @@ export default function AdminStockValuationPage() {
                       data.byBranch.map((b) => (
                         <tr key={b.branchId} className="hover:bg-accent/5">
                           <td className="py-3 font-bold text-fg">{b.branchNameAr}</td>
-                          <td className="py-3 text-end font-semibold">{currency(b.costValue)}</td>
-                          <td className="py-3 text-end font-semibold">{currency(b.retailValue)}</td>
+                          <td className="py-3 text-end font-semibold">{currency(b.costValue ?? 0)}</td>
+                          <td className="py-3 text-end font-semibold">{currency(b.retailValue ?? 0)}</td>
                         </tr>
                       ))
                     )}
@@ -124,8 +124,8 @@ export default function AdminStockValuationPage() {
                       data.byCategory.map((c) => (
                         <tr key={c.categoryId} className="hover:bg-accent/5">
                           <td className="py-3 font-bold text-fg">{c.categoryName}</td>
-                          <td className="py-3 text-end font-semibold">{currency(c.costValue)}</td>
-                          <td className="py-3 text-end font-semibold">{currency(c.retailValue)}</td>
+                          <td className="py-3 text-end font-semibold">{currency(c.costValue ?? 0)}</td>
+                          <td className="py-3 text-end font-semibold">{currency(c.retailValue ?? 0)}</td>
                         </tr>
                       ))
                     )}

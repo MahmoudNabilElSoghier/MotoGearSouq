@@ -187,7 +187,12 @@ export class AnalyticsService {
       branchMap.set(key, entry);
     }
     const salesByBranch = [...branchMap.values()]
-      .map((b) => ({ ...b, revenue: round2(b.revenue) }))
+      .map((b) => ({
+        branchId: b.branchId ?? "none",
+        branchName: b.nameAr,
+        orderCount: b.orders,
+        revenue: round2(b.revenue),
+      }))
       .sort((a, b) => b.revenue - a.revenue);
 
     return {
@@ -431,7 +436,7 @@ export class AnalyticsService {
             partCategory: { select: { nameAr: true } },
           },
         },
-        branch: { select: { id: true, nameAr: true } },
+        branch: { select: { id: true, code: true, nameAr: true, nameEn: true } },
       },
     });
 
@@ -440,11 +445,19 @@ export class AnalyticsService {
 
     const branchMap = new Map<
       string,
-      { branchId: string; nameAr: string; itemsCount: number; totalValue: number; totalRetailValue: number }
+      {
+        branchId: string;
+        code: string;
+        nameAr: string;
+        nameEn: string | null;
+        itemsCount: number;
+        totalValue: number;
+        totalRetailValue: number;
+      }
     >();
     const categoryMap = new Map<
       string,
-      { categoryId: string | null; nameAr: string; itemsCount: number; totalValue: number }
+      { categoryId: string | null; nameAr: string; itemsCount: number; totalValue: number; totalRetailValue: number }
     >();
 
     for (const row of inventory) {
@@ -455,8 +468,15 @@ export class AnalyticsService {
       totalRetailValue += retail;
 
       const branch =
-        branchMap.get(row.branchId) ??
-        ({ branchId: row.branchId, nameAr: row.branch.nameAr, itemsCount: 0, totalValue: 0, totalRetailValue: 0 });
+        branchMap.get(row.branchId) ?? {
+          branchId: row.branchId,
+          code: row.branch.code,
+          nameAr: row.branch.nameAr,
+          nameEn: row.branch.nameEn,
+          itemsCount: 0,
+          totalValue: 0,
+          totalRetailValue: 0,
+        };
       branch.itemsCount += 1;
       branch.totalValue += value;
       branch.totalRetailValue += retail;
@@ -464,15 +484,16 @@ export class AnalyticsService {
 
       const catKey = row.product.partCategoryId ?? "none";
       const cat =
-        categoryMap.get(catKey) ??
-        ({
+        categoryMap.get(catKey) ?? {
           categoryId: row.product.partCategoryId,
           nameAr: row.product.partCategory?.nameAr ?? "—",
           itemsCount: 0,
           totalValue: 0,
-        });
+          totalRetailValue: 0,
+        };
       cat.itemsCount += 1;
       cat.totalValue += value;
+      cat.totalRetailValue += retail;
       categoryMap.set(catKey, cat);
     }
 
@@ -486,14 +507,22 @@ export class AnalyticsService {
         potentialProfit: round2(retail - value),
         byBranch: [...branchMap.values()]
           .map((b) => ({
-            ...b,
-            totalValue: round2(b.totalValue),
-            totalRetailValue: round2(b.totalRetailValue),
+            branchId: b.branchId,
+            branchCode: b.code,
+            branchNameAr: b.nameAr,
+            branchNameEn: b.nameEn,
+            costValue: round2(b.totalValue),
+            retailValue: round2(b.totalRetailValue),
           }))
-          .sort((a, b) => b.totalValue - a.totalValue),
+          .sort((a, b) => b.costValue - a.costValue),
         byCategory: [...categoryMap.values()]
-          .map((c) => ({ ...c, totalValue: round2(c.totalValue) }))
-          .sort((a, b) => b.totalValue - a.totalValue),
+          .map((c) => ({
+            categoryId: c.categoryId ?? "none",
+            categoryName: c.nameAr,
+            costValue: round2(c.totalValue),
+            retailValue: round2(c.totalRetailValue),
+          }))
+          .sort((a, b) => b.costValue - a.costValue),
       },
     };
   }

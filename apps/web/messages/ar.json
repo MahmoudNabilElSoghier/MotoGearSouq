@@ -560,7 +560,8 @@
         "last7Days": "آخر 7 أيام",
         "last30Days": "آخر 30 يوماً",
         "last90Days": "آخر 90 يوماً",
-        "last365Days": "العام الماضي"
+        "last365Days": "العام الماضي",
+        "label": "الفترة"
       },
       "dashboard": {
         "totalRevenue": "إجمالي الإيرادات",
@@ -570,7 +571,15 @@
         "newCustomers": "العملاء الجدد",
         "topProducts": "المنتجات الأكثر مبيعاً",
         "salesByBranch": "المبيعات حسب الفرع",
-        "viewDetails": "عرض التفاصيل"
+        "viewDetails": "عرض التفاصيل",
+        "margin": "الهامش",
+        "cancelledOrders": "الطلبات الملغاة",
+        "codeName": "الكود / الاسم",
+        "units": "الوحدات",
+        "revenue": "الإيرادات",
+        "profit": "الربح",
+        "branch": "الفرع",
+        "orders": "الطلبات"
       },
       "breakEven": {
         "title": "تحليل نقطة التعادل والتكاليف الثابتة",
@@ -627,7 +636,23 @@
         "cashSales": "مبيعات نقدية",
         "cardSales": "مبيعات بطاقة",
         "codSales": "مبيعات دفع عند الاستلام",
-        "pendingPayments": "مدفوعات معلقة"
+        "pendingPayments": "مدفوعات معلقة",
+        "byMethod": {
+          "title": "طرق الدفع",
+          "method": "الطريقة",
+          "count": "العدد",
+          "total": "المبلغ",
+          "avgOrderValue": "متوسط قيمة الطلب"
+        }
+      },
+      "table": {
+        "code": "الكود",
+        "name": "الاسم",
+        "units": "الوحدات",
+        "revenue": "الإيرادات",
+        "profit": "الربح",
+        "branch": "الفرع",
+        "orders": "الطلبات"
       }
     },
     "forms": {
@@ -987,10 +1012,10 @@
         "cod": "الدفع عند الاستلام",
         "cash": "نقدي",
         "card": "بطاقة ائتمان",
-        "mock": "دفع تجريبي",
+        "mock": "تجريبي",
         "paymob": "باي موب",
         "fawry": "فوري",
-        "instapay": "انستاباي"
+        "instapay": "إنستاباي"
       },
       "paymentStatuses": {
         "pending": "قيد الانتظار",
@@ -1139,6 +1164,15 @@
       "cards": {
         "title": "البطاقات",
         "add": "إضافة بطاقة"
+      },
+      "nav": {
+        "home": "الرئيسية",
+        "models": "الدراجات",
+        "spareParts": "قطع الغيار",
+        "brands": "الماركات",
+        "branches": "الفروع",
+        "contact": "اتصل بنا",
+        "store": "المتجر"
       }
     },
     "customers": {
@@ -1168,8 +1202,8 @@
         "orders": "الطلبات",
         "created": "تاريخ الإنشاء",
         "actions": "الإجراءات",
-        "badgeRetail": "Retail",
-        "badgeWholesale": "Merchant"
+        "badgeRetail": "تجزئة",
+        "badgeWholesale": "جملة"
       },
       "actions": {
         "view": "عرض",
@@ -1290,11 +1324,11 @@
       "backToList": "Back to list",
       "empty": "لا توجد طلبات شراء.",
       "status": {
-        "draft": "Draft",
-        "ordered": "Ordered",
-        "shipped": "Shipped",
-        "received": "Received",
-        "cancelled": "Cancelled"
+        "draft": "مسودة",
+        "ordered": "مطلوب",
+        "shipped": "تم الشحن",
+        "received": "مستلم",
+        "cancelled": "ملغي"
       },
       "filter": {
         "status": "الحالة",

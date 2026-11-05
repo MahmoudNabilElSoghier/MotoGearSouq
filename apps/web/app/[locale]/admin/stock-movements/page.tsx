@@ -193,7 +193,7 @@ export default function AdminStockMovementsPage() {
                     <td className="px-5 py-3 text-muted text-xs" dir="ltr">
                       {m.purchaseOrder?.orderNumber ?? m.referenceId ?? "—"}
                     </td>
-                    <td className="px-5 py-3 text-muted text-xs max-w-48 truncate">{m.notes ?? "—"}</td>
+                    <td className="px-5 py-3 text-muted text-xs max-w-48 truncate">{m.notes ?? ""}</td>
                   </tr>
                 ))}
               </tbody>

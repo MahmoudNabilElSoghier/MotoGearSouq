@@ -495,6 +495,15 @@
       "cards": {
         "title": "Cards",
         "add": "Add Card"
+      },
+      "nav": {
+        "home": "Home",
+        "models": "Models",
+        "spareParts": "Spare Parts",
+        "brands": "Brands",
+        "branches": "Branches",
+        "contact": "Contact",
+        "store": "Store"
       }
     },
     "orders": {
@@ -563,10 +572,10 @@
         "print": "Print Invoice"
       },
       "paymentMethods": {
-        "cod": "Cash on Delivery",
+        "cod": "COD",
         "cash": "Cash",
         "card": "Credit Card",
-        "mock": "Mock Payment",
+        "mock": "Mock",
         "paymob": "Paymob",
         "fawry": "Fawry",
         "instapay": "InstaPay"
@@ -592,7 +601,8 @@
         "last7Days": "Last 7 Days",
         "last30Days": "Last 30 Days",
         "last90Days": "Last 90 Days",
-        "last365Days": "Last 365 Days"
+        "last365Days": "Last 365 Days",
+        "label": "Period"
       },
       "dashboard": {
         "totalRevenue": "Total Revenue",
@@ -602,7 +612,15 @@
         "newCustomers": "New Customers",
         "topProducts": "Top Products",
         "salesByBranch": "Sales by Branch",
-        "viewDetails": "View Details"
+        "viewDetails": "View Details",
+        "margin": "Margin",
+        "cancelledOrders": "Cancelled Orders",
+        "codeName": "Code / Name",
+        "units": "Units",
+        "revenue": "Revenue",
+        "profit": "Profit",
+        "branch": "Branch",
+        "orders": "Orders"
       },
       "breakEven": {
         "title": "Break-Even Analysis",
@@ -659,7 +677,23 @@
         "cashSales": "Cash Sales",
         "cardSales": "Card Sales",
         "codSales": "COD Sales",
-        "pendingPayments": "Pending Payments"
+        "pendingPayments": "Pending Payments",
+        "byMethod": {
+          "title": "Payment Methods",
+          "method": "Method",
+          "count": "Count",
+          "total": "Total",
+          "avgOrderValue": "Avg Order Value"
+        }
+      },
+      "table": {
+        "code": "Code",
+        "name": "Name",
+        "units": "Units",
+        "revenue": "Revenue",
+        "profit": "Profit",
+        "branch": "Branch",
+        "orders": "Orders"
       }
     },
     "forms": {
@@ -1035,7 +1069,7 @@
         "created": "Created",
         "actions": "Actions",
         "badgeRetail": "Retail",
-        "badgeWholesale": "Merchant"
+        "badgeWholesale": "Wholesale"
       },
       "actions": {
         "view": "View",

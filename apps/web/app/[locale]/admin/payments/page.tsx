@@ -16,20 +16,6 @@ const statusStyles: Record<string, string> = {
   refunded: "bg-purple-500/15 text-purple-400",
 };
 
-const providerLabels: Record<string, string> = {
-  mock: "Mock Payment",
-  paymob: "Paymob",
-  fawry: "Fawry",
-  instapay: "InstaPay",
-  manual: "Manual",
-};
-
-const methodLabels: Record<string, string> = {
-  cod: "Cash on Delivery",
-  cash: "Cash",
-  card: "Credit Card",
-};
-
 export default function AdminPaymentsPage() {
   const t = useTranslations("admin.payments");
   const locale = useLocale();
@@ -82,8 +68,8 @@ export default function AdminPaymentsPage() {
     const rows = pageData.items.map((item: PaymentTransactionItem) => ({
       id: item.id,
       orderNumber: item.order?.orderNumber ?? item.orderId,
-      provider: providerLabels[item.provider] ?? item.provider,
-      method: methodLabels[item.method] ?? item.method,
+      provider: t(`paymentMethods.${item.provider}`) ?? item.provider,
+      method: t(`paymentMethods.${item.method}`) ?? item.method,
       amount: item.amount,
       currency: item.currency,
       status: t(`statuses.${item.status}`) ?? item.status,
@@ -199,8 +185,8 @@ export default function AdminPaymentsPage() {
                         {item.order?.orderNumber ?? item.orderId.slice(0, 8)}
                       </Link>
                     </td>
-                    <td className="px-5 py-3 capitalize text-fg font-medium">{providerLabels[item.provider] ?? item.provider}</td>
-                    <td className="px-5 py-3 uppercase text-xs font-semibold text-muted">{methodLabels[item.method] ?? item.method}</td>
+                    <td className="px-5 py-3 capitalize text-fg font-medium">{t(`paymentMethods.${item.provider}`) ?? item.provider}</td>
+                    <td className="px-5 py-3 uppercase text-xs font-semibold text-muted">{t(`paymentMethods.${item.method}`) ?? item.method}</td>
                     <td className="px-5 py-3 font-bold text-fg" dir="ltr">
                       {formatEgp(item.amount)}
                     </td>

@@ -135,14 +135,14 @@ export default function AdminOrdersPage() {
   const handleExportCsv = () => {
     if (!ordersPage || ordersPage.items.length === 0) return;
     const headers = {
-      orderNumber: isAr ? "رقم الطلب" : "Order #",
-      customerName: isAr ? "اسم العميل" : "Customer Name",
-      phone: isAr ? "الهاتف" : "Phone",
-      total: isAr ? "الإجمالي" : "Total",
-      status: isAr ? "حالة الطلب" : "Status",
-      paymentStatus: isAr ? "حالة الدفع" : "Payment Status",
-      paymentMethod: isAr ? "طريقة الدفع" : "Payment Method",
-      createdAt: isAr ? "التاريخ" : "Date",
+      orderNumber: t("table.orderNumber"),
+      customerName: t("table.customer"),
+      phone: t("table.phone"),
+      total: t("table.total"),
+      status: t("table.status"),
+      paymentStatus: t("statuses.pending"),
+      paymentMethod: t("table.paymentMethod"),
+      createdAt: t("table.createdAt"),
     };
     const rows = ordersPage.items.map((o: Order) => ({
       orderNumber: o.orderNumber,
@@ -211,11 +211,11 @@ export default function AdminOrdersPage() {
             }}
             className="w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm text-fg focus:border-accent focus:outline-none"
           >
-            <option value="">{isAr ? "كل حالات الدفع" : "All Payment Statuses"}</option>
-            <option value="pending">Pending</option>
-            <option value="paid">Paid</option>
-            <option value="failed">Failed</option>
-            <option value="refunded">Refunded</option>
+            <option value="">{t("filters.all")}</option>
+            <option value="pending">{t("paymentStatuses.pending")}</option>
+            <option value="paid">{t("paymentStatuses.paid")}</option>
+            <option value="failed">{t("paymentStatuses.failed")}</option>
+            <option value="refunded">{t("paymentStatuses.refunded")}</option>
           </select>
         </div>
 
@@ -229,12 +229,12 @@ export default function AdminOrdersPage() {
             }}
             className="w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm text-fg focus:border-accent focus:outline-none"
           >
-            <option value="">{isAr ? "كل طرق الدفع" : "All Methods"}</option>
-            <option value="cod">COD</option>
-            <option value="mock">Mock</option>
-            <option value="paymob">Paymob</option>
-            <option value="fawry">Fawry</option>
-            <option value="instapay">InstaPay</option>
+            <option value="">{t("filters.all")}</option>
+            <option value="cod">{t("paymentMethods.cod")}</option>
+            <option value="mock">{t("paymentMethods.mock")}</option>
+            <option value="paymob">{t("paymentMethods.paymob")}</option>
+            <option value="fawry">{t("paymentMethods.fawry")}</option>
+            <option value="instapay">{t("paymentMethods.instapay")}</option>
           </select>
         </div>
 
@@ -277,7 +277,7 @@ export default function AdminOrdersPage() {
                   <th className="px-5 py-3 font-semibold text-start">{t("table.total")}</th>
                   <th className="px-5 py-3 font-semibold text-start">{t("table.status")}</th>
                   <th className="px-5 py-3 font-semibold text-start">{t("riskLabel")}</th>
-                  <th className="px-5 py-3 font-semibold text-start">{isAr ? "الدفع" : "Payment"}</th>
+                  <th className="px-5 py-3 font-semibold text-start">{t("table.paymentMethod")}</th>
                   <th className="px-5 py-3 font-semibold text-start">{t("table.date")}</th>
                   <th className="px-5 py-3 font-semibold text-end">{isAr ? "إجراء" : "Action"}</th>
                 </tr>
@@ -325,7 +325,7 @@ export default function AdminOrdersPage() {
                         className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-fg hover:border-accent hover:text-accent transition-colors"
                       >
                         <Eye className="w-3.5 h-3.5" />
-                        <span>{isAr ? "عرض" : "View"}</span>
+                        <span>{t("actions.view")}</span>
                       </Link>
                     </td>
                   </tr>

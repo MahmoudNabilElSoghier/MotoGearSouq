@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { AdminLayoutShell } from "@/components/admin/AdminLayoutShell";
+import { AdminTopBar } from "@/components/admin/AdminTopBar";
 
 export async function generateMetadata({
   params,
@@ -54,6 +55,7 @@ export default async function AdminLayout({
         <AdminLayoutShell locale={locale} />
       </aside>
       <div id="main-content" className="min-w-0 flex-1 p-6 md:p-8">
+        <AdminTopBar />
         {children}
       </div>
     </div>

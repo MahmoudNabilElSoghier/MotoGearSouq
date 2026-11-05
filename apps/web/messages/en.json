@@ -476,6 +476,51 @@
         "add": "Add card"
       }
     },
+    "orders": {
+      "title": "Orders",
+      "subtitle": "Manage customer orders and payments.",
+      "empty": "No orders found.",
+      "emptySearch": "No orders match your filters.",
+      "table": {
+        "orderNumber": "Order #",
+        "customer": "Customer",
+        "phone": "Phone",
+        "total": "Total",
+        "status": "Status",
+        "riskLabel": "Risk",
+        "date": "Date"
+      },
+      "filter": {
+        "all": "All",
+        "searchPlaceholder": "Search order #, customer, or phone..."
+      },
+      "pagination": {
+        "page": "Page {page} of {total}",
+        "prev": "Prev",
+        "next": "Next"
+      },
+      "paymentMethods": {
+        "cod": "Cash on Delivery",
+        "cash": "Cash",
+        "card": "Credit Card",
+        "mock": "Mock",
+        "paymob": "Paymob",
+        "fawry": "Fawry",
+        "instapay": "InstaPay"
+      },
+      "paymentStatuses": {
+        "pending": "Pending",
+        "paid": "Paid",
+        "unpaid": "Unpaid",
+        "failed": "Failed",
+        "refunded": "Refunded"
+      },
+      "riskLevels": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      }
+    },
     "reports": {
       "title": "Financial Reports & Intelligence",
       "nav": {

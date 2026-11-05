@@ -486,6 +486,51 @@
           "add": "إضافة بطاقة"
         }
       },
+      "orders": {
+        "title": "الطلبات",
+        "subtitle": "إدارة طلبات العملاء والمدفوعات.",
+        "empty": "لا توجد طلبات.",
+        "emptySearch": "لا توجد طلبات تطابق عوامل التصفية.",
+        "table": {
+          "orderNumber": "رقم الطلب",
+          "customer": "العميل",
+          "phone": "الهاتف",
+          "total": "الإجمالي",
+          "status": "الحالة",
+          "riskLabel": "المخاطرة",
+          "date": "التاريخ"
+        },
+        "filter": {
+          "all": "الكل",
+          "searchPlaceholder": "البحث برقم الطلب أو العميل أو الهاتف..."
+        },
+        "pagination": {
+          "page": "الصفحة {page} من {total}",
+          "prev": "السابق",
+          "next": "التالي"
+        },
+        "paymentMethods": {
+          "cod": "الدفع عند الاستلام",
+          "cash": "نقدي",
+          "card": "بطاقة ائتمان",
+          "mock": "تجريبي",
+          "paymob": "باي موب",
+          "fawry": "فوري",
+          "instapay": "إنستاباي"
+        },
+        "paymentStatuses": {
+          "pending": "قيد الانتظار",
+          "paid": "مدفوع",
+          "unpaid": "غير مدفوع",
+          "failed": "فشل",
+          "refunded": "مسترجع"
+        },
+        "riskLevels": {
+          "low": "منخفض",
+          "medium": "متوسط",
+          "high": "عالي"
+        }
+      },
       "period": {
         "last7Days": "آخر 7 أيام",
         "last30Days": "آخر 30 يوماً",

@@ -77,6 +77,32 @@ export default function AdminOrdersPage() {
     high: t("riskLevels.high"),
   };
 
+  const paymentMethodLabels: Record<string, string> = {
+    cod: t("paymentMethods.cod"),
+    cash: t("paymentMethods.cash"),
+    card: t("paymentMethods.card"),
+    mock: t("paymentMethods.mock"),
+    paymob: t("paymentMethods.paymob"),
+    fawry: t("paymentMethods.fawry"),
+    instapay: t("paymentMethods.instapay"),
+  };
+
+  const paymentStatusLabels: Record<string, string> = {
+    pending: t("paymentStatuses.pending"),
+    paid: t("paymentStatuses.paid"),
+    unpaid: t("paymentStatuses.unpaid"),
+    failed: t("paymentStatuses.failed"),
+    refunded: t("paymentStatuses.refunded"),
+  };
+
+  const paymentStatusStyles: Record<string, string> = {
+    paid: "bg-emerald-500/15 text-emerald-400",
+    unpaid: "bg-red-500/15 text-red-400",
+    pending: "bg-amber-500/15 text-amber-400",
+    failed: "bg-red-500/15 text-red-400",
+    refunded: "bg-sky-500/15 text-sky-400",
+  };
+
   const riskBadge = (o: Order) => {
     const level = o.riskLevel ?? "low";
     if (level === "low") return <span className="text-xs text-muted">—</span>;
@@ -273,9 +299,22 @@ export default function AdminOrdersPage() {
                       </span>
                     </td>
                     <td className="px-5 py-3">{riskBadge(o)}</td>
-                    <td className="px-5 py-3 text-xs">
-                      <span className="font-semibold uppercase text-muted">{o.paymentMethod ?? "cod"}</span>
-                      <span className="block text-[10px] text-accent font-mono">{o.paymentStatus ?? "pending"}</span>
+                    <td className="px-5 py-3">
+                      <span className="font-medium text-fg">
+                        {paymentMethodLabels[o.paymentMethod ?? "cod"] ??
+                          o.paymentMethod ??
+                          "cod"}
+                      </span>
+                      <span
+                        className={`block text-[10px] font-mono rounded-full px-2.5 py-0.5 ${
+                          paymentStatusStyles[o.paymentStatus ?? "pending"] ??
+                          "bg-bg text-muted"
+                        }`}
+                      >
+                        {paymentStatusLabels[o.paymentStatus ?? "pending"] ??
+                          o.paymentStatus ??
+                          "pending"}
+                      </span>
                     </td>
                     <td className="px-5 py-3 text-muted text-xs" dir="ltr">
                       {new Date(o.createdAt).toLocaleDateString(isAr ? "ar-EG" : "en-US")}

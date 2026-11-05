@@ -1,6 +1,44 @@
 {
   "common": {
-    "validationFailed": "فشل التحقق — {details}"
+    "validationFailed": "فشل التحقق — {details}",
+    "skipToContent": "Skip to main content",
+    "brandName": "MotoGearSouq",
+    "brandShort": "MotoGearSouq",
+    "tagline": "Official Digital Partner of ELSAAD Motorcycle",
+    "partnerName": "ELSAAD Motorcycle",
+    "price": "{price} EGP",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "close": "Close",
+    "active": "Active",
+    "inactive": "Inactive",
+    "whatsapp": "WhatsApp",
+    "search": "Search",
+    "apply": "Apply",
+    "prev": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} of {total}",
+    "details": "Details",
+    "contactPrice": "Contact us for price",
+    "backToHome": "Back to home",
+    "counts": {
+      "models": "{count} models",
+      "parts": "{count} spare parts",
+      "products": "{count} products",
+      "compatibleParts": "{count} compatible parts",
+      "cc": "{count} cc",
+      "fromYear": "From {year}",
+      "yearRange": "{from} - {to}"
+    },
+    "stock": {
+      "inStock": "In stock",
+      "outOfStock": "Out of stock",
+      "low": "Low stock"
+    }
   },
   "switcher": {
     "languageAria": "اختيار اللغة",
@@ -941,6 +979,63 @@
         "unpaid": "غير مدفوع",
         "failed": "فشل",
         "refunded": "مسترجع"
+      },
+      "table": {
+        "orderNumber": "Order Number",
+        "customer": "Customer",
+        "phone": "Phone",
+        "total": "Total",
+        "status": "Status",
+        "date": "Date"
+      },
+      "filter": {
+        "all": "All Statuses",
+        "search": "Search",
+        "searchPlaceholder": "Order number or phone"
+      },
+      "empty": "No orders registered.",
+      "pagination": {
+        "page": "Page {page} of {total}",
+        "prev": "Previous",
+        "next": "Next"
+      },
+      "detail": {
+        "title": "Order Details",
+        "customer": "Customer Info",
+        "shipping": "Shipping Address",
+        "items": "Items",
+        "totals": "Totals",
+        "subtotal": "Subtotal",
+        "tax": "VAT",
+        "total": "Total",
+        "timeline": "Timeline",
+        "created": "Created At",
+        "updated": "Last Updated",
+        "notes": "Notes",
+        "risk": {
+          "title": "Risk Analysis",
+          "score": "Score",
+          "level": "Level",
+          "breakdownTitle": "Evaluation Factor",
+          "flagged": "High risk order — review before dispatch",
+          "ipAddress": "IP Address",
+          "userAgent": "Device Fingerprint",
+          "breakdown": {
+            "accountAge": "Account Age",
+            "emailVerified": "Email Verified",
+            "deliveryHistory": "Delivery History",
+            "amountVsLimit": "Amount / Limit",
+            "sameIpToday": "Orders from same IP today",
+            "sameDeviceToday": "Orders from same device today"
+          }
+        },
+        "statusActions": {
+          "label": "Change Status",
+          "update": "Update Status",
+          "success": "Order status updated successfully",
+          "error": "Error updating order status"
+        },
+        "print": "Print Invoice"
       }
     },
     "table": {
@@ -1003,6 +1098,292 @@
     "topBar": {
       "title": "لوحة التحكم",
       "logout": "تسجيل الخروج"
+    },
+    "landing": {
+      "title": "Landing Page CMS",
+      "subtitle": "Manage sections, cards, and CTAs shown on the store landing page.",
+      "empty": "No landing sections found.",
+      "edit": "Edit",
+      "collapse": "Collapse",
+      "save": "Save changes",
+      "cardCount": "{count} cards",
+      "fields": {
+        "titleAr": "Title (Arabic)",
+        "titleEn": "Title (English)",
+        "subtitleAr": "Subtitle (Arabic)",
+        "subtitleEn": "Subtitle (English)",
+        "ctaLabelAr": "CTA label (Arabic)",
+        "ctaLabelEn": "CTA label (English)",
+        "ctaLink": "CTA link",
+        "order": "Order"
+      },
+      "cards": {
+        "title": "Cards",
+        "add": "Add card"
+      }
+    },
+    "customers": {
+      "title": "Customers",
+      "subtitle": "{count} customers",
+      "filters": {
+        "all": "All",
+        "type": "Type",
+        "typeRetail": "Individual",
+        "typeWholesale": "Merchant / Wholesale",
+        "status": "Status",
+        "statusPending": "Pending",
+        "statusApproved": "Approved",
+        "statusRejected": "Rejected",
+        "search": "Search",
+        "searchPlaceholder": "Name or phone",
+        "clearAll": "Clear all"
+      },
+      "table": {
+        "name": "Name",
+        "phone": "Phone",
+        "type": "Type",
+        "status": "Status",
+        "blocked": "Status",
+        "blockedBadge": "Blocked",
+        "deliveryHistory": "Deliveries",
+        "orders": "Orders",
+        "created": "Registered On",
+        "actions": "Actions",
+        "badgeRetail": "Retail",
+        "badgeWholesale": "Merchant"
+      },
+      "actions": {
+        "view": "View",
+        "approve": "Approve",
+        "reject": "Reject",
+        "block": "Block",
+        "unblock": "Unblock"
+      },
+      "block": {
+        "title": "Block Customer",
+        "message": "{name} will be prevented from logging in and creating new orders. Please provide a reason.",
+        "reasonLabel": "Reason for blocking",
+        "reasonMin": "Reason is required (min 10 characters)",
+        "reasonPlaceholder": "e.g: Repeated fake orders...",
+        "confirm": "Confirm Block",
+        "success": "Customer blocked successfully"
+      },
+      "unblock": {
+        "title": "Unblock Customer",
+        "message": "Are you sure you want to unblock {name}?",
+        "confirm": "Yes, Unblock",
+        "success": "Customer unblocked successfully"
+      },
+      "approve": {
+        "title": "Confirm Approval",
+        "message": "Are you sure you want to approve {name} as a wholesale merchant?",
+        "confirm": "Yes, approve",
+        "success": "Merchant approved successfully"
+      },
+      "reject": {
+        "title": "Reject Application",
+        "message": "{name} will be notified of the rejection. Please provide a reason.",
+        "reasonLabel": "Rejection reason",
+        "reasonMin": "Reason is required (min 10 characters)",
+        "reasonPlaceholder": "e.g: Commercial register is not valid...",
+        "confirm": "Confirm rejection",
+        "success": "Application rejected"
+      },
+      "empty": "No customers",
+      "emptyFiltered": "No customers match the filters",
+      "pagination": {
+        "page": "Page {page} of {total}",
+        "prev": "Previous",
+        "next": "Next"
+      },
+      "pending": {
+        "title": "Wholesale Applications",
+        "subtitle": "{count} applications under review",
+        "empty": "No pending applications",
+        "emptyCta": "View all customers",
+        "card": {
+          "businessName": "Business Name",
+          "taxNumber": "Tax Number",
+          "commercialRegister": "Commercial Register",
+          "appliedAt": "Applied On"
+        }
+      }
+    },
+    "common": {
+      "validationFailed": "Validation failed — {details}"
+    },
+    "suppliers": {
+      "title": "Suppliers",
+      "countLine": "{count} suppliers",
+      "add": "Add Supplier",
+      "createdOk": "Supplier created successfully",
+      "updatedOk": "Supplier updated successfully",
+      "edit": "Edit supplier",
+      "empty": "No suppliers found",
+      "filter": {
+        "searchPlaceholder": "Search by code, name, or phone..."
+      },
+      "table": {
+        "code": "Code",
+        "name": "Name",
+        "phone": "Phone",
+        "email": "Email",
+        "country": "Country",
+        "leadTime": "Lead time (days)",
+        "products": "Products",
+        "pos": "Purchase orders",
+        "actions": "Actions"
+      },
+      "form": {
+        "titleNew": "New supplier",
+        "titleEdit": "Edit supplier",
+        "code": "Code",
+        "name": "Name",
+        "nameAr": "Name (Arabic)",
+        "nameEn": "Name (English)",
+        "phone": "Phone",
+        "email": "Email",
+        "country": "Country",
+        "leadTimeDays": "Lead time (days)",
+        "saving": "Saving...",
+        "save": "Save",
+        "validationFailed": "Validation failed — {details}",
+        "saveError": "Failed to save supplier"
+      }
+    },
+    "purchases": {
+      "title": "Purchase Orders",
+      "countLine": "{count} purchase orders",
+      "add": "New Purchase Order",
+      "createdOk": "Purchase order created successfully",
+      "receivedOk": "Purchase order received — stock updated",
+      "cancelledOk": "Purchase order cancelled",
+      "notFound": "Purchase order not found",
+      "backToList": "Back to list",
+      "empty": "No purchase orders found",
+      "status": {
+        "draft": "Draft",
+        "ordered": "Ordered",
+        "shipped": "Shipped",
+        "received": "Received",
+        "cancelled": "Cancelled"
+      },
+      "filter": {
+        "status": "Status",
+        "all": "All"
+      },
+      "table": {
+        "orderNumber": "Order no.",
+        "supplier": "Supplier",
+        "branch": "Branch",
+        "items": "Items",
+        "total": "Total",
+        "status": "Status",
+        "date": "Date",
+        "product": "Product",
+        "qty": "Qty",
+        "unitCost": "Unit cost",
+        "lineTotal": "Line total",
+        "movementType": "Movement type",
+        "delta": "Qty change"
+      },
+      "pagination": {
+        "page": "Page {page} of {total}",
+        "prev": "Previous",
+        "next": "Next"
+      },
+      "detail": {
+        "supplier": "Supplier",
+        "branch": "Branch",
+        "created": "Created",
+        "receivedAt": "Received",
+        "expected": "Expected delivery",
+        "markReceived": "Mark as Received",
+        "cancelPo": "Cancel Order",
+        "itemsTitle": "Items",
+        "subtotal": "Subtotal",
+        "tax": "Tax",
+        "shipping": "Shipping",
+        "customs": "Customs",
+        "total": "Total",
+        "movementsTitle": "Stock movements from this order",
+        "notes": "Notes",
+        "confirmReceivedTitle": "Mark as received?",
+        "confirmReceivedMsg": "Stock will be increased by the received quantities.",
+        "confirmCancelTitle": "Cancel purchase order?",
+        "confirmCancelMsg": "This order will be cancelled. This cannot be undone."
+      },
+      "form": {
+        "titleNew": "New purchase order",
+        "supplier": "Supplier",
+        "selectSupplier": "Select supplier",
+        "branch": "Branch",
+        "selectBranch": "Select branch",
+        "shippingCost": "Shipping cost",
+        "customsCost": "Customs cost",
+        "expectedDate": "Expected delivery date",
+        "notes": "Notes",
+        "itemsTitle": "Items",
+        "addItem": "Add item",
+        "itemsRequired": "At least one item is required",
+        "product": "Product",
+        "selectProduct": "Select product",
+        "qty": "Qty",
+        "unitCost": "Unit cost",
+        "removeItem": "Remove item",
+        "saving": "Saving...",
+        "save": "Save",
+        "validationFailed": "Validation failed — {details}",
+        "saveError": "Failed to save purchase order"
+      }
+    },
+    "stockMovements": {
+      "title": "Stock Movements",
+      "countLine": "{count} movements",
+      "add": "Manual Adjustment",
+      "createdOk": "Stock adjusted successfully",
+      "empty": "No stock movements found",
+      "type": {
+        "purchase": "Purchase receipt",
+        "sale": "Sale",
+        "adjustment": "Manual adjustment",
+        "return": "Return",
+        "transferIn": "Transfer in",
+        "transferOut": "Transfer out"
+      },
+      "filter": {
+        "searchPlaceholder": "Search product, code, or notes...",
+        "type": "Type",
+        "all": "All"
+      },
+      "table": {
+        "date": "Date",
+        "product": "Product",
+        "branch": "Branch",
+        "type": "Type",
+        "delta": "Qty change",
+        "reference": "Reference",
+        "notes": "Notes"
+      },
+      "pagination": {
+        "page": "Page {page} of {total}",
+        "prev": "Previous",
+        "next": "Next"
+      },
+      "form": {
+        "titleNew": "Manual stock adjustment",
+        "product": "Product",
+        "selectProduct": "Select product",
+        "branch": "Branch",
+        "selectBranch": "Select branch",
+        "quantityDelta": "Quantity change",
+        "quantityDeltaHint": "e.g. 10 or -5",
+        "notes": "Notes",
+        "saving": "Saving...",
+        "save": "Save",
+        "validationFailed": "Validation failed — {details}",
+        "saveError": "Failed to save adjustment"
+      }
     }
   },
   "customers": {
@@ -1446,6 +1827,22 @@
         "shipped": "تم الشحن",
         "delivered": "تم التوصيل",
         "cancelled": "ملغي"
+      },
+      "paymentMethods": {
+        "cod": "Cash on Delivery",
+        "cash": "Cash",
+        "card": "Credit Card",
+        "mock": "Mock Payment",
+        "paymob": "Paymob",
+        "fawry": "Fawry",
+        "instapay": "InstaPay"
+      },
+      "paymentStatuses": {
+        "pending": "Pending",
+        "paid": "Paid",
+        "unpaid": "Unpaid",
+        "failed": "Failed",
+        "refunded": "Refunded"
       }
     }
   }

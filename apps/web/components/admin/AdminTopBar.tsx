@@ -20,7 +20,7 @@ export function AdminTopBar() {
       <div className="flex flex-col lg:flex-row items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className="text-sm font-semibold text-fg">
-            {t("adminPanel")}
+            {t("title")}
           </span>
           <LocaleSwitcher />
         </div>

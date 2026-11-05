@@ -453,6 +453,9 @@
       "deadStock": "Dead Stock",
       "stockValuation": "Stock Valuation"
     },
+    "topBar": {
+      "title": "Admin Panel"
+    },
     "landing": {
       "title": "Landing Page CMS",
       "subtitle": "Manage sections, cards, and CTAs shown on the store landing page.",
@@ -503,7 +506,7 @@
         "cod": "Cash on Delivery",
         "cash": "Cash",
         "card": "Credit Card",
-        "mock": "Mock",
+        "mock": "Mock Payment",
         "paymob": "Paymob",
         "fawry": "Fawry",
         "instapay": "InstaPay"

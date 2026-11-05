@@ -65,7 +65,7 @@ export default function AdminReportsDashboardPage() {
         <div>
           <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
           <p className="mt-1 text-sm text-muted">
-            {t("nav.dashboard")} — {data ? `${new Date(data.from).toLocaleDateString()} to ${new Date(data.to).toLocaleDateString()}` : ""}
+            {t("nav.dashboard")}
           </p>
         </div>
         <div className="flex items-center gap-2 bg-card border border-border rounded-xl p-1">
@@ -139,7 +139,7 @@ export default function AdminReportsDashboardPage() {
               </div>
               <div className="text-2xl font-black text-fg">{currency(kpis?.grossProfit ?? 0)}</div>
               <div className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                {kpis?.grossMarginPercent ?? 0}% margin
+                {kpis?.grossMarginPercent ?? 0}% {t("dashboard.margin")}
               </div>
             </div>
 
@@ -149,7 +149,7 @@ export default function AdminReportsDashboardPage() {
                 <ShoppingCart className="w-4 h-4 text-purple-500" />
               </div>
               <div className="text-2xl font-black text-fg">{currency(kpis?.avgOrderValue ?? 0)}</div>
-              <div className="text-xs text-muted">Cancelled: {kpis?.cancelledOrders ?? 0}</div>
+              <div className="text-xs text-muted">{t("dashboard.cancelledOrders")}: {kpis?.cancelledOrders ?? 0}</div>
             </div>
 
             <div className="p-5 rounded-2xl border border-border bg-card shadow-sm space-y-1">
@@ -158,7 +158,7 @@ export default function AdminReportsDashboardPage() {
                 <Users className="w-4 h-4 text-amber-500" />
               </div>
               <div className="text-2xl font-black text-fg">{nf.format(kpis?.newCustomers ?? 0)}</div>
-              <div className="text-xs text-muted">Active period customers</div>
+              <div className="text-xs text-muted">{t("dashboard.newCustomersPeriod")}</div>
             </div>
           </div>
 
@@ -229,11 +229,11 @@ export default function AdminReportsDashboardPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-start text-sm">
                   <thead>
-                    <tr className="border-b border-border text-muted text-xs">
-                      <th className="py-2.5 text-start font-semibold">Code / Name</th>
-                      <th className="py-2.5 text-end font-semibold">Units</th>
-                      <th className="py-2.5 text-end font-semibold">Revenue</th>
-                      <th className="py-2.5 text-end font-semibold">Profit</th>
+<tr className="border-b border-border text-muted text-xs">
+                      <th className="py-2.5 text-start font-semibold">{t("dashboard.codeName")}</th>
+                      <th className="py-2.5 text-end font-semibold">{t("dashboard.units")}</th>
+                      <th className="py-2.5 text-end font-semibold">{t("dashboard.revenue")}</th>
+                      <th className="py-2.5 text-end font-semibold">{t("dashboard.profit")}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border/60">
@@ -267,10 +267,10 @@ export default function AdminReportsDashboardPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-start text-sm">
                   <thead>
-                    <tr className="border-b border-border text-muted text-xs">
-                      <th className="py-2.5 text-start font-semibold">Branch</th>
-                      <th className="py-2.5 text-end font-semibold">Orders</th>
-                      <th className="py-2.5 text-end font-semibold">Revenue</th>
+<tr className="border-b border-border text-muted text-xs">
+                      <th className="py-2.5 text-start font-semibold">{t("dashboard.branch")}</th>
+                      <th className="py-2.5 text-end font-semibold">{t("dashboard.orders")}</th>
+                      <th className="py-2.5 text-end font-semibold">{t("dashboard.revenue")}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border/60">
@@ -281,9 +281,9 @@ export default function AdminReportsDashboardPage() {
                     ) : (
                       data.salesByBranch.map((b) => (
                         <tr key={b.branchId} className="hover:bg-accent/5">
-                          <td className="py-3 font-bold text-fg">{b.branchName}</td>
-                          <td className="py-3 text-end font-semibold">{nf.format(b.orderCount)}</td>
-                          <td className="py-3 text-end font-semibold">{currency(b.revenue)}</td>
+                          <td className="py-3 font-bold text-fg">{t("dashboard.branch")}: {b.branchName}</td>
+                          <td className="py-3 text-end font-semibold">{t("dashboard.orders")}: {nf.format(b.orderCount)}</td>
+                          <td className="py-3 text-end font-semibold">{t("dashboard.revenue")}: {currency(b.revenue)}</td>
                         </tr>
                       ))
                     )}

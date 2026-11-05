@@ -476,7 +476,7 @@
       }
     },
     "reports": {
-      "title": "التقارير المالية والتحليلات الذكية",
+      "title": "التقارير",
       "nav": {
         "dashboard": "لوحة التقارير",
         "breakEven": "نقطة التعادل",
@@ -568,7 +568,7 @@
         "avgOrderValue": "متوسط قيمة الطلب",
         "grossProfit": "مجمل الربح",
         "newCustomers": "العملاء الجدد",
-        "topProducts": "المنتجات الأكثر مبيعا",
+        "topProducts": "المنتجات الأكثر مبيعاً",
         "salesByBranch": "المبيعات حسب الفرع",
         "viewDetails": "عرض التفاصيل"
       },
@@ -594,7 +594,7 @@
         }
       },
       "abc": {
-        "title": "تحليل ABC (مبدأ پارتو)",
+        "title": "تحليل ABC (مبدأ بارتو)",
         "classA": "الفئة أ (أعلى 80% إيرادات)",
         "classB": "الفئة ب (15% التالية)",
         "classC": "الفئة ج (أقل 5% إيرادات)",
@@ -617,9 +617,17 @@
         "title": "تقييم المخزون",
         "totalCostValue": "إجمالي قيمة التكلفة",
         "totalRetailValue": "إجمالي قيمة التجزئة",
-        "potentialProfit": "الربح المحتمل",
+        "potentialProfit": "الربح المتوقع",
         "byBranch": "التقييم حسب الفرع",
         "byCategory": "التقييم حسب التصنيف"
+      },
+      "subtitle": "تقارير المبيعات والمخزون.",
+      "paymentKpis": {
+        "totalSales": "إجمالي المبيعات",
+        "cashSales": "مبيعات نقدية",
+        "cardSales": "مبيعات بطاقة",
+        "codSales": "مبيعات دفع عند الاستلام",
+        "pendingPayments": "مدفوعات معلقة"
       }
     },
     "forms": {
@@ -633,38 +641,38 @@
     },
     "dashboard": {
       "title": "لوحة التحكم",
-      "newProduct": "منتج جديد",
-      "viewSite": "عرض الموقع",
-      "statsAria": "إحصائيات المتجر",
+      "newProduct": "إضافة منتج",
+      "viewSite": "زيارة المتجر",
+      "statsAria": "إحصائيات لوحة التحكم",
       "cardBrands": "الماركات",
       "cardProducts": "المنتجات",
       "cardOrders": "الطلبات",
       "cardLowStock": "مخزون منخفض",
-      "pendingCustomers": "طلبات تفعيل التجار",
-      "recentOrders": "أحدث الطلبات",
-      "noOrders": "لا توجد طلبات بعد.",
+      "pendingCustomers": "عملاء في انتظار الموافقة",
+      "recentOrders": "آخر الطلبات",
+      "noOrders": "لا توجد طلبات.",
       "orderNo": "رقم الطلب",
       "customer": "العميل",
       "branchCol": "الفرع",
-      "total": "الإجمالي",
+      "total": "المجموع",
       "status": "الحالة",
       "statusPending": "قيد الانتظار",
       "statusConfirmed": "مؤكد",
       "statusShipped": "تم الشحن",
-      "statusDelivered": "تم التسليم",
+      "statusDelivered": "تم التوصيل",
       "statusCancelled": "ملغي"
     },
     "products": {
-      "metaNew": "منتج جديد | MotoGearSouq",
+      "metaNew": "إضافة منتج | MotoGearSouq",
       "metaEdit": "تعديل منتج | MotoGearSouq",
-      "newTitle": "منتج جديد",
+      "newTitle": "إضافة منتج جديد",
       "editTitle": "تعديل المنتج",
-      "backToList": "العودة للمنتجات",
+      "backToList": "العودة للقائمة",
       "title": "المنتجات",
       "countLine": "{count} منتج في القائمة",
-      "add": "منتج جديد",
+      "add": "إضافة منتج",
       "searchLabel": "بحث",
-      "searchPlaceholder": "اسم المنتج، الكود، أو كود OEM",
+      "searchPlaceholder": "اسم المنتج أو الكود",
       "searchBtn": "بحث",
       "code": "الكود",
       "name": "الاسم",
@@ -675,13 +683,13 @@
       "stock": "المخزون",
       "status": "الحالة",
       "actions": "الإجراءات",
-      "empty": "لا توجد منتجات مطابقة.",
-      "lowTag": "(منخفض)",
+      "empty": "لا توجد منتجات.",
+      "lowTag": "منخفض",
       "paginationAria": "صفحات المنتجات",
-      "deleteTitle": "حذف المنتج",
-      "deleteMsg": "هل أنت متأكد من حذف المنتج \"{name}\"؟",
+      "deleteTitle": "حذف منتج",
+      "deleteMsg": "هل أنت متأكد من حذف \"{name}\"؟",
       "deletedOk": "تم حذف المنتج بنجاح",
-      "deleteFailed": "تعسّر حذف المنتج",
+      "deleteFailed": "فشل حذف المنتج",
       "form": {
         "code": "كود المنتج *",
         "name": "اسم المنتج *",
@@ -768,9 +776,9 @@
     "branches": {
       "title": "الفروع",
       "countLine": "{count} فرع — الضمان والموظفين والمخزون لكل فرع.",
-      "add": "+ إضافة فرع",
-      "empty": "لا توجد فروع بعد.",
-      "createdOk": "تم إضافة الفرع بنجاح",
+      "add": "إضافة فرع",
+      "empty": "لا توجد فروع.",
+      "createdOk": "تم إنشاء الفرع بنجاح",
       "updatedOk": "تم تحديث الفرع بنجاح",
       "stats": {
         "inventory": "صنف بالمخزون",
@@ -782,11 +790,11 @@
         "fri": "الجمعة"
       },
       "types": {
-        "retail": "بيع بالتجزئة (Retail)",
-        "warehouse": "مخزن (Warehouse)",
-        "showroom": "صالة عرض (Showroom)",
-        "main": "رئيسي (Main)",
-        "service_center": "مركز صيانة (Service Center)"
+        "retail": "تجزئة",
+        "warehouse": "مستودع",
+        "showroom": "معرض",
+        "main": "رئيسي",
+        "service_center": "مركز خدمة"
       },
       "form": {
         "titleNew": "إضافة فرع جديد",
@@ -818,23 +826,23 @@
     "employees": {
       "title": "الموظفون",
       "countLine": "{count} موظف مسجل، مع فرع وكل صلاحية.",
-      "add": "+ إضافة موظف",
-      "empty": "لا يوجد موظفون بعد.",
+      "add": "إضافة موظف",
+      "empty": "لا يوجد موظفون.",
       "empNo": "رقم الموظف",
       "name": "الاسم",
-      "mobile": "الموبايل",
-      "role": "الصلاحية",
+      "mobile": "الهاتف",
+      "role": "الدور",
       "branchCol": "الفرع",
       "ordersCol": "الطلبات",
       "statusCol": "الحالة",
       "actions": "الإجراءات",
-      "createdOk": "تم إضافة الموظف بنجاح",
+      "createdOk": "تم إنشاء الموظف بنجاح",
       "updatedOk": "تم تحديث الموظف بنجاح",
       "roles": {
-        "admin": "مدير نظام",
-        "manager": "مدير فرع",
+        "admin": "مدير",
+        "manager": "مشرف",
         "cashier": "كاشير",
-        "warehouse": "أمين مخزن"
+        "warehouse": "مستودع"
       },
       "form": {
         "titleNew": "إضافة موظف جديد",
@@ -866,10 +874,10 @@
     },
     "inventory": {
       "title": "المخزون",
-      "countLine": "{count} صنف في العرض — عدّل الكمية مباشرة ثم اضغط حفظ.",
-      "lowCount": "{count} صنف تحت حد الطلب",
-      "filterLabel": "تصفية حسب الفرع",
-      "allBranches": "كل الفروع",
+      "countLine": "{count} منتج",
+      "lowCount": "{count} منتج منخفض المخزون",
+      "filterLabel": "الفرع",
+      "allBranches": "جميع الفروع",
       "viewBtn": "عرض",
       "empty": "لا توجد أصناف بالمخزون للفروع المختارة.",
       "product": "المنتج",
@@ -916,13 +924,14 @@
       }
     },
     "payments": {
-      "title": "إدارة المدفوعات والمعاملات",
+      "title": "المدفوعات",
       "filters": {
         "status": "الحالة",
-        "provider": "بوابة الدفع",
+        "provider": "البوابة",
         "dateFrom": "من تاريخ",
         "dateTo": "إلى تاريخ",
-        "all": "الكل"
+        "all": "الكل",
+        "searchPlaceholder": "البحث برقم الطلب أو العميل..."
       },
       "table": {
         "date": "التاريخ",
@@ -930,31 +939,41 @@
         "provider": "البوابة",
         "method": "طريقة الدفع",
         "amount": "المبلغ",
-        "status": "حالة الدفع",
+        "status": "الحالة",
         "actions": "إجراءات"
       },
       "statuses": {
         "pending": "قيد الانتظار",
-        "success": "ناجح",
+        "success": "مدفوع",
         "failed": "فشل",
-        "refunded": "مسترد"
+        "refunded": "مسترجع"
       },
       "providers": {
-        "mock": "وهمي",
+        "mock": "تجريبي",
         "paymob": "باي موب",
         "fawry": "فوري",
-        "instapay": "انستاباي",
+        "instapay": "إنستاباي",
         "manual": "يدوي"
       },
       "methods": {
         "visa": "فيزا / بطاقة",
         "cod": "الدفع عند الاستلام",
         "fawryCode": "كود فوري",
-        "instapay": "انستاباي",
-        "manual": "يدوي"
+        "instapay": "إنستاباي",
+        "manual": "يدوي",
+        "cash": "نقدي",
+        "card": "بطاقة ائتمان",
+        "mock": "دفع تجريبي",
+        "paymob": "باي موب",
+        "fawry": "فوري"
       },
-      "empty": "لا توجد معاملات دفع مسجلة",
-      "exportCsv": "تصدير CSV"
+      "empty": "لا توجد مدفوعات.",
+      "exportCsv": "تصدير CSV",
+      "pagination": {
+        "page": "صفحة {page} من {total}",
+        "prev": "السابق",
+        "next": "التالي"
+      }
     },
     "orders": {
       "title": "إدارة الطلبات",
@@ -1100,104 +1119,104 @@
       "logout": "تسجيل الخروج"
     },
     "landing": {
-      "title": "Landing Page CMS",
-      "subtitle": "Manage sections, cards, and CTAs shown on the store landing page.",
-      "empty": "No landing sections found.",
-      "edit": "Edit",
-      "collapse": "Collapse",
-      "save": "Save changes",
-      "cardCount": "{count} cards",
+      "title": "إدارة صفحة الهبوط",
+      "subtitle": "إدارة الأقسام والبطاقات وأزرار الإجراء المعروضة في صفحة الهبوط.",
+      "empty": "لا توجد أقسام للصفحة الرئيسية.",
+      "edit": "تعديل",
+      "collapse": "طي",
+      "save": "حفظ التغييرات",
+      "cardCount": "{count} بطاقة",
       "fields": {
-        "titleAr": "Title (Arabic)",
-        "titleEn": "Title (English)",
-        "subtitleAr": "Subtitle (Arabic)",
-        "subtitleEn": "Subtitle (English)",
-        "ctaLabelAr": "CTA label (Arabic)",
-        "ctaLabelEn": "CTA label (English)",
-        "ctaLink": "CTA link",
-        "order": "Order"
+        "titleAr": "العنوان (بالعربية)",
+        "titleEn": "العنوان (بالإنجليزية)",
+        "subtitleAr": "العنوان الفرعي (بالعربية)",
+        "subtitleEn": "العنوان الفرعي (باللغة الإنجليزية)",
+        "ctaLabelAr": "نص زر الإجراء (بالعربية)",
+        "ctaLabelEn": "نص زر الإجراء (باللغة الإنجليزية)",
+        "ctaLink": "رابط زر الإجراء",
+        "order": "الترتيب"
       },
       "cards": {
-        "title": "Cards",
-        "add": "Add card"
+        "title": "البطاقات",
+        "add": "إضافة بطاقة"
       }
     },
     "customers": {
-      "title": "Customers",
-      "subtitle": "{count} customers",
+      "title": "العملاء",
+      "subtitle": "إدارة العملاء والطلبات.",
       "filters": {
-        "all": "All",
-        "type": "Type",
-        "typeRetail": "Individual",
-        "typeWholesale": "Merchant / Wholesale",
-        "status": "Status",
-        "statusPending": "Pending",
-        "statusApproved": "Approved",
-        "statusRejected": "Rejected",
-        "search": "Search",
-        "searchPlaceholder": "Name or phone",
-        "clearAll": "Clear all"
+        "all": "الكل",
+        "type": "النوع",
+        "typeRetail": "تجزئة",
+        "typeWholesale": "جملة",
+        "status": "الحالة",
+        "statusPending": "قيد الانتظار",
+        "statusApproved": "مقبول",
+        "statusRejected": "مرفوض",
+        "search": "بحث",
+        "searchPlaceholder": "البحث باسم العميل أو الهاتف...",
+        "clearAll": "مسح الكل"
       },
       "table": {
-        "name": "Name",
-        "phone": "Phone",
-        "type": "Type",
-        "status": "Status",
-        "blocked": "Status",
-        "blockedBadge": "Blocked",
-        "deliveryHistory": "Deliveries",
-        "orders": "Orders",
-        "created": "Registered On",
-        "actions": "Actions",
+        "name": "الاسم",
+        "phone": "الهاتف",
+        "type": "النوع",
+        "status": "الحالة",
+        "blocked": "محظور",
+        "blockedBadge": "محظور",
+        "deliveryHistory": "سجل التسليم",
+        "orders": "الطلبات",
+        "created": "تاريخ الإنشاء",
+        "actions": "الإجراءات",
         "badgeRetail": "Retail",
         "badgeWholesale": "Merchant"
       },
       "actions": {
-        "view": "View",
-        "approve": "Approve",
-        "reject": "Reject",
-        "block": "Block",
-        "unblock": "Unblock"
+        "view": "عرض",
+        "approve": "موافقة",
+        "reject": "رفض",
+        "block": "حظر",
+        "unblock": "إلغاء الحظر"
       },
       "block": {
-        "title": "Block Customer",
-        "message": "{name} will be prevented from logging in and creating new orders. Please provide a reason.",
+        "title": "حظر عميل",
+        "message": "حظر حساب {name}؟",
         "reasonLabel": "Reason for blocking",
         "reasonMin": "Reason is required (min 10 characters)",
         "reasonPlaceholder": "e.g: Repeated fake orders...",
         "confirm": "Confirm Block",
-        "success": "Customer blocked successfully"
+        "success": "تم حظر العميل بنجاح"
       },
       "unblock": {
-        "title": "Unblock Customer",
-        "message": "Are you sure you want to unblock {name}?",
+        "title": "إلغاء حظر عميل",
+        "message": "إلغاء حظر حساب {name}؟",
         "confirm": "Yes, Unblock",
-        "success": "Customer unblocked successfully"
+        "success": "تم إلغاء حظر العميل بنجاح"
       },
       "approve": {
-        "title": "Confirm Approval",
-        "message": "Are you sure you want to approve {name} as a wholesale merchant?",
+        "title": "موافقة على عميل",
+        "message": "الموافقة على حساب {name}؟",
         "confirm": "Yes, approve",
-        "success": "Merchant approved successfully"
+        "success": "تمت الموافقة على العميل بنجاح"
       },
       "reject": {
-        "title": "Reject Application",
-        "message": "{name} will be notified of the rejection. Please provide a reason.",
+        "title": "رفض عميل",
+        "message": "رفض حساب {name}؟",
         "reasonLabel": "Rejection reason",
         "reasonMin": "Reason is required (min 10 characters)",
         "reasonPlaceholder": "e.g: Commercial register is not valid...",
         "confirm": "Confirm rejection",
-        "success": "Application rejected"
+        "success": "تم رفض العميل بنجاح"
       },
-      "empty": "No customers",
-      "emptyFiltered": "No customers match the filters",
+      "empty": "لا يوجد عملاء.",
+      "emptyFiltered": "لا يوجد عملاء تطابق عوامل التصفية.",
       "pagination": {
-        "page": "Page {page} of {total}",
-        "prev": "Previous",
-        "next": "Next"
+        "page": "صفحة {page} من {total}",
+        "prev": "السابق",
+        "next": "التالي"
       },
       "pending": {
-        "title": "Wholesale Applications",
+        "title": "في انتظار الموافقة",
         "subtitle": "{count} applications under review",
         "empty": "No pending applications",
         "emptyCta": "View all customers",
@@ -1210,29 +1229,38 @@
       }
     },
     "common": {
-      "validationFailed": "Validation failed — {details}"
+      "validationFailed": "Validation failed — {details}",
+      "errorGeneric": "حدث خطأ",
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "loading": "جارٍ التحميل...",
+      "save": "حفظ",
+      "cancel": "إلغاء",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "confirm": "تأكيد"
     },
     "suppliers": {
-      "title": "Suppliers",
+      "title": "الموردون",
       "countLine": "{count} suppliers",
-      "add": "Add Supplier",
-      "createdOk": "Supplier created successfully",
-      "updatedOk": "Supplier updated successfully",
+      "add": "إضافة مورد",
+      "createdOk": "تم إنشاء المورد بنجاح",
+      "updatedOk": "تم تحديث المورد بنجاح",
       "edit": "Edit supplier",
-      "empty": "No suppliers found",
+      "empty": "لا يوجد موردون.",
       "filter": {
         "searchPlaceholder": "Search by code, name, or phone..."
       },
       "table": {
-        "code": "Code",
-        "name": "Name",
-        "phone": "Phone",
-        "email": "Email",
-        "country": "Country",
-        "leadTime": "Lead time (days)",
-        "products": "Products",
-        "pos": "Purchase orders",
-        "actions": "Actions"
+        "code": "الكود",
+        "name": "الاسم",
+        "phone": "الهاتف",
+        "email": "البريد الإلكتروني",
+        "country": "الدولة",
+        "leadTime": "المهلة",
+        "products": "المنتجات",
+        "pos": "طلبات الشراء",
+        "actions": "الإجراءات"
       },
       "form": {
         "titleNew": "New supplier",
@@ -1252,15 +1280,15 @@
       }
     },
     "purchases": {
-      "title": "Purchase Orders",
+      "title": "طلبات الشراء",
       "countLine": "{count} purchase orders",
-      "add": "New Purchase Order",
-      "createdOk": "Purchase order created successfully",
-      "receivedOk": "Purchase order received — stock updated",
-      "cancelledOk": "Purchase order cancelled",
+      "add": "إضافة طلب شراء",
+      "createdOk": "تم إنشاء طلب الشراء بنجاح",
+      "receivedOk": "تم الاستلام بنجاح",
+      "cancelledOk": "تم الإلغاء بنجاح",
       "notFound": "Purchase order not found",
       "backToList": "Back to list",
-      "empty": "No purchase orders found",
+      "empty": "لا توجد طلبات شراء.",
       "status": {
         "draft": "Draft",
         "ordered": "Ordered",
@@ -1269,17 +1297,17 @@
         "cancelled": "Cancelled"
       },
       "filter": {
-        "status": "Status",
-        "all": "All"
+        "status": "الحالة",
+        "all": "الكل"
       },
       "table": {
-        "orderNumber": "Order no.",
-        "supplier": "Supplier",
-        "branch": "Branch",
-        "items": "Items",
-        "total": "Total",
-        "status": "Status",
-        "date": "Date",
+        "orderNumber": "رقم طلب الشراء",
+        "supplier": "المورد",
+        "branch": "الفرع",
+        "items": "العناصر",
+        "total": "المجموع",
+        "status": "الحالة",
+        "date": "التاريخ",
         "product": "Product",
         "qty": "Qty",
         "unitCost": "Unit cost",
@@ -1288,9 +1316,9 @@
         "delta": "Qty change"
       },
       "pagination": {
-        "page": "Page {page} of {total}",
-        "prev": "Previous",
-        "next": "Next"
+        "page": "صفحة {page} من {total}",
+        "prev": "السابق",
+        "next": "التالي"
       },
       "detail": {
         "supplier": "Supplier",
@@ -1338,37 +1366,37 @@
       }
     },
     "stockMovements": {
-      "title": "Stock Movements",
+      "title": "حركات المخزون",
       "countLine": "{count} movements",
-      "add": "Manual Adjustment",
-      "createdOk": "Stock adjusted successfully",
-      "empty": "No stock movements found",
+      "add": "إضافة حركة",
+      "createdOk": "تم إنشاء الحركة بنجاح",
+      "empty": "لا توجد حركات.",
       "type": {
-        "purchase": "Purchase receipt",
-        "sale": "Sale",
-        "adjustment": "Manual adjustment",
-        "return": "Return",
-        "transferIn": "Transfer in",
-        "transferOut": "Transfer out"
+        "purchase": "شراء",
+        "sale": "بيع",
+        "adjustment": "تعديل",
+        "return": "إرجاع",
+        "transferIn": "نقل وارد",
+        "transferOut": "نقل صادر"
       },
       "filter": {
-        "searchPlaceholder": "Search product, code, or notes...",
-        "type": "Type",
-        "all": "All"
+        "searchPlaceholder": "البحث عن منتج أو مرجع...",
+        "type": "النوع",
+        "all": "الكل"
       },
       "table": {
-        "date": "Date",
-        "product": "Product",
-        "branch": "Branch",
-        "type": "Type",
-        "delta": "Qty change",
-        "reference": "Reference",
-        "notes": "Notes"
+        "date": "التاريخ",
+        "product": "المنتج",
+        "branch": "الفرع",
+        "type": "النوع",
+        "delta": "الكمية",
+        "reference": "المرجع",
+        "notes": "ملاحظات"
       },
       "pagination": {
-        "page": "Page {page} of {total}",
-        "prev": "Previous",
-        "next": "Next"
+        "page": "صفحة {page} من {total}",
+        "prev": "السابق",
+        "next": "التالي"
       },
       "form": {
         "titleNew": "Manual stock adjustment",

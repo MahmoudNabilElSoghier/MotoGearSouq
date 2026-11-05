@@ -494,7 +494,7 @@
       },
       "cards": {
         "title": "Cards",
-        "add": "Add card"
+        "add": "Add Card"
       }
     },
     "orders": {
@@ -580,9 +580,9 @@
       }
     },
     "reports": {
-      "title": "Financial Reports & Intelligence",
+      "title": "Reports",
       "nav": {
-        "dashboard": "Reports Dashboard",
+        "dashboard": "Dashboard",
         "breakEven": "Break-Even",
         "abc": "ABC Analysis",
         "deadStock": "Dead Stock",
@@ -592,12 +592,12 @@
         "last7Days": "Last 7 Days",
         "last30Days": "Last 30 Days",
         "last90Days": "Last 90 Days",
-        "last365Days": "Last Year"
+        "last365Days": "Last 365 Days"
       },
       "dashboard": {
         "totalRevenue": "Total Revenue",
         "totalOrders": "Total Orders",
-        "avgOrderValue": "Average Order Value",
+        "avgOrderValue": "Avg Order Value",
         "grossProfit": "Gross Profit",
         "newCustomers": "New Customers",
         "topProducts": "Top Products",
@@ -605,31 +605,31 @@
         "viewDetails": "View Details"
       },
       "breakEven": {
-        "title": "Break-Even Analysis & Fixed Costs",
-        "settings": "Monthly Fixed Costs Settings",
-        "rent": "Monthly Rent",
-        "salaries": "Monthly Salaries",
-        "utilities": "Monthly Utilities",
-        "marketing": "Monthly Marketing",
-        "other": "Other Monthly Expenses",
+        "title": "Break-Even Analysis",
+        "settings": "Fixed Costs",
+        "rent": "Rent",
+        "salaries": "Salaries",
+        "utilities": "Utilities",
+        "marketing": "Marketing",
+        "other": "Other",
         "totalMonthly": "Total Monthly Fixed Costs",
         "save": "Save Settings",
         "saved": "Settings saved successfully",
-        "currentRevenue": "Current Period Revenue",
+        "currentRevenue": "Current Revenue",
         "breakEvenRevenue": "Break-Even Revenue",
-        "breakEvenUnits": "Break-Even Units Est.",
+        "breakEvenUnits": "Break-Even Units",
         "marginOfSafety": "Margin of Safety",
         "status": {
           "below": "Below Break-Even (Loss)",
-          "above": "Above Break-Even (Profitable)",
+          "above": "Above Break-Even (Profit)",
           "at": "At Break-Even"
         }
       },
       "abc": {
-        "title": "ABC Analysis (Pareto Principle)",
-        "classA": "Class A (Top 80% Revenue)",
-        "classB": "Class B (Next 15% Revenue)",
-        "classC": "Class C (Bottom 5% Revenue)",
+        "title": "ABC Analysis",
+        "classA": "Category A (Top 80% Revenue)",
+        "classB": "Category B (Next 15% Revenue)",
+        "classC": "Category C (Remaining 5% Revenue)",
         "code": "Code",
         "name": "Product Name",
         "revenue": "Revenue",
@@ -637,7 +637,7 @@
         "cumulative": "Cumulative %"
       },
       "deadStock": {
-        "title": "Dead Stock Analysis",
+        "title": "Dead Stock",
         "threshold": "Inactivity Threshold (Days)",
         "productsCount": "Dead Stock Items",
         "capitalTied": "Capital Tied Up",
@@ -646,12 +646,20 @@
         "exportCsv": "Export CSV"
       },
       "stockValuation": {
-        "title": "Inventory Valuation",
+        "title": "Stock Valuation",
         "totalCostValue": "Total Cost Value",
         "totalRetailValue": "Total Retail Value",
         "potentialProfit": "Potential Profit",
-        "byBranch": "Valuation by Branch",
-        "byCategory": "Valuation by Category"
+        "byBranch": "By Branch",
+        "byCategory": "By Category"
+      },
+      "subtitle": "Reports dashboard",
+      "paymentKpis": {
+        "totalSales": "Total Sales",
+        "cashSales": "Cash Sales",
+        "cardSales": "Card Sales",
+        "codSales": "COD Sales",
+        "pendingPayments": "Pending Payments"
       }
     },
     "forms": {
@@ -665,17 +673,17 @@
     },
     "dashboard": {
       "title": "Dashboard",
-      "newProduct": "New product",
-      "viewSite": "View site",
-      "statsAria": "Store statistics",
+      "newProduct": "Add Product",
+      "viewSite": "Visit Store",
+      "statsAria": "Dashboard statistics",
       "cardBrands": "Brands",
       "cardProducts": "Products",
       "cardOrders": "Orders",
-      "cardLowStock": "Low stock",
-      "pendingCustomers": "Pending Wholesale Applications",
-      "recentOrders": "Recent orders",
+      "cardLowStock": "Low Stock",
+      "pendingCustomers": "Pending Customers",
+      "recentOrders": "Recent Orders",
       "noOrders": "No orders yet.",
-      "orderNo": "Order no.",
+      "orderNo": "Order #",
       "customer": "Customer",
       "branchCol": "Branch",
       "total": "Total",
@@ -687,31 +695,31 @@
       "statusCancelled": "Cancelled"
     },
     "products": {
-      "metaNew": "New product | MotoGearSouq",
-      "metaEdit": "Edit product | MotoGearSouq",
-      "newTitle": "New product",
-      "editTitle": "Edit product",
-      "backToList": "Back to products",
+      "metaNew": "Add Product | MotoGearSouq",
+      "metaEdit": "Edit Product | MotoGearSouq",
+      "newTitle": "Add New Product",
+      "editTitle": "Edit Product",
+      "backToList": "Back to Products",
       "title": "Products",
       "countLine": "Products in list: {count}",
-      "add": "New product",
+      "add": "Add Product",
       "searchLabel": "Search",
-      "searchPlaceholder": "Product name, code, or OEM code",
+      "searchPlaceholder": "Product name or code",
       "searchBtn": "Search",
       "code": "Code",
       "name": "Name",
       "brand": "Brand",
       "category": "Category",
-      "wholesale": "Wholesale price",
-      "retail": "Retail price",
+      "wholesale": "Wholesale",
+      "retail": "Retail",
       "stock": "Stock",
       "status": "Status",
       "actions": "Actions",
-      "empty": "No matching products.",
-      "lowTag": "(low)",
+      "empty": "No products found.",
+      "lowTag": "Low",
       "paginationAria": "Product pages",
-      "deleteTitle": "Delete product",
-      "deleteMsg": "Are you sure you want to delete the product \"{name}\"?",
+      "deleteTitle": "Delete Product",
+      "deleteMsg": "Are you sure you want to delete \"{name}\"?",
       "deletedOk": "Product deleted successfully",
       "deleteFailed": "Failed to delete product",
       "form": {
@@ -800,9 +808,9 @@
     "branches": {
       "title": "Branches",
       "countLine": "Branches: {count} — warranty, staff and stock for each branch.",
-      "add": "+ Add branch",
-      "empty": "No branches yet.",
-      "createdOk": "Branch added successfully",
+      "add": "Add Branch",
+      "empty": "No branches found.",
+      "createdOk": "Branch created successfully",
       "updatedOk": "Branch updated successfully",
       "stats": {
         "inventory": "stock items",
@@ -850,23 +858,23 @@
     "employees": {
       "title": "Employees",
       "countLine": "Employees: {count} — each with a branch and permissions.",
-      "add": "+ Add employee",
-      "empty": "No employees yet.",
-      "empNo": "Employee no.",
+      "add": "Add Employee",
+      "empty": "No employees found.",
+      "empNo": "Employee #",
       "name": "Name",
-      "mobile": "Mobile",
+      "mobile": "Phone",
       "role": "Role",
       "branchCol": "Branch",
       "ordersCol": "Orders",
       "statusCol": "Status",
       "actions": "Actions",
-      "createdOk": "Employee added successfully",
+      "createdOk": "Employee created successfully",
       "updatedOk": "Employee updated successfully",
       "roles": {
-        "admin": "System admin",
-        "manager": "Branch manager",
+        "admin": "Admin",
+        "manager": "Manager",
         "cashier": "Cashier",
-        "warehouse": "Warehouse keeper"
+        "warehouse": "Warehouse"
       },
       "form": {
         "titleNew": "Add new employee",
@@ -898,10 +906,10 @@
     },
     "inventory": {
       "title": "Inventory",
-      "countLine": "Items shown: {count} — edit a quantity, then press save.",
-      "lowCount": "Items below reorder level: {count}",
-      "filterLabel": "Filter by branch",
-      "allBranches": "All branches",
+      "countLine": "{count} products",
+      "lowCount": "{count} low stock items",
+      "filterLabel": "Branch",
+      "allBranches": "All Branches",
       "viewBtn": "View",
       "empty": "No inventory items for the selected branches.",
       "product": "Product",
@@ -948,13 +956,14 @@
       }
     },
     "payments": {
-      "title": "Payments & Transactions Management",
+      "title": "Payments",
       "filters": {
         "status": "Status",
         "provider": "Provider",
-        "dateFrom": "Date From",
-        "dateTo": "Date To",
-        "all": "All"
+        "dateFrom": "From Date",
+        "dateTo": "To Date",
+        "all": "All",
+        "searchPlaceholder": "Search order or customer..."
       },
       "table": {
         "date": "Date",
@@ -967,7 +976,7 @@
       },
       "statuses": {
         "pending": "Pending",
-        "success": "Success",
+        "success": "Paid",
         "failed": "Failed",
         "refunded": "Refunded"
       },
@@ -983,25 +992,35 @@
         "cod": "Cash on Delivery",
         "fawryCode": "Fawry Code",
         "instapay": "InstaPay",
-        "manual": "Manual"
+        "manual": "Manual",
+        "cash": "Cash",
+        "card": "Credit Card",
+        "mock": "Mock Payment",
+        "paymob": "Paymob",
+        "fawry": "Fawry"
       },
-      "empty": "No payment transactions found",
-      "exportCsv": "Export CSV"
+      "empty": "No payments found.",
+      "exportCsv": "Export CSV",
+      "pagination": {
+        "page": "Page {page} of {total}",
+        "prev": "Prev",
+        "next": "Next"
+      }
     },
     "customers": {
       "title": "Customers",
-      "subtitle": "{count} customers",
+      "subtitle": "Manage customer accounts and orders.",
       "filters": {
         "all": "All",
         "type": "Type",
-        "typeRetail": "Individual",
-        "typeWholesale": "Merchant / Wholesale",
+        "typeRetail": "Retail",
+        "typeWholesale": "Wholesale",
         "status": "Status",
         "statusPending": "Pending",
         "statusApproved": "Approved",
         "statusRejected": "Rejected",
         "search": "Search",
-        "searchPlaceholder": "Name or phone",
+        "searchPlaceholder": "Search name or phone...",
         "clearAll": "Clear all"
       },
       "table": {
@@ -1009,11 +1028,11 @@
         "phone": "Phone",
         "type": "Type",
         "status": "Status",
-        "blocked": "Status",
+        "blocked": "Blocked",
         "blockedBadge": "Blocked",
         "deliveryHistory": "Deliveries",
         "orders": "Orders",
-        "created": "Registered On",
+        "created": "Created",
         "actions": "Actions",
         "badgeRetail": "Retail",
         "badgeWholesale": "Merchant"
@@ -1027,7 +1046,7 @@
       },
       "block": {
         "title": "Block Customer",
-        "message": "{name} will be prevented from logging in and creating new orders. Please provide a reason.",
+        "message": "Block account for {name}?",
         "reasonLabel": "Reason for blocking",
         "reasonMin": "Reason is required (min 10 characters)",
         "reasonPlaceholder": "e.g: Repeated fake orders...",
@@ -1036,34 +1055,34 @@
       },
       "unblock": {
         "title": "Unblock Customer",
-        "message": "Are you sure you want to unblock {name}?",
+        "message": "Unblock account for {name}?",
         "confirm": "Yes, Unblock",
         "success": "Customer unblocked successfully"
       },
       "approve": {
-        "title": "Confirm Approval",
-        "message": "Are you sure you want to approve {name} as a wholesale merchant?",
+        "title": "Approve Customer",
+        "message": "Approve account for {name}?",
         "confirm": "Yes, approve",
-        "success": "Merchant approved successfully"
+        "success": "Customer approved successfully"
       },
       "reject": {
-        "title": "Reject Application",
-        "message": "{name} will be notified of the rejection. Please provide a reason.",
+        "title": "Reject Customer",
+        "message": "Reject account for {name}?",
         "reasonLabel": "Rejection reason",
         "reasonMin": "Reason is required (min 10 characters)",
         "reasonPlaceholder": "e.g: Commercial register is not valid...",
         "confirm": "Confirm rejection",
-        "success": "Application rejected"
+        "success": "Customer rejected successfully"
       },
-      "empty": "No customers",
-      "emptyFiltered": "No customers match the filters",
+      "empty": "No customers found.",
+      "emptyFiltered": "No customers match your filters.",
       "pagination": {
         "page": "Page {page} of {total}",
-        "prev": "Previous",
+        "prev": "Prev",
         "next": "Next"
       },
       "pending": {
-        "title": "Wholesale Applications",
+        "title": "Pending Approval",
         "subtitle": "{count} applications under review",
         "empty": "No pending applications",
         "emptyCta": "View all customers",
@@ -1076,7 +1095,16 @@
       }
     },
     "common": {
-      "validationFailed": "Validation failed — {details}"
+      "validationFailed": "Validation failed — {details}",
+      "errorGeneric": "Error",
+      "active": "Active",
+      "inactive": "Inactive",
+      "loading": "Loading...",
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "confirm": "Confirm"
     },
     "suppliers": {
       "title": "Suppliers",
@@ -1085,7 +1113,7 @@
       "createdOk": "Supplier created successfully",
       "updatedOk": "Supplier updated successfully",
       "edit": "Edit supplier",
-      "empty": "No suppliers found",
+      "empty": "No suppliers found.",
       "filter": {
         "searchPlaceholder": "Search by code, name, or phone..."
       },
@@ -1095,9 +1123,9 @@
         "phone": "Phone",
         "email": "Email",
         "country": "Country",
-        "leadTime": "Lead time (days)",
+        "leadTime": "Lead Time",
         "products": "Products",
-        "pos": "Purchase orders",
+        "pos": "Purchase Orders",
         "actions": "Actions"
       },
       "form": {
@@ -1120,13 +1148,13 @@
     "purchases": {
       "title": "Purchase Orders",
       "countLine": "{count} purchase orders",
-      "add": "New Purchase Order",
+      "add": "Add Purchase Order",
       "createdOk": "Purchase order created successfully",
-      "receivedOk": "Purchase order received — stock updated",
-      "cancelledOk": "Purchase order cancelled",
+      "receivedOk": "Received successfully",
+      "cancelledOk": "Cancelled successfully",
       "notFound": "Purchase order not found",
       "backToList": "Back to list",
-      "empty": "No purchase orders found",
+      "empty": "No purchase orders found.",
       "status": {
         "draft": "Draft",
         "ordered": "Ordered",
@@ -1139,7 +1167,7 @@
         "all": "All"
       },
       "table": {
-        "orderNumber": "Order no.",
+        "orderNumber": "Order #",
         "supplier": "Supplier",
         "branch": "Branch",
         "items": "Items",
@@ -1155,7 +1183,7 @@
       },
       "pagination": {
         "page": "Page {page} of {total}",
-        "prev": "Previous",
+        "prev": "Prev",
         "next": "Next"
       },
       "detail": {
@@ -1206,19 +1234,19 @@
     "stockMovements": {
       "title": "Stock Movements",
       "countLine": "{count} movements",
-      "add": "Manual Adjustment",
-      "createdOk": "Stock adjusted successfully",
-      "empty": "No stock movements found",
+      "add": "Add Movement",
+      "createdOk": "Movement created successfully",
+      "empty": "No stock movements found.",
       "type": {
-        "purchase": "Purchase receipt",
+        "purchase": "Purchase",
         "sale": "Sale",
-        "adjustment": "Manual adjustment",
+        "adjustment": "Adjustment",
         "return": "Return",
-        "transferIn": "Transfer in",
-        "transferOut": "Transfer out"
+        "transferIn": "Transfer In",
+        "transferOut": "Transfer Out"
       },
       "filter": {
-        "searchPlaceholder": "Search product, code, or notes...",
+        "searchPlaceholder": "Search product or reference...",
         "type": "Type",
         "all": "All"
       },
@@ -1227,13 +1255,13 @@
         "product": "Product",
         "branch": "Branch",
         "type": "Type",
-        "delta": "Qty change",
+        "delta": "Delta",
         "reference": "Reference",
         "notes": "Notes"
       },
       "pagination": {
         "page": "Page {page} of {total}",
-        "prev": "Previous",
+        "prev": "Prev",
         "next": "Next"
       },
       "form": {

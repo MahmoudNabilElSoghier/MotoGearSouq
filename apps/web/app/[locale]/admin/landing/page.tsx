@@ -13,7 +13,7 @@ import {
   type LandingSectionRow,
   type LandingCardRow,
 } from "@motogearsouq/api-client";
-import { Loader2, Trash2, Plus, Save, ChevronRight } from "lucide-react";
+import { Loader2, Trash2, Plus, Save, ChevronRight, Tag, Link as LinkIcon, Globe, Text, ArrowRight } from "lucide-react";
 
 export default function AdminLandingPage() {
   const t = useTranslations("admin.landing");
@@ -155,9 +155,7 @@ export default function AdminLandingPage() {
                 <div>
                   <h2 className="font-bold text-fg">{section.titleAr}</h2>
                   <p className="text-xs text-muted">
-                    {section.slug} · {t("cardCount", {
-                      count: section.cards.length,
-                    })}
+                    {section.slug} · {t("cardCount", { count: section.cards.length })}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -188,7 +186,8 @@ export default function AdminLandingPage() {
                 <div className="p-5 space-y-6">
                   <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <div className="space-y-2">
-                      <label className="text-xs font-semibold text-muted">
+                      <label className="text-xs font-semibold text-muted flex items-center gap-1.5">
+                        <Tag className="w-3 h-3 text-muted" />
                         {t("fields.titleAr")}
                       </label>
                       <Input
@@ -205,7 +204,8 @@ export default function AdminLandingPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-semibold text-muted">
+                      <label className="text-xs font-semibold text-muted flex items-center gap-1.5">
+                        <Tag className="w-3 h-3 text-muted" />
                         {t("fields.titleEn")}
                       </label>
                       <Input
@@ -222,7 +222,8 @@ export default function AdminLandingPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-semibold text-muted">
+                      <label className="text-xs font-semibold text-muted flex items-center gap-1.5">
+                        <Tag className="w-3 h-3 text-muted" />
                         {t("fields.ctaLabelAr")}
                       </label>
                       <Input
@@ -239,7 +240,8 @@ export default function AdminLandingPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-semibold text-muted">
+                      <label className="text-xs font-semibold text-muted flex items-center gap-1.5">
+                        <Tag className="w-3 h-3 text-muted" />
                         {t("fields.ctaLabelEn")}
                       </label>
                       <Input
@@ -256,7 +258,8 @@ export default function AdminLandingPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-semibold text-muted">
+                      <label className="text-xs font-semibold text-muted flex items-center gap-1.5">
+                        <LinkIcon className="w-3 h-3 text-muted" />
                         {t("fields.ctaLink")}
                       </label>
                       <Input
@@ -273,7 +276,8 @@ export default function AdminLandingPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-semibold text-muted">
+                      <label className="text-xs font-semibold text-muted flex items-center gap-1.5">
+                        <Text className="w-3 h-3 text-muted" />
                         {t("fields.subtitleAr")}
                       </label>
                       <Input
@@ -283,9 +287,9 @@ export default function AdminLandingPage() {
                             prev.map((s) =>
                               s.id === section.id
                                 ? {
-                                  ...s,
-                                  subtitleAr: e.target.value || null,
-                                }
+                                    ...s,
+                                    subtitleAr: e.target.value || null,
+                                  }
                                 : s
                             ),
                           );
@@ -293,7 +297,8 @@ export default function AdminLandingPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-semibold text-muted">
+                      <label className="text-xs font-semibold text-muted flex items-center gap-1.5">
+                        <Text className="w-3 h-3 text-muted" />
                         {t("fields.subtitleEn")}
                       </label>
                       <Input
@@ -303,9 +308,9 @@ export default function AdminLandingPage() {
                             prev.map((s) =>
                               s.id === section.id
                                 ? {
-                                  ...s,
-                                  subtitleEn: e.target.value || null,
-                                }
+                                    ...s,
+                                    subtitleEn: e.target.value || null,
+                                  }
                                 : s
                             ),
                           );
@@ -313,7 +318,8 @@ export default function AdminLandingPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-semibold text-muted">
+                      <label className="text-xs font-semibold text-muted flex items-center gap-1.5">
+                        <ArrowRight className="w-3 h-3 text-muted" />
                         {t("fields.order")}
                       </label>
                       <Input
@@ -341,17 +347,22 @@ export default function AdminLandingPage() {
                       {section.cards.map((card) => (
                         <div
                           key={card.id}
-                          className="flex items-center gap-3 border border-border/50 rounded-lg p-3"
+                          className="flex flex-wrap items-center gap-3 border border-border/50 rounded-lg p-3"
                         >
-                          <div className="flex-1 space-y-1">
-                            <div className="flex items-center gap-2">
-                              <Input
-                                value={card.titleAr}
-                                onChange={(e) => {
-                                  setSections((prev) =>
-                                    prev.map((s) =>
-                                      s.id === section.id
-                                        ? {
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
+                              <Tag className="w-3 h-3 text-muted" />
+                              <label className="text-xs font-semibold text-muted">
+                                {t("cards.titleAr")}
+                              </label>
+                            </div>
+                            <Input
+                              value={card.titleAr}
+                              onChange={(e) => {
+                                setSections((prev) =>
+                                  prev.map((s) =>
+                                    s.id === section.id
+                                      ? {
                                           ...s,
                                           cards: s.cards.map((c) =>
                                             c.id === card.id
@@ -359,18 +370,26 @@ export default function AdminLandingPage() {
                                               : c
                                           ),
                                         }
-                                        : s
-                                    ),
-                                  );
-                                }}
-                              />
-                              <Input
-                                value={card.titleEn}
-                                onChange={(e) => {
-                                  setSections((prev) =>
-                                    prev.map((s) =>
-                                      s.id === section.id
-                                        ? {
+                                      : s
+                                  ),
+                                );
+                              }}
+                            />
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
+                              <Tag className="w-3 h-3 text-muted" />
+                              <label className="text-xs font-semibold text-muted">
+                                {t("cards.titleEn")}
+                              </label>
+                            </div>
+                            <Input
+                              value={card.titleEn}
+                              onChange={(e) => {
+                                setSections((prev) =>
+                                  prev.map((s) =>
+                                    s.id === section.id
+                                      ? {
                                           ...s,
                                           cards: s.cards.map((c) =>
                                             c.id === card.id
@@ -378,11 +397,18 @@ export default function AdminLandingPage() {
                                               : c
                                           ),
                                         }
-                                        : s
-                                    ),
-                                  );
-                                }}
-                              />
+                                      : s
+                                  ),
+                                );
+                              }}
+                            />
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
+                              <Tag className="w-3 h-3 text-muted" />
+                              <label className="text-xs font-semibold text-muted">
+                                {t("cards.link")}
+                              </label>
                             </div>
                             <Input
                               value={card.link}
@@ -391,26 +417,33 @@ export default function AdminLandingPage() {
                                   prev.map((s) =>
                                     s.id === section.id
                                       ? {
-                                        ...s,
-                                        cards: s.cards.map((c) =>
-                                          c.id === card.id
-                                            ? { ...c, link: e.target.value }
-                                            : c
-                                        ),
-                                      }
+                                          ...s,
+                                          cards: s.cards.map((c) =>
+                                            c.id === card.id
+                                              ? { ...c, link: e.target.value }
+                                              : c
+                                          ),
+                                        }
                                       : s
                                   ),
                                 );
                               }}
                             />
-                            <div className="flex items-center gap-2">
-                              <Input
-                                value={card.descAr ?? ""}
-                                onChange={(e) => {
-                                  setSections((prev) =>
-                                    prev.map((s) =>
-                                      s.id === section.id
-                                        ? {
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
+                              <Globe className="w-3 h-3 text-muted" />
+                              <label className="text-xs font-semibold text-muted">
+                                {t("cards.descAr")}
+                              </label>
+                            </div>
+                            <Input
+                              value={card.descAr ?? ""}
+                              onChange={(e) => {
+                                setSections((prev) =>
+                                  prev.map((s) =>
+                                    s.id === section.id
+                                      ? {
                                           ...s,
                                           cards: s.cards.map((c) =>
                                             c.id === card.id
@@ -422,18 +455,26 @@ export default function AdminLandingPage() {
                                               : c
                                           ),
                                         }
-                                        : s
-                                    ),
-                                  );
-                                }}
-                              />
-                              <Input
-                                value={card.descEn ?? ""}
-                                onChange={(e) => {
-                                  setSections((prev) =>
-                                    prev.map((s) =>
-                                      s.id === section.id
-                                        ? {
+                                      : s
+                                  ),
+                                );
+                              }}
+                            />
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
+                              <Globe className="w-3 h-3 text-muted" />
+                              <label className="text-xs font-semibold text-muted">
+                                {t("cards.descEn")}
+                              </label>
+                            </div>
+                            <Input
+                              value={card.descEn ?? ""}
+                              onChange={(e) => {
+                                setSections((prev) =>
+                                  prev.map((s) =>
+                                    s.id === section.id
+                                      ? {
                                           ...s,
                                           cards: s.cards.map((c) =>
                                             c.id === card.id
@@ -445,14 +486,13 @@ export default function AdminLandingPage() {
                                               : c
                                           ),
                                         }
-                                        : s
-                                    ),
-                                  );
-                                }}
-                              />
-                            </div>
+                                      : s
+                                  ),
+                                );
+                              }}
+                            />
                           </div>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 ms-auto">
                             <Button
                               variant="secondary"
                               onClick={() =>

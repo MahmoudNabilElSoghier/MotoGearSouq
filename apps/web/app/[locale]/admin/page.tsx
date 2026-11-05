@@ -3,15 +3,24 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { getBrands, getLowStockItems, getOrders, getProducts, getPendingCustomersCount, type ProductPage, type OrderPage } from "@motogearsouq/api-client";
+import { 
+  getBrands, 
+  getLowStockItems, 
+  getOrders, 
+  getProducts, 
+  getPendingCustomersCount, 
+  type ProductPage, 
+  type OrderPage 
+} from "@motogearsouq/api-client";
 import type { Brand, BranchInventory, Order } from "@motogearsouq/shared";
 import { useLocale, useTranslations } from "next-intl";
-import { Loader2, Users, Plus, Home } from "lucide-react";
+import { Loader2, Users, Plus, Home, Tag, Package, ShoppingCart, AlertTriangle } from "lucide-react";
 
 export default function AdminHomePage() {
   const t = useTranslations("admin.dashboard");
   const locale = useLocale();
-  const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
+  const isAr = locale === "ar";
+  const nf = new Intl.NumberFormat(isAr ? "ar-EG-u-nu-latn" : "en-US");
   const formatEgp = (value: number) => `${nf.format(value)} EGP`;
 
   const statusStyles: Record<string, string> = {
@@ -36,8 +45,11 @@ export default function AdminHomePage() {
   const [orderPage, setOrderPage] = useState<OrderPage | null>(null);
   const [pendingCustomers, setPendingCustomers] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     Promise.all([
       getBrands(),
       getProducts({ pageSize: 1 }),
@@ -46,19 +58,43 @@ export default function AdminHomePage() {
       getPendingCustomersCount().catch(() => ({ count: 0 })),
     ])
       .then(([b, p, l, o, pc]) => {
+        if (!isMounted) return;
         setBrands(b);
         setProductPage(p);
         setLowStockItems(l);
         setOrderPage(o);
         setPendingCustomers(pc.count);
       })
-      .finally(() => setLoading(false));
-  }, []);
+      .catch((err) => {
+        if (!isMounted) return;
+        console.error("Dashboard data fetch failed:", err);
+        setError(isAr ? "حدث خطأ أثناء تحميل البيانات، يرجى المحاولة مرة أخرى." : "Failed to load dashboard data. Please try again.");
+      })
+      .finally(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isAr]);
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
         <Loader2 className="w-8 h-8 animate-spin text-accent" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
+        <AlertTriangle className="w-12 h-12 text-red-500" />
+        <p className="text-lg font-bold text-red-500">{error}</p>
+        <Button onClick={() => window.location.reload()}>
+          {isAr ? "إعادة تحميل" : "Reload Page"}
+        </Button>
       </div>
     );
   }
@@ -69,12 +105,12 @@ export default function AdminHomePage() {
     danger: boolean;
     href?: string;
     amber?: boolean;
-    icon?: React.ComponentType<{ className?: string }>;
+    icon: React.ComponentType<{ className?: string }>;
   }> = [
-    { label: t("cardBrands"), value: brands.length, danger: false, href: "/admin/brands" },
-    { label: t("cardProducts"), value: productPage?.total ?? 0, danger: false, href: "/admin/products" },
-    { label: t("cardOrders"), value: orderPage?.total ?? 0, danger: false, href: "/admin/orders" },
-    { label: t("cardLowStock"), value: lowStockItems.length, danger: lowStockItems.length > 0, href: "/admin/inventory" },
+    { label: t("cardBrands"), value: brands.length, danger: false, href: "/admin/brands", icon: Tag },
+    { label: t("cardProducts"), value: productPage?.total ?? 0, danger: false, href: "/admin/products", icon: Package },
+    { label: t("cardOrders"), value: orderPage?.total ?? 0, danger: false, href: "/admin/orders", icon: ShoppingCart },
+    { label: t("cardLowStock"), value: lowStockItems.length, danger: lowStockItems.length > 0, href: "/admin/inventory", icon: AlertTriangle },
     {
       label: t("pendingCustomers"),
       value: pendingCustomers,
@@ -111,7 +147,7 @@ export default function AdminHomePage() {
           const content = (
             <>
               <p className="flex items-center gap-1.5 text-sm text-muted">
-                {Icon && <Icon className="w-4 h-4" />}
+                <Icon className="w-4 h-4" />
                 {card.label}
               </p>
               <p

@@ -47,6 +47,7 @@ export default async function Categories({
             {sections.map((section) => (
               <div
                 key={section.slug}
+                id={section.slug}
                 className="scroll-mt-24"
               >
                 <FadeIn>

@@ -61,7 +61,6 @@ export function ShowroomGallery() {
                     alt={t("viewImage", { n: index + 1 })}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    objectFit="cover"
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                     priority={index < 2}
                   />

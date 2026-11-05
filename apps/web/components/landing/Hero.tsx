@@ -23,7 +23,6 @@ export function Hero() {
         alt="Hero background"
         fill
         sizes="100vw"
-        objectFit="cover"
         className="object-cover"
         priority
       />

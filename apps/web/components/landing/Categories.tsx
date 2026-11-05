@@ -1,5 +1,8 @@
 import { getTranslations } from "next-intl/server";
-import { getLandingSections } from "@motogearsouq/api-client";
+import {
+  getLandingSections,
+  type LandingSectionRow,
+} from "@motogearsouq/api-client";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -14,7 +17,12 @@ export default async function Categories({
   const t = await getTranslations("categories");
   const isAr = locale === "ar";
 
-  const sections = await getLandingSections();
+  let sections: LandingSectionRow[] = [];
+  try {
+    sections = await getLandingSections();
+  } catch {
+    sections = [];
+  }
 
   return (
     <section id="categories" className="py-20 md:py-28 bg-bg scroll-mt-24">

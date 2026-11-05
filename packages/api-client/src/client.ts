@@ -107,7 +107,8 @@ async function request<T>(
     let message = `Request failed with HTTP ${response.status}`;
     let errorBody: unknown = null;
     try {
-      errorBody = await response.json();
+      const text = await response.text();
+      errorBody = text ? JSON.parse(text) : null;
       const bodyObj = errorBody as { message?: string | string[] };
       if (Array.isArray(bodyObj.message)) message = bodyObj.message.join("; ");
       else if (bodyObj.message) message = bodyObj.message;
@@ -117,7 +118,16 @@ async function request<T>(
     throw new ApiError(response.status, message, errorBody);
   }
 
-  return (await response.json()) as ApiResponse<T>;
+  // Safely parse JSON — an empty body (e.g. 500 with no content) would throw
+  // "Unexpected end of JSON input" on response.json().
+  let data: unknown = null;
+  try {
+    const text = await response.text();
+    data = text ? JSON.parse(text) : null;
+  } catch {
+    data = null;
+  }
+  return data as unknown as ApiResponse<T>;
 }
 
 export async function apiGet<T>(path: string, skipAuthRedirect = false): Promise<T> {

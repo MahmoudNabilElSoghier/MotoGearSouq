@@ -82,10 +82,18 @@
     "ctaSecondary": "Chat with us on WhatsApp"
   },
   "trustBar": {
-    "years": { "label": "Years of experience" },
-    "branches": { "label": "Branches" },
-    "brands": { "label": "Global brands" },
-    "customers": { "label": "Customers" }
+    "years": {
+      "label": "Years of experience"
+    },
+    "branches": {
+      "label": "Branches"
+    },
+    "brands": {
+      "label": "Global brands"
+    },
+    "customers": {
+      "label": "Customers"
+    }
   },
   "categories": {
     "title": "Our categories and products",
@@ -215,9 +223,18 @@
     "title": "Contact us",
     "subtitle": "Send us a message and we will get back to you as soon as possible",
     "fields": {
-      "name": { "label": "Full name", "placeholder": "Enter your name" },
-      "phone": { "label": "Phone number", "placeholder": "01XXXXXXXXX" },
-      "message": { "label": "Your message", "placeholder": "Write your message here..." }
+      "name": {
+        "label": "Full name",
+        "placeholder": "Enter your name"
+      },
+      "phone": {
+        "label": "Phone number",
+        "placeholder": "01XXXXXXXXX"
+      },
+      "message": {
+        "label": "Your message",
+        "placeholder": "Write your message here..."
+      }
     },
     "submitButton": "Send",
     "sending": "Sending...",
@@ -481,27 +498,69 @@
       }
     },
     "orders": {
-      "title": "Orders",
-      "subtitle": "Manage customer orders and payments.",
-      "empty": "No orders found.",
-      "emptySearch": "No orders match your filters.",
+      "title": "Orders Management",
+      "riskLabel": "Risk",
+      "riskLevels": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
       "table": {
-        "orderNumber": "Order #",
+        "orderNumber": "Order Number",
         "customer": "Customer",
         "phone": "Phone",
         "total": "Total",
         "status": "Status",
-        "riskLabel": "Risk",
         "date": "Date"
       },
       "filter": {
-        "all": "All",
-        "searchPlaceholder": "Search order #, customer, or phone..."
+        "all": "All Statuses",
+        "search": "Search",
+        "searchPlaceholder": "Order number or phone"
       },
+      "empty": "No orders registered.",
       "pagination": {
         "page": "Page {page} of {total}",
-        "prev": "Prev",
+        "prev": "Previous",
         "next": "Next"
+      },
+      "detail": {
+        "title": "Order Details",
+        "customer": "Customer Info",
+        "shipping": "Shipping Address",
+        "items": "Items",
+        "totals": "Totals",
+        "subtotal": "Subtotal",
+        "tax": "VAT",
+        "total": "Total",
+        "timeline": "Timeline",
+        "created": "Created At",
+        "updated": "Last Updated",
+        "notes": "Notes",
+        "risk": {
+          "title": "Risk Analysis",
+          "score": "Score",
+          "level": "Level",
+          "breakdownTitle": "Evaluation Factor",
+          "flagged": "High risk order — review before dispatch",
+          "ipAddress": "IP Address",
+          "userAgent": "Device Fingerprint",
+          "breakdown": {
+            "accountAge": "Account Age",
+            "emailVerified": "Email Verified",
+            "deliveryHistory": "Delivery History",
+            "amountVsLimit": "Amount / Limit",
+            "sameIpToday": "Orders from same IP today",
+            "sameDeviceToday": "Orders from same device today"
+          }
+        },
+        "statusActions": {
+          "label": "Change Status",
+          "update": "Update Status",
+          "success": "Order status updated successfully",
+          "error": "Error updating order status"
+        },
+        "print": "Print Invoice"
       },
       "paymentMethods": {
         "cod": "Cash on Delivery",
@@ -518,11 +577,6 @@
         "unpaid": "Unpaid",
         "failed": "Failed",
         "refunded": "Refunded"
-      },
-      "riskLevels": {
-        "low": "Low",
-        "medium": "Medium",
-        "high": "High"
       }
     },
     "reports": {
@@ -934,72 +988,6 @@
       "empty": "No payment transactions found",
       "exportCsv": "Export CSV"
     },
-    "orders": {
-      "title": "Orders Management",
-      "riskLabel": "Risk",
-      "riskLevels": {
-        "low": "Low",
-        "medium": "Medium",
-        "high": "High"
-      },
-      "table": {
-        "orderNumber": "Order Number",
-        "customer": "Customer",
-        "phone": "Phone",
-        "total": "Total",
-        "status": "Status",
-        "date": "Date"
-      },
-      "filter": {
-        "all": "All Statuses",
-        "search": "Search",
-        "searchPlaceholder": "Order number or phone"
-      },
-      "empty": "No orders registered.",
-      "pagination": {
-        "page": "Page {page} of {total}",
-        "prev": "Previous",
-        "next": "Next"
-      },
-      "detail": {
-        "title": "Order Details",
-        "customer": "Customer Info",
-        "shipping": "Shipping Address",
-        "items": "Items",
-        "totals": "Totals",
-        "subtotal": "Subtotal",
-        "tax": "VAT",
-        "total": "Total",
-        "timeline": "Timeline",
-        "created": "Created At",
-        "updated": "Last Updated",
-        "notes": "Notes",
-        "risk": {
-          "title": "Risk Analysis",
-          "score": "Score",
-          "level": "Level",
-          "breakdownTitle": "Evaluation Factor",
-          "flagged": "High risk order — review before dispatch",
-          "ipAddress": "IP Address",
-          "userAgent": "Device Fingerprint",
-          "breakdown": {
-            "accountAge": "Account Age",
-            "emailVerified": "Email Verified",
-            "deliveryHistory": "Delivery History",
-            "amountVsLimit": "Amount / Limit",
-            "sameIpToday": "Orders from same IP today",
-            "sameDeviceToday": "Orders from same device today"
-          }
-        },
-        "statusActions": {
-          "label": "Change Status",
-          "update": "Update Status",
-          "success": "Order status updated successfully",
-          "error": "Error updating order status"
-        },
-        "print": "Print Invoice"
-      }
-    },
     "customers": {
       "title": "Customers",
       "subtitle": "{count} customers",
@@ -1352,24 +1340,22 @@
     },
     "account": {
       "title": "My Account",
-      "subtitle": "Manage your account details and preferences",
-      "fields": {
-        "status": "Account status",
-        "name": "Full name"
+      "welcome": "Welcome, {name}",
+      "wholesaleBadge": "Merchant / Wholesale",
+      "sidebar": {
+        "overview": "Overview",
+        "orders": "My Orders",
+        "logout": "Sign Out"
       },
-      "status": {
-        "approved": "Approved",
-        "pending": "Pending review",
-        "rejected": "Rejected"
+      "stats": {
+        "totalOrders": "Total Orders",
+        "totalSpent": "Total Spent",
+        "pendingOrders": "Pending Orders"
       },
-      "actions": {
-        "logout": "Logout",
-        "backToHome": "Back to",
-        "home": "Home"
-      },
-      "errors": {
-        "logoutFailed": "فشل تسجيل الخروج، حاول تاني"
-      }
+      "recentOrders": "Recent Orders",
+      "viewAll": "View All",
+      "noOrders": "No orders yet",
+      "browseStore": "Browse Store"
     },
     "forgotPassword": {
       "title": "Forgot Password",
@@ -1430,25 +1416,6 @@
       "haveAccount": "Already have an account?",
       "loginLink": "Sign in"
     },
-    "account": {
-      "title": "My Account",
-      "welcome": "Welcome, {name}",
-      "wholesaleBadge": "Merchant / Wholesale",
-      "sidebar": {
-        "overview": "Overview",
-        "orders": "My Orders",
-        "logout": "Sign Out"
-      },
-      "stats": {
-        "totalOrders": "Total Orders",
-        "totalSpent": "Total Spent",
-        "pendingOrders": "Pending Orders"
-      },
-      "recentOrders": "Recent Orders",
-      "viewAll": "View All",
-      "noOrders": "No orders yet",
-      "browseStore": "Browse Store"
-    },
     "orders": {
       "title": "My Orders",
       "orderNumber": "Order #",
@@ -1466,6 +1433,22 @@
         "shipped": "Shipped",
         "delivered": "Delivered",
         "cancelled": "Cancelled"
+      },
+      "paymentMethods": {
+        "cod": "Cash on Delivery",
+        "cash": "Cash",
+        "card": "Credit Card",
+        "mock": "Mock Payment",
+        "paymob": "Paymob",
+        "fawry": "Fawry",
+        "instapay": "InstaPay"
+      },
+      "paymentStatuses": {
+        "pending": "Pending",
+        "paid": "Paid",
+        "unpaid": "Unpaid",
+        "failed": "Failed",
+        "refunded": "Refunded"
       }
     }
   }

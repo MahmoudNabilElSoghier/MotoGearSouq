@@ -78,21 +78,21 @@ export default function AdminOrdersPage() {
   };
 
   const paymentMethodLabels: Record<string, string> = {
-    cod: t("paymentMethods.cod"),
-    cash: t("paymentMethods.cash"),
-    card: t("paymentMethods.card"),
-    mock: t("paymentMethods.mock"),
-    paymob: t("paymentMethods.paymob"),
-    fawry: t("paymentMethods.fawry"),
-    instapay: t("paymentMethods.instapay"),
+    cod: t("paymentMethods.cod", { defaultValue: "Cash on Delivery" }),
+    cash: t("paymentMethods.cash", { defaultValue: "Cash" }),
+    card: t("paymentMethods.card", { defaultValue: "Credit Card" }),
+    mock: t("paymentMethods.mock", { defaultValue: "Mock Payment" }),
+    paymob: t("paymentMethods.paymob", { defaultValue: "Paymob" }),
+    fawry: t("paymentMethods.fawry", { defaultValue: "Fawry" }),
+    instapay: t("paymentMethods.instapay", { defaultValue: "InstaPay" }),
   };
 
   const paymentStatusLabels: Record<string, string> = {
-    pending: t("paymentStatuses.pending"),
-    paid: t("paymentStatuses.paid"),
-    unpaid: t("paymentStatuses.unpaid"),
-    failed: t("paymentStatuses.failed"),
-    refunded: t("paymentStatuses.refunded"),
+    pending: t("paymentStatuses.pending", { defaultValue: "Pending" }),
+    paid: t("paymentStatuses.paid", { defaultValue: "Paid" }),
+    unpaid: t("paymentStatuses.unpaid", { defaultValue: "Unpaid" }),
+    failed: t("paymentStatuses.failed", { defaultValue: "Failed" }),
+    refunded: t("paymentStatuses.refunded", { defaultValue: "Refunded" }),
   };
 
   const paymentStatusStyles: Record<string, string> = {

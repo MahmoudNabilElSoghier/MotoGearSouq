@@ -7,7 +7,7 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "set NODE_OPTIONS=--max-old-space-size=4096 && turbo run dev",
     "build": "turbo run build",
     "start": "turbo run start",
     "lint": "turbo run lint"

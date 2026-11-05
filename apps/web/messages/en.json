@@ -441,6 +441,7 @@
       "branches": "Branches",
       "inventory": "Inventory",
       "orders": "Orders",
+      "payments": "Payments",
       "customers": "Customers",
       "suppliers": "Suppliers",
       "purchases": "Purchase Orders",

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
-import { AdminNav } from "@/components/admin/AdminNav";
+import { AdminLayoutShell } from "@/components/admin/AdminLayoutShell";
 
 export async function generateMetadata({
   params,
@@ -51,9 +51,7 @@ export default async function AdminLayout({
             </span>
           )}
         </div>
-        <div className="flex-1 overflow-y-auto flex flex-col">
-          <AdminNav />
-        </div>
+        <AdminLayoutShell locale={locale} />
       </aside>
       <div id="main-content" className="min-w-0 flex-1 p-6 md:p-8">
         {children}

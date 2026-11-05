@@ -45,8 +45,11 @@ export function middleware(request: NextRequest) {
     return i18nResponse;
   }
 
-  // Logged-in customers skip login/register pages.
-  if ((isCustomerLogin || isCustomerRegister) && hasRefreshToken) {
+  // Logged-in customers skip login/register pages — EXCEPT the Google OAuth
+  // success landing (?google=success), which must reach the login page so its
+  // handler can run initAuth() and honor the stored `next` destination.
+  const isGoogleSuccess = request.nextUrl.searchParams.get("google") === "success";
+  if ((isCustomerLogin || isCustomerRegister) && hasRefreshToken && !isGoogleSuccess) {
     return NextResponse.redirect(new URL(`/${locale}/account`, request.url));
   }
 

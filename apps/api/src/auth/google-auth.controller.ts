@@ -54,13 +54,17 @@ export class GoogleAuthController {
   async callback(
     @Query("code") code: string,
     @Query("state") state: string,
-    @Query("redirect_uri") redirectUri: string,
+    @Query("redirect_uri") redirectUriQuery: string,
     @Res() res: Response,
   ) {
     const frontendUrl = this.config.get<string>("FRONTEND_URL") || "http://localhost:3000";
+    // Google appends only code/state to the callback — it does NOT echo
+    // redirect_uri back. Reconstruct the canonical callback URL (must exactly
+    // match the redirect_uri used in the authorization request).
+    const redirectUri = redirectUriQuery || `${frontendUrl}/api/auth/customer/google/callback`;
     try {
-      if (!code || !redirectUri) {
-        throw new BadRequestException("Missing code or redirect_uri");
+      if (!code) {
+        throw new BadRequestException("Missing code");
       }
       this.validateRedirectUri(redirectUri);
 

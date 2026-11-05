@@ -28,7 +28,7 @@ export default function AdminStockValuationPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
-        <p className="mt-1 text-sm text-muted">Total inventory valuation at cost price and retail price across branches and categories</p>
+        <p className="mt-1 text-sm text-muted">{t("subtitle")}</p>
       </div>
 
       {loading ? (
@@ -62,7 +62,7 @@ export default function AdminStockValuationPage() {
             <div className="p-5 rounded-2xl border border-border bg-card shadow-sm space-y-1">
               <div className="text-xs font-semibold text-muted flex items-center justify-between">
                 <span>{t("potentialProfit")}</span>
-                <span className="text-emerald-500 font-bold">Margin</span>
+                <span className="text-emerald-500 font-bold">{t("marginTag")}</span>
               </div>
               <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400">
                 {currency(data.potentialProfit)}
@@ -79,15 +79,15 @@ export default function AdminStockValuationPage() {
                 <table className="w-full text-start text-sm">
                   <thead>
                     <tr className="border-b border-border text-muted text-xs">
-                      <th className="py-2.5 text-start font-semibold">Branch</th>
-                      <th className="py-2.5 text-end font-semibold">Cost Value</th>
-                      <th className="py-2.5 text-end font-semibold">Retail Value</th>
+                      <th className="py-2.5 text-start font-semibold">{t("thBranch")}</th>
+                      <th className="py-2.5 text-end font-semibold">{t("thCostValue")}</th>
+                      <th className="py-2.5 text-end font-semibold">{t("thRetailValue")}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border/60">
                     {data.byBranch.length === 0 ? (
                       <tr>
-                        <td colSpan={3} className="py-6 text-center text-muted">No branch inventory valuation.</td>
+                        <td colSpan={3} className="py-6 text-center text-muted">{t("emptyBranch")}</td>
                       </tr>
                     ) : (
                       data.byBranch.map((b) => (
@@ -110,15 +110,15 @@ export default function AdminStockValuationPage() {
                 <table className="w-full text-start text-sm">
                   <thead>
                     <tr className="border-b border-border text-muted text-xs">
-                      <th className="py-2.5 text-start font-semibold">Category</th>
-                      <th className="py-2.5 text-end font-semibold">Cost Value</th>
-                      <th className="py-2.5 text-end font-semibold">Retail Value</th>
+                      <th className="py-2.5 text-start font-semibold">{t("thCategory")}</th>
+                      <th className="py-2.5 text-end font-semibold">{t("thCostValue")}</th>
+                      <th className="py-2.5 text-end font-semibold">{t("thRetailValue")}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border/60">
                     {data.byCategory.length === 0 ? (
                       <tr>
-                        <td colSpan={3} className="py-6 text-center text-muted">No category inventory valuation.</td>
+                        <td colSpan={3} className="py-6 text-center text-muted">{t("emptyCategory")}</td>
                       </tr>
                     ) : (
                       data.byCategory.map((c) => (

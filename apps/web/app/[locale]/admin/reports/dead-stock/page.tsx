@@ -28,14 +28,14 @@ export default function AdminDeadStockPage() {
 
   const exportCsv = () => {
     if (!data || data.products.length === 0) return;
-    const headers = ["Code", "Name", "Current Stock", "Cost Price", "Capital Tied", "Last Sold At"];
+    const headers = [t("csv.code"), t("csv.name"), t("csv.currentStock"), t("csv.costPrice"), t("csv.capitalTied"), t("csv.lastSoldAt")];
     const rows = data.products.map((p) => [
       p.code,
       `"${p.name.replace(/"/g, '""')}"`,
       p.currentStock,
       p.costPrice,
       p.capitalTied,
-      p.lastSoldAt ? p.lastSoldAt.split("T")[0] : "Never",
+      p.lastSoldAt ? p.lastSoldAt.split("T")[0] : t("csv.never"),
     ]);
     const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
     const encodedUri = encodeURI(csvContent);
@@ -52,7 +52,7 @@ export default function AdminDeadStockPage() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
-          <p className="mt-1 text-sm text-muted">Products in stock with zero sales in the selected threshold</p>
+          <p className="mt-1 text-sm text-muted">{t("subtitle")}</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 bg-card border border-border rounded-xl p-1">
@@ -94,38 +94,38 @@ export default function AdminDeadStockPage() {
                 <span>{t("productsCount")}</span>
                 <AlertCircle className="w-4 h-4 text-amber-500" />
               </div>
-              <div className="text-2xl font-black text-fg">{nf.format(data.deadProductsCount)} items</div>
-              <div className="text-xs text-muted">Checked {nf.format(data.totalProductsChecked)} total products</div>
+              <div className="text-2xl font-black text-fg">{t("itemsCount", { count: nf.format(data.deadProductsCount) })}</div>
+              <div className="text-xs text-muted">{t("checkedLine", { count: nf.format(data.totalProductsChecked) })}</div>
             </div>
 
             <div className="p-5 rounded-2xl border border-border bg-card shadow-sm space-y-1">
               <div className="text-xs font-semibold text-muted flex items-center justify-between">
                 <span>{t("capitalTied")}</span>
-                <span className="text-red-500 font-bold">Capital Tied</span>
+                <span className="text-red-500 font-bold">{t("capitalTied")}</span>
               </div>
               <div className="text-2xl font-black text-fg">{currency(data.totalCapitalTied)}</div>
-              <div className="text-xs text-muted">Inactive for {data.thresholdDays}+ days</div>
+              <div className="text-xs text-muted">{t("inactiveLine", { days: data.thresholdDays })}</div>
             </div>
           </div>
 
           {/* Table */}
           <div className="rounded-2xl border border-border bg-card p-6 space-y-4">
-            <h2 className="text-lg font-bold text-fg">Dead Stock Items</h2>
+            <h2 className="text-lg font-bold text-fg">{t("productsCount")}</h2>
             <div className="overflow-x-auto">
               <table className="w-full text-start text-sm">
                 <thead>
                   <tr className="border-b border-border text-muted text-xs">
-                    <th className="py-2.5 text-start font-semibold">Code / Name</th>
-                    <th className="py-2.5 text-end font-semibold">Stock</th>
-                    <th className="py-2.5 text-end font-semibold">Cost Price</th>
-                    <th className="py-2.5 text-end font-semibold">Capital Tied</th>
+                    <th className="py-2.5 text-start font-semibold">{t("thCodeName")}</th>
+                    <th className="py-2.5 text-end font-semibold">{t("thStock")}</th>
+                    <th className="py-2.5 text-end font-semibold">{t("thCostPrice")}</th>
+                    <th className="py-2.5 text-end font-semibold">{t("thCapitalTied")}</th>
                     <th className="py-2.5 text-end font-semibold">{t("lastSoldAt")}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/60">
                   {data.products.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="py-6 text-center text-muted">No dead stock found for this threshold! Great job.</td>
+                      <td colSpan={5} className="py-6 text-center text-muted">{t("emptyMessage")}</td>
                     </tr>
                   ) : (
                     data.products.map((p) => (

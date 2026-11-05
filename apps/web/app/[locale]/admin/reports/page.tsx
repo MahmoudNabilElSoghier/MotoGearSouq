@@ -129,7 +129,7 @@ export default function AdminReportsDashboardPage() {
                 <DollarSign className="w-4 h-4 text-emerald-500" />
               </div>
               <div className="text-2xl font-black text-fg">{currency(kpis?.totalRevenue ?? 0)}</div>
-              <div className="text-xs text-muted">{kpis?.totalOrders ?? 0} orders</div>
+              <div className="text-xs text-muted">{t("dashboard.ordersCount", { count: kpis?.totalOrders ?? 0 })}</div>
             </div>
 
             <div className="p-5 rounded-2xl border border-border bg-card shadow-sm space-y-1">
@@ -166,7 +166,7 @@ export default function AdminReportsDashboardPage() {
           <div className="space-y-4">
             <h2 className="text-xl font-extrabold text-fg flex items-center gap-2">
               <CreditCard className="w-6 h-6 text-accent" />
-              <span>{isAr ? "مؤشرات الدفع والتحصيل" : "Payment & Collection KPIs"}</span>
+              <span>{tPayKpis("title")}</span>
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="p-5 rounded-2xl border border-border bg-card shadow-sm space-y-1">
@@ -203,7 +203,7 @@ export default function AdminReportsDashboardPage() {
                   <tbody className="divide-y divide-border/60">
                     {Object.keys(methodMap).length === 0 ? (
                       <tr>
-                        <td colSpan={4} className="py-6 text-center text-muted">No payment data</td>
+                        <td colSpan={4} className="py-6 text-center text-muted">{tPayKpis("empty")}</td>
                       </tr>
                     ) : (
                       Object.entries(methodMap).map(([method, stats]) => (
@@ -239,7 +239,7 @@ export default function AdminReportsDashboardPage() {
                   <tbody className="divide-y divide-border/60">
                     {data.topProducts.length === 0 ? (
                       <tr>
-                        <td colSpan={4} className="py-6 text-center text-muted">No sales in this period.</td>
+                        <td colSpan={4} className="py-6 text-center text-muted">{t("dashboard.emptyTopProducts")}</td>
                       </tr>
                     ) : (
                       data.topProducts.map((p) => (
@@ -276,7 +276,7 @@ export default function AdminReportsDashboardPage() {
                   <tbody className="divide-y divide-border/60">
                     {data.salesByBranch.length === 0 ? (
                       <tr>
-                        <td colSpan={3} className="py-6 text-center text-muted">No branch sales in this period.</td>
+                        <td colSpan={3} className="py-6 text-center text-muted">{t("dashboard.emptyBranchSales")}</td>
                       </tr>
                     ) : (
                       data.salesByBranch.map((b) => (

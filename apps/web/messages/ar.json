@@ -581,7 +581,10 @@
         "profit": "الربح",
         "branch": "الفرع",
         "orders": "الطلبات",
-        "newCustomersPeriod": "آخر 30 يومًا"
+        "newCustomersPeriod": "آخر 30 يومًا",
+        "ordersCount": "{count} طلب",
+        "emptyTopProducts": "لا مبيعات في هذه الفترة.",
+        "emptyBranchSales": "لا مبيعات للفروع في هذه الفترة."
       },
       "breakEven": {
         "title": "تحليل نقطة التعادل والتكاليف الثابتة",
@@ -622,7 +625,25 @@
         "capitalTied": "رأس المال المجمد",
         "lastSoldAt": "تاريخ آخر بيع",
         "neverSold": "لم تُباع قط",
-        "exportCsv": "تصدير CSV"
+        "exportCsv": "تصدير CSV",
+        "subtitle": "منتجات في المخزون بدون أي مبيعات خلال الفترة المحددة",
+        "itemsCount": "{count} عنصر",
+        "checkedLine": "تم فحص {count} منتج إجمالًا",
+        "inactiveLine": "غير نشط منذ {days}+ يوم",
+        "thCodeName": "الكود / الاسم",
+        "thStock": "المخزون",
+        "thCostPrice": "سعر التكلفة",
+        "thCapitalTied": "رأس المال المحجوز",
+        "emptyMessage": "لا يوجد مخزون راكد في هذه الفترة! عمل رائع.",
+        "csv": {
+          "code": "الكود",
+          "name": "الاسم",
+          "currentStock": "المخزون الحالي",
+          "costPrice": "سعر التكلفة",
+          "capitalTied": "رأس المال المحجوز",
+          "lastSoldAt": "آخر بيع",
+          "never": "أبدًا"
+        }
       },
       "stockValuation": {
         "title": "تقييم المخزون",
@@ -630,7 +651,15 @@
         "totalRetailValue": "إجمالي قيمة التجزئة",
         "potentialProfit": "الربح المتوقع",
         "byBranch": "التقييم حسب الفرع",
-        "byCategory": "التقييم حسب التصنيف"
+        "byCategory": "التقييم حسب التصنيف",
+        "subtitle": "التقييم الإجمالي للمخزون بسعر التكلفة وسعر البيع عبر الفروع والفئات",
+        "marginTag": "الهامش",
+        "thBranch": "الفرع",
+        "thCategory": "الفئة",
+        "thCostValue": "قيمة التكلفة",
+        "thRetailValue": "قيمة البيع",
+        "emptyBranch": "لا يوجد تقييم مخزون للفروع.",
+        "emptyCategory": "لا يوجد تقييم مخزون للفئات."
       },
       "subtitle": "تقارير المبيعات والمخزون.",
       "paymentKpis": {
@@ -649,7 +678,9 @@
         "totalCollected": "إجمالي المحصل",
         "totalPending": "إجمالي المعلق",
         "refunded": "المسترجع",
-        "codOrders": "طلبات الدفع عند الاستلام"
+        "codOrders": "طلبات الدفع عند الاستلام",
+        "title": "مؤشرات الدفع والتحصيل",
+        "empty": "لا توجد بيانات دفع"
       },
       "table": {
         "code": "الكود",

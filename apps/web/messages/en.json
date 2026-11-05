@@ -650,7 +650,10 @@
         "profit": "Profit",
         "branch": "Branch",
         "orders": "Orders",
-        "newCustomersPeriod": "Last 30 days"
+        "newCustomersPeriod": "Last 30 days",
+        "ordersCount": "{count} orders",
+        "emptyTopProducts": "No sales in this period.",
+        "emptyBranchSales": "No branch sales in this period."
       },
       "breakEven": {
         "title": "Break-Even Analysis",
@@ -691,7 +694,25 @@
         "capitalTied": "Capital Tied Up",
         "lastSoldAt": "Last Sold At",
         "neverSold": "Never Sold",
-        "exportCsv": "Export CSV"
+        "exportCsv": "Export CSV",
+        "subtitle": "Products in stock with zero sales in the selected threshold",
+        "itemsCount": "{count} items",
+        "checkedLine": "Checked {count} total products",
+        "inactiveLine": "Inactive for {days}+ days",
+        "thCodeName": "Code / Name",
+        "thStock": "Stock",
+        "thCostPrice": "Cost Price",
+        "thCapitalTied": "Capital Tied",
+        "emptyMessage": "No dead stock found for this threshold! Great job.",
+        "csv": {
+          "code": "Code",
+          "name": "Name",
+          "currentStock": "Current Stock",
+          "costPrice": "Cost Price",
+          "capitalTied": "Capital Tied",
+          "lastSoldAt": "Last Sold At",
+          "never": "Never"
+        }
       },
       "stockValuation": {
         "title": "Stock Valuation",
@@ -699,7 +720,15 @@
         "totalRetailValue": "Total Retail Value",
         "potentialProfit": "Potential Profit",
         "byBranch": "By Branch",
-        "byCategory": "By Category"
+        "byCategory": "By Category",
+        "subtitle": "Total inventory valuation at cost price and retail price across branches and categories",
+        "marginTag": "Margin",
+        "thBranch": "Branch",
+        "thCategory": "Category",
+        "thCostValue": "Cost Value",
+        "thRetailValue": "Retail Value",
+        "emptyBranch": "No branch inventory valuation.",
+        "emptyCategory": "No category inventory valuation."
       },
       "subtitle": "Reports dashboard",
       "paymentKpis": {
@@ -718,7 +747,9 @@
         "totalCollected": "Total Collected",
         "totalPending": "Total Pending",
         "refunded": "Refunded",
-        "codOrders": "COD Orders"
+        "codOrders": "COD Orders",
+        "title": "Payment & Collection KPIs",
+        "empty": "No payment data"
       },
       "table": {
         "code": "Code",

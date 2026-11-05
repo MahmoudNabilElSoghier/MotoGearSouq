@@ -54,7 +54,8 @@ export function middleware(request: NextRequest) {
 
   // Admin auth routes (login) must never be protected — they are the
   // destination for unauthenticated users, so redirecting them would loop.
-  const isAdminAuthRoute = rest[0] === "login" && rest.length === 1;
+  // rest = ["admin", "login"] for /<locale>/admin/login
+  const isAdminAuthRoute = rest[0] === "admin" && rest[1] === "login";
 
   // b) /<locale>/admin/* (except auth routes) requires the auth cookie.
   if (!isAdminAuthRoute) {

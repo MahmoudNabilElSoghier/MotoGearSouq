@@ -1,44 +1,45 @@
 {
   "common": {
     "validationFailed": "فشل التحقق — {details}",
-    "skipToContent": "Skip to main content",
+    "skipToContent": "تخطي إلى المحتوى الرئيسي",
     "brandName": "MotoGearSouq",
     "brandShort": "MotoGearSouq",
-    "tagline": "Official Digital Partner of ELSAAD Motorcycle",
+    "tagline": "الشريك الرقمي الرسمي لشركة إلساد للدراجات النارية",
     "partnerName": "ELSAAD Motorcycle",
-    "price": "{price} EGP",
-    "loading": "Loading...",
-    "save": "Save",
-    "cancel": "Cancel",
-    "edit": "Edit",
-    "delete": "Delete",
-    "confirm": "Confirm",
-    "close": "Close",
-    "active": "Active",
-    "inactive": "Inactive",
+    "price": "{price} ج.م",
+    "loading": "جارٍ التحميل...",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "confirm": "تأكيد",
+    "close": "إغلاق",
+    "active": "نشط",
+    "inactive": "غير نشط",
     "whatsapp": "WhatsApp",
-    "search": "Search",
-    "apply": "Apply",
-    "prev": "Previous",
-    "next": "Next",
-    "pageOf": "Page {page} of {total}",
-    "details": "Details",
-    "contactPrice": "Contact us for price",
-    "backToHome": "Back to home",
+    "search": "بحث",
+    "apply": "تطبيق",
+    "prev": "السابق",
+    "next": "التالي",
+    "pageOf": "صفحة {page} من {total}",
+    "details": "التفاصيل",
+    "contactPrice": "تواصل معنا للسعر",
+    "backToHome": "العودة للرئيسية",
     "counts": {
-      "models": "{count} models",
-      "parts": "{count} spare parts",
-      "products": "{count} products",
-      "compatibleParts": "{count} compatible parts",
-      "cc": "{count} cc",
-      "fromYear": "From {year}",
+      "models": "{count} موديل",
+      "parts": "{count} قطع غيار",
+      "products": "{count} منتج",
+      "compatibleParts": "{count} قطع توافقية",
+      "cc": "{count} سي سي",
+      "fromYear": "من سنة {year}",
       "yearRange": "{from} - {to}"
     },
     "stock": {
-      "inStock": "In stock",
-      "outOfStock": "Out of stock",
-      "low": "Low stock"
-    }
+      "inStock": "متوفر",
+      "outOfStock": "نفد المخزون",
+      "low": "مخزون منخفض"
+    },
+    "errorGeneric": "حدث خطأ ما"
   },
   "switcher": {
     "languageAria": "اختيار اللغة",
@@ -579,7 +580,8 @@
         "revenue": "الإيرادات",
         "profit": "الربح",
         "branch": "الفرع",
-        "orders": "الطلبات"
+        "orders": "الطلبات",
+        "newCustomersPeriod": "آخر 30 يومًا"
       },
       "breakEven": {
         "title": "تحليل نقطة التعادل والتكاليف الثابتة",
@@ -643,7 +645,11 @@
           "count": "العدد",
           "total": "المبلغ",
           "avgOrderValue": "متوسط قيمة الطلب"
-        }
+        },
+        "totalCollected": "إجمالي المحصل",
+        "totalPending": "إجمالي المعلق",
+        "refunded": "المسترجع",
+        "codOrders": "طلبات الدفع عند الاستلام"
       },
       "table": {
         "code": "الكود",
@@ -936,7 +942,8 @@
         "deltaLabel": "التغيير الناتج",
         "zeroDelta": "لا يوجد تغيير في الكمية",
         "submit": "تسجيل الحركة",
-        "saving": "جارٍ الحفظ..."
+        "saving": "جارٍ الحفظ...",
+        "quantityHint": "أدخل الكمية"
       },
       "type": {
         "in": "إدخال (إضافة مخزون)",
@@ -965,7 +972,10 @@
         "method": "طريقة الدفع",
         "amount": "المبلغ",
         "status": "الحالة",
-        "actions": "إجراءات"
+        "actions": "إجراءات",
+        "id": "المعرف",
+        "currency": "العملة",
+        "createdAt": "تاريخ الإنشاء"
       },
       "statuses": {
         "pending": "قيد الانتظار",
@@ -998,6 +1008,18 @@
         "page": "صفحة {page} من {total}",
         "prev": "السابق",
         "next": "التالي"
+      },
+      "paymentMethods": {
+        "visa": "فيزا / بطاقة",
+        "cod": "الدفع عند الاستلام",
+        "fawryCode": "كود فوري",
+        "instapay": "إنستاباي",
+        "manual": "يدوي",
+        "cash": "نقدي",
+        "card": "بطاقة ائتمان",
+        "mock": "دفع تجريبي",
+        "paymob": "باي موب",
+        "fawry": "فوري"
       }
     },
     "orders": {
@@ -1034,53 +1056,66 @@
         "date": "التاريخ"
       },
       "filter": {
-        "all": "All Statuses",
-        "search": "Search",
-        "searchPlaceholder": "Order number or phone"
+        "all": "كل الحالات",
+        "search": "بحث",
+        "searchPlaceholder": "رقم الطلب أو رقم الهاتف"
       },
-      "empty": "No orders registered.",
+      "empty": "لا توجد طلبات مسجلة.",
       "pagination": {
-        "page": "Page {page} of {total}",
-        "prev": "Previous",
-        "next": "Next"
+        "page": "صفحة {page} من {total}",
+        "prev": "السابق",
+        "next": "التالي"
       },
       "detail": {
-        "title": "Order Details",
-        "customer": "Customer Info",
-        "shipping": "Shipping Address",
-        "items": "Items",
-        "totals": "Totals",
-        "subtotal": "Subtotal",
-        "tax": "VAT",
-        "total": "Total",
-        "timeline": "Timeline",
-        "created": "Created At",
-        "updated": "Last Updated",
-        "notes": "Notes",
+        "title": "تفاصيل الطلب",
+        "customer": "بيانات العميل",
+        "shipping": "عنوان الشحن",
+        "items": "المنتجات",
+        "totals": "الإجماليات",
+        "subtotal": "المجموع الفرعي",
+        "tax": "ضريبة القيمة المضافة",
+        "total": "الإجمالي",
+        "timeline": "الجدول الزمني",
+        "created": "تاريخ الإنشاء",
+        "updated": "آخر تحديث",
+        "notes": "ملاحظات",
         "risk": {
-          "title": "Risk Analysis",
-          "score": "Score",
-          "level": "Level",
-          "breakdownTitle": "Evaluation Factor",
-          "flagged": "High risk order — review before dispatch",
-          "ipAddress": "IP Address",
-          "userAgent": "Device Fingerprint",
+          "title": "تحليل المخاطر",
+          "score": "النقاط",
+          "level": "المستوى",
+          "breakdownTitle": "عامل التقييم",
+          "flagged": "طلب عالي المخاطرة — راجعه قبل الشحن",
+          "ipAddress": "عنوان IP",
+          "userAgent": "بصمة الجهاز",
           "breakdown": {
-            "accountAge": "Account Age",
-            "emailVerified": "Email Verified",
-            "deliveryHistory": "Delivery History",
-            "amountVsLimit": "Amount / Limit",
-            "sameIpToday": "Orders from same IP today",
-            "sameDeviceToday": "Orders from same device today"
+            "accountAge": "عمر الحساب",
+            "emailVerified": "البريد موثق",
+            "deliveryHistory": "سجل التوصيل",
+            "amountVsLimit": "المبلغ / الحد",
+            "sameIpToday": "طلبات من نفس IP اليوم",
+            "sameDeviceToday": "طلبات من نفس الجهاز اليوم"
           }
         },
         "statusActions": {
-          "label": "Change Status",
-          "update": "Update Status",
-          "success": "Order status updated successfully",
-          "error": "Error updating order status"
+          "label": "تغيير الحالة",
+          "update": "تحديث الحالة",
+          "success": "تم تحديث حالة الطلب بنجاح",
+          "error": "حدث خطأ أثناء تحديث حالة الطلب"
         },
-        "print": "Print Invoice"
+        "print": "طباعة الفاتورة",
+        "payment": {
+          "title": "الدفع",
+          "status": "الحالة",
+          "method": "الطريقة",
+          "amount": "المبلغ",
+          "paidAt": "تاريخ الدفع",
+          "markPaid": "تعليم كمدفوع",
+          "refund": "استرداد",
+          "refundConfirm": "هل تريد استرداد هذا المبلغ؟ لا يمكن التراجع عن هذا الإجراء.",
+          "refundReason": "سبب الاسترداد",
+          "transactions": "المعاملات",
+          "noTransactions": "لا توجد معاملات بعد"
+        }
       },
       "filters": {
         "searchPlaceholder": "بحث برقم الطلب أو الهاتف",
@@ -1173,7 +1208,12 @@
       },
       "cards": {
         "title": "البطاقات",
-        "add": "إضافة بطاقة"
+        "add": "إضافة بطاقة",
+        "titleAr": "العنوان (عربي)",
+        "titleEn": "العنوان (إنجليزي)",
+        "descAr": "الوصف (عربي)",
+        "descEn": "الوصف (إنجليزي)",
+        "link": "الرابط"
       },
       "nav": {
         "home": "الرئيسية",
@@ -1225,31 +1265,31 @@
       "block": {
         "title": "حظر عميل",
         "message": "حظر حساب {name}؟",
-        "reasonLabel": "Reason for blocking",
-        "reasonMin": "Reason is required (min 10 characters)",
-        "reasonPlaceholder": "e.g: Repeated fake orders...",
-        "confirm": "Confirm Block",
+        "reasonLabel": "سبب الحظر",
+        "reasonMin": "سبب الحظر مطلوب (10 أحرف على الأقل)",
+        "reasonPlaceholder": "مثال: طلبات مكررة وهمية...",
+        "confirm": "تأكيد الحظر",
         "success": "تم حظر العميل بنجاح"
       },
       "unblock": {
         "title": "إلغاء حظر عميل",
         "message": "إلغاء حظر حساب {name}؟",
-        "confirm": "Yes, Unblock",
+        "confirm": "نعم، إلغاء الحظر",
         "success": "تم إلغاء حظر العميل بنجاح"
       },
       "approve": {
         "title": "موافقة على عميل",
         "message": "الموافقة على حساب {name}؟",
-        "confirm": "Yes, approve",
+        "confirm": "نعم، اعتماد",
         "success": "تمت الموافقة على العميل بنجاح"
       },
       "reject": {
         "title": "رفض عميل",
         "message": "رفض حساب {name}؟",
-        "reasonLabel": "Rejection reason",
-        "reasonMin": "Reason is required (min 10 characters)",
-        "reasonPlaceholder": "e.g: Commercial register is not valid...",
-        "confirm": "Confirm rejection",
+        "reasonLabel": "سبب الرفض",
+        "reasonMin": "سبب الرفض مطلوب (10 أحرف على الأقل)",
+        "reasonPlaceholder": "مثال: السجل التجاري غير صالح...",
+        "confirm": "تأكيد الرفض",
         "success": "تم رفض العميل بنجاح"
       },
       "empty": "لا يوجد عملاء.",
@@ -1261,19 +1301,19 @@
       },
       "pending": {
         "title": "في انتظار الموافقة",
-        "subtitle": "{count} applications under review",
-        "empty": "No pending applications",
-        "emptyCta": "View all customers",
+        "subtitle": "{count} طلب تحت المراجعة",
+        "empty": "لا توجد طلبات معلقة",
+        "emptyCta": "عرض كل العملاء",
         "card": {
-          "businessName": "Business Name",
-          "taxNumber": "Tax Number",
-          "commercialRegister": "Commercial Register",
-          "appliedAt": "Applied On"
+          "businessName": "اسم النشاط التجاري",
+          "taxNumber": "الرقم الضريبي",
+          "commercialRegister": "السجل التجاري",
+          "appliedAt": "تاريخ التقديم"
         }
       }
     },
     "common": {
-      "validationFailed": "Validation failed — {details}",
+      "validationFailed": "فشل التحقق — {details}",
       "errorGeneric": "حدث خطأ",
       "active": "نشط",
       "inactive": "غير نشط",
@@ -1286,14 +1326,14 @@
     },
     "suppliers": {
       "title": "الموردون",
-      "countLine": "{count} suppliers",
+      "countLine": "{count} موردين",
       "add": "إضافة مورد",
       "createdOk": "تم إنشاء المورد بنجاح",
       "updatedOk": "تم تحديث المورد بنجاح",
-      "edit": "Edit supplier",
+      "edit": "تعديل المورد",
       "empty": "لا يوجد موردون.",
       "filter": {
-        "searchPlaceholder": "Search by code, name, or phone..."
+        "searchPlaceholder": "بحث بالكود أو الاسم أو الهاتف..."
       },
       "table": {
         "code": "الكود",
@@ -1307,31 +1347,31 @@
         "actions": "الإجراءات"
       },
       "form": {
-        "titleNew": "New supplier",
-        "titleEdit": "Edit supplier",
-        "code": "Code",
-        "name": "Name",
-        "nameAr": "Name (Arabic)",
-        "nameEn": "Name (English)",
-        "phone": "Phone",
-        "email": "Email",
-        "country": "Country",
-        "leadTimeDays": "Lead time (days)",
-        "saving": "Saving...",
-        "save": "Save",
-        "validationFailed": "Validation failed — {details}",
-        "saveError": "Failed to save supplier"
+        "titleNew": "مورد جديد",
+        "titleEdit": "تعديل المورد",
+        "code": "الكود",
+        "name": "الاسم",
+        "nameAr": "الاسم (عربي)",
+        "nameEn": "الاسم (إنجليزي)",
+        "phone": "الهاتف",
+        "email": "البريد الإلكتروني",
+        "country": "الدولة",
+        "leadTimeDays": "مدة التوريد (أيام)",
+        "saving": "جارٍ الحفظ...",
+        "save": "حفظ",
+        "validationFailed": "فشل التحقق — {details}",
+        "saveError": "فشل حفظ المورد"
       }
     },
     "purchases": {
       "title": "طلبات الشراء",
-      "countLine": "{count} purchase orders",
+      "countLine": "{count} طلبات شراء",
       "add": "إضافة طلب شراء",
       "createdOk": "تم إنشاء طلب الشراء بنجاح",
       "receivedOk": "تم الاستلام بنجاح",
       "cancelledOk": "تم الإلغاء بنجاح",
-      "notFound": "Purchase order not found",
-      "backToList": "Back to list",
+      "notFound": "طلب الشراء غير موجود",
+      "backToList": "العودة إلى القائمة",
       "empty": "لا توجد طلبات شراء.",
       "status": {
         "draft": "مسودة",
@@ -1352,12 +1392,12 @@
         "total": "المجموع",
         "status": "الحالة",
         "date": "التاريخ",
-        "product": "Product",
-        "qty": "Qty",
-        "unitCost": "Unit cost",
-        "lineTotal": "Line total",
-        "movementType": "Movement type",
-        "delta": "Qty change"
+        "product": "المنتج",
+        "qty": "الكمية",
+        "unitCost": "تكلفة الوحدة",
+        "lineTotal": "إجمالي السطر",
+        "movementType": "نوع الحركة",
+        "delta": "التغيير في الكمية"
       },
       "pagination": {
         "page": "صفحة {page} من {total}",
@@ -1365,53 +1405,53 @@
         "next": "التالي"
       },
       "detail": {
-        "supplier": "Supplier",
-        "branch": "Branch",
-        "created": "Created",
-        "receivedAt": "Received",
-        "expected": "Expected delivery",
-        "markReceived": "Mark as Received",
-        "cancelPo": "Cancel Order",
-        "itemsTitle": "Items",
-        "subtotal": "Subtotal",
-        "tax": "Tax",
-        "shipping": "Shipping",
-        "customs": "Customs",
-        "total": "Total",
-        "movementsTitle": "Stock movements from this order",
-        "notes": "Notes",
-        "confirmReceivedTitle": "Mark as received?",
-        "confirmReceivedMsg": "Stock will be increased by the received quantities.",
-        "confirmCancelTitle": "Cancel purchase order?",
-        "confirmCancelMsg": "This order will be cancelled. This cannot be undone."
+        "supplier": "المورد",
+        "branch": "الفرع",
+        "created": "تم الإنشاء",
+        "receivedAt": "تم الاستلام",
+        "expected": "التسليم المتوقع",
+        "markReceived": "تعليم كمستلم",
+        "cancelPo": "إلغاء الطلب",
+        "itemsTitle": "المنتجات",
+        "subtotal": "المجموع الفرعي",
+        "tax": "الضريبة",
+        "shipping": "الشحن",
+        "customs": "الجمارك",
+        "total": "الإجمالي",
+        "movementsTitle": "حركات المخزون من هذا الطلب",
+        "notes": "ملاحظات",
+        "confirmReceivedTitle": "تعليم كمستلم؟",
+        "confirmReceivedMsg": "سيتم زيادة المخزون بالكميات المستلمة.",
+        "confirmCancelTitle": "إلغاء طلب الشراء؟",
+        "confirmCancelMsg": "سيتم إلغاء هذا الطلب. لا يمكن التراجع عن هذا الإجراء."
       },
       "form": {
-        "titleNew": "New purchase order",
-        "supplier": "Supplier",
-        "selectSupplier": "Select supplier",
-        "branch": "Branch",
-        "selectBranch": "Select branch",
-        "shippingCost": "Shipping cost",
-        "customsCost": "Customs cost",
-        "expectedDate": "Expected delivery date",
-        "notes": "Notes",
-        "itemsTitle": "Items",
-        "addItem": "Add item",
-        "itemsRequired": "At least one item is required",
-        "product": "Product",
-        "selectProduct": "Select product",
-        "qty": "Qty",
-        "unitCost": "Unit cost",
-        "removeItem": "Remove item",
-        "saving": "Saving...",
-        "save": "Save",
-        "validationFailed": "Validation failed — {details}",
-        "saveError": "Failed to save purchase order"
+        "titleNew": "طلب شراء جديد",
+        "supplier": "المورد",
+        "selectSupplier": "اختر المورد",
+        "branch": "الفرع",
+        "selectBranch": "اختر الفرع",
+        "shippingCost": "تكلفة الشحن",
+        "customsCost": "تكلفة الجمارك",
+        "expectedDate": "تاريخ التسليم المتوقع",
+        "notes": "ملاحظات",
+        "itemsTitle": "المنتجات",
+        "addItem": "إضافة منتج",
+        "itemsRequired": "منتج واحد على الأقل مطلوب",
+        "product": "المنتج",
+        "selectProduct": "اختر المنتج",
+        "qty": "الكمية",
+        "unitCost": "تكلفة الوحدة",
+        "removeItem": "إزالة المنتج",
+        "saving": "جارٍ الحفظ...",
+        "save": "حفظ",
+        "validationFailed": "فشل التحقق — {details}",
+        "saveError": "فشل حفظ طلب الشراء"
       }
     },
     "stockMovements": {
       "title": "حركات المخزون",
-      "countLine": "{count} movements",
+      "countLine": "{count} حركة",
       "add": "إضافة حركة",
       "createdOk": "تم إنشاء الحركة بنجاح",
       "empty": "لا توجد حركات.",
@@ -1443,18 +1483,18 @@
         "next": "التالي"
       },
       "form": {
-        "titleNew": "Manual stock adjustment",
-        "product": "Product",
-        "selectProduct": "Select product",
-        "branch": "Branch",
-        "selectBranch": "Select branch",
-        "quantityDelta": "Quantity change",
+        "titleNew": "تعديل مخزون يدوي",
+        "product": "المنتج",
+        "selectProduct": "اختر المنتج",
+        "branch": "الفرع",
+        "selectBranch": "اختر الفرع",
+        "quantityDelta": "التغيير في الكمية",
         "quantityDeltaHint": "e.g. 10 or -5",
-        "notes": "Notes",
-        "saving": "Saving...",
-        "save": "Save",
-        "validationFailed": "Validation failed — {details}",
-        "saveError": "Failed to save adjustment"
+        "notes": "ملاحظات",
+        "saving": "جارٍ الحفظ...",
+        "save": "حفظ",
+        "validationFailed": "فشل التحقق — {details}",
+        "saveError": "فشل حفظ التعديل"
       }
     }
   },
@@ -1821,7 +1861,25 @@
       "recentOrders": "أحدث الطلبات",
       "viewAll": "عرض الكل",
       "noOrders": "لا توجد طلبات بعد",
-      "browseStore": "تصفح المتجر"
+      "browseStore": "تصفح المتجر",
+      "subtitle": "أدر ملفك الشخصي وطلباتك",
+      "fields": {
+        "name": "الاسم",
+        "status": "الحالة"
+      },
+      "status": {
+        "approved": "معتمد",
+        "pending": "قيد المراجعة",
+        "rejected": "مرفوض"
+      },
+      "actions": {
+        "backToHome": "العودة للرئيسية",
+        "home": "الرئيسية",
+        "logout": "تسجيل الخروج"
+      },
+      "errors": {
+        "logoutFailed": "فشل تسجيل الخروج، حاول مرة أخرى"
+      }
     },
     "forgotPassword": {
       "title": "نسيت كلمة المرور",
@@ -1901,20 +1959,20 @@
         "cancelled": "ملغي"
       },
       "paymentMethods": {
-        "cod": "Cash on Delivery",
-        "cash": "Cash",
-        "card": "Credit Card",
-        "mock": "Mock Payment",
-        "paymob": "Paymob",
-        "fawry": "Fawry",
-        "instapay": "InstaPay"
+        "cod": "الدفع عند الاستلام",
+        "cash": "نقدي",
+        "card": "بطاقة ائتمان",
+        "mock": "دفع تجريبي",
+        "paymob": "باي موب",
+        "fawry": "فوري",
+        "instapay": "إنستاباي"
       },
       "paymentStatuses": {
-        "pending": "Pending",
-        "paid": "Paid",
-        "unpaid": "Unpaid",
-        "failed": "Failed",
-        "refunded": "Refunded"
+        "pending": "قيد الانتظار",
+        "paid": "مدفوع",
+        "unpaid": "غير مدفوع",
+        "failed": "فشل",
+        "refunded": "مسترجع"
       }
     }
   }

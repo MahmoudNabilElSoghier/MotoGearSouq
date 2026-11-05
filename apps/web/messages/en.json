@@ -37,7 +37,8 @@
       "inStock": "In stock",
       "outOfStock": "Out of stock",
       "low": "Low stock"
-    }
+    },
+    "errorGeneric": "Something went wrong"
   },
   "switcher": {
     "languageAria": "Choose language",
@@ -494,7 +495,12 @@
       },
       "cards": {
         "title": "Cards",
-        "add": "Add Card"
+        "add": "Add Card",
+        "titleAr": "Title (Arabic)",
+        "titleEn": "Title (English)",
+        "descAr": "Description (Arabic)",
+        "descEn": "Description (English)",
+        "link": "Link"
       },
       "nav": {
         "home": "Home",
@@ -570,7 +576,20 @@
           "success": "Order status updated successfully",
           "error": "Error updating order status"
         },
-        "print": "Print Invoice"
+        "print": "Print Invoice",
+        "payment": {
+          "title": "Payment",
+          "status": "Status",
+          "method": "Method",
+          "amount": "Amount",
+          "paidAt": "Paid At",
+          "markPaid": "Mark as Paid",
+          "refund": "Refund",
+          "refundConfirm": "Refund this payment? This action cannot be undone.",
+          "refundReason": "Refund reason",
+          "transactions": "Transactions",
+          "noTransactions": "No transactions yet"
+        }
       },
       "paymentMethods": {
         "cod": "COD",
@@ -630,7 +649,8 @@
         "revenue": "Revenue",
         "profit": "Profit",
         "branch": "Branch",
-        "orders": "Orders"
+        "orders": "Orders",
+        "newCustomersPeriod": "Last 30 days"
       },
       "breakEven": {
         "title": "Break-Even Analysis",
@@ -694,7 +714,11 @@
           "count": "Count",
           "total": "Total",
           "avgOrderValue": "Avg Order Value"
-        }
+        },
+        "totalCollected": "Total Collected",
+        "totalPending": "Total Pending",
+        "refunded": "Refunded",
+        "codOrders": "COD Orders"
       },
       "table": {
         "code": "Code",
@@ -987,7 +1011,8 @@
         "deltaLabel": "Resulting change",
         "zeroDelta": "No change in quantity",
         "submit": "Record Movement",
-        "saving": "Saving..."
+        "saving": "Saving...",
+        "quantityHint": "Enter quantity"
       },
       "type": {
         "in": "IN (Add Stock)",
@@ -1016,7 +1041,10 @@
         "method": "Method",
         "amount": "Amount",
         "status": "Status",
-        "actions": "Actions"
+        "actions": "Actions",
+        "id": "ID",
+        "currency": "Currency",
+        "createdAt": "Created At"
       },
       "statuses": {
         "pending": "Pending",
@@ -1049,6 +1077,18 @@
         "page": "Page {page} of {total}",
         "prev": "Prev",
         "next": "Next"
+      },
+      "paymentMethods": {
+        "visa": "Visa / Card",
+        "cod": "Cash on Delivery",
+        "fawryCode": "Fawry Code",
+        "instapay": "InstaPay",
+        "manual": "Manual",
+        "cash": "Cash",
+        "card": "Credit Card",
+        "mock": "Mock Payment",
+        "paymob": "Paymob",
+        "fawry": "Fawry"
       }
     },
     "customers": {
@@ -1427,7 +1467,25 @@
       "recentOrders": "Recent Orders",
       "viewAll": "View All",
       "noOrders": "No orders yet",
-      "browseStore": "Browse Store"
+      "browseStore": "Browse Store",
+      "subtitle": "Manage your profile and orders",
+      "fields": {
+        "name": "Name",
+        "status": "Status"
+      },
+      "status": {
+        "approved": "Approved",
+        "pending": "Pending review",
+        "rejected": "Rejected"
+      },
+      "actions": {
+        "backToHome": "Back to home",
+        "home": "Home",
+        "logout": "Sign Out"
+      },
+      "errors": {
+        "logoutFailed": "Logout failed, please try again"
+      }
     },
     "forgotPassword": {
       "title": "Forgot Password",

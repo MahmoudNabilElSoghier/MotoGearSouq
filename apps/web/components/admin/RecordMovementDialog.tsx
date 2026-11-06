@@ -54,7 +54,6 @@ export function RecordMovementDialog({
   const tCommon = useTranslations("admin.forms.common");
   const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [loading, setLoading] = useState(false);
-  const [calculatedDelta, setCalculatedDelta] = useState<number | null>(null);
 
   const {
     register,
@@ -73,24 +72,15 @@ export function RecordMovementDialog({
 
   const isAdjustment = type === "adjustment";
 
-  // Recalculate delta when inputs change
+  let calculatedDelta: number | null = null;
   if (isAdjustment && newExactQty !== undefined && newExactQty !== "") {
     const newQty = parseInt(newExactQty, 10);
-    if (!Number.isNaN(newQty)) {
-      setCalculatedDelta(newQty - currentQty);
-    } else {
-      setCalculatedDelta(null);
-    }
+    calculatedDelta = Number.isNaN(newQty) ? null : newQty - currentQty;
   } else if (!isAdjustment && quantity !== undefined && quantity !== "") {
     const qty = parseInt(quantity, 10);
-    const delta = type === "in" ? qty : -qty;
     if (!Number.isNaN(qty) && qty > 0) {
-      setCalculatedDelta(delta);
-    } else {
-      setCalculatedDelta(null);
+      calculatedDelta = type === "in" ? qty : -qty;
     }
-  } else {
-    setCalculatedDelta(null);
   }
 
   const isDeltaZero = calculatedDelta !== null && calculatedDelta === 0;
@@ -136,7 +126,6 @@ export function RecordMovementDialog({
         notes: data.reason || undefined,
       });
       reset({ type: "in", quantity: "", newExactQty: "", reason: "" });
-      setCalculatedDelta(null);
       if (onSuccess) onSuccess();
     } catch (err) {
       setBanner({ type: "error", message: getErrorMessage(err) });
@@ -177,7 +166,6 @@ export function RecordMovementDialog({
                   type="button"
                   onClick={() => {
                     reset({ type: key as MovementType, quantity: "", newExactQty: "", reason: "" });
-                    setCalculatedDelta(null);
                   }}
                   className={`flex items-center justify-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
                     type === key

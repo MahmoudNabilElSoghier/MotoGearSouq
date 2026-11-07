@@ -273,7 +273,11 @@ export class AnalyticsService {
     return {
       data: {
         period: this.periodJson(range),
-        fixedCosts,
+        days: range.days,
+        fixedCosts: {
+          ...fixedCosts,
+          periodFixedCosts: round2(periodFixedCosts),
+        },
         variableCosts: { totalCOGS: cogs, variableCostRatio },
         contribution: {
           totalRevenue,
@@ -338,10 +342,17 @@ export class AnalyticsService {
       };
     };
 
+    const classes = { A: buildClass("A"), B: buildClass("B"), C: buildClass("C") };
+
     return {
       data: {
         period: this.periodJson(range),
-        classes: { A: buildClass("A"), B: buildClass("B"), C: buildClass("C") },
+        summary: {
+          classA: { count: classes.A.count, revenuePercent: classes.A.revenuePercent },
+          classB: { count: classes.B.count, revenuePercent: classes.B.revenuePercent },
+          classC: { count: classes.C.count, revenuePercent: classes.C.revenuePercent },
+        },
+        classes,
         products,
       },
     };

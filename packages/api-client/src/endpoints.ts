@@ -605,7 +605,7 @@ export interface AnalyticsDashboard {
 }
 
 export interface BreakEvenAnalysis {
-  period: string;
+  period: { from: string; to: string };
   days: number;
   fixedCosts: {
     monthlyRent: number;
@@ -617,17 +617,17 @@ export interface BreakEvenAnalysis {
     periodFixedCosts: number;
   };
   variableCosts: {
-    totalRevenue: number;
-    totalCogs: number;
+    totalCOGS: number;
     variableCostRatio: number;
   };
   contribution: {
+    totalRevenue: number;
     contributionMargin: number;
     contributionMarginRatio: number;
     breakEvenRevenue: number;
+    breakEvenUnits: number;
     currentRevenue: number;
     marginOfSafety: number;
-    breakEvenUnitsEstimate: number;
     status: "below" | "above" | "at";
   };
 }
@@ -643,13 +643,26 @@ export interface AbcProductItem {
   class: "A" | "B" | "C";
 }
 
+export interface AbcClassSummary {
+  count: number;
+  revenuePercent: number;
+}
+
+export interface AbcClassGroup extends AbcClassSummary {
+  products: AbcProductItem[];
+}
+
 export interface AbcAnalysis {
-  period: string;
-  totalRevenue: number;
+  period: { from: string; to: string };
   summary: {
-    classA: { count: number; revenuePercent: number };
-    classB: { count: number; revenuePercent: number };
-    classC: { count: number; revenuePercent: number };
+    classA: AbcClassSummary;
+    classB: AbcClassSummary;
+    classC: AbcClassSummary;
+  };
+  classes: {
+    A: AbcClassGroup;
+    B: AbcClassGroup;
+    C: AbcClassGroup;
   };
   products: AbcProductItem[];
 }

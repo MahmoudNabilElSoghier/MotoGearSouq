@@ -63,7 +63,12 @@ export default function AdminAbcAnalysisPage() {
           {/* Summary Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {(["A", "B", "C"] as const).map((cls) => {
-              const summary = cls === "A" ? data.summary.classA : cls === "B" ? data.summary.classB : data.summary.classC;
+              const summary =
+                (cls === "A"
+                  ? data.summary?.classA
+                  : cls === "B"
+                    ? data.summary?.classB
+                    : data.summary?.classC) ?? { count: 0, revenuePercent: 0 };
               const isSelected = activeTab === cls;
               return (
                 <button

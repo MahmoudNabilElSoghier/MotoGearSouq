@@ -156,7 +156,7 @@ export default function AdminBreakEvenPage() {
           {/* Break-Even Results Dashboard */}
           <div className="rounded-2xl border border-border bg-card p-6 space-y-6 lg:col-span-2">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-fg">Analysis Results ({analysis.period})</h2>
+              <h2 className="text-lg font-bold text-fg">Analysis Results ({period})</h2>
               <div
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold ${
                   status === "above"
@@ -184,7 +184,7 @@ export default function AdminBreakEvenPage() {
 
               <div className="p-4 rounded-xl border border-border bg-accent/5 space-y-1">
                 <div className="text-xs text-muted font-semibold">{t("breakEvenUnits")}</div>
-                <div className="text-xl font-black text-fg">{nf.format(analysis.contribution.breakEvenUnitsEstimate)} units</div>
+                <div className="text-xl font-black text-fg">{nf.format(analysis.contribution.breakEvenUnits)} units</div>
               </div>
 
               <div className="p-4 rounded-xl border border-border bg-accent/5 space-y-1">

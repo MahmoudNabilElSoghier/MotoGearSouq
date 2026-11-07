@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
-import { createOrder, initiatePayment, type CreateOrderPayload } from "@motogearsouq/api-client";
+import { createOrder, getOrders, initiatePayment, type CartItem, type CreateOrderPayload, type PaymentMethod } from "@motogearsouq/api-client";
 import { useCart } from "@/lib/cart-store";
 import { useCustomerAuth } from "@/lib/customer-auth-store";
 import { Button } from "@/components/ui/Button";
@@ -40,12 +40,26 @@ export default function CheckoutPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<string>("cod");
 
+  const { items, subtotal, taxAmount, total, clearCart } = useCart();
+  const { customer, isLoading: authLoading, init } = useCustomerAuth();
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<string>("cod");
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<CheckoutFormValues>();
+
+  const [prevOrder, setPrevOrder] = useState<{
+    shippingAddress?: string | null;
+    shippingCity?: string | null;
+    shippingGovernorate?: string | null;
+    notes?: string | null;
+  } | null>(null);
+  const [showUsePrevious, setShowUsePrevious] = useState(false);
 
   useEffect(() => {
     init();
@@ -58,16 +72,13 @@ export default function CheckoutPage() {
     }
   }, [authLoading, customer, locale, router]);
 
-  // Pre-fill shipping from the customer profile (editable).
   useEffect(() => {
     if (customer) {
-      reset({
-        address: customer.address ?? "",
-        city: "",
-        governorate: customer.governorate ?? "",
-      });
+      setValue("address", customer.address ?? "", { shouldValidate: true });
+      setValue("city", customer.city ?? "", { shouldValidate: true });
+      setValue("governorate", customer.governorate ?? "", { shouldValidate: true });
     }
-  }, [customer, reset]);
+  }, [customer, setValue]);
 
   useEffect(() => {
     if (items.length === 0) {

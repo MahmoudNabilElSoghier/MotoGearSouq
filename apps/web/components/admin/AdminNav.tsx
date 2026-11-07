@@ -5,10 +5,11 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { getPendingCustomersCount } from "@motogearsouq/api-client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export function AdminNav() {
   const t = useTranslations("admin.nav");
+  const locale = useLocale();
   const pathname = usePathname();
   const [pendingCount, setPendingCount] = useState(0);
 
@@ -40,24 +41,37 @@ export function AdminNav() {
       .catch(() => {});
   }, []);
 
+  const basePath =
+    pathname === `/${locale}`
+      ? "/"
+      : pathname.startsWith(`/${locale}/`)
+        ? pathname.slice(locale.length + 1)
+        : pathname;
+  const matchesPath = (href: string) =>
+    href === "/admin"
+      ? basePath === "/admin"
+      : basePath === href || basePath.startsWith(`${href}/`);
+  const activeHref = navItems.reduce<string | null>(
+    (best, item) =>
+      matchesPath(item.href) && (!best || item.href.length > best.length) ? item.href : best,
+    null,
+  );
+
   return (
     <div className="flex flex-col h-full p-3">
       <nav aria-label={t("aria")} className="flex flex-col gap-1">
         {navItems.map((item) => {
-          const active =
-            item.href === "/admin"
-              ? pathname.endsWith("/admin")
-              : pathname === item.href || pathname.startsWith(`${item.href}/`);
+          const active = activeHref === item.href;
           return (
             <Link
               key={item.href}
               href={item.href}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm transition-colors",
+                "flex items-center justify-between gap-2 rounded-lg border-b-2 px-3 py-2 text-sm transition-colors",
                 active
-                  ? "bg-accent-strong/20 font-semibold text-fg"
-                  : "text-muted hover:bg-bg hover:text-fg"
+                  ? "border-brand-red bg-accent-strong/20 font-semibold text-fg"
+                  : "border-transparent text-muted hover:bg-bg hover:text-fg"
               )}
             >
               <span className="flex-1">{item.label}</span>

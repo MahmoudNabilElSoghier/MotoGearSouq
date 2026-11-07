@@ -27,7 +27,8 @@ export function middleware(request: NextRequest) {
 
   // Path now carries a valid locale prefix (or intl chose to pass through).
   const [, locale = defaultLocale, ...rest] = pathname.split("/");
-  const hasRefreshToken = request.cookies.has("mgs_admin_rt");
+  const hasCustomerAuth = request.cookies.has("mgs_rt");
+  const hasAdminAuth = request.cookies.has("mgs_admin_rt");
   const isAdminArea = rest[0] === "admin";
 
   // Customer area (B2C auth) — presence-only check at the edge; real JWT/
@@ -37,7 +38,7 @@ export function middleware(request: NextRequest) {
   const isCustomerRegister = rest[0] === "register" && rest.length === 1;
 
   if (isAccountArea) {
-    if (!hasRefreshToken) {
+    if (!hasCustomerAuth) {
       const loginUrl = new URL(`/${locale}/login`, request.url);
       loginUrl.searchParams.set("next", pathname);
       return NextResponse.redirect(loginUrl);
@@ -49,7 +50,7 @@ export function middleware(request: NextRequest) {
   // success landing (?google=success), which must reach the login page so its
   // handler can run initAuth() and honor the stored `next` destination.
   const isGoogleSuccess = request.nextUrl.searchParams.get("google") === "success";
-  if ((isCustomerLogin || isCustomerRegister) && hasRefreshToken && !isGoogleSuccess) {
+  if ((isCustomerLogin || isCustomerRegister) && hasCustomerAuth && !isGoogleSuccess) {
     return NextResponse.redirect(new URL(`/${locale}/account`, request.url));
   }
 
@@ -62,7 +63,7 @@ export function middleware(request: NextRequest) {
 
   // b) /<locale>/admin/* (except auth routes) requires the auth cookie.
   if (!isAdminAuthRoute) {
-    if (!hasRefreshToken) {
+    if (!hasAdminAuth) {
       const loginUrl = new URL(`/${locale}/admin/login`, request.url);
       // Never set `next` to a login/auth URL — that would cause an infinite
       // redirect loop (login → login → …). Fall back to the admin dashboard.
@@ -80,7 +81,7 @@ export function middleware(request: NextRequest) {
   }
 
   // d) Logged-in users skip the login page.
-  if (hasRefreshToken) {
+  if (hasAdminAuth) {
     const nextParam = request.nextUrl.searchParams.get("next");
     const fallback = `/${locale}/admin`;
     const target =

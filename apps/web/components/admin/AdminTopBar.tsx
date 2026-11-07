@@ -18,8 +18,27 @@ function getInitials(email: string): string {
   return local.slice(0, 2).toUpperCase();
 }
 
+const ADMIN_ROUTE_TITLES = [
+  { prefix: "/branches", key: "branches.title" },
+  { prefix: "/brands", key: "brands.title" },
+  { prefix: "/categories", key: "categories.title" },
+  { prefix: "/customers", key: "customers.title" },
+  { prefix: "/employees", key: "employees.title" },
+  { prefix: "/inventory", key: "inventory.title" },
+  { prefix: "/landing", key: "landing.title" },
+  { prefix: "/orders", key: "orders.title" },
+  { prefix: "/payments", key: "payments.title" },
+  { prefix: "/products", key: "products.title" },
+  { prefix: "/purchases", key: "purchases.title" },
+  { prefix: "/reports", key: "reports.title" },
+  { prefix: "/stock-movements", key: "stockMovements.title" },
+  { prefix: "/suppliers", key: "suppliers.title" },
+  { prefix: "", key: "dashboard.title" },
+] as const;
+
 export function AdminTopBar() {
   const t = useTranslations("admin.topBar");
+  const adminT = useTranslations("admin");
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
@@ -74,12 +93,26 @@ export function AdminTopBar() {
 
   const initials = user?.email ? getInitials(user.email) : "";
 
+  const adminRoot = `/${locale}/admin`;
+  const routePath =
+    pathname === adminRoot
+      ? ""
+      : pathname.startsWith(`${adminRoot}/`)
+        ? pathname.slice(adminRoot.length)
+        : pathname;
+  const sectionKey = ADMIN_ROUTE_TITLES.find(({ prefix }) =>
+    prefix === ""
+      ? routePath === ""
+      : routePath === prefix || routePath.startsWith(`${prefix}/`),
+  )?.key;
+  const pageTitle = sectionKey ? adminT(sectionKey) : t("title");
+
   return (
     <header className="sticky top-0 z-20 w-full border-b border-border bg-bg/60 backdrop-blur-sm px-6 py-4">
       <div className="flex flex-col lg:flex-row items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className="text-sm font-semibold text-fg">
-            {t("title")}
+            {pageTitle}
           </span>
           <LocaleSwitcher />
         </div>

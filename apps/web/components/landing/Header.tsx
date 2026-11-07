@@ -1,16 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X, ShoppingCart, Home, Bike, Wrench, Tag, MapPin, Mail } from "lucide-react";
+import { Menu, X, ShoppingCart, Home, Tag, Mail, MapPin } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { LocaleSwitcher } from "@/components/ui/LocaleSwitcher";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { CartIcon } from "@/components/cart/CartIcon";
+import { getLandingSections } from "@motogearsouq/api-client";
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,25 +20,19 @@ export function Header() {
   const tNav = useTranslations("landing.nav");
   const tHeader = useTranslations("header");
 
+  const [sections, setSections] = useState<{ id: string; slug: string; titleAr: string; titleEn: string }[]>([]);
+
+  useEffect(() => {
+    getLandingSections().then((data) => {
+      setSections(data);
+    });
+  }, []);
+
   const isLanding = pathname === `/${locale}` || pathname === `/${locale}/`;
 
-  const NAV_ICONS: Record<string, React.ElementType> = {
-    hero: Home,
-    models: Bike,
-    "spare-parts": Wrench,
-    brands: Tag,
-    branches: MapPin,
-    contact: Mail,
-  };
+  // Navigation items come from CMS sections
+  // Home link is hardcoded, sections come from CMS, Brands/Brands/Contact are hardcoded at the end
 
-  const navItems = [
-    { id: "hero", label: tNav("home") },
-    { id: "models", label: tNav("models") },
-    { id: "spare-parts", label: tNav("spareParts") },
-    { id: "brands", label: tNav("brands") },
-    { id: "branches", label: tNav("branches") },
-    { id: "contact", label: tNav("contact") },
-  ];
 
   const storeButton = (onClick?: () => void) => (
     <Button variant="primary" size="sm" asChild>
@@ -70,28 +65,50 @@ export function Header() {
 
           {/* Desktop Nav */}
           <nav aria-label={tHeader("navAria")} className="hidden md:flex items-center gap-6">
-            {navItems.map((item) => {
-              const Icon = NAV_ICONS[item.id];
-              return isLanding ? (
-                <a
-                  key={item.id}
-                  href={`#${item.id}`}
-                  className="relative inline-flex items-center gap-2 text-lg font-semibold text-fg/90 hover:text-fg transition-colors after:absolute after:-bottom-1 after:start-0 after:h-[2px] after:w-full after:origin-left rtl:after:origin-right after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100 focus-visible:outline-none"
-                >
-                  <Icon className="w-4 h-4 shrink-0" />
-                  {item.label}
-                </a>
-              ) : (
-                <Link
-                  key={item.id}
-                  href={`/${locale}#${item.id}`}
-                  className="relative inline-flex items-center gap-2 text-lg font-semibold text-fg/90 hover:text-fg transition-colors after:absolute after:-bottom-1 after:start-0 after:h-[2px] after:w-full after:origin-left rtl:after:origin-right after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100 focus-visible:outline-none"
-                >
-                  <Icon className="w-4 h-4 shrink-0" />
-                  {item.label}
-                </Link>
-              );
-            })}
+            <Link
+              href={`/${locale}#hero`}
+              className="relative inline-flex items-center gap-2 text-lg font-semibold text-fg/90 hover:text-fg transition-colors after:absolute after:-bottom-1 after:start-0 after:h-[2px] after:w-full after:origin-left rtl:after:origin-right after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100 focus-visible:outline-none"
+            >
+              <Home className="w-4 h-4 shrink-0" />
+              {tNav("home")}
+            </Link>
+            {sections.map((section) => (
+              <Link
+                key={section.slug}
+                href={`/${locale}#${section.slug}`}
+                className="relative inline-flex items-center gap-2 text-lg font-semibold text-fg/90 hover:text-fg transition-colors after:absolute after:-bottom-1 after:start-0 after:h-[2px] after:w-full after:origin-left rtl:after:origin-right after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100 focus-visible:outline-none"
+              >
+                {isLanding ? (
+                  <a
+                    key={section.slug}
+                    href={`#${section.slug}`}
+                    className="relative inline-flex items-center gap-2 text-lg font-semibold text-fg/90 hover:text-fg transition-colors after:absolute after:-bottom-1 after:start-0 after:h-[2px] after:w-full after:origin-left rtl:after:origin-right after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100 focus-visible:outline-none"
+                  >
+                    {isAr ? section.titleAr : section.titleEn}
+                  </a>
+                ) : (
+                  <Link
+                    key={section.slug}
+                    href={`/${locale}#${section.slug}`}
+                    className="relative inline-flex items-center gap-2 text-lg font-semibold text-fg/90 hover:text-fg transition-colors after:absolute after:-bottom-1 after:start-0 after:h-[2px] after:w-full after:origin-left rtl:after:origin-right after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100 focus-visible:outline-none"
+                  >
+                    {isAr ? section.titleAr : section.titleEn}
+                  </Link>
+                )}
+              </Link>
+            ))}
+            <Link href={`/${locale}/brands`} className="relative inline-flex items-center gap-2 text-lg font-semibold text-fg/90 hover:text-fg transition-colors after:absolute after:-bottom-1 after:start-0 after:h-[2px] after:w-full after:origin-left rtl:after:origin-right after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100 focus-visible:outline-none">
+              <Tag className="w-4 h-4 shrink-0" />
+              {tNav("brands")}
+            </Link>
+            <Link href={`/${locale}/admin/branches`} className="relative inline-flex items-center gap-2 text-lg font-semibold text-fg/90 hover:text-fg transition-colors after:absolute after:-bottom-1 after:start-0 after:h-[2px] after:w-full after:origin-left rtl:after:origin-right after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100 focus-visible:outline-none">
+              <MapPin className="w-4 h-4 shrink-0" />
+              {tNav("branches")}
+            </Link>
+            <Link href={`/${locale}/contact`} className="relative inline-flex items-center gap-2 text-lg font-semibold text-fg/90 hover:text-fg transition-colors after:absolute after:-bottom-1 after:start-0 after:h-[2px] after:w-full after:origin-left rtl:after:origin-right after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100 focus-visible:outline-none">
+              <Mail className="w-4 h-4 shrink-0" />
+              {tNav("contact")}
+            </Link>
           </nav>
 
           {/* Desktop Actions (Switchers + Store CTA) */}
@@ -126,30 +143,28 @@ export function Header() {
           className="md:hidden bg-card border-b border-border px-4 pt-4 pb-6 space-y-4 animate-in fade-in slide-in-from-top-2 duration-200"
         >
           <nav aria-label={tHeader("navAria")} className="flex flex-col space-y-3">
-            {navItems.map((item) => {
-              const Icon = NAV_ICONS[item.id];
-              return isLanding ? (
-                <a
-                  key={item.id}
-                  href={`#${item.id}`}
-                  onClick={() => setIsOpen(false)}
-                  className="inline-flex items-center gap-2 text-base font-medium text-muted hover:text-fg transition-colors px-2 py-1 rounded-md hover:bg-bg/50"
-                >
-                  <Icon className="w-4 h-4 shrink-0" />
-                  {item.label}
-                </a>
-              ) : (
-                <Link
-                  key={item.id}
-                  href={`/${locale}#${item.id}`}
-                  onClick={() => setIsOpen(false)}
-                  className="inline-flex items-center gap-2 text-base font-medium text-muted hover:text-fg transition-colors px-2 py-1 rounded-md hover:bg-bg/50"
-                >
-                  <Icon className="w-4 h-4 shrink-0" />
-                  {item.label}
-                </Link>
-              );
-            })}
+            {sections.map((section) => (
+              <Link
+                key={section.slug}
+                href={`/${locale}#${section.slug}`}
+                onClick={() => setIsOpen(false)}
+                className="inline-flex items-center gap-2 text-base font-medium text-muted hover:text-fg transition-colors px-2 py-1 rounded-md hover:bg-bg/50"
+              >
+                {isAr ? section.titleAr : section.titleEn}
+              </Link>
+            ))}
+            <Link href={`/${locale}/brands`} className="inline-flex items-center gap-2 text-base font-medium text-muted hover:text-fg transition-colors px-2 py-1 rounded-md hover:bg-bg/50">
+              <Tag className="w-4 h-4 shrink-0" />
+              {tNav("brands")}
+            </Link>
+            <Link href={`/${locale}/admin/branches`} className="inline-flex items-center gap-2 text-base font-medium text-muted hover:text-fg transition-colors px-2 py-1 rounded-md hover:bg-bg/50">
+              <MapPin className="w-4 h-4 shrink-0" />
+              {tNav("branches")}
+            </Link>
+            <Link href={`/${locale}/contact`} className="inline-flex items-center gap-2 text-base font-medium text-muted hover:text-fg transition-colors px-2 py-1 rounded-md hover:bg-bg/50">
+              <Mail className="w-4 h-4 shrink-0" />
+              {tNav("contact")}
+            </Link>
           </nav>
           <div className="flex items-center justify-between pt-2 border-t border-border">
             <div className="flex items-center gap-2">

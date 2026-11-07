@@ -20,6 +20,7 @@ export function Header() {
   const tNav = useTranslations("landing.nav");
   const tHeader = useTranslations("header");
 
+  const isAr = locale === "ar";
   const [sections, setSections] = useState<{ id: string; slug: string; titleAr: string; titleEn: string }[]>([]);
 
   useEffect(() => {
@@ -97,15 +98,15 @@ export function Header() {
                 )}
               </Link>
             ))}
-            <Link href={`/${locale}/brands`} className="relative inline-flex items-center gap-2 text-lg font-semibold text-fg/90 hover:text-fg transition-colors after:absolute after:-bottom-1 after:start-0 after:h-[2px] after:w-full after:origin-left rtl:after:origin-right after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100 focus-visible:outline-none">
+              <Link href="#brands" className="relative inline-flex items-center gap-2 text-lg font-semibold text-fg/90 hover:text-fg transition-colors after:absolute after:-bottom-1 after:start-0 after:h-[2px] after:w-full after:origin-left rtl:after:origin-right after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100 focus-visible:outline-none">
               <Tag className="w-4 h-4 shrink-0" />
               {tNav("brands")}
             </Link>
-            <Link href={`/${locale}/admin/branches`} className="relative inline-flex items-center gap-2 text-lg font-semibold text-fg/90 hover:text-fg transition-colors after:absolute after:-bottom-1 after:start-0 after:h-[2px] after:w-full after:origin-left rtl:after:origin-right after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100 focus-visible:outline-none">
+            <Link href="#branches" className="relative inline-flex items-center gap-2 text-lg font-semibold text-fg/90 hover:text-fg transition-colors after:absolute after:-bottom-1 after:start-0 after:h-[2px] after:w-full after:origin-left rtl:after:origin-right after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100 focus-visible:outline-none">
               <MapPin className="w-4 h-4 shrink-0" />
               {tNav("branches")}
             </Link>
-            <Link href={`/${locale}/contact`} className="relative inline-flex items-center gap-2 text-lg font-semibold text-fg/90 hover:text-fg transition-colors after:absolute after:-bottom-1 after:start-0 after:h-[2px] after:w-full after:origin-left rtl:after:origin-right after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100 focus-visible:outline-none">
+            <Link href="#contact" className="relative inline-flex items-center gap-2 text-lg font-semibold text-fg/90 hover:text-fg transition-colors after:absolute after:-bottom-1 after:start-0 after:h-[2px] after:w-full after:origin-left rtl:after:origin-right after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 hover:after:scale-x-100 focus-visible:after:scale-x-100 focus-visible:outline-none">
               <Mail className="w-4 h-4 shrink-0" />
               {tNav("contact")}
             </Link>
@@ -153,15 +154,15 @@ export function Header() {
                 {isAr ? section.titleAr : section.titleEn}
               </Link>
             ))}
-            <Link href={`/${locale}/brands`} className="inline-flex items-center gap-2 text-base font-medium text-muted hover:text-fg transition-colors px-2 py-1 rounded-md hover:bg-bg/50">
+            <Link href="#brands" className="inline-flex items-center gap-2 text-base font-medium text-muted hover:text-fg transition-colors px-2 py-1 rounded-md hover:bg-bg/50">
               <Tag className="w-4 h-4 shrink-0" />
               {tNav("brands")}
             </Link>
-            <Link href={`/${locale}/admin/branches`} className="inline-flex items-center gap-2 text-base font-medium text-muted hover:text-fg transition-colors px-2 py-1 rounded-md hover:bg-bg/50">
+            <Link href="#branches" className="inline-flex items-center gap-2 text-base font-medium text-muted hover:text-fg transition-colors px-2 py-1 rounded-md hover:bg-bg/50">
               <MapPin className="w-4 h-4 shrink-0" />
               {tNav("branches")}
             </Link>
-            <Link href={`/${locale}/contact`} className="inline-flex items-center gap-2 text-base font-medium text-muted hover:text-fg transition-colors px-2 py-1 rounded-md hover:bg-bg/50">
+            <Link href="#contact" className="inline-flex items-center gap-2 text-base font-medium text-muted hover:text-fg transition-colors px-2 py-1 rounded-md hover:bg-bg/50">
               <Mail className="w-4 h-4 shrink-0" />
               {tNav("contact")}
             </Link>

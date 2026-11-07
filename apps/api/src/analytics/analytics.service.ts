@@ -1,6 +1,6 @@
 import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import type { CompanySettings } from "@prisma/client";
-import { toNumberOrZero, type UpdateCompanySettingsInput } from "@motogearsouq/shared";
+import { toNumberOrZero, type DeadStockResponse, type UpdateCompanySettingsInput } from "@motogearsouq/shared";
 import { PrismaService } from "../prisma/prisma.service";
 
 const PERIOD_DAYS: Record<string, number> = {
@@ -360,7 +360,7 @@ export class AnalyticsService {
 
   // ---------- 2.5 dead stock ----------
 
-  async getDeadStock(daysParam?: string) {
+  async getDeadStock(daysParam?: string): Promise<{ data: DeadStockResponse }> {
     const days =
       daysParam === undefined || daysParam === "" ? 90 : Number(daysParam);
     if (!Number.isInteger(days) || days < 1 || days > 3650) {
@@ -392,7 +392,9 @@ export class AnalyticsService {
 
     const ids = [...byProduct.keys()];
     if (ids.length === 0) {
-      return { data: { threshold: days, totalCapitalTied: 0, products: [] } };
+      return {
+        data: { items: [], totalDeadStock: 0, totalChecked: 0, capitalTied: 0, threshold: days },
+      };
     }
 
     const [recentSales, lastSold] = await Promise.all([
@@ -412,7 +414,7 @@ export class AnalyticsService {
     const lastSoldAt = new Map(lastSold.map((r) => [r.productId, r._max.createdAt]));
     const nowMs = Date.now();
 
-    const products = [...byProduct.values()]
+    const items = [...byProduct.values()]
       .filter((p) => !recentlySold.has(p.productId))
       .map((p) => {
         const last = lastSoldAt.get(p.productId) ?? null;
@@ -420,17 +422,25 @@ export class AnalyticsService {
           productId: p.productId,
           code: p.code,
           name: p.name,
-          totalStock: p.totalStock,
+          currentStock: p.totalStock,
           costPrice: round2(p.costPrice),
           capitalTied: round2(p.totalStock * p.costPrice),
           lastSoldAt: last ? last.toISOString() : null,
           daysSinceLastSale: last ? Math.floor((nowMs - last.getTime()) / (24 * 60 * 60 * 1000)) : null,
         };
       })
-      .sort((a, b) => b.capitalTied - a.capitalTied || b.totalStock - a.totalStock);
+      .sort((a, b) => b.capitalTied - a.capitalTied || b.currentStock - a.currentStock);
 
-    const totalCapitalTied = round2(products.reduce((s, p) => s + p.capitalTied, 0));
-    return { data: { threshold: days, totalCapitalTied, products } };
+    const capitalTied = round2(items.reduce((s, p) => s + p.capitalTied, 0));
+    return {
+      data: {
+        items,
+        totalDeadStock: items.length,
+        totalChecked: byProduct.size,
+        capitalTied,
+        threshold: days,
+      },
+    };
   }
 
   // ---------- 2.6 stock valuation ----------

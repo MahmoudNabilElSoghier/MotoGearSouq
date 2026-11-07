@@ -12,7 +12,7 @@ export default function AdminDeadStockPage() {
   const locale = useLocale();
   const isAr = locale === "ar";
   const nf = new Intl.NumberFormat(isAr ? "ar-EG-u-nu-latn" : "en-US");
-  const currency = (n: number) => `${nf.format(n)} EGP`;
+  const currency = (n: number) => `${nf.format(n ?? 0)} EGP`;
 
   const [days, setDays] = useState(90);
   const [data, setData] = useState<DeadStockResponse | null>(null);
@@ -27,9 +27,9 @@ export default function AdminDeadStockPage() {
   }, [days]);
 
   const exportCsv = () => {
-    if (!data || data.products.length === 0) return;
+    if (!data || data.items.length === 0) return;
     const headers = [t("csv.code"), t("csv.name"), t("csv.currentStock"), t("csv.costPrice"), t("csv.capitalTied"), t("csv.lastSoldAt")];
-    const rows = data.products.map((p) => [
+    const rows = data.items.map((p) => [
       p.code,
       `"${p.name.replace(/"/g, '""')}"`,
       p.currentStock,
@@ -68,7 +68,7 @@ export default function AdminDeadStockPage() {
               </button>
             ))}
           </div>
-          {data && data.products.length > 0 && (
+          {data && data.items.length > 0 && (
             <Button size="sm" variant="secondary" onClick={exportCsv} className="gap-2">
               <Download className="w-4 h-4" />
               <span>{t("exportCsv")}</span>
@@ -94,17 +94,16 @@ export default function AdminDeadStockPage() {
                 <span>{t("productsCount")}</span>
                 <AlertCircle className="w-4 h-4 text-amber-500" />
               </div>
-              <div className="text-2xl font-black text-fg">{t("itemsCount", { count: nf.format(data.deadProductsCount) })}</div>
-              <div className="text-xs text-muted">{t("checkedLine", { count: nf.format(data.totalProductsChecked) })}</div>
+              <div className="text-2xl font-black text-fg">{t("itemsCount", { count: nf.format(data?.items?.length ?? 0) })}</div>
+              <div className="text-xs text-muted">{t("checkedLine", { count: nf.format(data?.totalChecked ?? 0) })}</div>
             </div>
 
             <div className="p-5 rounded-2xl border border-border bg-card shadow-sm space-y-1">
               <div className="text-xs font-semibold text-muted flex items-center justify-between">
                 <span>{t("capitalTied")}</span>
-                <span className="text-red-500 font-bold">{t("capitalTied")}</span>
               </div>
-              <div className="text-2xl font-black text-fg">{currency(data.totalCapitalTied)}</div>
-              <div className="text-xs text-muted">{t("inactiveLine", { days: data.thresholdDays })}</div>
+              <div className="text-2xl font-black text-fg">{currency(data?.capitalTied ?? 0)}</div>
+              <div className="text-xs text-muted">{t("inactiveLine", { days: data?.threshold ?? 0 })}</div>
             </div>
           </div>
 
@@ -123,21 +122,21 @@ export default function AdminDeadStockPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/60">
-                  {data.products.length === 0 ? (
+                  {data.items.length === 0 ? (
                     <tr>
                       <td colSpan={5} className="py-6 text-center text-muted">{t("emptyMessage")}</td>
                     </tr>
                   ) : (
-                    data.products.map((p) => (
+                    data.items.map((p) => (
                       <tr key={p.productId} className="hover:bg-accent/5">
                         <td className="py-3">
                           <div className="font-bold text-fg">{p.name}</div>
                           <div className="text-xs font-mono text-muted">{p.code}</div>
                         </td>
-                        <td className="py-3 text-end font-semibold">{nf.format(p.currentStock)}</td>
-                        <td className="py-3 text-end font-semibold">{currency(p.costPrice)}</td>
+                        <td className="py-3 text-end font-semibold">{nf.format(p.currentStock ?? 0)}</td>
+                        <td className="py-3 text-end font-semibold">{currency(p.costPrice ?? 0)}</td>
                         <td className="py-3 text-end font-semibold text-red-600 dark:text-red-400">
-                          {currency(p.capitalTied)}
+                          {currency(p.capitalTied ?? 0)}
                         </td>
                         <td className="py-3 text-end text-xs text-muted">
                           {p.lastSoldAt ? new Date(p.lastSoldAt).toLocaleDateString() : t("neverSold")}

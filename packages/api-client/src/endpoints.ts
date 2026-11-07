@@ -29,8 +29,11 @@
   CreatePurchaseOrderInput,
   StockAdjustmentInput,
   UpdateCompanySettingsInput,
+  DeadStockResponse,
 } from "@motogearsouq/shared";
 import { apiGet, apiGetOrNull, apiRaw, apiSend, type ApiResponse } from "./client";
+
+export type { DeadStockProduct, DeadStockResponse } from "@motogearsouq/shared";
 
 export interface ProductFilter {
   q?: string;
@@ -665,25 +668,6 @@ export interface AbcAnalysis {
     C: AbcClassGroup;
   };
   products: AbcProductItem[];
-}
-
-export interface DeadStockProduct {
-  productId: string;
-  code: string;
-  name: string;
-  currentStock: number;
-  costPrice: number;
-  capitalTied: number;
-  lastSoldAt: string | null;
-  daysSinceLastSale: number | null;
-}
-
-export interface DeadStockResponse {
-  thresholdDays: number;
-  totalProductsChecked: number;
-  deadProductsCount: number;
-  totalCapitalTied: number;
-  products: DeadStockProduct[];
 }
 
 export interface StockValuationResponse {

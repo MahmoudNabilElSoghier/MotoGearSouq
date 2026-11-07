@@ -773,8 +773,6 @@
     },
     "dashboard": {
       "title": "Dashboard",
-      "newProduct": "Add Product",
-      "viewSite": "Visit Store",
       "statsAria": "Dashboard statistics",
       "cardBrands": "Brands",
       "cardProducts": "Products",

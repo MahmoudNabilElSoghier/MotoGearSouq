@@ -14,7 +14,7 @@ import {
 } from "@motogearsouq/api-client";
 import type { Brand, BranchInventory, Order } from "@motogearsouq/shared";
 import { useLocale, useTranslations } from "next-intl";
-import { Loader2, Users, Plus, Home, Tag, Package, ShoppingCart, AlertTriangle } from "lucide-react";
+import { Loader2, Users, Tag, Package, ShoppingCart, AlertTriangle } from "lucide-react";
 
 export default function AdminHomePage() {
   const t = useTranslations("admin.dashboard");
@@ -125,20 +125,6 @@ export default function AdminHomePage() {
     <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
-        <div className="flex gap-3">
-          <Button asChild size="sm">
-            <Link href="/admin/products/new" className="inline-flex items-center gap-2">
-              <Plus className="w-4 h-4" />
-              {t("newProduct")}
-            </Link>
-          </Button>
-          <Button asChild size="sm" variant="secondary">
-            <Link href="/" className="inline-flex items-center gap-2">
-              <Home className="w-4 h-4" />
-              {t("viewSite")}
-            </Link>
-          </Button>
-        </div>
       </div>
 
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5" aria-label={t("statsAria")}>

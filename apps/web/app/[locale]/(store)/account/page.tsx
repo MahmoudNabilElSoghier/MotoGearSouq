@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { LogOut, User, Mail, Phone, ShieldCheck, Home } from "lucide-react";
+import { LogOut, User, Mail, Phone, ShieldCheck, Home, Loader2, LogIn } from "lucide-react";
 import { useCustomerAuth } from "@/lib/customer-auth-store";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -18,12 +19,35 @@ export default function AccountPage() {
 
   useEffect(() => {
     if (!isLoading && !customer) {
-      router.push(`/${locale}/login`);
+      router.push(`/${locale}/login?next=/${locale}/account`);
     }
   }, [customer, isLoading, router, locale]);
 
-  if (isLoading || !customer) {
-    return null;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-8 h-8 animate-spin text-accent" />
+      </div>
+    );
+  }
+
+  if (!customer) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20">
+        <div className="flex items-center justify-center mb-4">
+          <LogOut className="w-8 h-8 text-muted" />
+        </div>
+        <h2 className="text-lg font-bold text-fg">{t("loginRequired.title")}</h2>
+        <p className="mt-2 text-sm text-muted">{t("loginRequired.message")}</p>
+        <Link
+          href={`/${locale}/login?next=/${locale}/account`}
+          className="inline-flex items-center gap-2 text-accent hover:underline font-medium mt-4"
+        >
+          <LogIn className="w-4 h-4" />
+          {t("login")}
+        </Link>
+      </div>
+    );
   }
 
   const handleLogout = async () => {

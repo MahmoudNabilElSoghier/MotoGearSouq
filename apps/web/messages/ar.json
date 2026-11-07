@@ -1282,11 +1282,11 @@
         "contact": "اتصل بنا",
         "store": "المتجر"
       },
-      "addSection": "إضافة قسم",
-      "created": "تم إضافة القسم",
-      "errorCreate": "فشل إضافة القسم",
-      "deleted": "تم حذف القسم",
-      "errorDelete": "فشل حذف القسم",
+      "addSection": "Add Section",
+      "created": "Section created",
+      "errorCreate": "Failed to create section",
+      "deleted": "Section deleted",
+      "errorDelete": "Failed to delete section",
       "admin": {
         "landing": {
           "addSection": "إضافة قسم",
@@ -1951,7 +1951,12 @@
       },
       "errors": {
         "logoutFailed": "فشل تسجيل الخروج، حاول مرة أخرى"
-      }
+      },
+      "loginRequired": {
+        "title": "تسجيل الدخول مطلوب",
+        "message": "يرجى تسجيل الدخول لعرض حسابك."
+      },
+      "login": "تسجيل الدخول"
     },
     "forgotPassword": {
       "title": "نسيت كلمة المرور",

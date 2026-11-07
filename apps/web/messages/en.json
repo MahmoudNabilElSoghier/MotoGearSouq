@@ -1557,7 +1557,12 @@
       },
       "errors": {
         "logoutFailed": "Logout failed, please try again"
-      }
+      },
+      "loginRequired": {
+        "title": "Login Required",
+        "message": "Please log in to view your account."
+      },
+      "login": "Log in"
     },
     "forgotPassword": {
       "title": "Forgot Password",

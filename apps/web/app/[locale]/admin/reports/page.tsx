@@ -96,7 +96,7 @@ export default function AdminReportsDashboardPage() {
           return (
             <Link
               key={item.href}
-              href={item.href}
+              href={`/${locale}${item.href}`}
               className="flex items-center justify-between p-3 rounded-xl border border-border bg-card hover:bg-accent/10 transition-colors group"
             >
               <div className="flex items-center gap-2.5">

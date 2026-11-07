@@ -67,7 +67,7 @@ export default function AdminProductsPage() {
     if (q) params.set("q", q);
     if (target > 1) params.set("page", String(target));
     const qs = params.toString();
-    return `/admin/products${qs ? `?${qs}` : ""}`;
+    return `/${locale}/admin/products${qs ? `?${qs}` : ""}`;
   };
 
   return (
@@ -80,7 +80,7 @@ export default function AdminProductsPage() {
           </p>
         </div>
         <Button asChild size="sm">
-          <Link href="/admin/products/new" className="inline-flex items-center gap-2">
+          <Link href={`/${locale}/admin/products/new`} className="inline-flex items-center gap-2">
             <Plus className="w-3.5 h-3.5" />
             {t("add")}
           </Link>
@@ -89,7 +89,7 @@ export default function AdminProductsPage() {
 
       {banner && <FormBanner type={banner.type} message={banner.message} onClose={() => setBanner(null)} />}
 
-      <form action="/admin/products" method="get" className="flex items-end gap-2">
+      <form action={`/${locale}/admin/products`} method="get" className="flex items-end gap-2">
         <div className="w-full max-w-md">
           <Input
             label={t("searchLabel")}
@@ -173,7 +173,7 @@ export default function AdminProductsPage() {
                           </td>
                           <td className="px-4 py-3 flex gap-3 text-sm">
                             <Link
-                              href={`/admin/products/${product.id}/edit`}
+                              href={`/${locale}/admin/products/${product.id}/edit`}
                               className="inline-flex items-center gap-1 font-semibold text-accent hover:underline"
                             >
                               <Pencil className="w-3.5 h-3.5 shrink-0" />

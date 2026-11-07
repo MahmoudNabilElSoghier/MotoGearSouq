@@ -149,7 +149,7 @@ export default function AdminHomePage() {
             <li key={card.label}>
               {card.href ? (
                 <Link
-                  href={card.href}
+                  href={`/${locale}${card.href}`}
                   className={`block rounded-xl border p-5 transition-colors hover:border-accent ${
                     card.danger
                       ? "border-red-500/40 bg-red-500/5"

@@ -67,7 +67,7 @@ export default function AdminInventoryPage() {
         )}
       </div>
 
-      <form action="/admin/inventory" method="get" className="flex items-end gap-2">
+      <form action={`/${locale}/admin/inventory`} method="get" className="flex items-end gap-2">
         <div className="flex flex-col gap-1.5">
           <label
             htmlFor="branch-select"

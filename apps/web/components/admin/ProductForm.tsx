@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/Input";
 import { FormBanner } from "./FormBanner";
 import { productFormSchema, type ProductFormValues, type UpdateProductInput, type Brand, type PartCategory, type Product } from "@motogearsouq/shared";
 import { createProduct, updateProduct, ApiError } from "@motogearsouq/api-client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 
 const toPriceInput = (value: number | null | undefined) =>
@@ -37,6 +37,7 @@ const inputClass =
 export function ProductForm({ product, brands, categories }: ProductFormProps) {
   const t = useTranslations("admin.products.form");
   const tCommon = useTranslations("admin.forms.common");
+  const locale = useLocale();
   const router = useRouter();
   const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
@@ -96,7 +97,7 @@ export function ProductForm({ product, brands, categories }: ProductFormProps) {
       }
 
       setTimeout(() => {
-        router.push("/admin/products");
+        router.push(`/${locale}/admin/products`);
         router.refresh();
       }, 1000);
     } catch (err) {

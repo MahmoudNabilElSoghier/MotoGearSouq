@@ -12,14 +12,13 @@ export function LocaleSwitcher() {
   const locale = useLocale();
   const pathname = usePathname();
 
-  // Strip the current locale prefix so the other locale can be swapped in.
+  // Strip the current locale prefix so the target locale can be swapped in.
   const segments = pathname.split("/");
   const current = segments[1] ?? "";
   const rest = ["ar", "en"].includes(current) ? pathname.slice(current.length + 1) : pathname;
-  const other = locale === "ar" ? "en" : "ar";
 
-  const handleSwitch = () => {
-    document.cookie = `NEXT_LOCALE=${other}; path=/; max-age=31536000; SameSite=Lax`;
+  const handleSwitch = (target: string) => {
+    document.cookie = `NEXT_LOCALE=${target}; path=/; max-age=31536000; SameSite=Lax`;
   };
 
   return (
@@ -28,8 +27,8 @@ export function LocaleSwitcher() {
       className="inline-flex items-center rounded-lg border border-border bg-bg/60 overflow-hidden"
     >
       <Link
-        href={`/${other}${rest}`}
-        onClick={handleSwitch}
+        href={`/ar${rest}`}
+        onClick={() => handleSwitch("ar")}
         hrefLang="ar"
         lang="ar"
         aria-current={locale === "ar" ? "true" : undefined}
@@ -43,8 +42,8 @@ export function LocaleSwitcher() {
       </Link>
       <span aria-hidden="true" className="w-px self-stretch bg-border" />
       <Link
-        href={`/${other}${rest}`}
-        onClick={handleSwitch}
+        href={`/en${rest}`}
+        onClick={() => handleSwitch("en")}
         hrefLang="en"
         lang="en"
         aria-current={locale === "en" ? "true" : undefined}

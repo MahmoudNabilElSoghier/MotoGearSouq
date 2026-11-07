@@ -95,7 +95,7 @@ export function AdminNav({ collapsed }: { collapsed: boolean }) {
           return (
             <Link
               key={item.href}
-              href={item.href}
+              href={`/${locale}${item.href}`}
               aria-label={item.label}
               aria-current={active ? "page" : undefined}
               title={collapsed ? item.label : undefined}

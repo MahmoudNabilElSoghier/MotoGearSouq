@@ -6,14 +6,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginInput } from "@motogearsouq/shared";
 import { authApi } from "@motogearsouq/api-client";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Lock, Mail, Loader2, AlertCircle } from "lucide-react";
 
 export default function AdminLoginPage() {
   const t = useTranslations("admin.login");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = searchParams.get("next") ?? "/admin";
+  const locale = useLocale();
+  const next = searchParams.get("next") ?? `/${locale}/admin`;
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 

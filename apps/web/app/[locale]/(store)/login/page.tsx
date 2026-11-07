@@ -44,8 +44,7 @@ export default function LoginPage() {
       initAuth().then(() => {
         const next = safeNext(sessionStorage.getItem("google_oauth_next") || searchParams.get("next"), `/${locale}/account`);
         sessionStorage.removeItem("google_oauth_next");
-        router.push(next);
-        router.refresh();
+        window.location.href = next;
       });
     } else if (googleStatus === "error" && msg) {
       const decoded = decodeURIComponent(msg);
@@ -79,8 +78,7 @@ export default function LoginPage() {
     // Sync any guest cart items (localStorage) into the authenticated server cart.
     void syncGuestCart();
     const next = safeNext(searchParams.get("next"), `/${locale}/account`);
-    router.push(next);
-    router.refresh();
+    window.location.href = next;
   };
 
   return (

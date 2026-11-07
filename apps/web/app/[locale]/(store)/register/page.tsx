@@ -80,8 +80,7 @@ export default function RegisterPage() {
     // Sync any guest cart items (localStorage) into the authenticated server cart.
     void syncGuestCart();
     const next = safeNext(searchParams.get("next"), `/${locale}/account`);
-    router.push(next);
-    router.refresh();
+    window.location.href = next;
   };
 
   const onWholesaleSubmit = async (data: CreateWholesaleCustomerInput) => {
@@ -93,6 +92,8 @@ export default function RegisterPage() {
     }
     wholesaleForm.reset();
     setWholesaleDone(true);
+    const next = safeNext(searchParams.get("next"), `/${locale}/account`);
+    window.location.href = next;
   };
 
   const passwordToggle = (

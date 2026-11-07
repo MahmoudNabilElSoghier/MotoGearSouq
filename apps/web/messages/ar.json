@@ -1281,6 +1281,20 @@
         "branches": "الفروع",
         "contact": "اتصل بنا",
         "store": "المتجر"
+      },
+      "addSection": "إضافة قسم",
+      "created": "تم إضافة القسم",
+      "errorCreate": "فشل إضافة القسم",
+      "deleted": "تم حذف القسم",
+      "errorDelete": "فشل حذف القسم",
+      "admin": {
+        "landing": {
+          "addSection": "إضافة قسم",
+          "created": "تم إضافة القسم",
+          "errorCreate": "فشل إضافة القسم",
+          "deleted": "تم حذف القسم",
+          "errorDelete": "فشل حذف القسم"
+        }
       }
     },
     "customers": {

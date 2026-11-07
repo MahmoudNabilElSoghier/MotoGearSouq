@@ -514,6 +514,20 @@
         "branches": "Branches",
         "contact": "Contact",
         "store": "Store"
+      },
+      "addSection": "Add Section",
+      "created": "Section created",
+      "errorCreate": "Failed to create section",
+      "deleted": "Section deleted",
+      "errorDelete": "Failed to delete section",
+      "admin": {
+        "landing": {
+          "addSection": "Add Section",
+          "created": "Section created",
+          "errorCreate": "Failed to create section",
+          "deleted": "Section deleted",
+          "errorDelete": "Failed to delete section"
+        }
       }
     },
     "orders": {

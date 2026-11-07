@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import {
   addLandingCard,
+  addLandingSection,
   deleteSection,
   getLandingSections,
   updateLandingSection,
@@ -121,7 +122,29 @@ export default function AdminLandingPage() {
   };
 
   const handleAddSection = async () => {
-    setBanner({ type: "info", message: t("comingSoon") });
+    setSaving((prev) => new Set(prev).add("new"));
+    try {
+      await addLandingSection({
+        slug: "",
+        titleAr: "",
+        titleEn: "",
+        subtitleAr: "",
+        subtitleEn: "",
+        ctaLabelAr: "",
+        ctaLabelEn: "",
+        ctaLink: "",
+        order: 0,
+      });
+      const data = await getLandingSections();
+      setSections(data);
+      setBanner({ type: "success", message: t("created") });
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error ? error.message : String(err);
+      setBanner({ type: "error", message: msg });
+    } finally {
+      setSaving((prev) => new Set(prev).delete("new"));
+    }
   };
 
   const handleCloseFeedback = () => setFeedback(null);

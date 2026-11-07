@@ -672,3 +672,15 @@ model PaymentTransaction {
   @@index([status])
   @@index([createdAt])
 }
+
+model Role {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  nameAr    String
+  nameEn    String
+  system    Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([order])
+}

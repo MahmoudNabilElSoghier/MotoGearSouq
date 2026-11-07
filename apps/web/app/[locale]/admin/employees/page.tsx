@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getEmployees } from "@motogearsouq/api-client";
+import { getEmployees, getRoles } from "@motogearsouq/api-client";
 import { EmployeeForm } from "@/components/admin/EmployeeForm";
+import { RolesPanel } from "@/components/admin/RolesPanel";
 import { FormBanner } from "@/components/admin/FormBanner";
-import type { Employee } from "@motogearsouq/shared";
+import type { Employee, Role } from "@motogearsouq/shared";
 import { Button } from "@/components/ui/Button";
-import { Loader2, Plus, Pencil } from "lucide-react";
+import { Loader2, Plus, Pencil, ShieldCheck } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 const roleStyles: Record<string, string> = {
@@ -22,17 +23,13 @@ export default function AdminEmployeesPage() {
   const locale = useLocale();
   const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
 
-  const roleLabels: Record<string, string> = {
-    admin: t("roles.admin"),
-    manager: t("roles.manager"),
-    cashier: t("roles.cashier"),
-    warehouse: t("roles.warehouse"),
-  };
-
   const [employees, setEmployees] = useState<Employee[]>([]);
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [rolesKey, setRolesKey] = useState(0);
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
   const [showCreate, setShowCreate] = useState(false);
+  const [showRoles, setShowRoles] = useState(false);
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
   const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
@@ -45,6 +42,22 @@ export default function AdminEmployeesPage() {
       .finally(() => setLoading(false));
   }, [refreshKey]);
 
+  useEffect(() => {
+    getRoles()
+      .then(setRoles)
+      .catch(() => {});
+  }, [rolesKey]);
+
+  const roleLabels: Record<string, string> = {
+    admin: t("roles.admin"),
+    manager: t("roles.manager"),
+    cashier: t("roles.cashier"),
+    warehouse: t("roles.warehouse"),
+    ...Object.fromEntries(
+      roles.map((r) => [r.key, locale === "ar" ? r.nameAr : r.nameEn]),
+    ),
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -54,17 +67,37 @@ export default function AdminEmployeesPage() {
             {loading ? tCommon("loading") : t("countLine", { count: nf.format(employees.length) })}
           </p>
         </div>
-        {!showCreate && (
-          <Button size="sm" onClick={() => setShowCreate(true)} className="inline-flex items-center gap-1.5">
-            <Plus className="w-3.5 h-3.5" />
-            {t("add")}
+        <div className="flex gap-3">
+          {!showRoles && !showCreate && (
+            <Button size="sm" onClick={() => setShowCreate(true)} className="inline-flex items-center gap-1.5">
+              <Plus className="w-3.5 h-3.5" />
+              {t("add")}
+            </Button>
+          )}
+          <Button
+            size="sm"
+            variant="secondary"
+            aria-pressed={showRoles}
+            onClick={() => {
+              setShowCreate(false);
+              setEditingEmployee(null);
+              setShowRoles((v) => !v);
+            }}
+            className="inline-flex items-center gap-1.5"
+          >
+            <ShieldCheck className="w-3.5 h-3.5" />
+            {showRoles ? t("rolesPanel.close") : t("manageRoles")}
           </Button>
-        )}
+        </div>
       </div>
 
       {banner && <FormBanner type={banner.type} message={banner.message} onClose={() => setBanner(null)} />}
 
-      {showCreate && (
+      {showRoles && (
+        <RolesPanel onChanged={() => setRolesKey((k) => k + 1)} />
+      )}
+
+      {!showRoles && showCreate && (
         <EmployeeForm
           mode="create"
           onSuccess={() => {
@@ -76,7 +109,7 @@ export default function AdminEmployeesPage() {
         />
       )}
 
-      {editingEmployee && (
+      {!showRoles && editingEmployee && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
           <div className="w-full max-w-2xl bg-card border border-border rounded-xl p-6 max-h-[90vh] overflow-y-auto">
             <EmployeeForm

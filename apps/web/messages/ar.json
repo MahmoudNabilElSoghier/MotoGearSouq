@@ -930,6 +930,31 @@
         "manager": "مدير فرع (Manager)",
         "warehouse": "أمين مخزن (Warehouse)",
         "admin": "مدير نظام (Admin)"
+      },
+      "manageRoles": "إدارة الأدوار",
+      "rolesPanel": {
+        "title": "إدارة الأدوار",
+        "close": "إغلاق",
+        "keyLabel": "المفتاح",
+        "nameArLabel": "الاسم بالعربية",
+        "nameEnLabel": "الاسم بالإنجليزية",
+        "keyPlaceholder": "مثال: delivery",
+        "nameArPlaceholder": "مثال: مندوب توصيل",
+        "nameEnPlaceholder": "e.g. Delivery Agent",
+        "add": "إضافة دور",
+        "edit": "تعديل",
+        "delete": "حذف",
+        "save": "حفظ",
+        "cancel": "إلغاء",
+        "system": "أساسي",
+        "custom": "مصنع",
+        "typeCol": "النوع",
+        "empty": "لا توجد أدوار بعد",
+        "createdOk": "تم إنشاء الدور بنجاح",
+        "updatedOk": "تم تحديث الدور بنجاح",
+        "deletedOk": "تم حذف الدور بنجاح",
+        "deleteConfirm": "هل أنت متأكد من حذف هذا الدور؟",
+        "namesRequired": "أدخل اسم الدور باللغتين"
       }
     },
     "inventory": {

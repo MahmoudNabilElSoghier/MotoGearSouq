@@ -4,12 +4,12 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createEmployeeSchema, type CreateEmployeeInput, type UpdateEmployeeInput } from "@motogearsouq/shared";
-import { createEmployee, updateEmployee, getBranches, ApiError } from "@motogearsouq/api-client";
-import type { Employee, Branch } from "@motogearsouq/shared";
+import { createEmployee, updateEmployee, getBranches, getRoles, ApiError } from "@motogearsouq/api-client";
+import type { Employee, Branch, Role } from "@motogearsouq/shared";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { FormBanner } from "./FormBanner";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 
 interface EmployeeFormProps {
@@ -32,12 +32,15 @@ function pickEditable<T extends Record<string, unknown>>(input: T, forbidden: re
 export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel }: EmployeeFormProps) {
   const t = useTranslations("admin.employees");
   const tCommon = useTranslations("admin.forms.common");
+  const locale = useLocale();
   const [branches, setBranches] = useState<Branch[]>([]);
+  const [roles, setRoles] = useState<Role[]>([]);
   const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getBranches().then(setBranches).catch(() => {});
+    getRoles().then(setRoles).catch(() => {});
   }, []);
 
   const getErrorMessage = (err: unknown): string => {
@@ -123,6 +126,26 @@ export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel
     }
   };
 
+  const roleOptions = (() => {
+    const list =
+      roles.length > 0
+        ? roles.map((r) => ({
+            value: r.key,
+            label: locale === "ar" ? r.nameAr : r.nameEn,
+          }))
+        : [
+            { value: "cashier", label: t("formRoles.cashier") },
+            { value: "manager", label: t("formRoles.manager") },
+            { value: "warehouse", label: t("formRoles.warehouse") },
+            { value: "admin", label: t("formRoles.admin") },
+          ];
+    const currentValue = initialData?.role ?? "cashier";
+    if (!list.some((option) => option.value === currentValue)) {
+      list.push({ value: currentValue, label: currentValue });
+    }
+    return list;
+  })();
+
   return (
     <div className="bg-card border border-border rounded-xl p-6 shadow-xl">
       <h2 className="text-lg font-bold text-fg mb-4">
@@ -146,10 +169,11 @@ export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel
               {...register("role")}
               className="w-full bg-bg border border-border rounded-lg px-4 py-2.5 text-fg text-sm focus:border-accent focus:outline-none"
             >
-              <option value="cashier">{t("formRoles.cashier")}</option>
-              <option value="manager">{t("formRoles.manager")}</option>
-              <option value="warehouse">{t("formRoles.warehouse")}</option>
-              <option value="admin">{t("formRoles.admin")}</option>
+              {roleOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
           </div>
 

@@ -21,6 +21,9 @@
   UpdateBranchInput,
   CreateEmployeeInput,
   UpdateEmployeeInput,
+  CreateRoleInput,
+  UpdateRoleInput,
+  Role,
   CreateSupplierInput,
   UpdateSupplierInput,
   CreatePurchaseOrderInput,
@@ -136,6 +139,22 @@ export const getBranchBySlug = (slug: string): Promise<Branch | null> =>
 
 export const getEmployees = (): Promise<Employee[]> =>
   apiGet<Employee[]>("/employees");
+
+export const getRoles = (): Promise<Role[]> => apiGet<Role[]>("/employees/roles");
+
+export const createRole = (input: CreateRoleInput): Promise<ApiResponse<Role>> =>
+  apiSend<Role>("POST", "/employees/roles", input);
+
+export const updateRole = (
+  id: string,
+  input: UpdateRoleInput,
+): Promise<ApiResponse<Role>> =>
+  apiSend<Role>("PATCH", `/employees/roles/${encode(id)}`, input);
+
+export const deleteRole = (
+  id: string,
+): Promise<ApiResponse<{ id: string }>> =>
+  apiSend<{ id: string }>("DELETE", `/employees/roles/${encode(id)}`);
 
 export const getInventory = (branchId?: string): Promise<BranchInventory[]> =>
   apiGet<BranchInventory[]>(

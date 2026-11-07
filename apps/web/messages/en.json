@@ -1000,6 +1000,31 @@
         "manager": "Branch manager",
         "warehouse": "Warehouse keeper",
         "admin": "System admin"
+      },
+      "manageRoles": "Manage Roles",
+      "rolesPanel": {
+        "title": "Roles Management",
+        "close": "Close",
+        "keyLabel": "Key",
+        "nameArLabel": "Name (Arabic)",
+        "nameEnLabel": "Name (English)",
+        "keyPlaceholder": "e.g. delivery",
+        "nameArPlaceholder": "مثال: مندوب توصيل",
+        "nameEnPlaceholder": "e.g. Delivery Agent",
+        "add": "Add Role",
+        "edit": "Edit",
+        "delete": "Delete",
+        "save": "Save",
+        "cancel": "Cancel",
+        "system": "System",
+        "custom": "Custom",
+        "typeCol": "Type",
+        "empty": "No roles yet",
+        "createdOk": "Role created successfully",
+        "updatedOk": "Role updated successfully",
+        "deletedOk": "Role deleted successfully",
+        "deleteConfirm": "Are you sure you want to delete this role?",
+        "namesRequired": "Enter the role name in both languages"
       }
     },
     "inventory": {

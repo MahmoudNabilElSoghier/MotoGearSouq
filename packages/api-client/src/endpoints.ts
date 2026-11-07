@@ -395,6 +395,18 @@ export const removeLandingCard = (
 ): Promise<ApiResponse<{ id: string }>> =>
   apiSend<{ id: string }>("DELETE", `/landing/cards/${encode(id)}`);
 
+export const createSection = (
+  input: LandingSectionInput,
+): Promise<ApiResponse<LandingSectionRow>> =>
+  apiSend<LandingSectionRow>("POST", "/landing", input);
+
+export const addLandingSection = createSection;
+
+export const deleteSection = (
+  id: string,
+): Promise<ApiResponse<{ id: string }>> =>
+  apiSend<{ id: string }>("DELETE", `/landing/${encode(id)}`);
+
 // ---------- ERP: suppliers, purchase orders, stock movements (Sprint 2) ----------
 
 export interface Supplier {
@@ -908,5 +920,19 @@ export const blockCustomer = (id: string, reason: string): Promise<ApiResponse<A
 export const unblockCustomer = (id: string): Promise<ApiResponse<AdminCustomerItem>> =>
   apiSend<AdminCustomerItem>("PATCH", `/admin/customers/${encode(id)}/unblock`);
 
+// ---------- Auth: customer password reset (Sprint 2E-4) ----------
 
+export const forgotPassword = (email: string): Promise<ApiResponse<{ message: string }>> =>
+  apiSend<{ message: string }>("POST", "/auth/customer/forgot-password", { email });
+
+export const resetPassword = (
+  token: string,
+  password: string,
+): Promise<ApiResponse<{ message: string }>> =>
+  apiSend<{ message: string }>("POST", "/auth/customer/reset-password", {
+    token,
+    password,
+  });
+
+// ---------- ERP: suppliers, purchase orders, stock movements (Sprint 2) ----------
 

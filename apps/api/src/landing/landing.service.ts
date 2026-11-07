@@ -53,6 +53,71 @@ export class LandingService {
     );
   }
 
+  async createSection(
+    input: {
+      slug: string;
+      titleAr: string;
+      titleEn: string;
+      subtitleAr?: string | null;
+      subtitleEn?: string | null;
+      ctaLabelAr: string;
+      ctaLabelEn: string;
+      ctaLink: string;
+      order?: string | number;
+    },
+  ): Promise<DbResult<LandingSection>> {
+    return withDb(
+      this.prisma,
+      async (db) => {
+        const existing = await db.landingSection.findUnique({
+          where: { slug: input.slug },
+        });
+        if (existing) throw new NotFoundException("Section slug already exists");
+        const created = await db.landingSection.create({
+          data: {
+            slug: input.slug,
+            titleAr: input.titleAr,
+            titleEn: input.titleEn,
+            subtitleAr: input.subtitleAr ?? null,
+            subtitleEn: input.subtitleEn ?? null,
+            ctaLabelAr: input.ctaLabelAr,
+            ctaLabelEn: input.ctaLabelEn,
+            ctaLink: input.ctaLink,
+            order: input.order != null ? Number(input.order) : 0,
+          },
+        });
+        return {
+          id: created.id,
+          slug: created.slug,
+          titleAr: created.titleAr,
+          titleEn: created.titleEn,
+          subtitleAr: created.subtitleAr ?? null,
+          subtitleEn: created.subtitleEn ?? null,
+          ctaLabelAr: created.ctaLabelAr,
+          ctaLabelEn: created.ctaLabelEn,
+          ctaLink: created.ctaLink,
+          order: created.order,
+          createdAt: created.createdAt.toISOString(),
+          updatedAt: created.updatedAt.toISOString(),
+        };
+      },
+      () => ({
+        id: `tmp-${Date.now()}`,
+        slug: input.slug,
+        titleAr: input.titleAr,
+        titleEn: input.titleEn,
+        subtitleAr: input.subtitleAr ?? null,
+        subtitleEn: input.subtitleEn ?? null,
+        ctaLabelAr: input.ctaLabelAr,
+        ctaLabelEn: input.ctaLabelEn,
+        ctaLink: input.ctaLink,
+        order: input.order != null ? Number(input.order) : 0,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }),
+    );
+  }
+
   async updateSection(
     id: string,
     input: {

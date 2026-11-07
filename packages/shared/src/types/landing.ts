@@ -31,3 +31,15 @@ export interface LandingSection {
   updatedAt: Dateish;
   cards?: LandingCard[];
 }
+
+export interface LandingSectionInput {
+  slug: string;
+  titleAr: string;
+  titleEn: string;
+  subtitleAr?: string | null;
+  subtitleEn?: string | null;
+  ctaLabelAr: string;
+  ctaLabelEn: string;
+  ctaLink: string;
+  order?: string | number;
+}

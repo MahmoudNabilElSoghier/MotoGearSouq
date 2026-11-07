@@ -5,15 +5,16 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import {
+  addLandingCard,
+  deleteSection,
   getLandingSections,
   updateLandingSection,
-  addLandingCard,
   updateLandingCard,
   removeLandingCard,
   type LandingSectionRow,
   type LandingCardRow,
 } from "@motogearsouq/api-client";
-import { Loader2, Trash2, Plus, Save, ChevronRight, Tag, Link as LinkIcon, Globe, Text, ArrowRight } from "lucide-react";
+import { Loader2, Trash2, Plus, Save, ChevronRight, Tag, Link as LinkIcon, Globe, Text, ArrowRight, AlertCircle, CheckCircle } from "lucide-react";
 
 export default function AdminLandingPage() {
   const t = useTranslations("admin.landing");
@@ -21,6 +22,7 @@ export default function AdminLandingPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<Set<string>>(new Set());
   const [openSectionId, setOpenSectionId] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
   useEffect(() => {
     getLandingSections()
@@ -50,7 +52,7 @@ export default function AdminLandingPage() {
         ctaLink: section.ctaLink.trim(),
         order: Number(section.order),
       });
-      console.log("Section saved:", id);
+      setBanner({ type: "success", message: t("saved") });
     } catch (error: unknown) {
       const msg =
         error &&
@@ -62,7 +64,7 @@ export default function AdminLandingPage() {
             ? error.message
             : String(error);
       console.error("Save failed:", msg);
-    } finally {
+      setBanner({ type: "error", message: msg });
       setSaving((prev) => {
         const next = new Set(prev);
         next.delete(id);
@@ -93,6 +95,44 @@ export default function AdminLandingPage() {
     }
   };
 
+  const handleDeleteSection = async (id: string) => {
+    setSaving((prev) => new Set(prev).add(id));
+    try {
+      await deleteSection(id);
+      const data = await getLandingSections();
+      setSections(data);
+      setOpenSectionId(null);
+      setBanner({
+        type: "success",
+        message: t("deleted"),
+      });
+    } catch {
+      setBanner({
+        type: "error",
+        message: t("errorDelete"),
+      });
+    } finally {
+      setSaving((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }
+  };
+
+  const handleAddSection = async () => {
+    setBanner({ type: "info", message: t("comingSoon") });
+  };
+
+  const handleCloseFeedback = () => setFeedback(null);
+
+  // Auto-dismiss feedback after 3 seconds
+  useEffect(() => {
+    if (!feedback) return;
+    const timer = setTimeout(() => setFeedback(null), 3000);
+    return () => clearTimeout(timer);
+  }, [feedback]);
+
   const handleSaveCard = async (
     sectionId: string,
     cardId: string,
@@ -108,6 +148,7 @@ export default function AdminLandingPage() {
         link: card.link.trim(),
         order: Number(card.order),
       });
+      setBanner({ type: "success", message: t("saved") });
     } catch {
       // keep simple
     } finally {
@@ -136,9 +177,34 @@ export default function AdminLandingPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
-        <p className="text-sm text-muted">{t("subtitle")}</p>
+        <div className="flex flex-col gap-1">
+          <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
+          <p className="text-sm text-muted">{t("subtitle")}</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="secondary" size="sm" onClick={handleAddSection}>
+            <Plus className="w-3.5 h-3.5 mr-1.5" />
+            {t("addSection")}
+          </Button>
+        </div>
       </div>
+      {feedback && (
+        <div className={`rounded-lg border p-4 flex items-center gap-3 ${
+          feedback.type === "success" ? "bg-emerald-50 border-emerald-200" : "bg-red-50 border-red-200"
+        }`}>
+          <div className="flex items-center gap-2">
+            {feedback.type === "success" ? (
+              <CheckCircle className="w-4 h-4 text-emerald-600" />
+            ) : (
+              <AlertCircle className="w-4 h-4 text-red-600" />
+            )}
+            <span className="text-sm font-medium">{feedback.message}</span>
+          </div>
+          <button type="button" className="text-xs text-muted hover:text-fg hover:underline" onClick={handleCloseFeedback}>
+            {t("dismiss")}
+          </button>
+        </div>
+      )}
 
       {sections.length === 0 ? (
         <div className="rounded-xl border border-border bg-card p-8 text-center text-muted">
@@ -170,6 +236,14 @@ export default function AdminLandingPage() {
                         isOpen(section.id) ? "rotate-90" : ""
                       }`}
                     />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleDeleteSection(section.id)}
+                    disabled={saving.has(section.id)}
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
                   </Button>
                   <Button
                     variant="secondary"

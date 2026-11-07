@@ -22,6 +22,7 @@ import {
   updateLandingCardSchema,
   updateLandingSectionSchema,
   type LandingCardInput,
+  type LandingSectionInput,
   type UpdateLandingCardInput,
   type UpdateLandingSectionInput,
 } from "@motogearsouq/shared";
@@ -42,6 +43,16 @@ export class LandingController {
   @ApiOperation({ summary: "List all landing sections with cards (public)" })
   async getSections() {
     return this.landing.getLandingSections();
+  }
+
+  @Post()
+  @UseGuards(AdminAuthGuard)
+  @ApiHeader({ name: "x-admin-api-key", required: false })
+  @ApiOperation({ summary: "Create landing section (admin)" })
+  createSection(
+    @Body(sectionBody()) body: LandingSectionInput,
+  ) {
+    return this.landing.createSection(body);
   }
 
   @Put(":id")

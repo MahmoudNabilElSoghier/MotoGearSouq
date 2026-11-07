@@ -1,5 +1,5 @@
 import type { LoginInput } from "@motogearsouq/shared";
-import { apiGet, apiSend, setAccessToken } from "./client";
+import { ApiError, apiGet, apiSend, ensureAuth, setAccessToken } from "./client";
 
 export interface AuthUser {
   id: string;
@@ -38,6 +38,14 @@ export const authApi = {
   },
 
   async me(): Promise<AuthUser> {
-    return apiGet<AuthUser>("/auth/me");
+    try {
+      return await apiGet<AuthUser>("/auth/me");
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 401) {
+        await ensureAuth(true);
+        return apiGet<AuthUser>("/auth/me");
+      }
+      throw error;
+    }
   },
 };

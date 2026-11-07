@@ -23,6 +23,27 @@ export const setAccessToken = (token: string | null): void => {
 
 export const getAccessToken = (): string | null => inMemoryAccessToken;
 
+export function ensureAuth(force = false): Promise<string> {
+  if (refreshPromise) return refreshPromise;
+  if (!force && inMemoryAccessToken) return Promise.resolve(inMemoryAccessToken);
+  refreshPromise = (async () => {
+    const res = await fetch(`${baseUrl()}/auth/refresh`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      credentials: "include",
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("Refresh failed");
+    const json = (await res.json()) as ApiResponse<{ accessToken: string }>;
+    const newToken = json.data.accessToken;
+    inMemoryAccessToken = newToken;
+    return newToken;
+  })().finally(() => {
+    refreshPromise = null;
+  });
+  return refreshPromise;
+}
+
 const baseUrl = (): string => {
   if (typeof window !== "undefined") {
     return process.env.NEXT_PUBLIC_API_URL ?? "/api";
@@ -68,24 +89,7 @@ async function request<T>(
   if (response.status === 401 && !path.startsWith("/auth/")) {
     if (!isRetry) {
       try {
-        if (!refreshPromise) {
-          refreshPromise = (async () => {
-            const res = await fetch(`${baseUrl()}/auth/refresh`, {
-              method: "POST",
-              headers: { "content-type": "application/json" },
-              credentials: "include",
-              cache: "no-store",
-            });
-            if (!res.ok) throw new Error("Refresh failed");
-            const json = (await res.json()) as ApiResponse<{ accessToken: string }>;
-            const newToken = json.data.accessToken;
-            inMemoryAccessToken = newToken;
-            return newToken;
-          })().finally(() => {
-            refreshPromise = null;
-          });
-        }
-        const newToken = await refreshPromise;
+        const newToken = await ensureAuth(true);
         headers.set("authorization", `Bearer ${newToken}`);
         return request<T>(path, { ...init, headers }, true);
       } catch {

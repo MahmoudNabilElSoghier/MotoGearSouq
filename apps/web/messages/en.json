@@ -473,7 +473,8 @@
     },
     "topBar": {
       "title": "Admin Panel",
-      "logout": "Sign out"
+      "logout": "Sign out",
+      "myProfile": "My Profile"
     },
     "landing": {
       "title": "Landing Page CMS",

@@ -366,7 +366,7 @@ export const updateLandingCard = (
   id: string,
   input: UpdateLandingCardInput,
 ): Promise<ApiResponse<LandingCardRow | null>> =>
-  apiSend<LandingCardRow | null>("PATCH", `/landing/cards/${encode(id)}`, input);
+  apiSend<LandingCardRow | null>("PUT", `/landing/cards/${encode(id)}`, input);
 
 export const removeLandingCard = (
   id: string,

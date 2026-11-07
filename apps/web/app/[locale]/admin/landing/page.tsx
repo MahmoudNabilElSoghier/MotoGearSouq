@@ -41,14 +41,14 @@ export default function AdminLandingPage() {
     setSaving((prev) => new Set(prev).add(id));
     try {
       await updateLandingSection(id, {
-        titleAr: section.titleAr,
-        titleEn: section.titleEn,
-        subtitleAr: section.subtitleAr ?? undefined,
-        subtitleEn: section.subtitleEn ?? undefined,
-        ctaLabelAr: section.ctaLabelAr,
-        ctaLabelEn: section.ctaLabelEn,
-        ctaLink: section.ctaLink,
-        order: section.order,
+        titleAr: section.titleAr.trim(),
+        titleEn: section.titleEn.trim(),
+        subtitleAr: section.subtitleAr?.trim() ? section.subtitleAr : undefined,
+        subtitleEn: section.subtitleEn?.trim() ? section.subtitleEn : undefined,
+        ctaLabelAr: section.ctaLabelAr.trim(),
+        ctaLabelEn: section.ctaLabelEn.trim(),
+        ctaLink: section.ctaLink.trim(),
+        order: Number(section.order),
       });
       console.log("Section saved:", id);
     } catch (error: unknown) {
@@ -101,12 +101,12 @@ export default function AdminLandingPage() {
     setSaving((prev) => new Set(prev).add(cardId));
     try {
       await updateLandingCard(cardId, {
-        titleAr: card.titleAr,
-        titleEn: card.titleEn,
-        descAr: card.descAr,
-        descEn: card.descEn,
-        link: card.link,
-        order: card.order,
+        titleAr: card.titleAr.trim(),
+        titleEn: card.titleEn.trim(),
+        descAr: card.descAr?.trim() ? card.descAr : undefined,
+        descEn: card.descEn?.trim() ? card.descEn : undefined,
+        link: card.link.trim(),
+        order: Number(card.order),
       });
     } catch {
       // keep simple

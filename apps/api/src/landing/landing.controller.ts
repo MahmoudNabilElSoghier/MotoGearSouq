@@ -19,14 +19,17 @@ import { AdminAuthGuard } from "../common/guards/admin-auth.guard";
 import { ZodValidationPipe } from "../common/pipes/zod-validation.pipe";
 import {
   landingCardSchema,
-  landingSectionSchema,
+  updateLandingCardSchema,
+  updateLandingSectionSchema,
   type LandingCardInput,
-  type LandingSectionInput,
+  type UpdateLandingCardInput,
+  type UpdateLandingSectionInput,
 } from "@motogearsouq/shared";
 import { LandingService } from "./landing.service";
 
-const sectionBody = () => new ZodValidationPipe(landingSectionSchema);
+const sectionBody = () => new ZodValidationPipe(updateLandingSectionSchema);
 const cardBody = () => new ZodValidationPipe(landingCardSchema);
+const cardUpdateBody = () => new ZodValidationPipe(updateLandingCardSchema);
 
 @ApiTags("landing")
 @Controller("landing")
@@ -48,7 +51,7 @@ export class LandingController {
   @ApiOperation({ summary: "Update landing section (admin)" })
   updateSection(
     @Param("id") id: string,
-    @Body(sectionBody()) body: LandingSectionInput,
+    @Body(sectionBody()) body: UpdateLandingSectionInput,
   ) {
     return this.landing.updateSection(id, body);
   }
@@ -72,7 +75,7 @@ export class LandingController {
   @ApiOperation({ summary: "Update landing card (admin)" })
   updateCard(
     @Param("id") id: string,
-    @Body(cardBody()) body: LandingCardInput,
+    @Body(cardUpdateBody()) body: UpdateLandingCardInput,
   ) {
     return this.landing.updateCard(id, body);
   }

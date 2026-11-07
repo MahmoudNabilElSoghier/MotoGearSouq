@@ -1,10 +1,23 @@
 import { z } from "zod";
 
+const orderField = z
+  .union([
+    z
+      .number()
+      .refine((value) => Number.isInteger(value), { message: "أدخل عددًا صحيحًا" }),
+    z
+      .string()
+      .refine((value) => value === "" || Number.isInteger(Number(value)), {
+        message: "أدخل عددًا صحيحًا",
+      }),
+  ])
+  .optional();
+
 export const landingSectionSchema = z.object({
   slug: z
     .string()
     .min(1, "المعرّف مطلوب")
-    .regex(/^[a-z0-9-]+$/, "المعرّف يجب أن يكون إنجليزيًا (a-z, 0-9, -)"),
+    .regex(/^[a-z0-9-]+$/, "المعرّف يجب أن يكون إنجليزيًا (a-z, 0, 9, -)"),
   titleAr: z.string().min(1, "العنوان بالعربية مطلوب"),
   titleEn: z.string().min(1, "العنوان بالإنجليزية مطلوب"),
   subtitleAr: z.string().optional().nullable(),
@@ -12,13 +25,7 @@ export const landingSectionSchema = z.object({
   ctaLabelAr: z.string().min(1, "نص زر الإجراء بالعربية مطلوب"),
   ctaLabelEn: z.string().min(1, "نص زر الإجراء بالإنجليزية مطلوب"),
   ctaLink: z.string().min(1, "رابط زر الإجراء مطلوب"),
-  order: z
-    .string()
-    .refine(
-      (value) => value === "" || Number.isInteger(Number(value)),
-      "أدخل عددًا صحيحًا"
-    )
-    .optional(),
+  order: orderField,
 });
 
 export type LandingSectionInput = z.infer<typeof landingSectionSchema>;
@@ -40,13 +47,7 @@ export const landingCardSchema = z.object({
   descAr: z.string().optional().nullable(),
   descEn: z.string().optional().nullable(),
   link: z.string().min(1, "الرابط مطلوب"),
-  order: z
-    .string()
-    .refine(
-      (value) => value === "" || Number.isInteger(Number(value)),
-      "أدخل عددًا صحيحًا"
-    )
-    .optional(),
+  order: orderField,
 });
 
 export type LandingCardInput = z.infer<typeof landingCardSchema>;

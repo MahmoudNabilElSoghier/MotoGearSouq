@@ -27,7 +27,7 @@ export function middleware(request: NextRequest) {
 
   // Path now carries a valid locale prefix (or intl chose to pass through).
   const [, locale = defaultLocale, ...rest] = pathname.split("/");
-  const hasRefreshToken = request.cookies.has("mgs_rt");
+  const hasRefreshToken = request.cookies.has("mgs_admin_rt");
   const isAdminArea = rest[0] === "admin";
 
   // Customer area (B2C auth) — presence-only check at the edge; real JWT/

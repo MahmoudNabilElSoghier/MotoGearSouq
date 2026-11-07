@@ -7,7 +7,8 @@ import { useTranslations, useLocale } from "next-intl";
 import { authApi, type AuthUser } from "@motogearsouq/api-client";
 import { LocaleSwitcher } from "@/components/ui/LocaleSwitcher";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { ChevronDown, LogOut, User } from "lucide-react";
+import { ChevronDown, LogOut, Menu, User } from "lucide-react";
+import { useAdminSidebar } from "@/components/admin/AdminSidebarProvider";
 
 function getInitials(email: string): string {
   const local = email.split("@")[0];
@@ -39,9 +40,11 @@ const ADMIN_ROUTE_TITLES = [
 export function AdminTopBar() {
   const t = useTranslations("admin.topBar");
   const adminT = useTranslations("admin");
+  const tNav = useTranslations("admin.nav");
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
+  const { openMobile } = useAdminSidebar();
   const isLoginPage = pathname === `/${locale}/admin/login`;
 
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -111,6 +114,14 @@ export function AdminTopBar() {
     <header className="sticky top-0 z-20 w-full border-b border-border bg-bg/60 backdrop-blur-sm px-6 py-4">
       <div className="flex flex-col lg:flex-row items-center justify-between gap-3">
         <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={openMobile}
+            aria-label={tNav("openMenu")}
+            className="rounded-lg p-2 text-muted transition-colors hover:bg-card hover:text-fg md:hidden"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
           <span className="text-sm font-semibold text-fg">
             {pageTitle}
           </span>

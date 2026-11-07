@@ -469,7 +469,10 @@
       "breakEven": "Break-Even",
       "abcAnalysis": "ABC Analysis",
       "deadStock": "Dead Stock",
-      "stockValuation": "Stock Valuation"
+      "stockValuation": "Stock Valuation",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu",
+      "toggleSidebar": "Toggle sidebar"
     },
     "topBar": {
       "title": "Admin Panel",

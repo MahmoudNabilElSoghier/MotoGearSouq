@@ -11,7 +11,8 @@ import { useCustomerAuth, type CustomerUser } from "@/lib/customer-auth-store";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Container } from "@/components/ui/Container";
-import { Loader2, AlertCircle, Pencil, CheckCircle2, MapPin } from "lucide-react";
+import { FormBanner } from "@/components/admin/FormBanner";
+import { Loader2, AlertCircle, Pencil, CheckCircle2, MapPin, Trash2, AlertTriangle } from "lucide-react";
 
 type CheckoutFormValues = {
   address: string;
@@ -127,6 +128,9 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<string>("cod");
   const [addressChoice, setAddressChoice] = useState<string>("new");
+  const [addressToDelete, setAddressToDelete] = useState<string | null>(null);
+  const [hiddenAddresses, setHiddenAddresses] = useState<string[]>([]);
+  const [addressToast, setAddressToast] = useState(false);
   const streetInputRef = useRef<HTMLInputElement | null>(null);
 
   const {
@@ -176,6 +180,24 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
     streetInputRef.current?.focus();
   };
 
+  const confirmDeleteAddress = () => {
+    if (!addressToDelete) return;
+    const next = [...hiddenAddresses, addressToDelete];
+    setHiddenAddresses(next);
+    try {
+      window.localStorage.setItem("hiddenAddresses", JSON.stringify(next));
+    } catch {
+      // Storage unavailable → still hidden for this session.
+    }
+    if (addressChoice === addressToDelete) selectNewAddress();
+    setAddressToDelete(null);
+    setAddressToast(true);
+  };
+
+  const visibleAddresses = savedAddresses.filter(
+    (a) => !hiddenAddresses.includes(a.key),
+  );
+
   const successfulDeliveries = customer.successfulDeliveries ?? 0;
   const codLimit = codLimitFor(successfulDeliveries);
   const nextLimit = codLimitFor(successfulDeliveries + 1);
@@ -192,6 +214,29 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
       setPaymentMethod("mock");
     }
   }, [codExceeded, paymentMethod]);
+
+  // Hidden (deleted) addresses persist per browser via localStorage.
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem("hiddenAddresses");
+      if (!raw) return;
+      const parsed: unknown = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        setHiddenAddresses(
+          parsed.filter((x): x is string => typeof x === "string"),
+        );
+      }
+    } catch {
+      // Corrupt/absent storage → show every address.
+    }
+  }, []);
+
+  // Success toast auto-dismiss (landing CMS banner pattern).
+  useEffect(() => {
+    if (!addressToast) return;
+    const timer = setTimeout(() => setAddressToast(false), 3000);
+    return () => clearTimeout(timer);
+  }, [addressToast]);
 
   const formatLimit = (limit: number) =>
     Number.isFinite(limit) ? nf.format(limit) : isAr ? "بلا حدود" : "Unlimited";
@@ -266,15 +311,22 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-8 lg:grid-cols-[1fr_400px]">
           {/* Customer / Shipping Form */}
           <div className="space-y-6 rounded-xl border border-border bg-card p-6 md:p-8">
+            {addressToast && (
+              <FormBanner
+                type="success"
+                message={t("deleteAddress.toast")}
+                onClose={() => setAddressToast(false)}
+              />
+            )}
             {/* Saved address selection (Amazon-style radios) */}
-            {savedAddresses.length > 0 && (
+            {visibleAddresses.length > 0 && (
               <div className="space-y-3">
                 <p className="flex items-center gap-1.5 text-sm font-semibold text-fg">
                   <MapPin className="w-4 h-4 text-accent" aria-hidden />
                   {t("usePreviousAddress.title")}
                 </p>
                 <div className="space-y-2">
-                  {savedAddresses.map((a) => (
+                  {visibleAddresses.map((a) => (
                     <label
                       key={a.key}
                       className={`flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors ${
@@ -291,7 +343,7 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
                         onChange={() => selectSavedAddress(a)}
                         className="mt-0.5 accent-accent"
                       />
-                      <span className="min-w-0">
+                      <span className="min-w-0 flex-1">
                         <span className="block text-sm font-semibold text-fg">
                           {a.street}
                         </span>
@@ -301,6 +353,18 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
                             .join(isAr ? "، " : ", ")}
                         </span>
                       </span>
+                      <button
+                        type="button"
+                        aria-label={t("deleteAddress.button")}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setAddressToDelete(a.key);
+                        }}
+                        className="ms-auto shrink-0 rounded-lg p-1.5 text-red-500 transition-colors hover:bg-red-500/10"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
                     </label>
                   ))}
                   <label
@@ -569,6 +633,47 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
             </div>
           </aside>
         </form>
+
+        {/* Delete address confirmation */}
+        {addressToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="delete-address-title"
+              className="w-full max-w-md space-y-4 rounded-xl border border-border bg-card p-6 shadow-2xl"
+            >
+              <div className="flex items-center gap-3">
+                <div className="rounded-full bg-red-500/15 p-2 text-red-400">
+                  <AlertTriangle className="h-6 w-6" />
+                </div>
+                <h2
+                  id="delete-address-title"
+                  className="text-lg font-bold text-fg"
+                >
+                  {t("deleteAddress.title")}
+                </h2>
+              </div>
+              <p className="text-sm text-muted">{t("deleteAddress.message")}</p>
+              <div className="flex justify-end gap-3 pt-2">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setAddressToDelete(null)}
+                >
+                  {t("deleteAddress.cancel")}
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={confirmDeleteAddress}
+                  className="bg-red-600 hover:bg-red-700 text-white"
+                >
+                  {t("deleteAddress.confirm")}
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </Container>
     </main>
   );

@@ -1483,6 +1483,14 @@
     "usePreviousAddress": {
       "title": "Use your previous address",
       "newAddress": "Use a new address"
+    },
+    "deleteAddress": {
+      "button": "Delete address",
+      "title": "Delete Address?",
+      "message": "Are you sure you want to delete this address? This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete",
+      "toast": "Address deleted successfully"
     }
   },
   "order": {

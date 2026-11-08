@@ -1678,6 +1678,50 @@
         "failed": "Failed",
         "refunded": "Refunded"
       }
+    },
+    "landing": {
+      "trustBar": {
+        "delivery": {
+          "title": "Delivery Across Egypt",
+          "subtitle": "Fast shipping to all governorates"
+        },
+        "cod": {
+          "title": "Cash on Delivery",
+          "subtitle": "Pay securely when you receive"
+        },
+        "wholesale": {
+          "title": "Wholesale Prices",
+          "subtitle": "Special rates for merchants & shops"
+        },
+        "support": {
+          "title": "24/7 Expert Support",
+          "subtitle": "Technical assistance anytime"
+        }
+      },
+      "howToOrder": {
+        "title": "How to Order in 3 Simple Steps",
+        "subtitle": "Fast, easy, and secure purchasing process",
+        "steps": {
+          "1": {
+            "title": "Pick Category & Product",
+            "desc": "Browse our massive catalog of genuine motorcycle parts and accessories."
+          },
+          "2": {
+            "title": "Add to Cart & Checkout",
+            "desc": "Fill in your delivery address and choose your preferred payment method."
+          },
+          "3": {
+            "title": "Receive at Your Door",
+            "desc": "Your order is carefully packed and shipped directly to your location."
+          }
+        }
+      },
+      "merchant": {
+        "badge": "B2B Merchants Program",
+        "title": "Are you a workshop owner or motorcycle parts merchant?",
+        "subtitle": "Join our official B2B network today to unlock exclusive wholesale pricing, priority dispatch, and dedicated account support.",
+        "cta": "Register as Merchant"
+      }
     }
   }
 }

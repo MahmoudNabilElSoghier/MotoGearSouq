@@ -1,50 +1,64 @@
 "use client";
 
-import { trustBar } from "@/lib/content";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
+import { Truck, Banknote, Store, Headphones } from "lucide-react";
 import { FadeIn } from "@/components/ui/FadeIn";
-import { useCountUp } from "@/components/ui/useCountUp";
-
-interface TrustItem {
-  id: string;
-  value: string;
-}
-
-function Stat({ item, index }: { item: TrustItem; index: number }) {
-  const t = useTranslations("trustBar");
-  const match = /^(\d+)(.*)$/.exec(item.value);
-  const target = match ? Number(match[1]) : 0;
-  const suffix = match ? match[2] : "";
-  const { value, ref } = useCountUp(target);
-
-  return (
-    <FadeIn delay={Math.min(index * 0.05, 0.3)} className="h-full">
-      <Card padding="md" className="border-border/50 bg-bg/40 h-full">
-        <div
-          ref={ref}
-          className="text-3xl md:text-4xl font-extrabold text-accent mb-2"
-        >
-          {value}
-          {suffix}
-        </div>
-        <div className="text-sm md:text-base text-muted font-medium">
-          {t(`${item.id}.label`)}
-        </div>
-      </Card>
-    </FadeIn>
-  );
-}
 
 export function TrustBar() {
+  const t = useTranslations("landing.trustBar");
+
+  const items = [
+    {
+      id: "delivery",
+      icon: Truck,
+      title: t("delivery.title"),
+      subtitle: t("delivery.subtitle"),
+    },
+    {
+      id: "cod",
+      icon: Banknote,
+      title: t("cod.title"),
+      subtitle: t("cod.subtitle"),
+    },
+    {
+      id: "wholesale",
+      icon: Store,
+      title: t("wholesale.title"),
+      subtitle: t("wholesale.subtitle"),
+    },
+    {
+      id: "support",
+      icon: Headphones,
+      title: t("support.title"),
+      subtitle: t("support.subtitle"),
+    },
+  ];
+
   return (
-    <section id="trust-bar" className="py-12 bg-card border-y border-border scroll-mt-24">
+    <section className="relative z-20 -mt-10 md:-mt-12 px-4 mb-8">
       <Container size="xl">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          {trustBar.map((item, index) => (
-            <Stat key={item.id} item={item} index={index} />
-          ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {items.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <FadeIn key={item.id} delay={Math.min(index * 0.05, 0.3)} className="h-full">
+                <Card
+                  padding="md"
+                  className="bg-card border-border shadow-xl rounded-2xl flex items-center gap-4 p-5 h-full hover:border-brand-red/50 transition-colors"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-brand-red/10 text-brand-red flex items-center justify-center shrink-0">
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-fg text-base mb-0.5">{item.title}</h3>
+                    <p className="text-muted text-xs">{item.subtitle}</p>
+                  </div>
+                </Card>
+              </FadeIn>
+            );
+          })}
         </div>
       </Container>
     </section>

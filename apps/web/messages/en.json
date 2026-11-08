@@ -59,6 +59,31 @@
       "branches": "Branches",
       "contact": "Contact",
       "store": "Shop"
+    },
+    "trustBar": {
+      "delivery": "Delivery across Egypt",
+      "deliverySub": "Fast shipping nationwide",
+      "cod": "Cash on Delivery",
+      "codSub": "Pay when you receive",
+      "wholesale": "Wholesale Prices",
+      "wholesaleSub": "For merchants & workshops",
+      "support": "24/7 Support",
+      "supportSub": "Always here to help"
+    },
+    "howToOrder": {
+      "title": "How to Order?",
+      "subtitle": "Get your motorcycle parts in 3 easy steps",
+      "step1Title": "Pick your part",
+      "step1Desc": "Browse our catalog and choose what you need",
+      "step2Title": "Add to cart",
+      "step2Desc": "Review your cart and complete the checkout",
+      "step3Title": "Receive at your door",
+      "step3Desc": "Fast delivery to your address"
+    },
+    "merchant": {
+      "title": "Are you a merchant or a workshop owner?",
+      "subtitle": "Get exclusive wholesale prices and priority support",
+      "cta": "Register as Merchant"
     }
   },
   "navigation": {
@@ -1677,33 +1702,6 @@
         "unpaid": "Unpaid",
         "failed": "Failed",
         "refunded": "Refunded"
-      }
-    },
-    "landing": {
-      "trustBar": {
-        "delivery": "Delivery across Egypt",
-        "deliverySub": "Fast shipping nationwide",
-        "cod": "Cash on Delivery",
-        "codSub": "Pay when you receive",
-        "wholesale": "Wholesale Prices",
-        "wholesaleSub": "For merchants & workshops",
-        "support": "24/7 Support",
-        "supportSub": "Always here to help"
-      },
-      "howToOrder": {
-        "title": "How to Order?",
-        "subtitle": "Get your motorcycle parts in 3 easy steps",
-        "step1Title": "Pick your part",
-        "step1Desc": "Browse our catalog and choose what you need",
-        "step2Title": "Add to cart",
-        "step2Desc": "Review your cart and complete the checkout",
-        "step3Title": "Receive at your door",
-        "step3Desc": "Fast delivery to your address"
-      },
-      "merchant": {
-        "title": "Are you a merchant or a workshop owner?",
-        "subtitle": "Get exclusive wholesale prices and priority support",
-        "cta": "Register as Merchant"
       }
     }
   }

@@ -54,8 +54,7 @@ export default function AccountPage() {
     setError(null);
     try {
       await logout();
-      router.push(`/${locale}`);
-      router.refresh();
+      window.location.href = `/${locale}`;
     } catch {
       setError(t("errors.logoutFailed"));
     }

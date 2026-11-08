@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   Menu,
   X,
@@ -28,7 +28,6 @@ export function StoreHeader() {
   const [accountOpen, setAccountOpen] = useState(false);
   const locale = useLocale();
   const pathname = usePathname();
-  const router = useRouter();
   const tNav = useTranslations("navigation");
   const tHeader = useTranslations("header");
   const tLogin = useTranslations("customerAuth.login");
@@ -43,8 +42,7 @@ export function StoreHeader() {
   const handleLogout = async () => {
     setAccountOpen(false);
     await useCustomerAuth.getState().logout();
-    router.push(`/${locale}`);
-    router.refresh();
+    window.location.href = `/${locale}`;
   };
 
   const navItems = [

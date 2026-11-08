@@ -113,8 +113,14 @@ export const useCustomerAuth = create<CustomerAuthState>()((set, get) => ({
   },
 
   logout: async () => {
-    await fetch("/api/auth/customer/logout", { method: "POST", credentials: "include" });
-    set({ customer: null });
+    set({ isLoading: true });
+    try {
+      await fetch("/api/auth/customer/logout", { method: "POST", credentials: "include" });
+    } catch {
+      // ignore
+    } finally {
+      set({ customer: null, isLoading: false, isInitialized: true });
+    }
   },
 
   setCustomer: (c) => set({ customer: c }),

@@ -1474,7 +1474,7 @@
     "codLimitProgress": "After {count} successful order(s), your limit rises to {nextLimit} EGP.",
     "usePreviousAddress": {
       "title": "Use your previous address",
-      "button": "Use this address"
+      "newAddress": "Use a new address"
     }
   },
   "order": {

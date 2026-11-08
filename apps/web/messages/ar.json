@@ -1868,7 +1868,7 @@
     "codLimitProgress": "بعد {count} طلب ناجح، يرتفع حدك إلى {nextLimit} ج.م.",
     "usePreviousAddress": {
       "title": "استخدم عنوانك السابق",
-      "button": "استخدم هذا العنوان"
+      "newAddress": "استخدم عنواناً جديداً"
     }
   },
   "order": {

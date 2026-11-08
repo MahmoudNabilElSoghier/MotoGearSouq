@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
@@ -20,10 +20,11 @@ type CheckoutFormValues = {
   notes?: string;
 };
 
-type PrevOrder = {
-  shippingAddress?: string | null;
-  shippingCity?: string | null;
-  shippingGovernorate?: string | null;
+type SavedAddress = {
+  key: string;
+  street: string;
+  city: string;
+  governorate: string;
 };
 
 function codLimitFor(successfulDeliveries: number): number {
@@ -38,8 +39,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { items } = useCart();
   const { customer, isLoading: authLoading, isInitialized, init } = useCustomerAuth();
-  const [prevOrder, setPrevOrder] = useState<PrevOrder | null>(null);
-  const [showUsePrevious, setShowUsePrevious] = useState(false);
+  const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>([]);
 
   useEffect(() => {
     init();
@@ -53,7 +53,7 @@ export default function CheckoutPage() {
     }
   }, [authLoading, customer, isInitialized, locale, router]);
 
-  // Latest delivered order → "Use previous address" banner.
+  // Unique addresses from past orders → radio selection list.
   useEffect(() => {
     if (!customer) return;
     let cancelled = false;
@@ -61,18 +61,29 @@ export default function CheckoutPage() {
       try {
         const res = await fetch("/api/auth/customer/orders", { credentials: "include" });
         if (!res.ok) return;
-        const body = (await res.json()) as { data?: PrevOrder[] } | null;
-        const last = Array.isArray(body?.data) ? body.data[0] : undefined;
-        if (!cancelled && last?.shippingAddress) {
-          setPrevOrder({
-            shippingAddress: last.shippingAddress,
-            shippingCity: last.shippingCity ?? null,
-            shippingGovernorate: last.shippingGovernorate ?? null,
-          });
-          setShowUsePrevious(true);
+        const body = (await res.json()) as {
+          data?: Array<{
+            shippingAddress?: string | null;
+            shippingCity?: string | null;
+            shippingGovernorate?: string | null;
+          }>;
+        } | null;
+        const orders = Array.isArray(body?.data) ? body.data : [];
+        const seen = new Set<string>();
+        const list: SavedAddress[] = [];
+        for (const order of orders) {
+          const street = order.shippingAddress?.trim();
+          if (!street) continue;
+          const city = order.shippingCity?.trim() ?? "";
+          const governorate = order.shippingGovernorate?.trim() ?? "";
+          const key = `${street}|${city}|${governorate}`;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          list.push({ key, street, city, governorate });
         }
+        if (!cancelled) setSavedAddresses(list);
       } catch {
-        // The banner is optional; ignore fetch failures.
+        // The saved-address list is optional; ignore fetch failures.
       }
     })();
     return () => {
@@ -96,29 +107,15 @@ export default function CheckoutPage() {
     );
   }
 
-  return (
-    <CheckoutForm
-      customer={customer}
-      prevOrder={prevOrder}
-      showUsePrevious={showUsePrevious}
-      setShowUsePrevious={setShowUsePrevious}
-    />
-  );
+  return <CheckoutForm customer={customer} savedAddresses={savedAddresses} />;
 }
 
 type CheckoutFormProps = {
   customer: CustomerUser;
-  prevOrder: PrevOrder | null;
-  showUsePrevious: boolean;
-  setShowUsePrevious: (show: boolean) => void;
+  savedAddresses: SavedAddress[];
 };
 
-function CheckoutForm({
-  customer,
-  prevOrder,
-  showUsePrevious,
-  setShowUsePrevious,
-}: CheckoutFormProps) {
+function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
   const t = useTranslations("checkout");
   const locale = useLocale();
   const router = useRouter();
@@ -129,12 +126,14 @@ function CheckoutForm({
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<string>("cod");
+  const [addressChoice, setAddressChoice] = useState<string>("new");
+  const streetInputRef = useRef<HTMLInputElement | null>(null);
 
   const {
     register,
     handleSubmit,
     setValue,
-    formState: { errors, isDirty },
+    formState: { errors },
   } = useForm<CheckoutFormValues>({
     mode: "onSubmit",
     defaultValues: {
@@ -144,6 +143,38 @@ function CheckoutForm({
       notes: "",
     },
   });
+
+  const streetRegister = register("address", {
+    required: isAr ? "العنوان مطلوب" : "Address is required",
+  });
+  const cityRegister = register("city", {
+    required: isAr ? "المدينة مطلوبة" : "City is required",
+  });
+  const governorateRegister = register("governorate", {
+    required: isAr ? "المحافظة مطلوبة" : "Governorate is required",
+  });
+
+  // Any manual edit of an address field means the user is typing a new address.
+  const flipToNewAddress = () =>
+    setAddressChoice((current) => (current === "new" ? current : "new"));
+
+  const selectSavedAddress = (a: SavedAddress) => {
+    setAddressChoice(a.key);
+    setValue("address", a.street, { shouldValidate: true, shouldDirty: true });
+    setValue("city", a.city, { shouldValidate: true, shouldDirty: true });
+    setValue("governorate", a.governorate, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  };
+
+  const selectNewAddress = () => {
+    setAddressChoice("new");
+    setValue("address", "", { shouldValidate: true, shouldDirty: true });
+    setValue("city", "", { shouldValidate: true, shouldDirty: true });
+    setValue("governorate", "", { shouldValidate: true, shouldDirty: true });
+    streetInputRef.current?.focus();
+  };
 
   const successfulDeliveries = customer.successfulDeliveries ?? 0;
   const codLimit = codLimitFor(successfulDeliveries);
@@ -235,39 +266,63 @@ function CheckoutForm({
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-8 lg:grid-cols-[1fr_400px]">
           {/* Customer / Shipping Form */}
           <div className="space-y-6 rounded-xl border border-border bg-card p-6 md:p-8">
-            {showUsePrevious && prevOrder && prevOrder.shippingAddress && !isDirty && (
-              <div className="mb-4 flex items-center gap-2 rounded-xl border border-amber-50 bg-amber-50 px-4 py-3">
-                <div className="flex items-center gap-2 rounded-lg bg-amber-100 p-2 text-amber-600">
-                  <MapPin className="w-5 h-5" />
+            {/* Saved address selection (Amazon-style radios) */}
+            {savedAddresses.length > 0 && (
+              <div className="space-y-3">
+                <p className="flex items-center gap-1.5 text-sm font-semibold text-fg">
+                  <MapPin className="w-4 h-4 text-accent" aria-hidden />
+                  {t("usePreviousAddress.title")}
+                </p>
+                <div className="space-y-2">
+                  {savedAddresses.map((a) => (
+                    <label
+                      key={a.key}
+                      className={`flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors ${
+                        addressChoice === a.key
+                          ? "border-accent bg-accent/10"
+                          : "border-border bg-bg hover:border-border/80"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="savedAddress"
+                        value={a.key}
+                        checked={addressChoice === a.key}
+                        onChange={() => selectSavedAddress(a)}
+                        className="mt-0.5 accent-accent"
+                      />
+                      <span className="min-w-0">
+                        <span className="block text-sm font-semibold text-fg">
+                          {a.street}
+                        </span>
+                        <span className="block text-xs text-muted">
+                          {[a.city, a.governorate]
+                            .filter(Boolean)
+                            .join(isAr ? "، " : ", ")}
+                        </span>
+                      </span>
+                    </label>
+                  ))}
+                  <label
+                    className={`flex cursor-pointer items-center gap-3 rounded-xl border p-4 transition-colors ${
+                      addressChoice === "new"
+                        ? "border-accent bg-accent/10"
+                        : "border-border bg-bg hover:border-border/80"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="savedAddress"
+                      value="new"
+                      checked={addressChoice === "new"}
+                      onChange={selectNewAddress}
+                      className="accent-accent"
+                    />
+                    <span className="text-sm font-medium text-fg">
+                      {t("usePreviousAddress.newAddress")}
+                    </span>
+                  </label>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-bold text-fg">
-                    {t("usePreviousAddress.title")}: {prevOrder.shippingAddress}
-                    {prevOrder.shippingCity ? `, ${prevOrder.shippingCity}` : ""}
-                  </p>
-                </div>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => {
-                    setValue("address", prevOrder.shippingAddress ?? "", {
-                      shouldValidate: true,
-                      shouldDirty: true,
-                    });
-                    setValue("city", prevOrder.shippingCity ?? "", {
-                      shouldValidate: true,
-                      shouldDirty: true,
-                    });
-                    setValue("governorate", prevOrder.shippingGovernorate ?? "", {
-                      shouldValidate: true,
-                      shouldDirty: true,
-                    });
-                    setShowUsePrevious(false);
-                  }}
-                >
-                  {t("usePreviousAddress.button")}
-                </Button>
               </div>
             )}
             <h2 className="text-xl font-bold text-fg">
@@ -302,7 +357,15 @@ function CheckoutForm({
             <div>
               <Input
                 label={isAr ? "العنوان بالتفصيل" : "Street Address"}
-                {...register("address", { required: isAr ? "العنوان مطلوب" : "Address is required" })}
+                {...streetRegister}
+                ref={(el) => {
+                  streetRegister.ref(el);
+                  streetInputRef.current = el;
+                }}
+                onChange={(e) => {
+                  streetRegister.onChange(e);
+                  flipToNewAddress();
+                }}
                 placeholder={isAr ? "شارع الجمهورية، عمارة 12" : "12 El Gomhoreya St"}
               />
               {errors.address && (
@@ -314,7 +377,11 @@ function CheckoutForm({
               <div>
                 <Input
                   label={isAr ? "المدينة / المركز" : "City / Center"}
-                  {...register("city", { required: isAr ? "المدينة مطلوبة" : "City is required" })}
+                  {...cityRegister}
+                  onChange={(e) => {
+                    cityRegister.onChange(e);
+                    flipToNewAddress();
+                  }}
                   placeholder={isAr ? "المنصورة" : "Mansoura"}
                 />
                 {errors.city && (
@@ -325,7 +392,11 @@ function CheckoutForm({
               <div>
                 <Input
                   label={isAr ? "المحافظة" : "Governorate"}
-                  {...register("governorate", { required: isAr ? "المحافظة مطلوبة" : "Governorate is required" })}
+                  {...governorateRegister}
+                  onChange={(e) => {
+                    governorateRegister.onChange(e);
+                    flipToNewAddress();
+                  }}
                   placeholder={isAr ? "الدقهلية" : "Dakahlia"}
                 />
                 {errors.governorate && (

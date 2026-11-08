@@ -176,7 +176,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
 
   return (
     <main id="main-content" className="flex-1 py-12 md:py-16">
-      <Container>
+      <Container size="xl" className="max-w-[1600px] w-full">
         <div className="mb-6">
           <h1 className="text-3xl md:text-4xl font-extrabold text-fg">{t("heading")}</h1>
         </div>
@@ -202,8 +202,8 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
           </div>
         )}
 
-        <div className="grid items-start gap-8 md:grid-cols-[16rem_1fr] lg:grid-cols-[18rem_1fr]">
-          <aside className="sticky top-24 hidden md:block">
+        <div className="flex flex-col md:flex-row gap-8 items-start">
+          <aside className="sticky top-24 hidden md:block w-72 shrink-0">
             <form
               action={`/${locale}/products`}
               method="get"
@@ -292,7 +292,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
             </form>
           </aside>
 
-          <div>
+          <div className="flex-1 min-w-0 w-full">
             <form
               action={`/${locale}/products`}
               method="get"
@@ -333,7 +333,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
                 </Button>
               </div>
             ) : (
-              <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+              <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6">
                 {result.items.map((product) => {
                   const stock = totalStock(product);
                   const badge = stockBadge(stock, product.reorderLevel, locale);

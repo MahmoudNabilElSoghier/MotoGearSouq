@@ -19,7 +19,7 @@ export async function StoreFooter() {
 
   return (
     <footer className="bg-card border-t border-border py-16">
-      <Container size="xl">
+      <Container size="xl" className="max-w-[1600px] w-full">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Company Info */}
           <div className="md:col-span-2 space-y-4">

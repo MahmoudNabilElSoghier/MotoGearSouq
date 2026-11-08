@@ -124,7 +124,7 @@ export function StoreHeader() {
 
   return (
     <header className="sticky top-0 z-50 bg-bg/95 backdrop-blur border-b border-border">
-      <Container size="xl" as="div">
+      <Container size="xl" as="div" className="max-w-[1600px] w-full">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link href={`/${locale}`} className="flex flex-col items-start">

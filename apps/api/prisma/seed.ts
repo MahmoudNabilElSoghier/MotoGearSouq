@@ -305,6 +305,15 @@ async function seedAdminUser(): Promise<string> {
 }
 
 async function main() {
+  await prisma.landingCard.deleteMany({
+    where: {
+      OR: [
+        { titleEn: "New card" },
+        { titleAr: "بطاقة جديدة" },
+      ],
+    },
+  });
+
   for (const [index, category] of contentCategories.entries()) {
     await prisma.category.upsert({
       where: { slug: category.id },

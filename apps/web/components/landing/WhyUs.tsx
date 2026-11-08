@@ -11,10 +11,10 @@ export function WhyUs() {
   const t = useTranslations("whyUs");
 
   return (
-    <section id="why-us" className="py-20 md:py-28 bg-card border-y border-border scroll-mt-24">
+    <section id="why-us" className="py-12 md:py-16 bg-card border-y border-border scroll-mt-24">
       <Container size="xl">
         <FadeIn>
-          <div className="text-center max-w-2xl mx-auto mb-16">
+          <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
               {t("title")}
             </h2>
@@ -31,13 +31,13 @@ export function WhyUs() {
               <FadeIn key={feature.id} delay={Math.min(index * 0.05, 0.3)} className="h-full">
                 <Card
                   padding="lg"
-                  className="bg-bg/50 border-border h-full flex flex-col transition-all duration-300 hover:border-accent/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/10"
+                  className="bg-bg/50 border-border h-full flex flex-col transition-all duration-300 hover:border-brand-red/50 hover:bg-brand-red/5 hover:-translate-y-1 hover:shadow-lg"
                 >
-                  <div className="w-14 h-14 rounded-lg bg-accent/10 text-accent flex items-center justify-center mb-5">
+                  <div className="w-14 h-14 rounded-xl bg-brand-red/10 text-brand-red flex items-center justify-center mb-5">
                     <Icon className="w-7 h-7" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-3">{t(`items.${feature.id}.title`)}</h3>
-                  <p className="text-muted text-base leading-7">
+                  <h3 className="text-xl font-bold mb-3">{t(`items.${feature.id}.title`)}</h3>
+                  <p className="text-muted text-sm md:text-base leading-relaxed">
                     {t(`items.${feature.id}.description`)}
                   </p>
                 </Card>

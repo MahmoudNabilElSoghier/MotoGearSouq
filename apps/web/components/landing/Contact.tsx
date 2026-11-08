@@ -53,7 +53,7 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="relative overflow-hidden py-20 md:py-28 bg-bg scroll-mt-24">
+    <section id="contact" className="relative overflow-hidden py-12 md:py-16 bg-bg scroll-mt-24">
       {/* Faint accent glow, top-right — matches the OG image style */}
       {/* Decorative glow: physical (aesthetic only) */}
       <div
@@ -62,7 +62,7 @@ export function Contact() {
       />
       <Container size="xl">
         <FadeIn>
-          <div className="text-center max-w-2xl mx-auto mb-8 pb-6 border-b border-border/50">
+          <div className="text-center max-w-2xl mx-auto mb-10 pb-4 border-b border-border/50">
             <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
               {t("title")}
             </h2>

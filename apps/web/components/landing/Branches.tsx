@@ -24,10 +24,10 @@ export function Branches() {
   const selectedAddress = t(`items.${selectedBranch.id}.address`);
 
   return (
-    <section id="branches" className="py-20 md:py-28 bg-card border-y border-border scroll-mt-24">
+    <section id="branches" className="py-12 md:py-16 bg-card border-y border-border scroll-mt-24">
       <Container size="xl">
         <FadeIn>
-          <div className="text-center max-w-2xl mx-auto mb-16">
+          <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
               {t("title")}
             </h2>
@@ -81,25 +81,25 @@ export function Branches() {
                     }}
                     className={`bg-bg/50 flex flex-col justify-between cursor-pointer transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
                       isSelected
-                        ? "border-accent"
-                        : "border-border hover:border-accent/40"
+                        ? "border-brand-red bg-brand-red/5"
+                        : "border-border hover:border-brand-red/50"
                     }`}
                   >
                     <div>
-                      <h3 className="text-xl font-bold text-accent mb-4">
+                      <h3 className="text-xl font-bold text-fg mb-4">
                         {branchName}
                       </h3>
                       <div className="space-y-3 text-sm text-muted">
                         <div className="flex items-start gap-3">
-                          <MapPin className="w-5 h-5 text-accent shrink-0 mt-0.5" />
+                          <MapPin className="w-5 h-5 text-brand-red shrink-0 mt-0.5" />
                           <span>{branchAddress}</span>
                         </div>
                         <div className="flex items-center gap-3">
-                          <Phone className="w-5 h-5 text-accent shrink-0" />
+                          <Phone className="w-5 h-5 text-brand-red shrink-0" />
                           <span dir="ltr">{branch.phone}</span>
                         </div>
                         <div className="flex items-center gap-3">
-                          <Clock className="w-5 h-5 text-accent shrink-0" />
+                          <Clock className="w-5 h-5 text-brand-red shrink-0" />
                           <span>{branchHours}</span>
                         </div>
                       </div>
@@ -109,7 +109,7 @@ export function Branches() {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-fg hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm self-start"
+                      className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-fg hover:text-brand-red transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm self-start"
                     >
                       <span>{t("openInMaps")}</span>
                       <ExternalLink className="w-4 h-4" />

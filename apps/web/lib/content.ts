@@ -54,14 +54,14 @@ export const branches: Branch[] = [
     id: "giza",
     name: "",
     address: "",
-    phone: "01000000001",
+    phone: "01123456789",
     hours: "",
   },
   {
     id: "alex",
     name: "",
     address: "",
-    phone: "01000000002",
+    phone: "01234567890",
     hours: "",
   },
 ];

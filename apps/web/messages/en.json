@@ -1681,45 +1681,28 @@
     },
     "landing": {
       "trustBar": {
-        "delivery": {
-          "title": "Delivery Across Egypt",
-          "subtitle": "Fast shipping to all governorates"
-        },
-        "cod": {
-          "title": "Cash on Delivery",
-          "subtitle": "Pay securely when you receive"
-        },
-        "wholesale": {
-          "title": "Wholesale Prices",
-          "subtitle": "Special rates for merchants & shops"
-        },
-        "support": {
-          "title": "24/7 Expert Support",
-          "subtitle": "Technical assistance anytime"
-        }
+        "delivery": "Delivery across Egypt",
+        "deliverySub": "Fast shipping nationwide",
+        "cod": "Cash on Delivery",
+        "codSub": "Pay when you receive",
+        "wholesale": "Wholesale Prices",
+        "wholesaleSub": "For merchants & workshops",
+        "support": "24/7 Support",
+        "supportSub": "Always here to help"
       },
       "howToOrder": {
-        "title": "How to Order in 3 Simple Steps",
-        "subtitle": "Fast, easy, and secure purchasing process",
-        "steps": {
-          "1": {
-            "title": "Pick Category & Product",
-            "desc": "Browse our massive catalog of genuine motorcycle parts and accessories."
-          },
-          "2": {
-            "title": "Add to Cart & Checkout",
-            "desc": "Fill in your delivery address and choose your preferred payment method."
-          },
-          "3": {
-            "title": "Receive at Your Door",
-            "desc": "Your order is carefully packed and shipped directly to your location."
-          }
-        }
+        "title": "How to Order?",
+        "subtitle": "Get your motorcycle parts in 3 easy steps",
+        "step1Title": "Pick your part",
+        "step1Desc": "Browse our catalog and choose what you need",
+        "step2Title": "Add to cart",
+        "step2Desc": "Review your cart and complete the checkout",
+        "step3Title": "Receive at your door",
+        "step3Desc": "Fast delivery to your address"
       },
       "merchant": {
-        "badge": "B2B Merchants Program",
-        "title": "Are you a workshop owner or motorcycle parts merchant?",
-        "subtitle": "Join our official B2B network today to unlock exclusive wholesale pricing, priority dispatch, and dedicated account support.",
+        "title": "Are you a merchant or a workshop owner?",
+        "subtitle": "Get exclusive wholesale prices and priority support",
         "cta": "Register as Merchant"
       }
     }

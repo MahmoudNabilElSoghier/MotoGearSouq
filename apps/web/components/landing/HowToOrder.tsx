@@ -14,22 +14,22 @@ export function HowToOrder() {
       id: "step1",
       number: "01",
       icon: Search,
-      title: t("steps.1.title"),
-      desc: t("steps.1.desc"),
+      title: t("step1Title"),
+      desc: t("step1Desc"),
     },
     {
       id: "step2",
       number: "02",
       icon: ShoppingCart,
-      title: t("steps.2.title"),
-      desc: t("steps.2.desc"),
+      title: t("step2Title"),
+      desc: t("step2Desc"),
     },
     {
       id: "step3",
       number: "03",
       icon: Truck,
-      title: t("steps.3.title"),
-      desc: t("steps.3.desc"),
+      title: t("step3Title"),
+      desc: t("step3Desc"),
     },
   ];
 

@@ -13,26 +13,26 @@ export function TrustBar() {
     {
       id: "delivery",
       icon: Truck,
-      title: t("delivery.title"),
-      subtitle: t("delivery.subtitle"),
+      title: t("delivery"),
+      subtitle: t("deliverySub"),
     },
     {
       id: "cod",
       icon: Banknote,
-      title: t("cod.title"),
-      subtitle: t("cod.subtitle"),
+      title: t("cod"),
+      subtitle: t("codSub"),
     },
     {
       id: "wholesale",
       icon: Store,
-      title: t("wholesale.title"),
-      subtitle: t("wholesale.subtitle"),
+      title: t("wholesale"),
+      subtitle: t("wholesaleSub"),
     },
     {
       id: "support",
       icon: Headphones,
-      title: t("support.title"),
-      subtitle: t("support.subtitle"),
+      title: t("support"),
+      subtitle: t("supportSub"),
     },
   ];
 

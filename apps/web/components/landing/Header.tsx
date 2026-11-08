@@ -36,7 +36,7 @@ export function Header() {
 
 
   const storeButton = (onClick?: () => void) => (
-    <Button variant="primary" size="sm" asChild>
+    <Button variant="secondary" size="sm" asChild>
       <Link
         href={`/${locale}/products`}
         onClick={onClick}
@@ -117,6 +117,7 @@ export function Header() {
             <CartIcon />
             <LocaleSwitcher />
             <ThemeToggle />
+            <div className="h-5 w-[1px] bg-border mx-1" />
             {storeButton()}
           </div>
 

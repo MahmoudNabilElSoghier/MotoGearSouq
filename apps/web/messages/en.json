@@ -1486,6 +1486,7 @@
     },
     "deleteAddress": {
       "button": "Delete address",
+      "editButton": "Edit address",
       "title": "Delete Address?",
       "message": "Are you sure you want to delete this address? This action cannot be undone.",
       "cancel": "Cancel",

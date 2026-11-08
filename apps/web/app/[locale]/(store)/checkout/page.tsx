@@ -180,6 +180,14 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
     streetInputRef.current?.focus();
   };
 
+  const handleEditAddress = (a: SavedAddress) => {
+    setAddressChoice("new");
+    setValue("address", a.street, { shouldValidate: true, shouldDirty: true });
+    setValue("city", a.city ?? "", { shouldValidate: true, shouldDirty: true });
+    setValue("governorate", a.governorate ?? "", { shouldValidate: true, shouldDirty: true });
+    streetInputRef.current?.focus();
+  };
+
   const confirmDeleteAddress = () => {
     if (!addressToDelete) return;
     const next = [...hiddenAddresses, addressToDelete];
@@ -353,6 +361,18 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
                             .join(isAr ? "، " : ", ")}
                         </span>
                       </span>
+                      <button
+                        type="button"
+                        aria-label={t("deleteAddress.editButton")}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleEditAddress(a);
+                        }}
+                        className="shrink-0 rounded-lg p-1.5 text-accent transition-colors hover:bg-accent/10"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </button>
                       <button
                         type="button"
                         aria-label={t("deleteAddress.button")}

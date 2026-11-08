@@ -5,19 +5,25 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
-import { createOrder, getOrders, initiatePayment, type CartItem, type CreateOrderPayload, type PaymentMethod } from "@motogearsouq/api-client";
+import { createOrder, initiatePayment, type CreateOrderPayload } from "@motogearsouq/api-client";
 import { useCart } from "@/lib/cart-store";
-import { useCustomerAuth } from "@/lib/customer-auth-store";
+import { useCustomerAuth, type CustomerUser } from "@/lib/customer-auth-store";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Container } from "@/components/ui/Container";
-import { Loader2, AlertCircle, Pencil, CheckCircle2 } from "lucide-react";
+import { Loader2, AlertCircle, Pencil, CheckCircle2, MapPin } from "lucide-react";
 
 type CheckoutFormValues = {
   address: string;
   city: string;
   governorate: string;
   notes?: string;
+};
+
+type PrevOrder = {
+  shippingAddress?: string | null;
+  shippingCity?: string | null;
+  shippingGovernorate?: string | null;
 };
 
 function codLimitFor(successfulDeliveries: number): number {
@@ -28,6 +34,91 @@ function codLimitFor(successfulDeliveries: number): number {
 }
 
 export default function CheckoutPage() {
+  const locale = useLocale();
+  const router = useRouter();
+  const { items } = useCart();
+  const { customer, isLoading: authLoading, isInitialized, init } = useCustomerAuth();
+  const [prevOrder, setPrevOrder] = useState<PrevOrder | null>(null);
+  const [showUsePrevious, setShowUsePrevious] = useState(false);
+
+  useEffect(() => {
+    init();
+  }, [init]);
+
+  // Force login: no guest checkout (5C-1). Wait for init to settle so a
+  // fresh page load does not bounce a logged-in customer before /me resolves.
+  useEffect(() => {
+    if (isInitialized && !authLoading && !customer) {
+      router.replace(`/${locale}/login?next=/${locale}/checkout`);
+    }
+  }, [authLoading, customer, isInitialized, locale, router]);
+
+  // Latest delivered order → "Use previous address" banner.
+  useEffect(() => {
+    if (!customer) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/auth/customer/orders", { credentials: "include" });
+        if (!res.ok) return;
+        const body = (await res.json()) as { data?: PrevOrder[] } | null;
+        const last = Array.isArray(body?.data) ? body.data[0] : undefined;
+        if (!cancelled && last?.shippingAddress) {
+          setPrevOrder({
+            shippingAddress: last.shippingAddress,
+            shippingCity: last.shippingCity ?? null,
+            shippingGovernorate: last.shippingGovernorate ?? null,
+          });
+          setShowUsePrevious(true);
+        }
+      } catch {
+        // The banner is optional; ignore fetch failures.
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [customer]);
+
+  // Empty cart → back to cart page.
+  useEffect(() => {
+    if (items.length === 0) {
+      router.replace(`/${locale}/cart`);
+    }
+  }, [items, locale, router]);
+
+  if (authLoading || !customer || items.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <Loader2 className="w-8 h-8 animate-spin text-accent" aria-hidden />
+        <span className="sr-only">Loading</span>
+      </div>
+    );
+  }
+
+  return (
+    <CheckoutForm
+      customer={customer}
+      prevOrder={prevOrder}
+      showUsePrevious={showUsePrevious}
+      setShowUsePrevious={setShowUsePrevious}
+    />
+  );
+}
+
+type CheckoutFormProps = {
+  customer: CustomerUser;
+  prevOrder: PrevOrder | null;
+  showUsePrevious: boolean;
+  setShowUsePrevious: (show: boolean) => void;
+};
+
+function CheckoutForm({
+  customer,
+  prevOrder,
+  showUsePrevious,
+  setShowUsePrevious,
+}: CheckoutFormProps) {
   const t = useTranslations("checkout");
   const locale = useLocale();
   const router = useRouter();
@@ -35,13 +126,6 @@ export default function CheckoutPage() {
   const nf = new Intl.NumberFormat(isAr ? "ar-EG-u-nu-latn" : "en-US");
 
   const { items, subtotal, taxAmount, total, clearCart } = useCart();
-  const { customer, isLoading: authLoading, init } = useCustomerAuth();
-  const [submitting, setSubmitting] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<string>("cod");
-
-  const { items, subtotal, taxAmount, total, clearCart } = useCart();
-  const { customer, isLoading: authLoading, init } = useCustomerAuth();
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<string>("cod");
@@ -49,44 +133,19 @@ export default function CheckoutPage() {
   const {
     register,
     handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<CheckoutFormValues>();
+    setValue,
+    formState: { errors, isDirty },
+  } = useForm<CheckoutFormValues>({
+    mode: "onSubmit",
+    defaultValues: {
+      address: customer.address ?? "",
+      city: "",
+      governorate: customer.governorate ?? "",
+      notes: "",
+    },
+  });
 
-  const [prevOrder, setPrevOrder] = useState<{
-    shippingAddress?: string | null;
-    shippingCity?: string | null;
-    shippingGovernorate?: string | null;
-    notes?: string | null;
-  } | null>(null);
-  const [showUsePrevious, setShowUsePrevious] = useState(false);
-
-  useEffect(() => {
-    init();
-  }, [init]);
-
-  // Force login: no guest checkout (5C-1).
-  useEffect(() => {
-    if (!authLoading && !customer) {
-      router.replace(`/${locale}/login?next=/${locale}/checkout`);
-    }
-  }, [authLoading, customer, locale, router]);
-
-  useEffect(() => {
-    if (customer) {
-      setValue("address", customer.address ?? "", { shouldValidate: true });
-      setValue("city", customer.city ?? "", { shouldValidate: true });
-      setValue("governorate", customer.governorate ?? "", { shouldValidate: true });
-    }
-  }, [customer, setValue]);
-
-  useEffect(() => {
-    if (items.length === 0) {
-      router.replace(`/${locale}/cart`);
-    }
-  }, [items, locale, router]);
-
-  const successfulDeliveries = customer?.successfulDeliveries ?? 0;
+  const successfulDeliveries = customer.successfulDeliveries ?? 0;
   const codLimit = codLimitFor(successfulDeliveries);
   const nextLimit = codLimitFor(successfulDeliveries + 1);
   const orderNumber = successfulDeliveries + 1;
@@ -102,15 +161,6 @@ export default function CheckoutPage() {
       setPaymentMethod("mock");
     }
   }, [codExceeded, paymentMethod]);
-
-  if (authLoading || !customer || items.length === 0) {
-    return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-accent" aria-hidden />
-        <span className="sr-only">Loading</span>
-      </div>
-    );
-  }
 
   const formatLimit = (limit: number) =>
     Number.isFinite(limit) ? nf.format(limit) : isAr ? "بلا حدود" : "Unlimited";
@@ -135,13 +185,13 @@ export default function CheckoutPage() {
       const res = await createOrder(payload);
       if (res && res.data && res.data.orderNumber) {
         clearCart();
-        const orderNumber = res.data.orderNumber;
+        const createdOrderNumber = res.data.orderNumber;
         if (paymentMethod !== "cod") {
           try {
             const payRes = await initiatePayment({
-              orderNumber,
+              orderNumber: createdOrderNumber,
               method: paymentMethod,
-              returnUrl: `/${locale}/orders/${orderNumber}`,
+              returnUrl: `/${locale}/orders/${createdOrderNumber}`,
             });
             if (payRes && payRes.redirectUrl) {
               router.push(payRes.redirectUrl);
@@ -151,7 +201,7 @@ export default function CheckoutPage() {
             // fallback to order tracking page if init fails
           }
         }
-        router.push(`/${locale}/orders/${orderNumber}`);
+        router.push(`/${locale}/orders/${createdOrderNumber}`);
       } else {
         throw new Error(isAr ? "فشل إنشاء الطلب" : "Failed to create order");
       }
@@ -185,6 +235,41 @@ export default function CheckoutPage() {
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-8 lg:grid-cols-[1fr_400px]">
           {/* Customer / Shipping Form */}
           <div className="space-y-6 rounded-xl border border-border bg-card p-6 md:p-8">
+            {showUsePrevious && prevOrder && prevOrder.shippingAddress && !isDirty && (
+              <div className="mb-4 flex items-center gap-2 rounded-xl border border-amber-50 bg-amber-50 px-4 py-3">
+                <div className="flex items-center gap-2 rounded-lg bg-amber-100 p-2 text-amber-600">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-bold text-fg">
+                    {t("usePreviousAddress.title")}: {prevOrder.shippingAddress}
+                    {prevOrder.shippingCity ? `, ${prevOrder.shippingCity}` : ""}
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => {
+                    setValue("address", prevOrder.shippingAddress ?? "", {
+                      shouldValidate: true,
+                      shouldDirty: true,
+                    });
+                    setValue("city", prevOrder.shippingCity ?? "", {
+                      shouldValidate: true,
+                      shouldDirty: true,
+                    });
+                    setValue("governorate", prevOrder.shippingGovernorate ?? "", {
+                      shouldValidate: true,
+                      shouldDirty: true,
+                    });
+                    setShowUsePrevious(false);
+                  }}
+                >
+                  {t("usePreviousAddress.button")}
+                </Button>
+              </div>
+            )}
             <h2 className="text-xl font-bold text-fg">
               {isAr ? "بيانات الشحن والتواصل" : "Shipping & Contact Details"}
             </h2>

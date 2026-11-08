@@ -1865,7 +1865,11 @@
     "codLimitTitle": "حد الدفع عند الاستلام",
     "codLimitBody": "الحد الأقصى {limit} ج.م للطلب رقم {count}. لتجاوز الحد، ادفع أونلاين.",
     "codLimitExceeded": "طلبك ({total} ج.م) يتجاوز حد COD ({limit} ج.م). الرجاء الدفع أونلاين.",
-    "codLimitProgress": "بعد {count} طلب ناجح، يرتفع حدك إلى {nextLimit} ج.م."
+    "codLimitProgress": "بعد {count} طلب ناجح، يرتفع حدك إلى {nextLimit} ج.م.",
+    "usePreviousAddress": {
+      "title": "استخدم عنوانك السابق",
+      "button": "استخدم هذا العنوان"
+    }
   },
   "order": {
     "title": "تتبع الطلب",

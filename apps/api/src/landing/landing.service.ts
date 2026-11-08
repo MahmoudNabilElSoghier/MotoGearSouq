@@ -290,6 +290,20 @@ export class LandingService {
       () => ({ id }),
     );
   }
+
+  async removeSection(id: string): Promise<DbResult<{ id: string }>> {
+    return withDb(
+      this.prisma,
+      async (db) => {
+        const existing = await db.landingSection.findUnique({ where: { id } });
+        if (!existing) throw new NotFoundException("Landing section not found");
+        // Cards are removed by the schema's onDelete: Cascade relation.
+        await db.landingSection.delete({ where: { id } });
+        return { id };
+      },
+      () => ({ id }),
+    );
+  }
 }
 
 function mapSection(s: SectionWithCards): LandingSection {

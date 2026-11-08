@@ -99,4 +99,13 @@ export class LandingController {
   removeCard(@Param("id") id: string) {
     return this.landing.removeCard(id);
   }
+
+  @Delete(":id")
+  @UseGuards(AdminAuthGuard)
+  @ApiHeader({ name: "x-admin-api-key", required: false })
+  @ApiParam({ name: "id" })
+  @ApiOperation({ summary: "Delete landing section (admin)" })
+  removeSection(@Param("id") id: string) {
+    return this.landing.removeSection(id);
+  }
 }

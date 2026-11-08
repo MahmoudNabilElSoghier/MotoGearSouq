@@ -30,6 +30,7 @@
   StockAdjustmentInput,
   UpdateCompanySettingsInput,
   DeadStockResponse,
+  LandingSectionInput,
 } from "@motogearsouq/shared";
 import { apiGet, apiGetOrNull, apiRaw, apiSend, type ApiResponse } from "./client";
 

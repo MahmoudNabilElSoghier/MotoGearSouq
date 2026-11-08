@@ -23,7 +23,7 @@ export default function AdminLandingPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<Set<string>>(new Set());
   const [openSectionId, setOpenSectionId] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
   useEffect(() => {
     getLandingSections()
@@ -125,14 +125,14 @@ export default function AdminLandingPage() {
     setSaving((prev) => new Set(prev).add("new"));
     try {
       await addLandingSection({
-        slug: "",
-        titleAr: "",
-        titleEn: "",
+        slug: `section-${Date.now()}`,
+        titleAr: "قسم جديد",
+        titleEn: "New section",
         subtitleAr: "",
         subtitleEn: "",
-        ctaLabelAr: "",
-        ctaLabelEn: "",
-        ctaLink: "",
+        ctaLabelAr: "اقرأ المزيد",
+        ctaLabelEn: "Read more",
+        ctaLink: "#",
         order: 0,
       });
       const data = await getLandingSections();
@@ -140,21 +140,25 @@ export default function AdminLandingPage() {
       setBanner({ type: "success", message: t("created") });
     } catch (err: unknown) {
       const msg =
-        err instanceof Error ? error.message : String(err);
+        err instanceof Error ? err.message : String(err);
       setBanner({ type: "error", message: msg });
     } finally {
-      setSaving((prev) => new Set(prev).delete("new"));
+      setSaving((prev) => {
+        const next = new Set(prev);
+        next.delete("new");
+        return next;
+      });
     }
   };
 
-  const handleCloseFeedback = () => setFeedback(null);
+  const handleCloseBanner = () => setBanner(null);
 
-  // Auto-dismiss feedback after 3 seconds
+  // Auto-dismiss banner after 3 seconds
   useEffect(() => {
-    if (!feedback) return;
-    const timer = setTimeout(() => setFeedback(null), 3000);
+    if (!banner) return;
+    const timer = setTimeout(() => setBanner(null), 3000);
     return () => clearTimeout(timer);
-  }, [feedback]);
+  }, [banner]);
 
   const handleSaveCard = async (
     sectionId: string,
@@ -211,19 +215,19 @@ export default function AdminLandingPage() {
           </Button>
         </div>
       </div>
-      {feedback && (
+      {banner && (
         <div className={`rounded-lg border p-4 flex items-center gap-3 ${
-          feedback.type === "success" ? "bg-emerald-50 border-emerald-200" : "bg-red-50 border-red-200"
+          banner.type === "success" ? "bg-emerald-50 border-emerald-200" : "bg-red-50 border-red-200"
         }`}>
           <div className="flex items-center gap-2">
-            {feedback.type === "success" ? (
+            {banner.type === "success" ? (
               <CheckCircle className="w-4 h-4 text-emerald-600" />
             ) : (
               <AlertCircle className="w-4 h-4 text-red-600" />
             )}
-            <span className="text-sm font-medium">{feedback.message}</span>
+            <span className="text-sm font-medium">{banner.message}</span>
           </div>
-          <button type="button" className="text-xs text-muted hover:text-fg hover:underline" onClick={handleCloseFeedback}>
+          <button type="button" className="text-xs text-muted hover:text-fg hover:underline" onClick={handleCloseBanner}>
             {t("dismiss")}
           </button>
         </div>

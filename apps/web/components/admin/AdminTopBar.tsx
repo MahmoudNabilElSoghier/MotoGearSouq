@@ -30,6 +30,7 @@ const ADMIN_ROUTE_TITLES = [
   { prefix: "/orders", key: "orders.title" },
   { prefix: "/payments", key: "payments.title" },
   { prefix: "/products", key: "products.title" },
+  { prefix: "/profile", key: "profile.title" },
   { prefix: "/purchases", key: "purchases.title" },
   { prefix: "/reports", key: "reports.title" },
   { prefix: "/stock-movements", key: "stockMovements.title" },
@@ -167,11 +168,19 @@ export function AdminTopBar() {
                   </div>
                   <Link
                     role="menuitem"
-                    href={`/${locale}/account`}
+                    href={`/${locale}/admin/profile`}
                     onClick={() => setMenuOpen(false)}
                     className="mt-1 block rounded-md px-3 py-2 text-sm font-semibold text-fg transition-colors hover:bg-bg"
                   >
                     {t("myProfile")}
+                  </Link>
+                  <Link
+                    role="menuitem"
+                    href={`/${locale}`}
+                    onClick={() => setMenuOpen(false)}
+                    className="block rounded-md px-3 py-2 text-sm font-semibold text-fg transition-colors hover:bg-bg"
+                  >
+                    {t("visitStore")}
                   </Link>
                   <button
                     type="button"

@@ -477,7 +477,15 @@
     "topBar": {
       "title": "Admin Panel",
       "logout": "Sign out",
-      "myProfile": "My Profile"
+      "myProfile": "My Profile",
+      "visitStore": "Visit Store"
+    },
+    "profile": {
+      "title": "My Profile",
+      "email": "Email",
+      "role": "Role",
+      "logout": "Sign out",
+      "loading": "Loading profile…"
     },
     "landing": {
       "title": "Landing Page CMS",

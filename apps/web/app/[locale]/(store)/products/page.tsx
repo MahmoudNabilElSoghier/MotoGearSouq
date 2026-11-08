@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Input } from "@/components/ui/Input";
+import { Package } from "lucide-react";
 import { getBrands, getPartCategories, getProducts, totalStock } from "@motogearsouq/api-client";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
 
@@ -331,16 +333,32 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
                 </Button>
               </div>
             ) : (
-              <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                 {result.items.map((product) => {
                   const stock = totalStock(product);
                   const badge = stockBadge(stock, product.reorderLevel, locale);
+                  const imageUrl = product.imageUrl || product.images?.[0]?.url;
                   return (
-                    <li key={product.id}>
+                    <li key={product.id} className="h-full">
                       <Link
                         href={`/${locale}/products/${product.code}`}
-                        className="group flex h-full flex-col gap-3 rounded-xl border border-border bg-card p-5 transition-colors hover:border-accent"
+                        className="group flex h-full flex-col gap-3 rounded-xl border border-border bg-card p-4 transition-colors hover:border-accent"
                       >
+                        <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-muted/50">
+                          {imageUrl ? (
+                            <Image
+                              src={imageUrl}
+                              alt={product.name}
+                              fill
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                              className="object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center text-muted">
+                              <Package className="h-10 w-10 opacity-40" />
+                            </div>
+                          )}
+                        </div>
                         <div className="flex items-start justify-between gap-2">
                           <span className="font-mono text-xs text-muted" dir="ltr">
                             {product.code}
@@ -351,7 +369,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
                             {badge.label}
                           </span>
                         </div>
-                        <h2 className="font-bold text-fg group-hover:text-accent">
+                        <h2 className="font-bold text-fg group-hover:text-accent line-clamp-2" dir="auto">
                           {product.name}
                         </h2>
                         <p className="text-sm text-muted">

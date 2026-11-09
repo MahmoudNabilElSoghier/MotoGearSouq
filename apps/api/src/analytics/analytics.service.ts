@@ -107,11 +107,32 @@ export class AnalyticsService {
   }
 
   async updateSettings(input: UpdateCompanySettingsInput) {
-    const row = await this.prisma.get().companySettings.upsert({
-      where: { id: "singleton" },
-      update: input,
-      create: { id: "singleton", ...input },
-    });
+    const db = this.prisma.get();
+    const existing = await db.companySettings.findFirst();
+    let row: CompanySettings;
+    if (existing) {
+      row = await db.companySettings.update({
+        where: { id: existing.id },
+        data: input,
+      });
+    } else {
+      try {
+        row = await db.companySettings.create({
+          data: { id: "singleton", ...input },
+        });
+      } catch (error) {
+        // A concurrent request created the row between our read and write —
+        // update its row instead of surfacing the unique-constraint error.
+        const code = (error as { code?: string } | null)?.code;
+        if (code !== "P2002") throw error;
+        const winner = await db.companySettings.findFirst();
+        if (!winner) throw error;
+        row = await db.companySettings.update({
+          where: { id: winner.id },
+          data: input,
+        });
+      }
+    }
     return { data: this.serializeSettings(row) };
   }
 

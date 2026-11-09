@@ -45,11 +45,15 @@ export function ensureAuth(force = false): Promise<string> {
 }
 
 const baseUrl = (): string => {
-  if (typeof window !== "undefined") {
-    return process.env.NEXT_PUBLIC_API_URL ?? "/api";
-  }
-  const origin = process.env.API_ORIGIN ?? process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
-  return origin.startsWith("http") ? `${origin}/api` : origin;
+  // Single source of truth: NEXT_PUBLIC_API_URL (client) or API_ORIGIN (server).
+  // Appends "/api" only when the env var points to a bare origin (no /api suffix).
+  const env =
+    (typeof window !== "undefined"
+      ? process.env.NEXT_PUBLIC_API_URL
+      : process.env.API_ORIGIN ?? process.env.NEXT_PUBLIC_API_URL) ?? "/api";
+  if (env === "/api" || env.endsWith("/api")) return env;
+  if (env.startsWith("http")) return `${env}/api`;
+  return "/api";
 };
 
 async function request<T>(

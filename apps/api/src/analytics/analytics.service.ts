@@ -68,11 +68,21 @@ export class AnalyticsService {
   }
 
   private async getSettingsRow(): Promise<CompanySettings> {
-    return this.prisma.get().companySettings.upsert({
-      where: { id: "singleton" },
-      update: {},
-      create: { id: "singleton" },
-    });
+    const existing = await this.prisma.get().companySettings.findFirst();
+    if (existing) return existing;
+    try {
+      return await this.prisma.get().companySettings.create({
+        data: { id: "singleton" },
+      });
+    } catch (error) {
+      // A concurrent request created the row between our read and write —
+      // reuse it instead of surfacing the unique-constraint error.
+      const code = (error as { code?: string } | null)?.code;
+      if (code !== "P2002") throw error;
+      const row = await this.prisma.get().companySettings.findFirst();
+      if (!row) throw error;
+      return row;
+    }
   }
 
   private serializeSettings(s: CompanySettings) {

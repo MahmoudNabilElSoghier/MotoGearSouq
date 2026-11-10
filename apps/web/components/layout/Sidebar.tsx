@@ -65,19 +65,19 @@ export function Sidebar({ open, onClose }: SidebarProps) {
   };
 
   const navItems = [
-    { href: `/${locale}`, label: t("home"), icon: Home },
-    { href: `/${locale}/products`, label: t("store"), icon: ShoppingBag },
-    { href: `/${locale}/cart`, label: t("cart"), icon: ShoppingCart, badge: cartCount },
-    { href: `/${locale}/account`, label: t("account"), icon: User },
+    { href: `/${locale}`, label: t("home", { defaultValue: "Home" }), icon: Home },
+    { href: `/${locale}/products`, label: t("store", { defaultValue: "Store" }), icon: ShoppingBag },
+    { href: `/${locale}/cart`, label: t("cart", { defaultValue: "Cart" }), icon: ShoppingCart, badge: cartCount },
+    { href: `/${locale}/account`, label: t("account", { defaultValue: "Account" }), icon: User },
   ];
 
   const supportItems = [
-    { href: `/${locale}/support`, label: t("supportChat"), icon: MessageSquare },
-    { href: `/${locale}/track-order`, label: t("trackOrder"), icon: Package },
-    { href: `/${locale}/contact`, label: t("contactSupport"), icon: Mail },
-    { href: `/${locale}/support/return-exchange`, label: t("returnExchange"), icon: RotateCcw },
-    { href: `/${locale}/privacy`, label: t("privacy"), icon: FileText },
-    { href: `/${locale}/terms`, label: t("terms"), icon: FileText },
+    { href: `/${locale}/support`, label: t("supportChat", { defaultValue: "Support Chat" }), icon: MessageSquare },
+    { href: `/${locale}/track-order`, label: t("trackOrder", { defaultValue: "Track Order" }), icon: Package },
+    { href: `/${locale}/contact`, label: t("contactSupport", { defaultValue: "Contact Support" }), icon: Mail },
+    { href: `/${locale}/support/return-exchange`, label: t("returnExchange", { defaultValue: "Return & Exchange" }), icon: RotateCcw },
+    { href: `/${locale}/privacy`, label: t("privacy", { defaultValue: "Privacy Policy" }), icon: FileText },
+    { href: `/${locale}/terms`, label: t("terms", { defaultValue: "Terms of Service" }), icon: FileText },
   ];
 
   return (
@@ -94,7 +94,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       {/* Panel */}
       <aside
         id="app-sidebar"
-        aria-label={t("aria")}
+        aria-label={t("aria", { defaultValue: "Main menu" })}
         aria-hidden={!open}
         inert={!open}
         className={`fixed inset-y-0 start-0 z-[70] flex w-[min(320px,85vw)] flex-col border-e border-border bg-card shadow-2xl transition-transform duration-300 ease-out ${
@@ -143,14 +143,14 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                     onClick={onClose}
                     className="text-xs font-semibold text-fg hover:text-accent py-1"
                   >
-                    {tAccount("title")}
+                    {tAccount("title", { defaultValue: "Account" })}
                   </Link>
                   <Link
                     href={`/${locale}/account/orders`}
                     onClick={onClose}
                     className="text-xs font-semibold text-fg hover:text-accent py-1"
                   >
-                    {tAccount("sidebar.orders")}
+                    {tAccount("sidebar.orders", { defaultValue: "Orders" })}
                   </Link>
                   <button
                     type="button"
@@ -158,14 +158,14 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                     className="flex items-center gap-1.5 text-xs font-semibold text-red-400 hover:underline py-1 mt-1 text-start"
                   >
                     <LogOut className="h-3.5 w-3.5" />
-                    {tAccount("sidebar.logout")}
+                    {tAccount("sidebar.logout", { defaultValue: "Sign Out" })}
                   </button>
                 </div>
               </div>
             ) : (
               <div>
-                <p className="font-extrabold text-fg">{t("welcome")}</p>
-                <p className="mt-1 text-sm text-muted">{t("welcomeSubtitle")}</p>
+                <p className="font-extrabold text-fg">{t("welcome", { defaultValue: "Welcome to MotoGearSouq" })}</p>
+                <p className="mt-1 text-sm text-muted">{t("welcomeSubtitle", { defaultValue: "Sign in to follow your orders and check out faster." })}</p>
                 <Button variant="primary" fullWidth className="mt-4" asChild>
                   <Link
                     href={`/${locale}/login`}
@@ -173,7 +173,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                     className="gap-2"
                   >
                     <User className="h-4 w-4" aria-hidden="true" />
-                    <span>{t("login")}</span>
+                    <span>{t("login", { defaultValue: "Login" })}</span>
                   </Link>
                 </Button>
               </div>
@@ -183,9 +183,9 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           {/* Navigation */}
           <section>
             <h2 className="px-3 text-xs font-bold uppercase tracking-wider text-muted">
-              {t("sectionNav")}
+              {t("sectionNav", { defaultValue: "Navigation" })}
             </h2>
-            <nav aria-label={t("sectionNav")} className="mt-2 space-y-1">
+            <nav aria-label={t("sectionNav", { defaultValue: "Navigation" })} className="mt-2 space-y-1">
               {navItems.map(({ href, label, icon: Icon, badge }) => (
                 <Link key={href} href={href} onClick={onClose} className={rowBase}>
                   <Icon className="h-5 w-5 shrink-0 text-muted" aria-hidden="true" />
@@ -203,7 +203,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           {/* Support & Legal */}
           <section>
             <h2 className="px-3 text-xs font-bold uppercase tracking-wider text-muted">
-              {t("sectionSupport")}
+              {t("sectionSupport", { defaultValue: "Support & Legal" })}
             </h2>
             <div className="mt-2 space-y-1">
               {supportItems.map(({ href, label, icon: Icon }) => (
@@ -215,7 +215,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
 
               {/* Settings: Locale switcher & Theme toggle */}
               <div className="px-3 py-3 flex items-center justify-between border-t border-border mt-3">
-                <span className="text-xs font-semibold text-muted">{t("settings")}</span>
+                <span className="text-xs font-semibold text-muted">{t("settings", { defaultValue: "Settings" })}</span>
                 <div className="flex items-center gap-2">
                   <LocaleSwitcher />
                   <ThemeToggle />
@@ -227,7 +227,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
 
         {/* Footer */}
         <div className="border-t border-border px-5 py-4 text-center text-xs text-muted">
-          {t("copyright")}
+          {t("copyright", { defaultValue: "© 2026 MotoGearSouq. All rights reserved." })}
         </div>
       </aside>
     </>

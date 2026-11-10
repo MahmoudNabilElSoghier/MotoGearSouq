@@ -14,25 +14,25 @@ export function MobileBottomNav() {
   const items = [
     {
       href: `/${locale}`,
-      label: tNav("home") || tSidebar("home") || "Home",
+      label: tNav("home", { defaultValue: tSidebar("home", { defaultValue: "Home" }) }),
       icon: Home,
       exact: true,
     },
     {
       href: `/${locale}/support`,
-      label: tNav("supportChat") || tSidebar("supportChat") || "Support",
+      label: tNav("supportChat", { defaultValue: tSidebar("supportChat", { defaultValue: "Support" }) }),
       icon: MessageSquare,
       exact: false,
     },
     {
       href: `/${locale}/track-order`,
-      label: tNav("trackOrder") || "Track",
+      label: tNav("trackOrder", { defaultValue: tSidebar("trackOrder", { defaultValue: "Track" }) }),
       icon: Package,
       exact: false,
     },
     {
       href: `/${locale}/account`,
-      label: tSidebar("account") || "Profile",
+      label: tSidebar("account", { defaultValue: "Profile" }),
       icon: User,
       exact: false,
     },

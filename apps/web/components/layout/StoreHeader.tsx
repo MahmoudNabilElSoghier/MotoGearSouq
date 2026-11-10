@@ -8,6 +8,7 @@ import { Menu, Home, MessageSquare, Package, User, UserCircle, LogOut, ChevronDo
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { LocaleSwitcher } from "@/components/ui/LocaleSwitcher";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { CartIcon } from "@/components/cart/CartIcon";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { useCustomerAuth } from "@/lib/customer-auth-store";
@@ -171,10 +172,11 @@ export function StoreHeader() {
               {renderLogo(false)}
             </Link>
 
-            {/* End: locale switcher (desktop) + cart + login/account */}
+            {/* End: locale switcher & theme toggle (desktop) + cart + login/account */}
             <div className="flex items-center gap-2 sm:gap-3">
-              <span className="hidden md:flex">
+              <span className="hidden md:flex items-center gap-2">
                 <LocaleSwitcher />
+                <ThemeToggle />
               </span>
               <CartIcon />
               {accountControl}

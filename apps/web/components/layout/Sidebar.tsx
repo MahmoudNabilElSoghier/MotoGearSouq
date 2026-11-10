@@ -19,7 +19,6 @@ import {
   LogOut,
 } from "lucide-react";
 import { LocaleSwitcher } from "@/components/ui/LocaleSwitcher";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { Button } from "@/components/ui/Button";
 import { useCart } from "@/lib/cart-store";
 import { useCustomerAuth } from "@/lib/customer-auth-store";
@@ -213,10 +212,9 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                 </Link>
               ))}
 
-              {/* Locale switcher & Theme toggle */}
+              {/* Locale switcher */}
               <div className="px-3 py-3 flex items-center justify-between border-t border-border mt-3">
                 <LocaleSwitcher />
-                <ThemeToggle />
               </div>
             </div>
           </section>

@@ -8,6 +8,7 @@ import { Menu, Home, MessageSquare, Package, User } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { LocaleSwitcher } from "@/components/ui/LocaleSwitcher";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { CartIcon } from "@/components/cart/CartIcon";
 import { Sidebar } from "@/components/layout/Sidebar";
 
@@ -85,10 +86,11 @@ export function Header() {
               {renderLogo(false)}
             </Link>
 
-            {/* End: locale switcher (desktop) + cart + login */}
+            {/* End: locale switcher & theme toggle (desktop) + cart + login */}
             <div className="flex items-center gap-2 sm:gap-3">
-              <span className="hidden md:flex">
+              <span className="hidden md:flex items-center gap-2">
                 <LocaleSwitcher />
+                <ThemeToggle />
               </span>
               <CartIcon />
               <Button variant="primary" size="sm" asChild>

@@ -44,7 +44,8 @@
   "switcher": {
     "languageAria": "اختيار اللغة",
     "arabic": "العربية",
-    "english": "English"
+    "english": "English",
+    "switchTo": "التبديل إلى {language}"
   },
   "themeToggle": {
     "aria": "تبديل المظهر",

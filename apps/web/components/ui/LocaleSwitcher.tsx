@@ -3,9 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-
-const BASE =
-  "px-2.5 py-1.5 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent";
+import { Globe } from "lucide-react";
 
 export function LocaleSwitcher() {
   const t = useTranslations("switcher");
@@ -17,43 +15,25 @@ export function LocaleSwitcher() {
   const current = segments[1] ?? "";
   const rest = ["ar", "en"].includes(current) ? pathname.slice(current.length + 1) : pathname;
 
-  const handleSwitch = (target: string) => {
+  const target = locale === "ar" ? "en" : "ar";
+  const targetLabel = target === "ar" ? t("arabic") : t("english");
+
+  const handleSwitch = () => {
     document.cookie = `NEXT_LOCALE=${target}; path=/; max-age=31536000; SameSite=Lax`;
   };
 
   return (
-    <nav
-      aria-label={t("languageAria")}
-      className="inline-flex items-center rounded-lg border border-border bg-bg/60 overflow-hidden"
-    >
+    <nav aria-label={t("languageAria")} className="inline-flex">
       <Link
-        href={`/ar${rest}`}
-        onClick={() => handleSwitch("ar")}
-        hrefLang="ar"
-        lang="ar"
-        aria-current={locale === "ar" ? "true" : undefined}
-        className={`${BASE} ${
-          locale === "ar"
-            ? "bg-accent-strong/15 text-fg"
-            : "text-muted hover:text-fg"
-        }`}
+        href={`/${target}${rest}`}
+        onClick={handleSwitch}
+        hrefLang={target}
+        aria-label={t("switchTo", { language: targetLabel })}
+        title={t("switchTo", { language: targetLabel })}
+        className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-border bg-bg/60 px-2.5 text-xs font-semibold text-muted transition-colors hover:border-accent hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       >
-        {t("arabic")}
-      </Link>
-      <span aria-hidden="true" className="w-px self-stretch bg-border" />
-      <Link
-        href={`/en${rest}`}
-        onClick={() => handleSwitch("en")}
-        hrefLang="en"
-        lang="en"
-        aria-current={locale === "en" ? "true" : undefined}
-        className={`${BASE} ${
-          locale === "en"
-            ? "bg-accent-strong/15 text-fg"
-            : "text-muted hover:text-fg"
-        }`}
-      >
-        {t("english")}
+        <Globe className="h-4 w-4" aria-hidden="true" />
+        {locale === "ar" ? t("arabic") : t("english")}
       </Link>
     </nav>
   );

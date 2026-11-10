@@ -6,15 +6,7 @@ import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Input } from "@/components/ui/Input";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Bike,
-  Check,
-  Package,
-  Repeat,
-  Scooter,
-} from "lucide-react";
+import { Bike, Check, Package, Repeat, Scooter } from "lucide-react";
 import {
   getBrands,
   getModels,
@@ -79,7 +71,6 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
   const t = await getTranslations({ locale, namespace: "products" });
   const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
   const isAr = locale === "ar";
-  const BackIcon = isAr ? ArrowRight : ArrowLeft;
 
   const search = toFirst(sp.search) || toFirst(sp.q);
   const categorySlug = toFirst(sp.category) || toFirst(sp.cat);
@@ -146,7 +137,8 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
     model: model?.slug,
   };
 
-  // stepHrefs[i] = URL that renders step i (used by the stepper and Back buttons).
+  // stepHrefs[i] = URL that renders step i: params for steps 0..i-1 only. Clicking
+  // a stepper step therefore clears that step's param and every param after it.
   const stepHrefs = [
     buildHref({}),
     category ? buildHref({ category: category.slug }) : "",
@@ -167,26 +159,14 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
   const cardBase =
     "flex min-h-[88px] flex-col justify-center rounded-xl border border-border bg-card p-4 transition-colors hover:border-accent hover:bg-accent/5";
 
-  const stepHeader = (title: string, backHref: string | null) => (
-    <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-      <h2 className="text-xl font-extrabold text-fg md:text-2xl">{title}</h2>
-      {backHref && (
-        <Button asChild variant="secondary" size="sm">
-          <Link href={backHref} className="min-h-11 gap-2">
-            <BackIcon className="h-4 w-4" aria-hidden="true" />
-            {t("finder.back")}
-          </Link>
-        </Button>
-      )}
-    </div>
-  );
-
   let body: ReactNode;
 
   if (view === "category") {
     body = (
       <section>
-        {stepHeader(t("finder.selectCategory"), null)}
+        <h2 className="mb-4 text-xl font-extrabold text-fg md:text-2xl">
+          {t("finder.selectCategory")}
+        </h2>
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4">
           {categories.map((item) => (
             <li key={item.id}>
@@ -208,7 +188,9 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
   } else if (view === "brand") {
     body = (
       <section>
-        {stepHeader(t("finder.selectBrand"), stepHrefs[0])}
+        <h2 className="mb-4 text-xl font-extrabold text-fg md:text-2xl">
+          {t("finder.selectBrand")}
+        </h2>
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4">
           {brands.map((item) => (
             <li key={item.id}>
@@ -253,7 +235,9 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
     ];
     body = (
       <section>
-        {stepHeader(t("finder.selectType"), stepHrefs[1])}
+        <h2 className="mb-4 text-xl font-extrabold text-fg md:text-2xl">
+          {t("finder.selectType")}
+        </h2>
         <ul className="grid max-w-2xl grid-cols-1 gap-4 sm:grid-cols-2">
           {typeCards.map(({ value, label, Icon }) => (
             <li key={value}>
@@ -276,7 +260,9 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
   } else if (view === "model") {
     body = (
       <section>
-        {stepHeader(t("finder.selectModel"), stepHrefs[2])}
+        <h2 className="mb-4 text-xl font-extrabold text-fg md:text-2xl">
+          {t("finder.selectModel")}
+        </h2>
         {models.length === 0 ? (
           <div className="rounded-xl border border-border bg-card px-4 py-12 text-center">
             <p className="text-muted">{t("finder.noModels")}</p>
@@ -488,20 +474,28 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
           {steps.map((step, index) => {
             const state =
               index < stepIndex[view] ? "done" : index === stepIndex[view] ? "current" : "todo";
-            const href = index < stepIndex[view] ? stepHrefs[index] : "";
+            const href = stepHrefs[index];
+            // Reachable steps (params for all earlier steps are set) are clickable;
+            // clicking one re-opens it and clears its own param plus everything after.
+            const clickable = index <= stepIndex[view] && !!href;
+            const chip = !clickable
+              ? "border-border bg-card opacity-50"
+              : state === "done"
+                ? "border-emerald-500/60 bg-emerald-500/10 hover:border-emerald-500 hover:bg-emerald-500/15"
+                : "border-accent bg-accent/10 hover:bg-accent/15";
             const circle =
               state === "current"
-                ? "border-accent bg-accent/15 text-accent ring-2 ring-accent/30"
+                ? "border-accent bg-accent/15 text-accent"
                 : state === "done"
-                  ? "border-accent/60 bg-accent/10 text-accent"
+                  ? "border-emerald-500 bg-emerald-500/15 text-emerald-400"
                   : "border-border bg-card text-muted";
             const label = state === "todo" ? "text-muted" : "text-fg";
             const inner = (
               <>
                 <span
-                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 text-xs font-extrabold sm:h-9 sm:w-9 ${circle}`}
+                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 text-[11px] font-extrabold sm:h-8 sm:w-8 ${circle}`}
                 >
-                  {state === "done" ? <Check className="h-4 w-4" /> : index + 1}
+                  {state === "done" ? <Check className="h-3.5 w-3.5" /> : index + 1}
                 </span>
                 <span className="min-w-0">
                   <span
@@ -519,17 +513,19 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
             );
             return (
               <li key={step.key} className="flex min-w-0 flex-1 items-center gap-1 sm:gap-2">
-                {state === "done" && href ? (
+                {clickable ? (
                   <Link
                     href={href}
-                    className="flex min-w-0 items-center gap-1.5 transition-opacity hover:opacity-75 sm:gap-2"
+                    aria-current={state === "current" ? "step" : undefined}
+                    className={`flex min-h-[44px] min-w-0 flex-1 items-center gap-1.5 rounded-xl border-2 px-1.5 py-1.5 transition-all duration-200 sm:gap-2 sm:px-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${chip}`}
                   >
                     {inner}
                   </Link>
                 ) : (
                   <span
                     aria-current={state === "current" ? "step" : undefined}
-                    className="flex min-w-0 items-center gap-1.5 sm:gap-2"
+                    aria-disabled="true"
+                    className={`flex min-h-[44px] min-w-0 flex-1 items-center gap-1.5 rounded-xl border-2 px-1.5 py-1.5 sm:gap-2 sm:px-2.5 ${chip}`}
                   >
                     {inner}
                   </span>
@@ -538,7 +534,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
                   <span
                     aria-hidden="true"
                     className={`h-px min-w-3 flex-1 sm:min-w-6 ${
-                      index + 1 < stepIndex[view] ? "bg-accent/50" : "bg-border"
+                      index + 1 <= stepIndex[view] ? "bg-emerald-500/50" : "bg-border"
                     }`}
                   />
                 )}

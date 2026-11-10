@@ -34,9 +34,10 @@ type PageProps = {
   }>;
 };
 
-// Vehicle Finder URL shape: /products?category=...&brand=...&type=...&model=...
-type Flow = { category?: string; brand?: string; type?: string; model?: string };
-type View = "category" | "brand" | "type" | "model" | "results";
+// Vehicle Finder URL shape: /products?brand=...&type=...&model=...&category=...
+// Flow order: Brand → Type → Model → Category (customer's vehicle first, then the part).
+type Flow = { brand?: string; type?: string; model?: string; category?: string };
+type View = "brand" | "type" | "model" | "category" | "results";
 
 const VEHICLE_TYPES = ["motorcycle", "scooter"];
 
@@ -90,9 +91,8 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
   let result: ProductPage | undefined;
   let view: View;
 
-  if (!category) {
-    view = "category";
-  } else if (!brand) {
+  // Self-healing: jump back to the first step whose param is missing or invalid.
+  if (!brand) {
     view = "brand";
   } else if (!vehicleOk) {
     view = "type";
@@ -101,6 +101,8 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
     model = modelSlug ? models.find((item) => item.slug === modelSlug) : undefined;
     if (!model) {
       view = "model";
+    } else if (!category) {
+      view = "category";
     } else {
       result = await getProducts({
         q: search || undefined,
@@ -121,71 +123,51 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
   const buildHref = (flow: Flow, page?: number): string => {
     const p = new URLSearchParams();
     if (search) p.set("search", search);
-    if (flow.category) p.set("category", flow.category);
     if (flow.brand) p.set("brand", flow.brand);
     if (flow.type) p.set("type", flow.type);
     if (flow.model) p.set("model", flow.model);
+    if (flow.category) p.set("category", flow.category);
     if (page && page > 1) p.set("page", String(page));
     const qs = p.toString();
     return `/${locale}/products${qs ? `?${qs}` : ""}`;
   };
 
   const currentFlow: Flow = {
-    category: category?.slug,
     brand: brand?.slug,
     type: vehicleOk ? vehicleType : undefined,
     model: model?.slug,
+    category: category?.slug,
   };
 
   // stepHrefs[i] = URL that renders step i: params for steps 0..i-1 only. Clicking
   // a stepper step therefore clears that step's param and every param after it.
   const stepHrefs = [
     buildHref({}),
-    category ? buildHref({ category: category.slug }) : "",
-    category && brand ? buildHref({ category: category.slug, brand: brand.slug }) : "",
-    category && brand && vehicleOk
-      ? buildHref({ category: category.slug, brand: brand.slug, type: vehicleType })
+    brand ? buildHref({ brand: brand.slug }) : "",
+    brand && vehicleOk ? buildHref({ brand: brand.slug, type: vehicleType }) : "",
+    brand && vehicleOk && model
+      ? buildHref({ brand: brand.slug, type: vehicleType, model: model.slug })
       : "",
   ];
 
   const steps = [
-    { key: "category", label: t("finder.stepCategory"), value: category ? localize(category) : null },
     { key: "brand", label: t("finder.stepBrand"), value: brand ? localize(brand) : null },
     { key: "type", label: t("finder.stepType"), value: vehicleOk ? typeLabel : null },
     { key: "model", label: t("finder.stepModel"), value: model ? localize(model) : null },
+    {
+      key: "category",
+      label: t("finder.stepCategory"),
+      value: category ? localize(category) : null,
+    },
   ];
-  const stepIndex: Record<View, number> = { category: 0, brand: 1, type: 2, model: 3, results: 4 };
+  const stepIndex: Record<View, number> = { brand: 0, type: 1, model: 2, category: 3, results: 4 };
 
   const cardBase =
     "flex min-h-[88px] flex-col justify-center rounded-xl border border-border bg-card p-4 transition-colors hover:border-accent hover:bg-accent/5";
 
   let body: ReactNode;
 
-  if (view === "category") {
-    body = (
-      <section>
-        <h2 className="mb-4 text-xl font-extrabold text-fg md:text-2xl">
-          {t("finder.selectCategory")}
-        </h2>
-        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4">
-          {categories.map((item) => (
-            <li key={item.id}>
-              <Link href={buildHref({ category: item.slug })} className={`${cardBase} gap-1`}>
-                <span className="font-bold text-fg" dir="auto">
-                  {localize(item)}
-                </span>
-                {localizeAlt(item) && (
-                  <span className="text-xs text-muted" dir="auto">
-                    {localizeAlt(item)}
-                  </span>
-                )}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
-    );
-  } else if (view === "brand") {
+  if (view === "brand") {
     body = (
       <section>
         <h2 className="mb-4 text-xl font-extrabold text-fg md:text-2xl">
@@ -195,7 +177,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
           {brands.map((item) => (
             <li key={item.id}>
               <Link
-                href={buildHref({ category: category?.slug, brand: item.slug })}
+                href={buildHref({ brand: item.slug })}
                 className={`${cardBase} gap-2`}
               >
                 {item.logoUrl ? (
@@ -243,7 +225,6 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
             <li key={value}>
               <Link
                 href={buildHref({
-                  category: category?.slug,
                   brand: brand?.slug,
                   type: value,
                 })}
@@ -267,7 +248,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
           <div className="rounded-xl border border-border bg-card px-4 py-12 text-center">
             <p className="text-muted">{t("finder.noModels")}</p>
             <Button asChild variant="secondary" className="mt-4 min-h-11">
-              <Link href={stepHrefs[2]}>{t("finder.back")}</Link>
+              <Link href={stepHrefs[1]}>{t("finder.back")}</Link>
             </Button>
           </div>
         ) : (
@@ -283,7 +264,6 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
                 <li key={item.id}>
                   <Link
                     href={buildHref({
-                      category: category?.slug,
                       brand: brand?.slug,
                       type: vehicleType,
                       model: item.slug,
@@ -302,6 +282,38 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
         )}
       </section>
     );
+  } else if (view === "category") {
+    body = (
+      <section>
+        <h2 className="mb-4 text-xl font-extrabold text-fg md:text-2xl">
+          {t("finder.selectCategory")}
+        </h2>
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4">
+          {categories.map((item) => (
+            <li key={item.id}>
+              <Link
+                href={buildHref({
+                  brand: brand?.slug,
+                  type: vehicleType,
+                  model: model?.slug,
+                  category: item.slug,
+                })}
+                className={`${cardBase} gap-1`}
+              >
+                <span className="font-bold text-fg" dir="auto">
+                  {localize(item)}
+                </span>
+                {localizeAlt(item) && (
+                  <span className="text-xs text-muted" dir="auto">
+                    {localizeAlt(item)}
+                  </span>
+                )}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+    );
   } else {
     body = result ? (
       <section>
@@ -309,10 +321,10 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold text-fg" dir="auto">
               {[
-                category ? localize(category) : null,
                 brand ? localize(brand) : null,
                 vehicleOk ? typeLabel : null,
                 model ? localize(model) : null,
+                category ? localize(category) : null,
               ]
                 .filter(Boolean)
                 .join(" · ")}
@@ -461,10 +473,10 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
               placeholder={t("searchPlaceholder")}
             />
           </div>
-          {category && <input type="hidden" name="category" value={category.slug} />}
           {brand && <input type="hidden" name="brand" value={brand.slug} />}
           {vehicleOk && <input type="hidden" name="type" value={vehicleType} />}
           {model && <input type="hidden" name="model" value={model.slug} />}
+          {category && <input type="hidden" name="category" value={category.slug} />}
           <Button type="submit" variant="primary">
             {t("searchLabel")}
           </Button>

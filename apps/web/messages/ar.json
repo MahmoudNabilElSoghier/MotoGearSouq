@@ -309,11 +309,11 @@
     "heading": "قطع الغيار",
     "finder": {
       "heading": "اعثر على قطع غيارك",
-      "stepCategory": "الصنف",
+      "stepCategory": "الفئة",
       "stepBrand": "الماركة",
       "stepType": "النوع",
       "stepModel": "الموديل",
-      "selectCategory": "اختر الصنف",
+      "selectCategory": "اختر الفئة",
       "selectBrand": "اختر الماركة",
       "selectType": "اختر النوع",
       "selectModel": "اختر الموديل",

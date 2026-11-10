@@ -1728,5 +1728,23 @@
     "trackOrder": "Track Order",
     "login": "Login",
     "cart": "Cart"
+  },
+  "sidebar": {
+    "aria": "Main menu",
+    "welcome": "Welcome to MotoGearSouq",
+    "welcomeSubtitle": "Sign in to follow your orders and check out faster.",
+    "login": "Log in",
+    "sectionNav": "Navigation",
+    "sectionSupport": "Support & Legal",
+    "home": "Home",
+    "store": "Store",
+    "cart": "Cart",
+    "account": "Account",
+    "supportChat": "Support Chat",
+    "contactSupport": "Contact Support",
+    "returnExchange": "Return & Exchange",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "copyright": "© 2026 MotoGearSouq. All rights reserved."
   }
 }

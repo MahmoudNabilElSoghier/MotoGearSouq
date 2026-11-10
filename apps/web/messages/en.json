@@ -1746,5 +1746,13 @@
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
     "copyright": "© 2026 MotoGearSouq. All rights reserved."
+  },
+  "support": {
+    "title": "Support Chat",
+    "subtitle": "Choose what you need and we'll take it from there.",
+    "whereOrderTitle": "Where is my order?",
+    "whereOrderDesc": "See where your order is and when it should arrive",
+    "returnTitle": "Return or exchange",
+    "returnDesc": "Something arrived damaged, wrong or missing — or you want to send it back"
   }
 }

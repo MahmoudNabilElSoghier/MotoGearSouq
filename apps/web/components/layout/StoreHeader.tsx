@@ -172,14 +172,16 @@ export function StoreHeader() {
               {renderLogo(false)}
             </Link>
 
-            {/* End: locale switcher & theme toggle (desktop) + cart + login/account */}
+            {/* End: locale switcher & theme toggle + cart + login/account */}
             <div className="flex items-center gap-2 sm:gap-3">
-              <span className="hidden md:flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <LocaleSwitcher />
                 <ThemeToggle />
-              </span>
+              </div>
               <CartIcon />
-              {accountControl}
+              <div className="hidden md:flex">
+                {accountControl}
+              </div>
             </div>
           </div>
         </Container>

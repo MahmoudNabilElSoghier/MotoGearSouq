@@ -86,23 +86,25 @@ export function Header() {
               {renderLogo(false)}
             </Link>
 
-            {/* End: locale switcher & theme toggle (desktop) + cart + login */}
+            {/* End: locale switcher & theme toggle + cart + login */}
             <div className="flex items-center gap-2 sm:gap-3">
-              <span className="hidden md:flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <LocaleSwitcher />
                 <ThemeToggle />
-              </span>
+              </div>
               <CartIcon />
-              <Button variant="primary" size="sm" asChild>
-                <Link
-                  href={`/${locale}/login`}
-                  aria-label={tNav("login")}
-                  className="gap-1.5 px-3"
-                >
-                  <User className="h-4 w-4" aria-hidden="true" />
-                  <span className="hidden sm:inline">{tNav("login")}</span>
-                </Link>
-              </Button>
+              <div className="hidden md:flex">
+                <Button variant="primary" size="sm" asChild>
+                  <Link
+                    href={`/${locale}/login`}
+                    aria-label={tNav("login")}
+                    className="gap-1.5 px-3"
+                  >
+                    <User className="h-4 w-4" aria-hidden="true" />
+                    <span className="hidden sm:inline">{tNav("login")}</span>
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         </Container>

@@ -39,11 +39,11 @@ export function TrustBar() {
   return (
     <section className="relative z-20 -mt-10 md:-mt-12 px-4 mb-8">
       <Container size="xl">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="flex overflow-x-auto gap-3 snap-x snap-mandatory px-2 pb-2 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-4 md:px-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {items.map((item, index) => {
             const Icon = item.icon;
             return (
-              <FadeIn key={item.id} delay={Math.min(index * 0.05, 0.3)} className="h-full">
+              <FadeIn key={item.id} delay={Math.min(index * 0.05, 0.3)} className="h-full min-w-[270px] sm:min-w-[290px] md:min-w-0 snap-center shrink-0">
                 <Card
                   padding="md"
                   className="bg-card border-border shadow-xl rounded-2xl flex items-center gap-4 p-5 h-full hover:border-brand-red/50 transition-colors"

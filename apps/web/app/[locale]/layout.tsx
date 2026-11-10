@@ -8,6 +8,7 @@ import Script from "next/script";
 import { meta } from "@/lib/content";
 import { locales, type Locale } from "@/i18n";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
 import "../globals.css";
 
 const cairo = Cairo({
@@ -97,6 +98,7 @@ export default async function LocaleLayout({
             {children}
           </NextIntlClientProvider>
         </ThemeProvider>
+        <MobileBottomNav />
         {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
         {META_PIXEL_ID && (
           <Script id="meta-pixel" strategy="afterInteractive">

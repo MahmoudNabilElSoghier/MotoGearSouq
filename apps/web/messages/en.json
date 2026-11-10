@@ -23,6 +23,7 @@
     "pageOf": "Page {page} of {total}",
     "details": "Details",
     "contactPrice": "Contact us for price",
+    "validationFailed": "Validation failed — {details}",
     "backToHome": "Back to home",
     "counts": {
       "models": "{count} models",

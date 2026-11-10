@@ -15,7 +15,8 @@ export type DocumentEntityType =
   | "BRANCH"
   | "EMPLOYEE"
   | "ORDER"
-  | "CUSTOMER";
+  | "CUSTOMER"
+  | "LANDING_CARD";
 
 export interface DocumentRecord {
   id: string;
@@ -35,6 +36,7 @@ export interface DocumentRecord {
   deletedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
+  url?: string | null;
 }
 
 export interface UploadedFileInput {
@@ -140,7 +142,7 @@ export class DocumentsService {
       deletedAt: null,
     };
 
-    return withDb(
+    const res = await withDb(
       this.prisma,
       async (db) => db.document.create({ data: base }),
       () => {
@@ -154,6 +156,14 @@ export class DocumentsService {
         return record;
       },
     );
+    const url = await this.storage.getDownloadUrl(storageKey);
+    return {
+      data: {
+        ...res.data,
+        url,
+      },
+      isMock: res.isMock,
+    };
   }
 
   async listByEntity(

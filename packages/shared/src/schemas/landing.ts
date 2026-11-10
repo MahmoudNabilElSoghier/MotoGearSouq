@@ -47,6 +47,7 @@ export const landingCardSchema = z.object({
   descAr: z.string().optional().nullable(),
   descEn: z.string().optional().nullable(),
   link: z.string().min(1, "الرابط مطلوب"),
+  photo: z.string().optional().nullable(),
   order: orderField,
 });
 

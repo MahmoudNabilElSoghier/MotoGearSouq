@@ -32,7 +32,7 @@
   DeadStockResponse,
   LandingSectionInput,
 } from "@motogearsouq/shared";
-import { apiGet, apiGetOrNull, apiRaw, apiSend, type ApiResponse } from "./client";
+import { apiGet, apiGetOrNull, apiRaw, apiSend, request, type ApiResponse } from "./client";
 
 export type { DeadStockProduct, DeadStockResponse } from "@motogearsouq/shared";
 
@@ -348,6 +348,7 @@ export interface LandingCardRow {
   descAr: string | null;
   descEn: string | null;
   link: string;
+  photo?: string | null;
   order: number;
   createdAt: string;
   updatedAt: string;
@@ -381,6 +382,7 @@ export interface CreateLandingCardInput {
   descAr?: string | null;
   descEn?: string | null;
   link: string;
+  photo?: string | null;
   order?: number;
 }
 
@@ -395,6 +397,7 @@ export interface UpdateLandingCardInput {
   descAr?: string | null;
   descEn?: string | null;
   link?: string;
+  photo?: string | null;
   order?: number;
 }
 
@@ -949,4 +952,35 @@ export const resetPassword = (
   });
 
 // ---------- ERP: suppliers, purchase orders, stock movements (Sprint 2) ----------
+
+// ---------- Documents / Uploads ----------
+
+export interface DocumentRecord {
+  id: string;
+  entityType: string;
+  entityId: string;
+  fileName: string;
+  fileSize: number;
+  mimeType: string;
+  storageKey: string;
+  storageDriver: string;
+  url?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export const uploadDocument = (
+  file: File | Blob,
+  entityType: string,
+  entityId: string,
+): Promise<ApiResponse<DocumentRecord>> => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("entityType", entityType);
+  formData.append("entityId", entityId);
+  return request<DocumentRecord>("/documents", {
+    method: "POST",
+    body: formData,
+  });
+};
 

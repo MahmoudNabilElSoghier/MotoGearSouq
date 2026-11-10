@@ -12,10 +12,12 @@ import {
   updateLandingSection,
   updateLandingCard,
   removeLandingCard,
+  uploadDocument,
   type LandingSectionRow,
   type LandingCardRow,
 } from "@motogearsouq/api-client";
-import { Loader2, Trash2, Plus, Save, ChevronRight, Tag, Link as LinkIcon, Globe, Text, ArrowRight, AlertCircle, CheckCircle } from "lucide-react";
+import { compressImage } from "@/lib/compressImage";
+import { Loader2, Trash2, Plus, Save, ChevronRight, Tag, Link as LinkIcon, Globe, Text, ArrowRight, AlertCircle, CheckCircle, Image as ImageIcon } from "lucide-react";
 
 export default function AdminLandingPage() {
   const t = useTranslations("admin.landing");
@@ -160,11 +162,46 @@ export default function AdminLandingPage() {
     return () => clearTimeout(timer);
   }, [banner]);
 
+  const [removePhotoMap, setRemovePhotoMap] = useState<Record<string, boolean>>({});
+
+  const handleCardImageUpload = async (cardId: string, file: File) => {
+    setSaving((prev) => new Set(prev).add(cardId));
+    try {
+      const compressed = await compressImage(file);
+      const res = await uploadDocument(compressed, "LANDING_CARD", cardId);
+      const url = res.data.url;
+      if (url) {
+        setSections((prev) =>
+          prev.map((s) => ({
+            ...s,
+            cards: s.cards.map((c) =>
+              c.id === cardId ? { ...c, photo: url } : c
+            ),
+          }))
+        );
+        setRemovePhotoMap((prev) => ({ ...prev, [cardId]: false }));
+      }
+      setBanner({ type: "success", message: t("saved") });
+    } catch (err: unknown) {
+      setBanner({
+        type: "error",
+        message: err instanceof Error ? err.message : String(err),
+      });
+    } finally {
+      setSaving((prev) => {
+        const next = new Set(prev);
+        next.delete(cardId);
+        return next;
+      });
+    }
+  };
+
   const handleSaveCard = async (
     sectionId: string,
     cardId: string,
     card: LandingCardRow,
   ) => {
+    const shouldRemove = removePhotoMap[cardId] ?? false;
     setSaving((prev) => new Set(prev).add(cardId));
     try {
       await updateLandingCard(cardId, {
@@ -173,6 +210,7 @@ export default function AdminLandingPage() {
         descAr: card.descAr?.trim() ? card.descAr : undefined,
         descEn: card.descEn?.trim() ? card.descEn : undefined,
         link: card.link.trim(),
+        photo: shouldRemove ? null : (card.photo ?? undefined),
         order: Number(card.order),
       });
       setBanner({ type: "success", message: t("saved") });
@@ -450,6 +488,53 @@ export default function AdminLandingPage() {
                           key={card.id}
                           className="flex flex-wrap items-center gap-3 border border-border/50 rounded-lg p-3"
                         >
+                          <div className="flex items-center gap-3 w-full">
+                            {card.photo && !removePhotoMap[card.id] && (
+                              <div className="relative w-12 h-12 rounded overflow-hidden bg-muted/20 flex-shrink-0 border border-border">
+                                <img
+                                  src={card.photo}
+                                  alt=""
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            )}
+                            <div className="flex flex-col gap-1 flex-1">
+                              <label className="text-xs font-semibold text-muted flex items-center gap-1">
+                                <ImageIcon className="w-3 h-3" />
+                                {t("cards.image")}
+                              </label>
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  className="text-xs text-muted file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-secondary file:text-fg hover:file:bg-secondary/80"
+                                  onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file)
+                                      handleCardImageUpload(card.id, file);
+                                  }}
+                                  disabled={saving.has(card.id)}
+                                />
+                                {card.photo && (
+                                  <label className="flex items-center gap-1.5 text-xs text-muted cursor-pointer">
+                                    <input
+                                      type="checkbox"
+                                      checked={
+                                        removePhotoMap[card.id] ?? false
+                                      }
+                                      onChange={(e) =>
+                                        setRemovePhotoMap((prev) => ({
+                                          ...prev,
+                                          [card.id]: e.target.checked,
+                                        }))
+                                      }
+                                    />
+                                    {t("cards.removeImage")}
+                                  </label>
+                                )}
+                              </div>
+                            </div>
+                          </div>
                           <div className="flex items-center gap-2">
                             <div className="flex items-center gap-1">
                               <Tag className="w-3 h-3 text-muted" />

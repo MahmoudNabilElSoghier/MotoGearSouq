@@ -554,7 +554,10 @@
         "titleEn": "Title (English)",
         "descAr": "Description (Arabic)",
         "descEn": "Description (English)",
-        "link": "Link"
+        "link": "Link",
+        "image": "Image",
+        "removeImage": "Remove image",
+        "uploading": "Uploading..."
       },
       "nav": {
         "home": "Home",

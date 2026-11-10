@@ -76,6 +76,7 @@ model LandingCard {
   descAr    String?
   descEn    String?
   link      String
+  photo     String?
   order     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -340,6 +341,7 @@ enum DocumentEntityType {
   EMPLOYEE
   ORDER
   CUSTOMER
+  LANDING_CARD
 }
 
 enum DocumentStatus {

@@ -56,14 +56,14 @@ const baseUrl = (): string => {
   return "/api";
 };
 
-async function request<T>(
+export async function request<T>(
   path: string,
   init: RequestInit & { method?: string } = {},
   isRetry = false,
   skipAuthRedirect = false,
 ): Promise<ApiResponse<T>> {
   const headers = new Headers(init.headers);
-  if (init.body && !headers.has("content-type")) {
+  if (init.body && !(init.body instanceof FormData) && !headers.has("content-type")) {
     headers.set("content-type", "application/json");
   }
 

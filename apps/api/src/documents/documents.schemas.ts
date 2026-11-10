@@ -19,6 +19,7 @@ export const documentEntityTypeSchema = z.enum([
   "EMPLOYEE",
   "ORDER",
   "CUSTOMER",
+  "LANDING_CARD",
 ]);
 
 // Multipart fields arrive as strings; JSON callers may send booleans.

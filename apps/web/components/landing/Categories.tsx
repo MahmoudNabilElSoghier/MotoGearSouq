@@ -78,7 +78,12 @@ export default async function Categories({
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                   {section.cards.map((card, index) => {
                     const IconComponent = getCardIcon(section.slug, card.titleEn);
-                    const photo = (card as { photo?: string | null }).photo ?? null;
+                    const rawPhoto = card.photo;
+                    const photo = rawPhoto
+                      ? rawPhoto.startsWith("http") || rawPhoto.startsWith("/")
+                        ? rawPhoto
+                        : `${(process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000").replace(/\/api$/, "")}/${rawPhoto}`
+                      : null;
                     const title = isAr ? card.titleAr : card.titleEn;
                     return (
                       <FadeIn

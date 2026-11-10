@@ -91,6 +91,7 @@ export class DocumentsController {
             "EMPLOYEE",
             "ORDER",
             "CUSTOMER",
+            "LANDING_CARD",
           ],
         },
         entityId: { type: "string" },

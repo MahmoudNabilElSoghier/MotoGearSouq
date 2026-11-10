@@ -11,6 +11,7 @@ export interface LandingCard {
   descAr?: string | null;
   descEn?: string | null;
   link: string;
+  photo?: string | null;
   order: number;
   createdAt: Dateish;
   updatedAt: Dateish;

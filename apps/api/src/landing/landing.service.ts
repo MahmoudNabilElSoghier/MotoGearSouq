@@ -27,6 +27,7 @@ interface SectionWithCards {
     descAr: string | null;
     descEn: string | null;
     link: string;
+    photo: string | null;
     order: number;
     createdAt: Date;
     updatedAt: Date;
@@ -190,6 +191,7 @@ export class LandingService {
       descAr?: string | null;
       descEn?: string | null;
       link: string;
+      photo?: string | null;
       order?: string | number;
     },
   ): Promise<DbResult<LandingCard>> {
@@ -212,21 +214,11 @@ export class LandingService {
             descAr: input.descAr ?? null,
             descEn: input.descEn ?? null,
             link: input.link,
+            photo: input.photo ?? null,
             order,
           },
         });
-        return {
-          id: created.id,
-          sectionId: created.sectionId,
-          titleAr: created.titleAr,
-          titleEn: created.titleEn,
-          descAr: created.descAr ?? null,
-          descEn: created.descEn ?? null,
-          link: created.link,
-          order: created.order,
-          createdAt: created.createdAt.toISOString(),
-          updatedAt: created.updatedAt.toISOString(),
-        };
+        return mapCard(created);
       },
       () => ({
         id: `tmp-${Date.now()}`,
@@ -236,6 +228,7 @@ export class LandingService {
         descAr: input.descAr ?? null,
         descEn: input.descEn ?? null,
         link: input.link,
+        photo: input.photo ?? null,
         order: input.order != null ? Number(input.order) : 0,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -251,6 +244,7 @@ export class LandingService {
       descAr?: string | null;
       descEn?: string | null;
       link?: string;
+      photo?: string | null;
       order?: string | number;
     },
   ): Promise<DbResult<LandingCard | null>> {
@@ -269,6 +263,8 @@ export class LandingService {
             descEn:
               input.descEn !== undefined ? input.descEn : existing.descEn,
             link: input.link ?? existing.link,
+            photo:
+              input.photo !== undefined ? input.photo : existing.photo,
             order: input.order != null ? Number(input.order) : existing.order,
           },
         });
@@ -332,6 +328,7 @@ function mapCard(c: {
   descAr: string | null;
   descEn: string | null;
   link: string;
+  photo: string | null;
   order: number;
   createdAt: Date;
   updatedAt: Date;
@@ -344,6 +341,7 @@ function mapCard(c: {
     descAr: c.descAr,
     descEn: c.descEn,
     link: c.link,
+    photo: c.photo ?? null,
     order: c.order,
     createdAt: c.createdAt.toISOString(),
     updatedAt: c.updatedAt.toISOString(),

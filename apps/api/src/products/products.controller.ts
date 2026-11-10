@@ -64,6 +64,11 @@ export class ProductsController {
   @ApiQuery({ name: "categorySlug", required: false })
   @ApiQuery({ name: "category", required: false, description: "Alias of categorySlug (repeatable)" })
   @ApiQuery({ name: "type", required: false, description: "new | used | spare-parts | accessories" })
+  @ApiQuery({
+    name: "modelId",
+    required: false,
+    description: "Only products compatible with this machine model id",
+  })
   @ApiQuery({ name: "featured", required: false, description: "true = only featured products" })
   @ApiQuery({ name: "priceMin", required: false })
   @ApiQuery({ name: "priceMax", required: false })
@@ -79,6 +84,7 @@ export class ProductsController {
     @Query("categorySlug") categorySlug?: string | string[],
     @Query("category") category?: string | string[],
     @Query("type") type?: string,
+    @Query("modelId") modelId?: string,
     @Query("featured") featured?: string,
     @Query("priceMin") priceMin?: string,
     @Query("priceMax") priceMax?: string,
@@ -91,6 +97,7 @@ export class ProductsController {
       brandSlug: brandSlug || brand || undefined,
       categorySlug: categorySlug || category || undefined,
       type: type || undefined,
+      modelId: modelId || undefined,
       featured: featured === "true" || featured === "1",
       priceMin: toFiniteNumber(priceMin),
       priceMax: toFiniteNumber(priceMax),

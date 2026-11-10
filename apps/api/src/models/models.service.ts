@@ -4,16 +4,34 @@ import type { MachineModel } from "@motogearsouq/shared";
 import { withDb, type DbResult } from "../common/with-db";
 import { PrismaService } from "../prisma/prisma.service";
 
+// Vehicle Finder URLs use English type slugs; the stored category is Arabic.
+const VEHICLE_TYPE_CATEGORIES: Record<string, string[]> = {
+  motorcycle: ["دراجات نارية"],
+  scooter: ["سكوترات"],
+};
+
+export interface ModelFilter {
+  brandId?: string;
+  type?: string;
+}
+
 @Injectable()
 export class ModelsService {
   constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
-  getModels(brandSlug?: string): Promise<DbResult<MachineModel[]>> {
+  getModels(brandSlug?: string, filter: ModelFilter = {}): Promise<DbResult<MachineModel[]>> {
+    const categories = filter.type
+      ? (VEHICLE_TYPE_CATEGORIES[filter.type] ?? [filter.type])
+      : undefined;
     return withDb(
       this.prisma,
       async (db) => {
         const rows = await db.machineModel.findMany({
-          where: brandSlug ? { brand: { slug: brandSlug } } : {},
+          where: {
+            ...(brandSlug ? { brand: { slug: brandSlug } } : {}),
+            ...(filter.brandId ? { brandId: filter.brandId } : {}),
+            ...(categories ? { category: { in: categories } } : {}),
+          },
           orderBy: [{ category: "asc" }, { name: "asc" }],
           include: {
             brand: true,
@@ -22,7 +40,13 @@ export class ModelsService {
         });
         return rows.map(fromPrismaModel);
       },
-      () => mockModels.filter((model) => !brandSlug || model.brand?.slug === brandSlug),
+      () =>
+        mockModels.filter(
+          (model) =>
+            (!brandSlug || model.brand?.slug === brandSlug) &&
+            (!filter.brandId || model.brandId === filter.brandId) &&
+            (!categories || categories.includes(model.category)),
+        ),
     );
   }
 

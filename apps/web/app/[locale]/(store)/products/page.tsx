@@ -1,13 +1,30 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Input } from "@/components/ui/Input";
-import { Package } from "lucide-react";
-import { getBrands, getPartCategories, getProducts, totalStock } from "@motogearsouq/api-client";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Bike,
+  Check,
+  Package,
+  Repeat,
+  Scooter,
+} from "lucide-react";
+import {
+  getBrands,
+  getModels,
+  getPartCategories,
+  getProducts,
+  totalStock,
+  type ProductPage,
+} from "@motogearsouq/api-client";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
+import type { MachineModel } from "@motogearsouq/shared";
 
 export const dynamic = "force-dynamic";
 
@@ -16,16 +33,22 @@ type PageProps = {
   searchParams: Promise<{
     q?: string | string[];
     search?: string | string[];
-    brand?: string | string[];
-    cat?: string | string[];
     category?: string | string[];
+    cat?: string | string[];
+    brand?: string | string[];
     type?: string | string[];
-    featured?: string | string[];
-    priceMin?: string;
-    priceMax?: string;
+    model?: string | string[];
     page?: string;
   }>;
 };
+
+// Vehicle Finder URL shape: /products?category=...&brand=...&type=...&model=...
+type Flow = { category?: string; brand?: string; type?: string; model?: string };
+type View = "category" | "brand" | "type" | "model" | "results";
+
+const VEHICLE_TYPES = ["motorcycle", "scooter"];
+
+type Nameable = { name: string; nameAr?: string | null };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -38,28 +61,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   };
 }
 
-type ChipDef = { key: string; label: string; href: string };
-
-function toList(value?: string | string[]): string[] {
-  if (!value) return [];
-  return (Array.isArray(value) ? value : [value]).filter(Boolean);
-}
-
 function toFirst(value?: string | string[]): string {
   if (Array.isArray(value)) return value[0] ?? "";
   return value ?? "";
-}
-
-function toFiniteNumber(value?: string): number | undefined {
-  if (value == null || value === "") return undefined;
-  const n = Number(value);
-  return Number.isFinite(n) ? n : undefined;
-}
-
-function removeValue(params: URLSearchParams, key: string, value: string): void {
-  const remaining = params.getAll(key).filter((item) => item !== value);
-  params.delete(key);
-  remaining.forEach((item) => params.append(key, item));
 }
 
 function stockBadge(stock: number, reorderLevel: number, locale: string) {
@@ -74,366 +78,476 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
   const sp = await searchParams;
   const t = await getTranslations({ locale, namespace: "products" });
   const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
+  const isAr = locale === "ar";
+  const BackIcon = isAr ? ArrowRight : ArrowLeft;
 
   const search = toFirst(sp.search) || toFirst(sp.q);
-  const typeFilter = toFirst(sp.type);
-  const brandList = toList(sp.brand);
-  const catList = toList(sp.category ?? sp.cat);
-  const featured = toFirst(sp.featured) === "true";
-  const priceMin = toFiniteNumber(sp.priceMin);
-  const priceMax = toFiniteNumber(sp.priceMax);
+  const categorySlug = toFirst(sp.category) || toFirst(sp.cat);
+  const brandSlug = toFirst(sp.brand);
+  const vehicleType = toFirst(sp.type);
+  const modelSlug = toFirst(sp.model);
   const pageNum = Math.max(1, Number(toFirst(sp.page)) || 1);
 
-  const [result, brands, categories] = await Promise.all([
-    getProducts({
-      q: search || undefined,
-      brandSlug: brandList.length ? brandList : undefined,
-      categorySlug: catList.length ? catList : undefined,
-      type: typeFilter || undefined,
-      featured,
-      priceMin,
-      priceMax,
-      page: pageNum,
-      pageSize: 12,
-    }),
-    getBrands(),
-    getPartCategories(),
-  ]);
+  const [categories, brands] = await Promise.all([getPartCategories(), getBrands()]);
 
-  const buildHref = (mutate?: (params: URLSearchParams) => void, target?: number): string => {
+  const category = categorySlug ? categories.find((item) => item.slug === categorySlug) : undefined;
+  const brand = brandSlug ? brands.find((item) => item.slug === brandSlug) : undefined;
+  const vehicleOk = !!vehicleType && VEHICLE_TYPES.includes(vehicleType);
+
+  let models: MachineModel[] = [];
+  let model: MachineModel | undefined;
+  let result: ProductPage | undefined;
+  let view: View;
+
+  if (!category) {
+    view = "category";
+  } else if (!brand) {
+    view = "brand";
+  } else if (!vehicleOk) {
+    view = "type";
+  } else {
+    models = await getModels({ brandSlug: brand.slug, type: vehicleType });
+    model = modelSlug ? models.find((item) => item.slug === modelSlug) : undefined;
+    if (!model) {
+      view = "model";
+    } else {
+      result = await getProducts({
+        q: search || undefined,
+        categorySlug: category.slug,
+        modelId: model.id,
+        page: pageNum,
+        pageSize: 12,
+      });
+      view = "results";
+    }
+  }
+
+  const localize = (item: Nameable): string => (isAr ? (item.nameAr ?? item.name) : item.name);
+  const localizeAlt = (item: Nameable): string | null =>
+    isAr ? (item.name === item.nameAr ? null : item.name) : item.nameAr ?? null;
+  const typeLabel = vehicleType === "scooter" ? t("finder.scooter") : t("finder.motorcycle");
+
+  const buildHref = (flow: Flow, page?: number): string => {
     const p = new URLSearchParams();
     if (search) p.set("search", search);
-    if (typeFilter) p.set("type", typeFilter);
-    brandList.forEach((slug) => p.append("brand", slug));
-    catList.forEach((slug) => p.append("category", slug));
-    if (featured) p.set("featured", "true");
-    if (priceMin != null) p.set("priceMin", String(priceMin));
-    if (priceMax != null) p.set("priceMax", String(priceMax));
-    mutate?.(p);
-    if (target && target > 1) p.set("page", String(target));
+    if (flow.category) p.set("category", flow.category);
+    if (flow.brand) p.set("brand", flow.brand);
+    if (flow.type) p.set("type", flow.type);
+    if (flow.model) p.set("model", flow.model);
+    if (page && page > 1) p.set("page", String(page));
     const qs = p.toString();
     return `/${locale}/products${qs ? `?${qs}` : ""}`;
   };
 
-  const typeLabels: Record<string, string> = {
-    new: t("filters.typeNew"),
-    used: t("filters.typeUsed"),
-    "spare-parts": t("filters.typeSpareParts"),
-    accessories: t("filters.typeAccessories"),
+  const currentFlow: Flow = {
+    category: category?.slug,
+    brand: brand?.slug,
+    type: vehicleOk ? vehicleType : undefined,
+    model: model?.slug,
   };
 
-  const chips: ChipDef[] = [];
-  if (search) {
-    chips.push({ key: "search", label: `${t("searchLabel")}: ${search}`, href: buildHref((p) => p.delete("search")) });
-  }
-  if (typeFilter) {
-    chips.push({
-      key: "type",
-      label: `${t("filters.type")}: ${typeLabels[typeFilter] ?? typeFilter}`,
-      href: buildHref((p) => p.delete("type")),
-    });
-  }
-  brandList.forEach((slug) => {
-    const brand = brands.find((item) => item.slug === slug);
-    chips.push({
-      key: `brand-${slug}`,
-      label: `${t("filters.brand")}: ${brand?.nameAr ?? brand?.name ?? slug}`,
-      href: buildHref((p) => removeValue(p, "brand", slug)),
-    });
-  });
-  catList.forEach((slug) => {
-    const category = categories.find((item) => item.slug === slug);
-    chips.push({
-      key: `category-${slug}`,
-      label: `${t("filters.category")}: ${category?.nameAr ?? category?.name ?? slug}`,
-      href: buildHref((p) => removeValue(p, "category", slug)),
-    });
-  });
-  if (featured) {
-    chips.push({ key: "featured", label: t("filters.featured"), href: buildHref((p) => p.delete("featured")) });
-  }
-  if (priceMin != null || priceMax != null) {
-    const parts: string[] = [];
-    if (priceMin != null) parts.push(`${t("filters.priceMin")} ${nf.format(priceMin)}`);
-    if (priceMax != null) parts.push(`${t("filters.priceMax")} ${nf.format(priceMax)}`);
-    chips.push({
-      key: "price",
-      label: parts.join(" – "),
-      href: buildHref((p) => {
-        p.delete("priceMin");
-        p.delete("priceMax");
-      }),
-    });
-  }
-
-  const typeOptions: Array<{ value: string; label: string }> = [
-    { value: "", label: t("filters.typeAll") },
-    { value: "new", label: t("filters.typeNew") },
-    { value: "used", label: t("filters.typeUsed") },
-    { value: "spare-parts", label: t("filters.typeSpareParts") },
-    { value: "accessories", label: t("filters.typeAccessories") },
+  // stepHrefs[i] = URL that renders step i (used by the stepper and Back buttons).
+  const stepHrefs = [
+    buildHref({}),
+    category ? buildHref({ category: category.slug }) : "",
+    category && brand ? buildHref({ category: category.slug, brand: brand.slug }) : "",
+    category && brand && vehicleOk
+      ? buildHref({ category: category.slug, brand: brand.slug, type: vehicleType })
+      : "",
   ];
+
+  const steps = [
+    { key: "category", label: t("finder.stepCategory"), value: category ? localize(category) : null },
+    { key: "brand", label: t("finder.stepBrand"), value: brand ? localize(brand) : null },
+    { key: "type", label: t("finder.stepType"), value: vehicleOk ? typeLabel : null },
+    { key: "model", label: t("finder.stepModel"), value: model ? localize(model) : null },
+  ];
+  const stepIndex: Record<View, number> = { category: 0, brand: 1, type: 2, model: 3, results: 4 };
+
+  const cardBase =
+    "flex min-h-[88px] flex-col justify-center rounded-xl border border-border bg-card p-4 transition-colors hover:border-accent hover:bg-accent/5";
+
+  const stepHeader = (title: string, backHref: string | null) => (
+    <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+      <h2 className="text-xl font-extrabold text-fg md:text-2xl">{title}</h2>
+      {backHref && (
+        <Button asChild variant="secondary" size="sm">
+          <Link href={backHref} className="min-h-11 gap-2">
+            <BackIcon className="h-4 w-4" aria-hidden="true" />
+            {t("finder.back")}
+          </Link>
+        </Button>
+      )}
+    </div>
+  );
+
+  let body: ReactNode;
+
+  if (view === "category") {
+    body = (
+      <section>
+        {stepHeader(t("finder.selectCategory"), null)}
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4">
+          {categories.map((item) => (
+            <li key={item.id}>
+              <Link href={buildHref({ category: item.slug })} className={`${cardBase} gap-1`}>
+                <span className="font-bold text-fg" dir="auto">
+                  {localize(item)}
+                </span>
+                {localizeAlt(item) && (
+                  <span className="text-xs text-muted" dir="auto">
+                    {localizeAlt(item)}
+                  </span>
+                )}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+    );
+  } else if (view === "brand") {
+    body = (
+      <section>
+        {stepHeader(t("finder.selectBrand"), stepHrefs[0])}
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4">
+          {brands.map((item) => (
+            <li key={item.id}>
+              <Link
+                href={buildHref({ category: category?.slug, brand: item.slug })}
+                className={`${cardBase} gap-2`}
+              >
+                {item.logoUrl ? (
+                  <Image
+                    src={item.logoUrl}
+                    alt=""
+                    width={36}
+                    height={36}
+                    className="h-9 w-9 rounded-lg object-contain"
+                  />
+                ) : (
+                  <span
+                    aria-hidden="true"
+                    className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent/10 text-base font-extrabold text-accent"
+                  >
+                    {item.name.charAt(0).toUpperCase()}
+                  </span>
+                )}
+                <span className="font-bold text-fg" dir="auto">
+                  {localize(item)}
+                </span>
+                {localizeAlt(item) && (
+                  <span className="text-xs text-muted" dir="auto">
+                    {localizeAlt(item)}
+                  </span>
+                )}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+    );
+  } else if (view === "type") {
+    const typeCards = [
+      { value: "motorcycle", label: t("finder.motorcycle"), Icon: Bike },
+      { value: "scooter", label: t("finder.scooter"), Icon: Scooter },
+    ];
+    body = (
+      <section>
+        {stepHeader(t("finder.selectType"), stepHrefs[1])}
+        <ul className="grid max-w-2xl grid-cols-1 gap-4 sm:grid-cols-2">
+          {typeCards.map(({ value, label, Icon }) => (
+            <li key={value}>
+              <Link
+                href={buildHref({
+                  category: category?.slug,
+                  brand: brand?.slug,
+                  type: value,
+                })}
+                className={`${cardBase} min-h-[120px] items-center gap-3 text-center`}
+              >
+                <Icon className="h-10 w-10 text-accent" strokeWidth={1.5} aria-hidden="true" />
+                <span className="text-lg font-extrabold text-fg">{label}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+    );
+  } else if (view === "model") {
+    body = (
+      <section>
+        {stepHeader(t("finder.selectModel"), stepHrefs[2])}
+        {models.length === 0 ? (
+          <div className="rounded-xl border border-border bg-card px-4 py-12 text-center">
+            <p className="text-muted">{t("finder.noModels")}</p>
+            <Button asChild variant="secondary" className="mt-4 min-h-11">
+              <Link href={stepHrefs[2]}>{t("finder.back")}</Link>
+            </Button>
+          </div>
+        ) : (
+          <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4">
+            {models.map((item) => {
+              const meta = [
+                item.engineCc ? `${nf.format(item.engineCc)}cc` : null,
+                item.yearFrom ? `${item.yearFrom}${item.yearTo ? `–${item.yearTo}` : ""}` : null,
+              ]
+                .filter(Boolean)
+                .join(" · ");
+              return (
+                <li key={item.id}>
+                  <Link
+                    href={buildHref({
+                      category: category?.slug,
+                      brand: brand?.slug,
+                      type: vehicleType,
+                      model: item.slug,
+                    })}
+                    className={`${cardBase} gap-1`}
+                  >
+                    <span className="font-bold text-fg" dir="auto">
+                      {localize(item)}
+                    </span>
+                    {meta && <span className="text-xs text-muted">{meta}</span>}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </section>
+    );
+  } else {
+    body = result ? (
+      <section>
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold text-fg" dir="auto">
+              {[
+                category ? localize(category) : null,
+                brand ? localize(brand) : null,
+                vehicleOk ? typeLabel : null,
+                model ? localize(model) : null,
+              ]
+                .filter(Boolean)
+                .join(" · ")}
+            </p>
+            <p className="mt-1 text-sm text-muted" aria-live="polite">
+              {t("filters.resultsCount", { count: nf.format(result.total) })}
+            </p>
+          </div>
+          <Button asChild variant="secondary" size="sm">
+            <Link href={buildHref({})} className="min-h-11 gap-2">
+              <Repeat className="h-4 w-4" aria-hidden="true" />
+              {t("finder.changeVehicle")}
+            </Link>
+          </Button>
+        </div>
+
+        {result.items.length === 0 ? (
+          <div className="rounded-xl border border-border bg-card px-4 py-12 text-center">
+            <p className="text-muted">{t("filters.empty")}</p>
+            <Button asChild variant="secondary" className="mt-4 min-h-11">
+              <Link href={buildHref({})}>{t("finder.changeVehicle")}</Link>
+            </Button>
+          </div>
+        ) : (
+          <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6">
+            {result.items.map((product) => {
+              const stock = totalStock(product);
+              const badge = stockBadge(stock, product.reorderLevel, locale);
+              const imageUrl = product.imageUrl || product.images?.[0]?.url;
+              return (
+                <li key={product.id} className="h-full">
+                  <Link
+                    href={`/${locale}/products/${product.code}`}
+                    className="group flex h-full flex-col gap-3 rounded-xl border border-border bg-card p-4 transition-colors hover:border-accent"
+                  >
+                    <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-muted/50">
+                      {imageUrl ? (
+                        <Image
+                          src={imageUrl}
+                          alt={product.name}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-muted">
+                          <Package className="h-10 w-10 opacity-40" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="font-mono text-xs text-muted" dir="ltr">
+                        {product.code}
+                      </span>
+                      <span
+                        className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${badge.classes}`}
+                      >
+                        {badge.label}
+                      </span>
+                    </div>
+                    <h2 className="font-bold text-fg group-hover:text-accent line-clamp-2" dir="auto">
+                      {product.name}
+                    </h2>
+                    <p className="text-sm text-muted">
+                      {[product.brand?.nameAr, product.partCategory?.nameAr]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </p>
+                    <div className="mt-auto flex items-center justify-between pt-2">
+                      <p className="text-lg font-extrabold text-fg">
+                        {product.retailPrice != null ? (
+                          <span dir="ltr">
+                            {nf.format(product.retailPrice)} {isAr ? "ج.م" : "EGP"}
+                          </span>
+                        ) : (
+                          (isAr ? "عند التواصل" : "Contact for price")
+                        )}
+                      </p>
+                      <AddToCartButton product={{ id: product.id, code: product.code, name: product.name, retailPrice: product.retailPrice, taxRate: product.taxRate }} />
+                    </div>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+
+        {result.totalPages > 1 && (
+          <nav
+            aria-label={t("paginationAria")}
+            className="mt-8 flex items-center justify-between text-sm"
+          >
+            <Link
+              href={buildHref(currentFlow, result.page - 1)}
+              aria-disabled={result.page <= 1}
+              className={`rounded-lg border border-border px-4 py-2 font-semibold ${
+                result.page <= 1
+                  ? "pointer-events-none opacity-40"
+                  : "text-fg hover:border-accent"
+              }`}
+            >
+              {isAr ? "السابق" : "Previous"}
+            </Link>
+            <span className="text-muted">
+              {isAr ? (
+                <>صفحة <span dir="ltr">{nf.format(result.page)}</span> من <span dir="ltr">{nf.format(result.totalPages)}</span></>
+              ) : (
+                <>Page <span dir="ltr">{nf.format(result.page)}</span> of <span dir="ltr">{nf.format(result.totalPages)}</span></>
+              )}
+            </span>
+            <Link
+              href={buildHref(currentFlow, result.page + 1)}
+              aria-disabled={result.page >= result.totalPages}
+              className={`rounded-lg border border-border px-4 py-2 font-semibold ${
+                result.page >= result.totalPages
+                  ? "pointer-events-none opacity-40"
+                  : "text-fg hover:border-accent"
+              }`}
+            >
+              {isAr ? "التالي" : "Next"}
+            </Link>
+          </nav>
+        )}
+      </section>
+    ) : null;
+  }
 
   return (
     <main id="main-content" className="flex-1 py-12 md:py-16">
       <Container size="xl" className="max-w-[1600px] w-full">
         <div className="mb-6">
           <h1 className="text-3xl md:text-4xl font-extrabold text-fg">{t("heading")}</h1>
+          <p className="mt-2 text-muted">{t("finder.heading")}</p>
         </div>
 
-        {chips.length > 0 && (
-          <div className="mb-6 flex flex-wrap items-center gap-2">
-            {chips.map((chip) => (
-              <Link
-                key={chip.key}
-                href={chip.href}
-                className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-fg transition-colors hover:border-accent"
-              >
-                {chip.label}
-                <span aria-hidden="true">×</span>
-              </Link>
-            ))}
-            <Link
-              href={`/${locale}/products`}
-              className="text-xs font-semibold text-accent hover:underline"
-            >
-              {t("filters.clearAll")}
-            </Link>
+        <form
+          action={`/${locale}/products`}
+          method="get"
+          className="mb-6 flex items-end gap-2"
+        >
+          <div className="flex-1">
+            <Input
+              label={t("searchLabel")}
+              name="search"
+              defaultValue={search}
+              placeholder={t("searchPlaceholder")}
+            />
           </div>
-        )}
+          {category && <input type="hidden" name="category" value={category.slug} />}
+          {brand && <input type="hidden" name="brand" value={brand.slug} />}
+          {vehicleOk && <input type="hidden" name="type" value={vehicleType} />}
+          {model && <input type="hidden" name="model" value={model.slug} />}
+          <Button type="submit" variant="primary">
+            {t("searchLabel")}
+          </Button>
+        </form>
 
-        <div className="flex flex-col md:flex-row gap-8 items-start">
-          <aside className="sticky top-24 hidden md:block w-72 shrink-0">
-            <form
-              action={`/${locale}/products`}
-              method="get"
-              className="space-y-6 rounded-xl border border-border bg-card p-4"
-            >
-              {search && <input type="hidden" name="search" value={search} />}
-              {featured && <input type="hidden" name="featured" value="true" />}
-              {priceMin != null && <input type="hidden" name="priceMin" value={String(priceMin)} />}
-              {priceMax != null && <input type="hidden" name="priceMax" value={String(priceMax)} />}
-
-              <fieldset>
-                <legend className="text-sm font-semibold text-fg">{t("filters.type")}</legend>
-                <div className="mt-2 space-y-1.5">
-                  {typeOptions.map((option) => (
-                    <label key={option.value || "all"} className="flex items-center gap-2 text-sm text-muted">
-                      <input
-                        type="radio"
-                        name="type"
-                        value={option.value}
-                        defaultChecked={typeFilter === option.value}
-                        className="h-4 w-4 accent-accent"
-                      />
-                      {option.label}
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
-
-              <fieldset>
-                <legend className="text-sm font-semibold text-fg">{t("filters.brand")}</legend>
-                <div className="mt-2 max-h-48 space-y-1.5 overflow-y-auto">
-                  {brands.map((item) => (
-                    <label key={item.id} className="flex items-center gap-2 text-sm text-muted">
-                      <input
-                        type="checkbox"
-                        name="brand"
-                        value={item.slug}
-                        defaultChecked={brandList.includes(item.slug)}
-                        className="h-4 w-4 accent-accent"
-                      />
-                      {item.nameAr ?? item.name}
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
-
-              <fieldset>
-                <legend className="text-sm font-semibold text-fg">{t("filters.category")}</legend>
-                <div className="mt-2 max-h-48 space-y-1.5 overflow-y-auto">
-                  {categories.map((item) => (
-                    <label key={item.id} className="flex items-center gap-2 text-sm text-muted">
-                      <input
-                        type="checkbox"
-                        name="category"
-                        value={item.slug}
-                        defaultChecked={catList.includes(item.slug)}
-                        className="h-4 w-4 accent-accent"
-                      />
-                      {item.parentId ? "└ " : ""}
-                      {item.nameAr ?? item.name}
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
-
-              <div className="grid grid-cols-2 gap-2">
-                <Input
-                  label={t("filters.priceMin")}
-                  name="priceMin"
-                  inputMode="numeric"
-                  className="w-full"
-                  defaultValue={priceMin != null ? String(priceMin) : ""}
-                />
-                <Input
-                  label={t("filters.priceMax")}
-                  name="priceMax"
-                  inputMode="numeric"
-                  className="w-full"
-                  defaultValue={priceMax != null ? String(priceMax) : ""}
-                />
-              </div>
-
-              <Button type="submit" variant="secondary" fullWidth>
-                {t("filters.apply")}
-              </Button>
-            </form>
-          </aside>
-
-          <div className="flex-1 min-w-0 w-full">
-            <form
-              action={`/${locale}/products`}
-              method="get"
-              className="mb-4 flex items-end gap-2"
-            >
-              <div className="flex-1">
-                <Input
-                  label={t("searchLabel")}
-                  name="search"
-                  defaultValue={search}
-                  placeholder={t("searchPlaceholder")}
-                />
-              </div>
-              {typeFilter && <input type="hidden" name="type" value={typeFilter} />}
-              {brandList.map((slug) => (
-                <input key={slug} type="hidden" name="brand" value={slug} />
-              ))}
-              {catList.map((slug) => (
-                <input key={slug} type="hidden" name="category" value={slug} />
-              ))}
-              {featured && <input type="hidden" name="featured" value="true" />}
-              {priceMin != null && <input type="hidden" name="priceMin" value={String(priceMin)} />}
-              {priceMax != null && <input type="hidden" name="priceMax" value={String(priceMax)} />}
-              <Button type="submit" variant="primary">
-                {t("searchLabel")}
-              </Button>
-            </form>
-
-            <p className="mb-4 text-sm text-muted" aria-live="polite">
-              {t("filters.resultsCount", { count: nf.format(result.total) })}
-            </p>
-
-            {result.items.length === 0 ? (
-              <div className="rounded-xl border border-border bg-card px-4 py-12 text-center">
-                <p className="text-muted">{t("filters.empty")}</p>
-                <Button asChild variant="secondary" className="mt-4">
-                  <Link href={`/${locale}/products`}>{t("filters.viewAll")}</Link>
-                </Button>
-              </div>
-            ) : (
-              <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6">
-                {result.items.map((product) => {
-                  const stock = totalStock(product);
-                  const badge = stockBadge(stock, product.reorderLevel, locale);
-                  const imageUrl = product.imageUrl || product.images?.[0]?.url;
-                  return (
-                    <li key={product.id} className="h-full">
-                      <Link
-                        href={`/${locale}/products/${product.code}`}
-                        className="group flex h-full flex-col gap-3 rounded-xl border border-border bg-card p-4 transition-colors hover:border-accent"
-                      >
-                        <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-muted/50">
-                          {imageUrl ? (
-                            <Image
-                              src={imageUrl}
-                              alt={product.name}
-                              fill
-                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                              className="object-cover transition-transform duration-300 group-hover:scale-105"
-                            />
-                          ) : (
-                            <div className="flex h-full w-full items-center justify-center text-muted">
-                              <Package className="h-10 w-10 opacity-40" />
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex items-start justify-between gap-2">
-                          <span className="font-mono text-xs text-muted" dir="ltr">
-                            {product.code}
-                          </span>
-                          <span
-                            className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${badge.classes}`}
-                          >
-                            {badge.label}
-                          </span>
-                        </div>
-                        <h2 className="font-bold text-fg group-hover:text-accent line-clamp-2" dir="auto">
-                          {product.name}
-                        </h2>
-                        <p className="text-sm text-muted">
-                          {[product.brand?.nameAr, product.partCategory?.nameAr]
-                            .filter(Boolean)
-                            .join(" · ")}
-                        </p>
-                        <div className="mt-auto flex items-center justify-between pt-2">
-                          <p className="text-lg font-extrabold text-fg">
-                            {product.retailPrice != null ? (
-                              <span dir="ltr">
-                                {nf.format(product.retailPrice)} {locale === "ar" ? "ج.م" : "EGP"}
-                              </span>
-                            ) : (
-                              (locale === "ar" ? "عند التواصل" : "Contact for price")
-                            )}
-                          </p>
-                          <AddToCartButton product={{ id: product.id, code: product.code, name: product.name, retailPrice: product.retailPrice, taxRate: product.taxRate }} />
-                        </div>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-
-            {result.totalPages > 1 && (
-              <nav
-                aria-label={t("paginationAria")}
-                className="mt-8 flex items-center justify-between text-sm"
-              >
-                <Link
-                  href={buildHref(undefined, result.page - 1)}
-                  aria-disabled={result.page <= 1}
-                  className={`rounded-lg border border-border px-4 py-2 font-semibold ${
-                    result.page <= 1
-                      ? "pointer-events-none opacity-40"
-                      : "text-fg hover:border-accent"
-                  }`}
+        <ol className="mb-6 flex items-center gap-1 sm:gap-2">
+          {steps.map((step, index) => {
+            const state =
+              index < stepIndex[view] ? "done" : index === stepIndex[view] ? "current" : "todo";
+            const href = index < stepIndex[view] ? stepHrefs[index] : "";
+            const circle =
+              state === "current"
+                ? "border-accent bg-accent/15 text-accent ring-2 ring-accent/30"
+                : state === "done"
+                  ? "border-accent/60 bg-accent/10 text-accent"
+                  : "border-border bg-card text-muted";
+            const label = state === "todo" ? "text-muted" : "text-fg";
+            const inner = (
+              <>
+                <span
+                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 text-xs font-extrabold sm:h-9 sm:w-9 ${circle}`}
                 >
-                  {locale === "ar" ? "السابق" : "Previous"}
-                </Link>
-                <span className="text-muted">
-                  {locale === "ar" ? (
-                    <>صفحة <span dir="ltr">{nf.format(result.page)}</span> من <span dir="ltr">{nf.format(result.totalPages)}</span></>
-                  ) : (
-                    <>Page <span dir="ltr">{nf.format(result.page)}</span> of <span dir="ltr">{nf.format(result.totalPages)}</span></>
+                  {state === "done" ? <Check className="h-4 w-4" /> : index + 1}
+                </span>
+                <span className="min-w-0">
+                  <span
+                    className={`block truncate text-[11px] font-semibold sm:text-xs ${label}`}
+                  >
+                    {step.label}
+                  </span>
+                  {step.value && (
+                    <span className="block truncate text-[10px] text-muted" dir="auto">
+                      {step.value}
+                    </span>
                   )}
                 </span>
-                <Link
-                  href={buildHref(undefined, result.page + 1)}
-                  aria-disabled={result.page >= result.totalPages}
-                  className={`rounded-lg border border-border px-4 py-2 font-semibold ${
-                    result.page >= result.totalPages
-                      ? "pointer-events-none opacity-40"
-                      : "text-fg hover:border-accent"
-                  }`}
-                >
-                  {locale === "ar" ? "التالي" : "Next"}
-                </Link>
-              </nav>
-            )}
-          </div>
-        </div>
+              </>
+            );
+            return (
+              <li key={step.key} className="flex min-w-0 flex-1 items-center gap-1 sm:gap-2">
+                {state === "done" && href ? (
+                  <Link
+                    href={href}
+                    className="flex min-w-0 items-center gap-1.5 transition-opacity hover:opacity-75 sm:gap-2"
+                  >
+                    {inner}
+                  </Link>
+                ) : (
+                  <span
+                    aria-current={state === "current" ? "step" : undefined}
+                    className="flex min-w-0 items-center gap-1.5 sm:gap-2"
+                  >
+                    {inner}
+                  </span>
+                )}
+                {index < steps.length - 1 && (
+                  <span
+                    aria-hidden="true"
+                    className={`h-px min-w-3 flex-1 sm:min-w-6 ${
+                      index + 1 < stepIndex[view] ? "bg-accent/50" : "bg-border"
+                    }`}
+                  />
+                )}
+              </li>
+            );
+          })}
+        </ol>
+
+        {body}
 
         <p className="mt-6 text-xs text-muted">{t("vatNote")}</p>
       </Container>

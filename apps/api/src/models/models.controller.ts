@@ -9,9 +9,18 @@ export class ModelsController {
 
   @Get()
   @ApiQuery({ name: "brandSlug", required: false })
-  @ApiOperation({ summary: "Machine models (optionally filtered by brand slug)" })
-  getModels(@Query("brandSlug") brandSlug?: string) {
-    return this.models.getModels(brandSlug || undefined);
+  @ApiQuery({ name: "brandId", required: false })
+  @ApiQuery({ name: "type", required: false, description: "motorcycle | scooter" })
+  @ApiOperation({ summary: "Machine models (optionally filtered by brand and vehicle type)" })
+  getModels(
+    @Query("brandSlug") brandSlug?: string,
+    @Query("brandId") brandId?: string,
+    @Query("type") type?: string,
+  ) {
+    return this.models.getModels(brandSlug || undefined, {
+      brandId: brandId || undefined,
+      type: type || undefined,
+    });
   }
 
   @Get(":brandSlug/:modelSlug")

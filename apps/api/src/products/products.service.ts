@@ -17,6 +17,8 @@ export interface ProductFilter {
   categorySlug?: string | string[];
   // new | used | spare-parts | accessories (arbitrary values yield an empty list)
   type?: string;
+  // Vehicle Finder: only products compatible with this machine model.
+  modelId?: string;
   featured?: boolean;
   priceMin?: number;
   priceMax?: number;
@@ -76,6 +78,7 @@ function buildWhere(filter: ProductFilter): Record<string, unknown> {
   if (categorySlugs.length === 1) where.partCategory = { slug: categorySlugs[0] };
   else if (categorySlugs.length > 1) where.partCategory = { slug: { in: categorySlugs } };
   if (filter.type) where.type = filter.type;
+  if (filter.modelId) where.compatibilities = { some: { modelId: filter.modelId } };
   if (filter.featured) where.isFeatured = true;
   const price: Record<string, number> = {};
   if (filter.priceMin != null) price.gte = filter.priceMin;
@@ -98,6 +101,13 @@ function matchesMock(product: Product, filter: ProductFilter): boolean {
     if (!slug || !categorySlugs.includes(slug)) return false;
   }
   if (filter.type && product.type !== filter.type) return false;
+  if (
+    filter.modelId &&
+    !mockCompatibilities.some(
+      (compat) => compat.productId === product.id && compat.modelId === filter.modelId,
+    )
+  )
+    return false;
   if (filter.featured && !product.isFeatured) return false;
   if (filter.priceMin != null && (product.retailPrice == null || product.retailPrice < filter.priceMin))
     return false;

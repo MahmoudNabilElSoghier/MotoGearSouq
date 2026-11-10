@@ -41,6 +41,7 @@ export interface ProductFilter {
   brandSlug?: string | string[];
   categorySlug?: string | string[];
   type?: string;
+  modelId?: string;
   featured?: boolean;
   priceMin?: number;
   priceMax?: number;
@@ -92,10 +93,21 @@ export const getCategoryTree = (): Promise<PartCategory[]> =>
 export const getCategoryBySlug = (slug: string): Promise<PartCategory | null> =>
   apiGetOrNull<PartCategory>(`/categories/${encode(slug)}`);
 
-export const getModels = (brandSlug?: string): Promise<MachineModel[]> =>
-  apiGet<MachineModel[]>(
-    brandSlug ? `/models?brandSlug=${encode(brandSlug)}` : "/models",
-  );
+export interface ModelFilter {
+  brandSlug?: string;
+  brandId?: string;
+  type?: string;
+}
+
+export const getModels = (filter: string | ModelFilter = {}): Promise<MachineModel[]> => {
+  const f: ModelFilter = typeof filter === "string" ? { brandSlug: filter } : filter;
+  const params = new URLSearchParams();
+  if (f.brandSlug) params.set("brandSlug", f.brandSlug);
+  if (f.brandId) params.set("brandId", f.brandId);
+  if (f.type) params.set("type", f.type);
+  const qs = params.toString();
+  return apiGet<MachineModel[]>(`/models${qs ? `?${qs}` : ""}`);
+};
 
 export const getModelBySlug = (
   brandSlug: string,
@@ -117,6 +129,7 @@ export const getProducts = (filter: ProductFilter = {}): Promise<ProductPage> =>
     params.set("categorySlug", filter.categorySlug);
   }
   if (filter.type) params.set("type", filter.type);
+  if (filter.modelId) params.set("modelId", filter.modelId);
   if (filter.featured) params.set("featured", "true");
   if (filter.priceMin != null) params.set("priceMin", String(filter.priceMin));
   if (filter.priceMax != null) params.set("priceMax", String(filter.priceMax));

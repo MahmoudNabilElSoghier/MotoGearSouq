@@ -6,7 +6,7 @@ import {
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { ArrowRight, Bike, Wrench, Shield, Tag } from "lucide-react";
+import { ArrowRight, Bike, ChevronLeft, ChevronRight, Wrench, Shield, Tag } from "lucide-react";
 import { FadeIn } from "@/components/ui/FadeIn";
 
 const getCardIcon = (sectionSlug: string, cardTitle: string) => {
@@ -75,36 +75,61 @@ export default async function Categories({
                   )}
                 </FadeIn>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {section.cards.map((card) => {
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                  {section.cards.map((card, index) => {
                     const IconComponent = getCardIcon(section.slug, card.titleEn);
+                    const photo = (card as { photo?: string | null }).photo ?? null;
+                    const title = isAr ? card.titleAr : card.titleEn;
                     return (
                       <FadeIn
                         key={card.id}
-                        delay={Math.min(
-                          section.cards.indexOf(card) * 0.05,
-                          0.3
-                        )}
+                        delay={Math.min(index * 0.05, 0.3)}
                         className="h-full"
                       >
                         <Link
                           href={card.link}
-                          className="group block h-full rounded-xl border border-border bg-card p-6 hover:border-brand-red/50 hover:bg-brand-red/5 transition-colors"
+                          className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card hover:border-brand-red transition-all duration-300"
                         >
-                          <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 rounded-xl bg-brand-red/10 flex items-center justify-center text-brand-red shrink-0 transition-transform duration-300 group-hover:scale-105">
-                              <IconComponent className="w-6 h-6" />
-                            </div>
-                            <div>
-                              <h4 className="font-bold text-fg mb-1 text-lg group-hover:text-brand-red transition-colors">
-                                {isAr ? card.titleAr : card.titleEn}
-                              </h4>
-                              {(card.descAr || card.descEn) && (
-                                <p className="text-muted text-sm leading-relaxed">
-                                  {isAr ? card.descAr : card.descEn}
-                                </p>
-                              )}
-                            </div>
+                          <div className="relative h-40 w-full overflow-hidden bg-muted">
+                            {photo ? (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img
+                                src={photo}
+                                alt={title}
+                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                              />
+                            ) : (
+                              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-red/10 via-brand-red/5 to-transparent text-brand-red transition-transform duration-500 group-hover:scale-110">
+                                <IconComponent
+                                  className="h-14 w-14"
+                                  strokeWidth={1.5}
+                                  aria-hidden="true"
+                                />
+                              </div>
+                            )}
+                          </div>
+
+                          <div
+                            className="absolute right-0 bottom-12 h-16 w-16 bg-brand-red flex items-end justify-end p-2 z-10"
+                            style={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
+                            aria-hidden="true"
+                          >
+                            <IconComponent className="h-5 w-5 text-white" />
+                          </div>
+
+                          <div className="flex items-center justify-between p-4 bg-card z-20 border-t border-border">
+                            <span className="font-bold text-fg">{title}</span>
+                            {isAr ? (
+                              <ChevronLeft
+                                className="h-5 w-5 text-muted transition-colors group-hover:text-brand-red"
+                                aria-hidden="true"
+                              />
+                            ) : (
+                              <ChevronRight
+                                className="h-5 w-5 text-muted transition-colors group-hover:text-brand-red"
+                                aria-hidden="true"
+                              />
+                            )}
                           </div>
                         </Link>
                       </FadeIn>

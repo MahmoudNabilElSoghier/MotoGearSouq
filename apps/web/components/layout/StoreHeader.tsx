@@ -3,36 +3,23 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import {
-  Menu,
-  X,
-  UserCircle,
-  LogIn,
-  LogOut,
-  ChevronDown,
-  House,
-  Tag,
-  Mail,
-} from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useCustomerAuth } from "@/lib/customer-auth-store";
+import { Menu, Home, MessageSquare, Package, User, UserCircle, LogOut, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { LocaleSwitcher } from "@/components/ui/LocaleSwitcher";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { CartIcon } from "@/components/cart/CartIcon";
+import { Sidebar } from "@/components/layout/Sidebar";
+import { useCustomerAuth } from "@/lib/customer-auth-store";
 
 export function StoreHeader() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const locale = useLocale();
-  const pathname = usePathname();
-  const tNav = useTranslations("navigation");
+  const tNav = useTranslations("nav");
   const tHeader = useTranslations("header");
-  const tLogin = useTranslations("customerAuth.login");
   const tAccount = useTranslations("customerAuth.account");
-  const tCart = useTranslations("cart");
+  const tLogin = useTranslations("customerAuth.login");
   const customer = useCustomerAuth((s) => s.customer);
 
   useEffect(() => {
@@ -45,14 +32,26 @@ export function StoreHeader() {
     window.location.href = `/${locale}`;
   };
 
-  const navItems = [
-    { label: tNav("home"), href: `/${locale}/products`, Icon: House },
-    { label: tNav("brands"), href: `/${locale}/brands`, Icon: Tag },
-    { label: tNav("contact"), href: `/${locale}#contact`, Icon: Mail },
+  const centerLinks = [
+    { href: `/${locale}`, label: tNav("home"), icon: Home },
+    { href: `/${locale}/support`, label: tNav("supportChat"), icon: MessageSquare },
+    { href: `/${locale}/track-order`, label: tNav("trackOrder"), icon: Package },
   ];
 
-  const isActive = (href: string) =>
-    !href.includes("#") && (pathname === href || pathname.startsWith(`${href}/`));
+  const renderLogo = (priority: boolean) => (
+    <Image
+      src={
+        locale === "ar"
+          ? "/brand/Logo_Icon_Name_AR_Large.png"
+          : "/brand/Logo_Icon_Name_EN_Large.png"
+      }
+      alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
+      width={150}
+      height={60}
+      className="h-10 w-auto object-contain md:h-12"
+      priority={priority}
+    />
+  );
 
   const accountControl = customer ? (
     <div className="relative">
@@ -61,7 +60,7 @@ export function StoreHeader() {
         onClick={() => setAccountOpen((v) => !v)}
         aria-expanded={accountOpen}
         aria-haspopup="menu"
-        className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold text-fg transition-colors hover:bg-card"
+        className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-semibold text-fg transition-colors hover:bg-card border border-border"
       >
         <UserCircle className="h-5 w-5 text-accent" />
         <span className="hidden max-w-[10ch] truncate sm:inline">{customer.name}</span>
@@ -76,7 +75,7 @@ export function StoreHeader() {
             aria-hidden="true"
             tabIndex={-1}
             onClick={() => setAccountOpen(false)}
-            className="fixed inset-0 z-40 cursor-default"
+            className="fixed inset-0 z-45 cursor-default"
           />
           <div
             role="menu"
@@ -103,7 +102,7 @@ export function StoreHeader() {
               type="button"
               role="menuitem"
               onClick={handleLogout}
-              className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-red-400 transition-colors hover:bg-red-500/10"
+              className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold text-red-400 transition-colors hover:bg-red-500/10 text-start"
             >
               <LogOut className="h-4 w-4" />
               {tAccount("sidebar.logout")}
@@ -113,111 +112,78 @@ export function StoreHeader() {
       )}
     </div>
   ) : (
-    <Link
-      href={`/${locale}/login`}
-      className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold text-fg transition-colors hover:bg-card"
-    >
-      <LogIn className="h-5 w-5 text-accent" />
-      <span className="hidden sm:inline">{tLogin("signinShort")}</span>
-    </Link>
+    <Button variant="primary" size="sm" asChild>
+      <Link
+        href={`/${locale}/login`}
+        aria-label={tNav("login")}
+        className="gap-1.5 px-3"
+      >
+        <User className="h-4 w-4" aria-hidden="true" />
+        <span className="hidden sm:inline">{tNav("login") || tLogin("signinShort")}</span>
+      </Link>
+    </Button>
   );
 
   return (
-    <header className="sticky top-0 z-50 bg-bg/95 backdrop-blur border-b border-border">
-      <Container size="xl" as="div" className="max-w-[1600px] w-full">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <Link href={`/${locale}`} className="flex flex-col items-start">
-            <Image
-              src={locale === "ar" ? "/brand/Logo_Icon_Name_AR_Large.png" : "/brand/Logo_Icon_Name_EN_Large.png"}
-              alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
-              width={150}
-              height={60}
-              className="h-12 w-auto object-contain"
-              priority
-            />
-          </Link>
+    <>
+      <header className="sticky top-0 z-50 border-b border-border bg-bg/80 backdrop-blur">
+        <Container size="xl" as="div">
+          <div className="relative flex h-16 items-center justify-between gap-3 md:h-20">
+            {/* Start: hamburger + logo (desktop) */}
+            <div className="flex items-center gap-2 md:gap-3">
+              <button
+                type="button"
+                onClick={() => setSidebarOpen((v) => !v)}
+                aria-label={tHeader("menuToggle")}
+                aria-expanded={sidebarOpen}
+                aria-controls="app-sidebar"
+                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-bg/60 text-fg transition-colors hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                <Menu className="h-5 w-5" aria-hidden="true" />
+              </button>
+              <Link href={`/${locale}`} className="hidden md:flex">
+                {renderLogo(true)}
+              </Link>
+            </div>
 
-          {/* Desktop Nav */}
-          <nav aria-label={tHeader("navAria")} className="hidden md:flex items-center gap-6">
-            {navItems.map((item) => {
-              const Icon = item.Icon;
-              return (
-                <Link
-                  key={item.href + item.label}
-                  href={item.href}
-                  aria-current={isActive(item.href) ? "page" : undefined}
-                  className={`relative inline-flex items-center gap-2 text-base font-semibold transition-colors after:absolute after:-bottom-1 after:-start-1 after:h-[2px] after:w-full after:origin-left rtl:after:origin-right after:bg-accent after:transition-transform after:duration-300 focus-visible:outline-none ${
-                    isActive(item.href)
-                      ? "text-accent after:scale-x-100"
-                      : "text-fg/90 hover:text-fg after:scale-x-0 hover:after:scale-x-100 focus-visible:after:scale-x-100"
-                  }`}
-                >
-                  <Icon className="w-4 h-4 flex-shrink-0" />
-                  {item.label}
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Desktop Actions */}
-          <div className="hidden md:flex items-center gap-3">
-            {accountControl}
-            <CartIcon label={tCart("label")} />
-            <LocaleSwitcher />
-            <ThemeToggle />
-          </div>
-
-          {/* Mobile Menu Toggle */}
-          <div className="md:hidden">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsOpen(!isOpen)}
-              aria-label={tHeader("menuToggle")}
-              aria-expanded={isOpen}
-              aria-controls="store-mobile-menu"
-              className="p-2"
+            {/* Center: desktop nav */}
+            <nav
+              aria-label={tHeader("navAria")}
+              className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-3 md:flex lg:gap-5"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </Button>
-          </div>
-        </div>
-      </Container>
-
-      {/* Mobile Menu */}
-      {isOpen && (
-        <div
-          id="store-mobile-menu"
-          className="md:hidden bg-card border-b border-border px-4 pt-4 pb-6 space-y-4 animate-in fade-in slide-in-from-top-2 duration-200"
-        >
-          <nav aria-label={tHeader("navAria")} className="flex flex-col space-y-3">
-            {navItems.map((item) => {
-              const Icon = item.Icon;
-              return (
+              {centerLinks.map(({ href, label, icon: Icon }) => (
                 <Link
-                  key={item.href + item.label}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  aria-current={isActive(item.href) ? "page" : undefined}
-                  className={`flex items-center gap-2 text-base font-medium transition-colors px-2 py-1 rounded-md hover:bg-bg/50 ${
-                    isActive(item.href) ? "text-accent" : "text-muted hover:text-fg"
-                  }`}
+                  key={href}
+                  href={href}
+                  className="inline-flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm font-semibold text-fg/90 transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent lg:text-base"
                 >
-                  <Icon className="w-4 h-4 flex-shrink-0" />
-                  {item.label}
+                  <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+                  {label}
                 </Link>
-              );
-            })}
-          </nav>
-          <div className="flex items-center gap-2 pt-2 border-t border-border">
-            {accountControl}
-            <CartIcon label={tCart("label")} />
-            <LocaleSwitcher />
-            <ThemeToggle />
+              ))}
+            </nav>
+
+            {/* Center: mobile logo */}
+            <Link
+              href={`/${locale}`}
+              className="absolute left-1/2 -translate-x-1/2 md:hidden"
+            >
+              {renderLogo(false)}
+            </Link>
+
+            {/* End: locale switcher (desktop) + cart + login/account */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              <span className="hidden md:flex">
+                <LocaleSwitcher />
+              </span>
+              <CartIcon />
+              {accountControl}
+            </div>
           </div>
-        </div>
-      )}
-    </header>
+        </Container>
+      </header>
+
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+    </>
   );
 }

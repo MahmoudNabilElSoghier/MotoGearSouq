@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { LocaleSwitcher } from "@/components/ui/LocaleSwitcher";
 import { CartIcon } from "@/components/cart/CartIcon";
-import { LandingSidebar } from "@/components/landing/LandingSidebar";
+import { Sidebar } from "@/components/layout/Sidebar";
 
 export function Header() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -106,7 +106,7 @@ export function Header() {
         </Container>
       </header>
 
-      <LandingSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
     </>
   );
 }

@@ -1753,6 +1753,20 @@
     "whereOrderTitle": "Where is my order?",
     "whereOrderDesc": "See where your order is and when it should arrive",
     "returnTitle": "Return or exchange",
-    "returnDesc": "Something arrived damaged, wrong or missing — or you want to send it back"
+    "returnDesc": "Something arrived damaged, wrong or missing — or you want to send it back",
+    "back": "Back",
+    "whichOrder": "Which order are you asking about?",
+    "findOrder": "Find your order",
+    "findOrderDesc": "Enter the phone number on the order and your order or tracking number — the same details you use on the order tracking page.",
+    "submitButton": "Find my order"
+  },
+  "trackOrder": {
+    "phoneLabel": "Phone number",
+    "orderLabel": "Order or tracking number",
+    "required": "Enter your phone number and your order number.",
+    "notFound": "Order not found. Check your order number and try again.",
+    "requestError": "Something went wrong. Please try again.",
+    "orderDate": "Order date",
+    "registeredPhone": "Registered phone"
   }
 }

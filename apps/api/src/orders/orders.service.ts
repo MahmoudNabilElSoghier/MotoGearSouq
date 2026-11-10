@@ -470,37 +470,17 @@ export class OrdersService {
   }
 
   async trackByNumber(orderNumber: string): Promise<DbResult<TrackOrder>> {
-    if (!process.env.DATABASE_URL) {
-      const mock = mockOrders.find((order) => order.orderNumber === orderNumber);
-      if (!mock) throw new NotFoundException(`Order "${orderNumber}" not found`);
-      return {
-        data: {
-          orderNumber: mock.orderNumber,
-          status: mock.status,
-          total: mock.total,
-          createdAt: String(mock.createdAt),
-          estimatedDelivery: this.estimatedDelivery(mock.status, String(mock.createdAt)),
-          phone: maskPhone(mock.customer?.phone ?? ""),
-          items: (mock.items ?? []).map((item) => ({
-            productId: item.productId,
-            name: item.product?.name ?? "",
-            quantity: item.quantity,
-            unitPrice: item.unitPrice,
-            lineTotal: item.lineTotal,
-          })),
-        },
-        isMock: true,
-      };
-    }
-
-    try {
-      const order = await this.prisma.get().order.findFirst({
-        where: { orderNumber, deletedAt: null },
-        include: { customer: true, items: { include: { product: true } } },
-      });
-      if (!order) throw new NotFoundException(`Order "${orderNumber}" not found`);
-      return {
-        data: {
+    // withDb: DATABASE_URL unset → mock immediately; DB set but unreachable →
+    // error caught and the mock fallback served (same pattern as getOrders).
+    const result = await withDb<TrackOrder | null>(
+      this.prisma,
+      async (db) => {
+        const order = await db.order.findFirst({
+          where: { orderNumber, deletedAt: null },
+          include: { customer: true, items: { include: { product: true } } },
+        });
+        if (!order) return null;
+        return {
           orderNumber: order.orderNumber,
           status: order.status,
           total: Number(order.total),
@@ -514,12 +494,30 @@ export class OrdersService {
             unitPrice: Number(item.unitPrice),
             lineTotal: Number(item.lineTotal),
           })),
-        },
-        isMock: false,
-      };
-    } catch (error) {
-      toDomainError(error);
-    }
+        };
+      },
+      () => {
+        const mock = mockOrders.find((order) => order.orderNumber === orderNumber);
+        if (!mock) return null;
+        return {
+          orderNumber: mock.orderNumber,
+          status: mock.status,
+          total: mock.total,
+          createdAt: String(mock.createdAt),
+          estimatedDelivery: this.estimatedDelivery(mock.status, String(mock.createdAt)),
+          phone: maskPhone(mock.customer?.phone ?? ""),
+          items: (mock.items ?? []).map((item) => ({
+            productId: item.productId,
+            name: item.product?.name ?? "",
+            quantity: item.quantity,
+            unitPrice: item.unitPrice,
+            lineTotal: item.lineTotal,
+          })),
+        };
+      },
+    );
+    if (!result.data) throw new NotFoundException(`Order "${orderNumber}" not found`);
+    return { data: result.data, isMock: result.isMock };
   }
 
   // ---------- Helpers ----------

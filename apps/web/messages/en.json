@@ -1721,5 +1721,12 @@
         "refunded": "Refunded"
       }
     }
+  },
+  "nav": {
+    "home": "Home",
+    "supportChat": "Support Chat",
+    "trackOrder": "Track Order",
+    "login": "Login",
+    "cart": "Cart"
   }
 }

@@ -1758,7 +1758,8 @@
     "whichOrder": "Which order are you asking about?",
     "findOrder": "Find your order",
     "findOrderDesc": "Enter the phone number on the order and your order or tracking number — the same details you use on the order tracking page.",
-    "submitButton": "Find my order"
+    "submitButton": "Find my order",
+    "whichOrderProblem": "Which order do you want to return or exchange?"
   },
   "trackOrder": {
     "phoneLabel": "Phone number",
@@ -1767,6 +1768,7 @@
     "notFound": "Order not found. Check your order number and try again.",
     "requestError": "Something went wrong. Please try again.",
     "orderDate": "Order date",
-    "registeredPhone": "Registered phone"
+    "registeredPhone": "Registered phone",
+    "whatsappMessage": "Order found. Please contact our support team via WhatsApp to process your return or exchange."
   }
 }

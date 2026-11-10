@@ -88,7 +88,7 @@ export default async function LocaleLayout({
     >
       <body className="font-sans antialiased bg-bg text-fg min-h-screen flex flex-col" suppressHydrationWarning>
         <ThemeProvider>
-          <NextIntlClientProvider messages={messages}>
+          <NextIntlClientProvider locale={locale} messages={messages}>
             <a
               href="#main-content"
               className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:start-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-accent-strong focus:text-white focus:rounded-lg"
@@ -96,9 +96,9 @@ export default async function LocaleLayout({
               تخطَّ إلى المحتوى الرئيسي
             </a>
             {children}
+            <MobileBottomNav />
           </NextIntlClientProvider>
         </ThemeProvider>
-        <MobileBottomNav />
         {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
         {META_PIXEL_ID && (
           <Script id="meta-pixel" strategy="afterInteractive">

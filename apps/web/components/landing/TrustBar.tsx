@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Card } from "@/components/ui/Card";
 import { Truck, Banknote, Store, Headphones } from "lucide-react";
 import { FadeIn } from "@/components/ui/FadeIn";
 
@@ -36,29 +35,28 @@ export function TrustBar() {
   ];
 
   return (
-    <section className="relative z-20 -mt-10 md:-mt-12 mb-8 py-6 sm:py-8">
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        {items.map((item, index) => {
-          const Icon = item.icon;
-          return (
-            <FadeIn key={item.id} delay={Math.min(index * 0.05, 0.3)} className="h-full">
-              <Card
-                padding="none"
-                className="h-full flex flex-col items-center justify-center text-center rounded-xl border border-border bg-card p-4 sm:p-5 md:p-6 min-h-[110px] sm:min-h-[130px] transition-colors hover:border-brand-red/50 shadow-xl"
-              >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-brand-red/10 text-brand-red flex items-center justify-center mb-2 sm:mb-3 shrink-0">
-                  <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+    <section className="relative z-20 -mt-10 md:-mt-12 mb-8 py-6 sm:py-8 px-4 sm:px-6">
+      <div className="rounded-2xl bg-card border border-border overflow-hidden max-w-4xl mx-auto shadow-sm">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-border/50">
+          {items.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <FadeIn key={item.id} delay={Math.min(index * 0.05, 0.3)} className="h-full">
+                <div className="h-full bg-card flex flex-col items-center justify-center gap-3 py-6 px-4 sm:py-8 text-center">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-brand-red/10 text-brand-red flex items-center justify-center shrink-0">
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-sm sm:text-base font-bold text-fg text-center leading-tight line-clamp-2">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-muted text-center leading-snug">
+                    {item.subtitle}
+                  </p>
                 </div>
-                <h3 className="text-xs sm:text-sm md:text-base font-bold text-fg leading-tight line-clamp-2">
-                  {item.title}
-                </h3>
-                <p className="text-[10px] sm:text-xs md:text-sm text-muted leading-snug mt-1">
-                  {item.subtitle}
-                </p>
-              </Card>
-            </FadeIn>
-          );
-        })}
+              </FadeIn>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

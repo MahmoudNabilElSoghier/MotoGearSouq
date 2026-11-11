@@ -1,21 +1,16 @@
 import Image from "next/image";
-import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { company } from "@/lib/config";
-import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { MessageCircle, ShoppingBag } from "lucide-react";
 
 export function Hero() {
   const t = useTranslations("hero");
-  const tc = useTranslations("categories");
   const locale = useLocale();
   const isAr = locale === "ar";
 
   return (
     <section
       id="hero"
-      className="relative min-h-[55vh] flex items-center overflow-hidden scroll-mt-24"
+      className="relative min-h-[35vh] sm:min-h-[45vh] flex items-center overflow-hidden scroll-mt-24"
     >
       {/* Background image */}
       <Image
@@ -35,41 +30,13 @@ export function Hero() {
 
       <Container size="xl" className="relative z-10 flex flex-col items-center justify-center py-12 md:py-16 text-center md:text-right">
         <div className="max-w-2xl md:max-w-3xl">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-8 text-white">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-8 text-white">
             {isAr ? "قطع غيار أصلية وأداء موثوق مع " : "Genuine Parts & Trusted Performance by "}
             <span className="text-brand-red">{isAr ? "السعد" : "ELSAAD"}</span>
           </h1>
-          <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-10 max-w-2xl mx-auto md:mx-0">
+          <p className="text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed mb-0 max-w-2xl mx-auto md:mx-0">
             {t("subheadline")}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 mt-10 justify-center">
-            <Button
-              variant="primary"
-              size="lg"
-              asChild
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold bg-brand-red hover:bg-red-700"
-            >
-              <Link href={`/${locale}/products`}>
-                <ShoppingBag className="w-5 h-5" />
-                {tc("cta.enterStore")}
-              </Link>
-            </Button>
-            <Button
-              variant="secondary"
-              size="lg"
-              asChild
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold bg-white/5 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 transition-colors rounded-lg"
-            >
-              <a
-                href={company.whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <MessageCircle className="w-5 h-5 text-[#25D366]" />
-                {t("ctaSecondary")}
-              </a>
-            </Button>
-          </div>
         </div>
       </Container>
     </section>

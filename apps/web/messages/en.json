@@ -537,6 +537,7 @@
       "edit": "Edit",
       "collapse": "Collapse",
       "save": "Save changes",
+      "saved": "Changes saved",
       "cardCount": "{count} cards",
       "fields": {
         "titleAr": "Title (Arabic)",
@@ -574,6 +575,12 @@
       "errorCreate": "Failed to create section",
       "deleted": "Section deleted",
       "errorDelete": "Failed to delete section",
+      "dismiss": "Dismiss",
+      "deleteSectionTitle": "Delete section",
+      "deleteSectionMessage": "Are you sure you want to delete section \"{name}\"? This action cannot be undone.",
+      "editSection": "Edit section",
+      "manageCards": "Manage cards ({count})",
+      "noCardsHint": "⚠️ No cards — add image and title",
       "admin": {
         "landing": {
           "addSection": "Add Section",

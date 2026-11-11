@@ -1280,6 +1280,7 @@
       "edit": "تعديل",
       "collapse": "طي",
       "save": "حفظ التغييرات",
+      "saved": "تم حفظ التغييرات",
       "cardCount": "{count} بطاقة",
       "fields": {
         "titleAr": "العنوان (بالعربية)",
@@ -1315,8 +1316,14 @@
       "addSection": "Add Section",
       "created": "Section created",
       "errorCreate": "Failed to create section",
-      "deleted": "Section deleted",
-      "errorDelete": "Failed to delete section",
+      "deleted": "تم حذف القسم",
+      "errorDelete": "فشل حذف القسم",
+      "dismiss": "إغلاق",
+      "deleteSectionTitle": "حذف القسم",
+      "deleteSectionMessage": "هل أنت متأكد من حذف القسم \"{name}\"؟ لا يمكن التراجع عن هذا الإجراء.",
+      "editSection": "تعديل القسم",
+      "manageCards": "إدارة البطاقات ({count})",
+      "noCardsHint": "⚠️ لا توجد بطاقات — أضف صورة وعنوان",
       "admin": {
         "landing": {
           "addSection": "إضافة قسم",

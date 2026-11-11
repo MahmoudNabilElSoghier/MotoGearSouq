@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import {
   addLandingCard,
   addLandingSection,
@@ -17,7 +18,7 @@ import {
   type LandingCardRow,
 } from "@motogearsouq/api-client";
 import { compressImage } from "@/lib/compressImage";
-import { Loader2, Trash2, Plus, Save, ChevronRight, Tag, Link as LinkIcon, Globe, Text, ArrowRight, AlertCircle, CheckCircle, Image as ImageIcon } from "lucide-react";
+import { Loader2, Trash2, Plus, Save, ChevronRight, Tag, Link as LinkIcon, Globe, Text, ArrowRight, AlertCircle, CheckCircle, Image as ImageIcon, Pencil, LayoutGrid } from "lucide-react";
 
 export default function AdminLandingPage() {
   const t = useTranslations("admin.landing");
@@ -25,6 +26,8 @@ export default function AdminLandingPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<Set<string>>(new Set());
   const [openSectionId, setOpenSectionId] = useState<string | null>(null);
+  const [openMode, setOpenMode] = useState<"section" | "cards">("section");
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
   useEffect(() => {
@@ -37,8 +40,14 @@ export default function AdminLandingPage() {
   }, []);
 
   const isOpen = (id: string) => openSectionId === id;
-  const toggleSection = (id: string) =>
-    setOpenSectionId((prev) => (prev === id ? null : id));
+  const togglePanel = (id: string, mode: "section" | "cards") => {
+    if (openSectionId === id && openMode === mode) {
+      setOpenSectionId(null);
+    } else {
+      setOpenSectionId(id);
+      setOpenMode(mode);
+    }
+  };
 
   const handleSaveSection = async (id: string) => {
     const section = sections.find((s) => s.id === id);
@@ -283,6 +292,22 @@ export default function AdminLandingPage() {
         </div>
       )}
 
+      {confirmDeleteId && (
+        <ConfirmDialog
+          title={t("deleteSectionTitle")}
+          message={t("deleteSectionMessage", {
+            name:
+              sections.find((s) => s.id === confirmDeleteId)?.titleAr ?? "",
+          })}
+          onCancel={() => setConfirmDeleteId(null)}
+          onConfirm={() => {
+            const id = confirmDeleteId;
+            setConfirmDeleteId(null);
+            void handleDeleteSection(id);
+          }}
+        />
+      )}
+
       {sections.length === 0 ? (
         <div className="rounded-xl border border-border bg-card p-8 text-center text-muted">
           {t("empty")}
@@ -294,47 +319,83 @@ export default function AdminLandingPage() {
               key={section.id}
               className="rounded-xl border border-border bg-card overflow-hidden"
             >
-              <div className="px-5 py-4 border-b border-border/50 flex items-center justify-between">
+              <div className="px-5 py-4 border-b border-border/50 flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <h2 className="font-bold text-fg">{section.titleAr}</h2>
                   <p className="text-xs text-muted">
                     {section.slug} · {t("cardCount", { count: section.cards.length })}
                   </p>
+                  {section.cards.length === 0 && (
+                    <p className="text-[11px] text-muted mt-1">
+                      {t("noCardsHint")}
+                    </p>
+                  )}
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <Button
-                    variant={isOpen(section.id) ? "secondary" : "ghost"}
-                    onClick={() => toggleSection(section.id)}
+                    variant={
+                      isOpen(section.id) && openMode === "section"
+                        ? "secondary"
+                        : "ghost"
+                    }
+                    onClick={() => togglePanel(section.id, "section")}
                     disabled={saving.has(section.id)}
+                    className="gap-1.5"
                   >
-                    {isOpen(section.id) ? t("collapse") : t("edit")}
+                    <Pencil className="w-3.5 h-3.5" />
+                    {t("editSection")}
                     <ChevronRight
                       className={`w-4 h-4 ${
-                        isOpen(section.id) ? "rotate-90" : ""
+                        isOpen(section.id) && openMode === "section"
+                          ? "rotate-90"
+                          : ""
+                      }`}
+                    />
+                  </Button>
+                  <Button
+                    variant={
+                      isOpen(section.id) && openMode === "cards"
+                        ? "secondary"
+                        : "ghost"
+                    }
+                    onClick={() => togglePanel(section.id, "cards")}
+                    disabled={saving.has(section.id)}
+                    className="gap-1.5"
+                  >
+                    <LayoutGrid className="w-3.5 h-3.5" />
+                    {t("manageCards", { count: section.cards.length })}
+                    <ChevronRight
+                      className={`w-4 h-4 ${
+                        isOpen(section.id) && openMode === "cards"
+                          ? "rotate-90"
+                          : ""
                       }`}
                     />
                   </Button>
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => handleDeleteSection(section.id)}
+                    onClick={() => setConfirmDeleteId(section.id)}
                     disabled={saving.has(section.id)}
+                    aria-label={t("deleteSectionTitle")}
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </Button>
-                  <Button
-                    variant="secondary"
-                    onClick={() => handleSaveSection(section.id)}
-                    disabled={saving.has(section.id)}
-                  >
-                    <Save className="w-3.5 h-3.5 mr-1.5" />
-                    {t("save")}
-                  </Button>
+                  {!(isOpen(section.id) && openMode === "cards") && (
+                    <Button
+                      variant="secondary"
+                      onClick={() => handleSaveSection(section.id)}
+                      disabled={saving.has(section.id)}
+                    >
+                      <Save className="w-3.5 h-3.5 mr-1.5" />
+                      {t("save")}
+                    </Button>
+                  )}
                 </div>
               </div>
 
-              {isOpen(section.id) && (
-                <div className="p-5 space-y-6">
+              {isOpen(section.id) && openMode === "section" && (
+                <div className="p-5">
                   <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <div className="space-y-2">
                       <label className="text-xs font-semibold text-muted flex items-center gap-1.5">
@@ -489,8 +550,10 @@ export default function AdminLandingPage() {
                       />
                     </div>
                   </div>
-
-                  <div className="border-t border-border/50 pt-4">
+                </div>
+              )}
+              {isOpen(section.id) && openMode === "cards" && (
+                <div className="p-5">
                     <h3 className="text-sm font-semibold text-fg mb-3">
                       {t("cards.title")}
                     </h3>
@@ -724,7 +787,6 @@ export default function AdminLandingPage() {
                         {t("cards.add")}
                       </Button>
                     </div>
-                  </div>
                 </div>
               )}
             </section>

@@ -1087,7 +1087,7 @@
         "nameArLabel": "Name (Arabic)",
         "nameEnLabel": "Name (English)",
         "keyPlaceholder": "e.g. delivery",
-        "nameArPlaceholder": "مثال: مندوب توصيل",
+        "nameArPlaceholder": "e.g. مندوب توصيل",
         "nameEnPlaceholder": "e.g. Delivery Agent",
         "add": "Add Role",
         "edit": "Edit",
@@ -1649,10 +1649,10 @@
         "sendResetLink": "Send reset link"
       },
       "errors": {
-        "requestFailed": "فشل إرسال الطلب، حاول تاني"
+        "requestFailed": "Request failed, try again"
       },
       "messages": {
-        "linkSent": "إذا كان البريد الإلكتروني موجودًا، سيتم إرسال رابط إعادة التعيين"
+        "linkSent": "If this email exists, a reset link will be sent"
       }
     },
     "resetPassword": {
@@ -1667,11 +1667,11 @@
         "resetPassword": "Reset password"
       },
       "errors": {
-        "invalidToken": "رابط إعادة التعيين غير صالح",
-        "resetFailed": "فشل إعادة تعيين كلمة المرور، حاول تاني"
+        "invalidToken": "Invalid reset link",
+        "resetFailed": "Password reset failed, try again"
       },
       "messages": {
-        "passwordUpdated": "تم تحديث كلمة المرور بنجاح"
+        "passwordUpdated": "Password updated successfully"
       }
     },
     "register": {

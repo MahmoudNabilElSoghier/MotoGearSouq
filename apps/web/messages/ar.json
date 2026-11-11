@@ -962,7 +962,7 @@
         "nameEnLabel": "الاسم بالإنجليزية",
         "keyPlaceholder": "مثال: delivery",
         "nameArPlaceholder": "مثال: مندوب توصيل",
-        "nameEnPlaceholder": "e.g. Delivery Agent",
+        "nameEnPlaceholder": "مثال: Delivery Agent",
         "add": "إضافة دور",
         "edit": "تعديل",
         "delete": "حذف",
@@ -1241,7 +1241,7 @@
         "level": "المستوى",
         "breakdownTitle": "عنصر التقييم",
         "flagged": "أوردر عالي المخاطر — راجع قبل الشحن",
-        "ipAddress": "IP",
+          "ipAddress": "عنوان IP",
         "userAgent": "بصمة الجهاز",
         "breakdown": {
           "accountAge": "عمر الحساب",

@@ -24,7 +24,7 @@ export function MerchantBanner() {
               <div className="space-y-3 max-w-2xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-brand-gold text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
                   <Store className="w-4 h-4" />
-                  {locale === "ar" ? "برنامج التجار والورش" : "B2B Merchants Program"}
+                  {t("badge")}
                 </div>
                 <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight">
                   {t("title")}

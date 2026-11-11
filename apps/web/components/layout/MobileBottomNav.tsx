@@ -10,6 +10,7 @@ export function MobileBottomNav() {
   const pathname = usePathname();
   const tNav = useTranslations("nav");
   const tSidebar = useTranslations("sidebar");
+  const tHeader = useTranslations("header");
 
   const items = [
     {
@@ -47,7 +48,7 @@ export function MobileBottomNav() {
 
   return (
     <nav
-      aria-label="Mobile Navigation"
+      aria-label={tHeader("navAria")}
       className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around border-t border-border bg-card/95 backdrop-blur px-2 py-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] md:hidden shadow-lg"
     >
       {items.map(({ href, label, icon: Icon, exact }) => {

@@ -15,7 +15,7 @@ export function Hero() {
       {/* Background image */}
       <Image
         src="/images/hero-bg.jpg"
-        alt="Hero background"
+        alt={t("bgAlt")}
         fill
         sizes="100vw"
         className="object-cover"
@@ -31,7 +31,7 @@ export function Hero() {
       <Container size="xl" className="relative z-10 flex flex-col items-center justify-center py-12 md:py-16 text-center md:text-right">
         <div className="max-w-2xl md:max-w-3xl">
           <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-8 text-white">
-            {isAr ? "قطع غيار أصلية وأداء موثوق مع " : "Genuine Parts & Trusted Performance by "}
+            {t("headlinePrefix")}
             <span className="text-brand-red">{isAr ? "السعد" : "ELSAAD"}</span>
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed mb-0 max-w-2xl mx-auto md:mx-0">

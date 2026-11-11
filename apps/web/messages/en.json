@@ -85,7 +85,8 @@
     "merchant": {
       "title": "Are you a merchant or a workshop owner?",
       "subtitle": "Get exclusive wholesale prices and priority support",
-      "cta": "Register as Merchant"
+      "cta": "Register as Merchant",
+      "badge": "B2B Merchants Program"
     }
   },
   "navigation": {
@@ -105,6 +106,8 @@
   },
   "hero": {
     "headline": "Performance, genuine parts, ELSAAD trust",
+    "headlinePrefix": "Genuine Parts & Trusted Performance by ",
+    "bgAlt": "Hero background",
     "subheadline": "Over 35 years in the motorcycle world — we offer new and used bikes, genuine spare parts, and reliable maintenance service across all our branches.",
     "ctaPrimary": "View models",
     "ctaSecondary": "Chat with us on WhatsApp"

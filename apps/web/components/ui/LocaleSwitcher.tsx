@@ -33,7 +33,7 @@ export function LocaleSwitcher() {
         className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-border bg-bg/60 px-2.5 text-xs font-semibold text-muted transition-colors hover:border-accent hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       >
         <Globe className="h-4 w-4" aria-hidden="true" />
-        {locale === "ar" ? t("arabic") : t("english")}
+        {locale === "ar" ? t("english") : t("arabic")}
       </Link>
     </nav>
   );

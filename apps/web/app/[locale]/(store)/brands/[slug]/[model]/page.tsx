@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/ui/Container";
 import { getModelBySlug, totalStock } from "@motogearsouq/api-client";
 
@@ -10,22 +11,23 @@ type PageProps = { params: Promise<{ locale: string; slug: string; model: string
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, slug, model: modelSlug } = await params;
+  const t = await getTranslations({ locale, namespace: "modelDetail" });
   const bikeModel = await getModelBySlug(slug, modelSlug);
-  if (!bikeModel) return { title: locale === "ar" ? "موديل غير موجود | MotoGearSouq" : "Model not found | MotoGearSouq" };
+  if (!bikeModel) return { title: t("metaNotFound") };
   const label = `${bikeModel.nameAr ?? bikeModel.name}${bikeModel.brand ? ` ${bikeModel.brand.nameAr ?? bikeModel.brand.name}` : ""}`;
   return {
-    title: locale === "ar" ? `${label} | قطع غيار | MotoGearSouq` : `${label} | Spare Parts | MotoGearSouq`,
-    description:
-      bikeModel.description ??
-      (locale === "ar"
-        ? `قطع غيار متوافقة مع ${label} — متاحة في فروع MotoGearSouq.`
-        : `Spare parts compatible with ${label} — available at MotoGearSouq.`),
+    title: t("metaTitle", { name: label }),
+    description: bikeModel.description ?? t("metaDescription", { name: label }),
   };
 }
 
 export default async function ModelDetailPage({ params }: PageProps) {
   const { locale, slug, model: modelSlug } = await params;
+  const t = await getTranslations({ locale, namespace: "modelDetail" });
+  const tBrand = await getTranslations({ locale, namespace: "brandDetail" });
+  const tProd = await getTranslations({ locale, namespace: "productDetail" });
   const bikeModel = await getModelBySlug(slug, modelSlug);
+  const isAr = locale === "ar";
   if (!bikeModel) notFound();
 
   const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
@@ -38,9 +40,9 @@ export default async function ModelDetailPage({ params }: PageProps) {
   return (
     <main id="main-content" className="flex-1 py-12 md:py-16">
       <Container>
-        <nav aria-label={locale === "ar" ? "مسار التنقل" : "Breadcrumb"} className="mb-6 flex flex-wrap gap-2 text-sm">
+        <nav aria-label={t("breadcrumbAria")} className="mb-6 flex flex-wrap gap-2 text-sm">
           <Link href={`/${locale}/brands`} className="text-accent hover:underline">
-            {locale === "ar" ? "الماركات" : "Brands"}
+            {t("crumbBrands")}
           </Link>
           <span className="text-muted" aria-hidden="true">
             /
@@ -64,14 +66,14 @@ export default async function ModelDetailPage({ params }: PageProps) {
             </span>
             {bikeModel.engineCc && (
               <span className="rounded-full bg-card px-4 py-1.5 text-muted">
-                <span dir="ltr">{nf.format(bikeModel.engineCc)}</span> {locale === "ar" ? "سي سي" : "CC"}
+                {tBrand("cc", { count: nf.format(bikeModel.engineCc) })}
               </span>
             )}
             {bikeModel.yearFrom && (
               <span className="rounded-full bg-card px-4 py-1.5 text-muted">
                 {bikeModel.yearTo
                   ? `${nf.format(bikeModel.yearFrom)} - ${nf.format(bikeModel.yearTo)}`
-                  : (locale === "ar" ? `من ${nf.format(bikeModel.yearFrom)}` : `From ${nf.format(bikeModel.yearFrom)}`)}
+                  : tBrand("fromYear", { year: nf.format(bikeModel.yearFrom) })}
               </span>
             )}
             {brand && (
@@ -89,27 +91,15 @@ export default async function ModelDetailPage({ params }: PageProps) {
 
         <section aria-labelledby="compatible-parts">
           <h2 id="compatible-parts" className="mb-4 border-b border-border pb-3 text-xl font-bold text-fg">
-            {locale === "ar" ? "قطع الغيار المتوافقة" : "Compatible Spare Parts"}
+            {t("compatibleTitle")}
           </h2>
           {products.length === 0 ? (
             <p className="rounded-xl border border-border bg-card px-4 py-12 text-center text-muted">
-              {locale === "ar" ? (
-                <>
-                  لا توجد قطع مسجلة لهذا الموديل بعد —{" "}
-                  <Link href={`/${locale}/#contact`} className="text-accent hover:underline">
-                    كلمنا
-                  </Link>{" "}
-                  وهنوفّرها لك.
-                </>
-              ) : (
-                <>
-                  No parts registered for this model yet —{" "}
-                  <Link href={`/${locale}/#contact`} className="text-accent hover:underline">
-                    contact us
-                  </Link>{" "}
-                  and we will source it for you.
-                </>
-              )}
+              {t("emptyBefore")}{" "}
+              <Link href={`/${locale}/#contact`} className="text-accent hover:underline">
+                {t("emptyContact")}
+              </Link>{" "}
+              {t("emptyAfter")}
             </p>
           ) : (
             <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -132,7 +122,7 @@ export default async function ModelDetailPage({ params }: PageProps) {
                               : "bg-red-500/15 text-red-400"
                           }`}
                         >
-                          {stock > 0 ? (locale === "ar" ? "متوفر" : "In stock") : (locale === "ar" ? "غير متوفر" : "Out of stock")}
+                          {stock > 0 ? (isAr ? "متوفر" : "In stock") : (isAr ? "غير متوفر" : "Out of stock")}
                         </span>
                       </div>
                       <h3 className="font-bold text-fg group-hover:text-accent">
@@ -141,10 +131,10 @@ export default async function ModelDetailPage({ params }: PageProps) {
                       <p className="mt-auto text-lg font-extrabold text-fg">
                         {product.retailPrice != null ? (
                           <span dir="ltr">
-                            {nf.format(product.retailPrice)} {locale === "ar" ? "ج.م" : "EGP"}
+                            {nf.format(product.retailPrice)} {isAr ? "ج.م" : "EGP"}
                           </span>
                         ) : (
-                          (locale === "ar" ? "عند التواصل" : "Contact for price")
+                          (isAr ? "عند التواصل" : "Contact for price")
                         )}
                       </p>
                     </Link>

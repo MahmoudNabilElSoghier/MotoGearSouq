@@ -381,15 +381,22 @@
     "metaDescription": "Motorcycle brands and their spare parts available at MotoGearSouq — SYM, Kymco, Haojue and more.",
     "heading": "Brands",
     "countLine": "Brands: {count} — choose your brand to see models and spare parts.",
-    "empty": "Brands will appear here soon."
+    "empty": "Brands will appear here soon.",
+    "viewModels": "View models →",
+    "defaultDescription": "Genuine spare parts and models available."
   },
   "brandDetail": {
     "metaNotFound": "Brand not found | MotoGearSouq",
     "metaTitle": "{name} | Brands | MotoGearSouq",
     "metaDescription": "Models and spare parts for {name} available at MotoGearSouq.",
     "backToBrands": "All brands",
-    "viewParts": "View spare parts ←",
-    "empty": "Models for this brand will appear here soon."
+    "viewParts": "View spare parts →",
+    "empty": "Models for this brand will appear here soon.",
+    "modelsCount": "{count} models",
+    "partsCount": "{count} spare parts",
+    "cc": "{count} CC",
+    "fromYear": "From {year}",
+    "compatibleParts": "{count} compatible parts"
   },
   "modelDetail": {
     "metaNotFound": "Model not found | MotoGearSouq",

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/ui/Container";
 import { getBrandBySlug } from "@motogearsouq/api-client";
 
@@ -10,21 +11,19 @@ type PageProps = { params: Promise<{ locale: string; slug: string }> };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, slug } = await params;
+  const t = await getTranslations({ locale, namespace: "brandDetail" });
   const brand = await getBrandBySlug(slug);
-  if (!brand) return { title: locale === "ar" ? "ماركة غير موجودة | MotoGearSouq" : "Brand not found | MotoGearSouq" };
+  if (!brand) return { title: t("metaNotFound") };
   const brandName = brand.nameAr ?? brand.name;
   return {
-    title: locale === "ar" ? `${brandName} | الماركات | MotoGearSouq` : `${brandName} | Brands | MotoGearSouq`,
-    description:
-      brand.description ??
-      (locale === "ar"
-        ? `موديلات وقطع غيار ${brandName} المتوفرة في MotoGearSouq.`
-        : `Models and spare parts for ${brandName} available at MotoGearSouq.`),
+    title: t("metaTitle", { name: brandName }),
+    description: brand.description ?? t("metaDescription", { name: brandName }),
   };
 }
 
 export default async function BrandDetailPage({ params }: PageProps) {
   const { locale, slug } = await params;
+  const t = await getTranslations({ locale, namespace: "brandDetail" });
   const brand = await getBrandBySlug(slug);
   if (!brand) notFound();
 
@@ -45,7 +44,7 @@ export default async function BrandDetailPage({ params }: PageProps) {
           href={`/${locale}/brands`}
           className="mb-6 inline-flex items-center gap-2 font-semibold text-accent hover:underline"
         >
-          <span aria-hidden="true">←</span> {locale === "ar" ? "كل الماركات" : "All brands"}
+          <span aria-hidden="true">←</span> {t("backToBrands")}
         </Link>
 
         <header className="mb-10 flex flex-wrap items-start gap-5">
@@ -65,13 +64,13 @@ export default async function BrandDetailPage({ params }: PageProps) {
               </p>
             )}
             <div className="mt-4 flex flex-wrap gap-4 text-sm text-muted">
-              <span><span dir="ltr">{nf.format(models.length)}</span> {locale === "ar" ? "موديل" : "models"}</span>
-              <span><span dir="ltr">{nf.format(brand._count?.products ?? 0)}</span> {locale === "ar" ? "قطعة غيار" : "spare parts"}</span>
+              <span>{t("modelsCount", { count: nf.format(models.length) })}</span>
+              <span>{t("partsCount", { count: nf.format(brand._count?.products ?? 0) })}</span>
               <Link
                 href={`/${locale}/products?brand=${brand.slug}`}
                 className="font-semibold text-accent hover:underline"
               >
-                {locale === "ar" ? "عرض قطع الغيار ←" : "View spare parts →"}
+                {t("viewParts")}
               </Link>
             </div>
           </div>
@@ -79,7 +78,7 @@ export default async function BrandDetailPage({ params }: PageProps) {
 
         {models.length === 0 ? (
           <p className="rounded-xl border border-border bg-card px-4 py-12 text-center text-muted">
-            {locale === "ar" ? "موديلات هذه الماركة هتظهر هنا قريبًا." : "Models for this brand will appear here soon."}
+            {t("empty")}
           </p>
         ) : (
           <div className="space-y-10">
@@ -106,16 +105,16 @@ export default async function BrandDetailPage({ params }: PageProps) {
                         <div className="mt-auto flex flex-wrap gap-2 text-xs">
                           {model.engineCc && (
                             <span className="rounded-full bg-bg px-2.5 py-1 text-muted">
-                              <span dir="ltr">{nf.format(model.engineCc)}</span> {locale === "ar" ? "سي سي" : "CC"}
+                              {t("cc", { count: nf.format(model.engineCc) })}
                             </span>
                           )}
                           {model.yearFrom && (
                             <span className="rounded-full bg-bg px-2.5 py-1 text-muted">
-                              {locale === "ar" ? `من ${nf.format(model.yearFrom)}` : `From ${nf.format(model.yearFrom)}`}
+                              {t("fromYear", { year: nf.format(model.yearFrom) })}
                             </span>
                           )}
                           <span className="rounded-full bg-bg px-2.5 py-1 text-muted">
-                            <span dir="ltr">{nf.format(model._count?.compatibilities ?? 0)}</span> {locale === "ar" ? "قطعة متوافقة" : "compatible parts"}
+                            {t("compatibleParts", { count: nf.format(model._count?.compatibilities ?? 0) })}
                           </span>
                         </div>
                       </Link>

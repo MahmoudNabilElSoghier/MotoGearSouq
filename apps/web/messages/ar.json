@@ -381,7 +381,9 @@
     "metaDescription": "ماركات الدراجات النارية وقطع غيارها المتوفرة في MotoGearSouq — SYM، Kymco، Haojue وغيرها.",
     "heading": "الماركات",
     "countLine": "{count} ماركة — اختار ماركتك لتشوف الموديلات وقطع غيارها.",
-    "empty": "الماركات هتظهر هنا قريبًا."
+    "empty": "الماركات هتظهر هنا قريبًا.",
+    "viewModels": "عرض الموديلات ←",
+    "defaultDescription": "قطع غيار وموديلات متوفرة للأصلية."
   },
   "brandDetail": {
     "metaNotFound": "ماركة غير موجودة | MotoGearSouq",
@@ -389,7 +391,12 @@
     "metaDescription": "موديلات وقطع غيار {name} المتوفرة في MotoGearSouq.",
     "backToBrands": "كل الماركات",
     "viewParts": "عرض قطع الغيار ←",
-    "empty": "موديلات هذه الماركة هتظهر هنا قريبًا."
+    "empty": "موديلات هذه الماركة هتظهر هنا قريبًا.",
+    "modelsCount": "{count} موديل",
+    "partsCount": "{count} قطعة غيار",
+    "cc": "{count} سي سي",
+    "fromYear": "من {year}",
+    "compatibleParts": "{count} قطعة متوافقة"
   },
   "modelDetail": {
     "metaNotFound": "موديل غير موجود | MotoGearSouq",

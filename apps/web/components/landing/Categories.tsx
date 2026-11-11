@@ -4,6 +4,7 @@ import {
   type LandingSectionRow,
 } from "@motogearsouq/api-client";
 import Link from "next/link";
+import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import {
@@ -32,20 +33,33 @@ const getCardIcon = (sectionSlug: string, cardTitle: string) => {
   return Tag;
 };
 
-type CategoryCardData = {
+// Resolves a CMS photo value into a usable src: absolute/protocol-relative
+// values pass through, storage keys are prefixed with the public API origin.
+const resolvePhoto = (rawPhoto?: string | null): string | null =>
+  rawPhoto
+    ? rawPhoto.startsWith("http") || rawPhoto.startsWith("/")
+      ? rawPhoto
+      : `${(process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000").replace(/\/api$/, "")}/${rawPhoto}`
+    : null;
+
+// Normalized card shape fed to <CategoryCard /> — mapped either from CMS
+// sections (LandingSectionRow.cards) or from the static fallback items.
+interface CategoryCardData {
   id: string;
-  href: string;
   title: string;
-  photo: string | null;
+  image?: string | null;
+  link: string;
   Icon: typeof Bike;
-};
+}
 
 function SectionHeader({ tag, title }: { tag: "h2" | "h3"; title: string }) {
   const TagEl = tag;
   return (
-    <div className="flex items-center gap-3 mb-4">
-      <span className="block h-1 w-8 shrink-0 bg-brand-red" aria-hidden="true" />
-      <TagEl className="text-xl font-bold text-fg truncate">{title}</TagEl>
+    <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col gap-1.5">
+        <TagEl className="text-xl font-bold text-fg truncate">{title}</TagEl>
+        <span className="block h-1 w-8 bg-brand-red" aria-hidden="true" />
+      </div>
       <LayoutGrid
         className="h-5 w-5 sm:h-6 sm:w-6 shrink-0 text-brand-red"
         aria-hidden="true"
@@ -63,20 +77,21 @@ function CategoryCard({
   isAr: boolean;
   index: number;
 }) {
-  const { href, title, photo, Icon } = card;
+  const { link, title, image, Icon } = card;
   return (
     <FadeIn delay={Math.min(index * 0.05, 0.3)} className="h-full">
       <Link
-        href={href}
+        href={link}
         className="group relative flex flex-col items-center gap-2"
       >
         <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-border bg-card">
-          {photo ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={photo}
+          {image ? (
+            <Image
+              src={image}
               alt={title}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              fill
+              sizes="(min-width: 1024px) 16vw, (min-width: 768px) 25vw, 33vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-red/10 via-brand-red/5 to-transparent text-brand-red transition-transform duration-500 group-hover:scale-105">
@@ -138,10 +153,10 @@ export default async function Categories({
   }
 
   const fallbackCards: CategoryCardData[] = [
-    { id: "new-motorcycles", href: `/${locale}/products`, title: t("items.new-motorcycles.title"), photo: null, Icon: Bike },
-    { id: "used-motorcycles", href: `/${locale}/products`, title: t("items.used-motorcycles.title"), photo: null, Icon: Bike },
-    { id: "spare-parts", href: `/${locale}/products`, title: t("items.spare-parts.title"), photo: null, Icon: Wrench },
-    { id: "accessories", href: `/${locale}/products`, title: t("items.accessories.title"), photo: null, Icon: Shield },
+    { id: "new-motorcycles", link: `/${locale}/products`, title: t("items.new-motorcycles.title"), image: null, Icon: Bike },
+    { id: "used-motorcycles", link: `/${locale}/products`, title: t("items.used-motorcycles.title"), image: null, Icon: Bike },
+    { id: "spare-parts", link: `/${locale}/products`, title: t("items.spare-parts.title"), image: null, Icon: Wrench },
+    { id: "accessories", link: `/${locale}/products`, title: t("items.accessories.title"), image: null, Icon: Shield },
   ];
 
   return (
@@ -179,29 +194,20 @@ export default async function Categories({
                 </FadeIn>
 
                 <div className={GRID_CLASSES}>
-                  {section.cards.map((card, index) => {
-                    const Icon = getCardIcon(section.slug, card.titleEn);
-                    const rawPhoto = card.photo;
-                    const photo = rawPhoto
-                      ? rawPhoto.startsWith("http") || rawPhoto.startsWith("/")
-                        ? rawPhoto
-                        : `${(process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000").replace(/\/api$/, "")}/${rawPhoto}`
-                      : null;
-                    return (
-                      <CategoryCard
-                        key={card.id}
-                        card={{
-                          id: card.id,
-                          href: card.link,
-                          title: isAr ? card.titleAr : card.titleEn,
-                          photo,
-                          Icon,
-                        }}
-                        isAr={isAr}
-                        index={index}
-                      />
-                    );
-                  })}
+                  {section.cards.map((card, index) => (
+                    <CategoryCard
+                      key={card.id}
+                      card={{
+                        id: card.id,
+                        title: isAr ? card.titleAr : card.titleEn,
+                        image: resolvePhoto(card.photo),
+                        link: card.link,
+                        Icon: getCardIcon(section.slug, card.titleEn),
+                      }}
+                      isAr={isAr}
+                      index={index}
+                    />
+                  ))}
                 </div>
 
                 <div className="mt-6">

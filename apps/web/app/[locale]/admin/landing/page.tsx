@@ -126,7 +126,7 @@ export default function AdminLandingPage() {
   const handleAddSection = async () => {
     setSaving((prev) => new Set(prev).add("new"));
     try {
-      await addLandingSection({
+      const res = await addLandingSection({
         slug: `section-${Date.now()}`,
         titleAr: "قسم جديد",
         titleEn: "New section",
@@ -137,12 +137,24 @@ export default function AdminLandingPage() {
         ctaLink: "#",
         order: 0,
       });
+      // The API answers 201 with { isMock: true } and a tmp- id when withDb
+      // swallowed a DB error (e.g. Prisma P2022) and served its fallback —
+      // the section was NOT persisted, so never report success for it.
+      if (res.isMock || !res.data?.id || res.data.id.startsWith("tmp-")) {
+        throw new Error(t("errorCreate"));
+      }
       const data = await getLandingSections();
       setSections(data);
       setBanner({ type: "success", message: t("created") });
     } catch (err: unknown) {
       const msg =
-        err instanceof Error ? err.message : String(err);
+        err && typeof err === "object" && "body" in err &&
+        (err as { body?: { message?: string } }).body?.message
+          ? (err as { body: { message: string } }).body.message
+          : err instanceof Error
+            ? err.message
+            : String(err);
+      console.error("Create section failed:", msg);
       setBanner({ type: "error", message: msg });
     } finally {
       setSaving((prev) => {

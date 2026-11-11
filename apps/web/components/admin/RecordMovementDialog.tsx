@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -23,14 +23,20 @@ interface RecordMovementDialogProps {
   onSuccess?: () => void;
 }
 
-const movementFormSchema = z.object({
-  type: z.enum(["in", "out", "adjustment"]),
-  quantity: z.string().regex(/^\d+$/, "Must be a whole number"),
-  newExactQty: z.string().optional(),
-  reason: z.string().optional(),
-});
+type MovementMessages = {
+  wholeNumber: string;
+};
 
-type MovementFormValues = z.infer<typeof movementFormSchema>;
+function createMovementFormSchema(m: MovementMessages) {
+  return z.object({
+    type: z.enum(["in", "out", "adjustment"]),
+    quantity: z.string().regex(/^\d+$/, m.wholeNumber),
+    newExactQty: z.string().optional(),
+    reason: z.string().optional(),
+  });
+}
+
+type MovementFormValues = z.infer<ReturnType<typeof createMovementFormSchema>>;
 
 type MovementType = "in" | "out" | "adjustment";
 
@@ -52,6 +58,11 @@ export function RecordMovementDialog({
 }: RecordMovementDialogProps) {
   const t = useTranslations("admin.inventory");
   const tCommon = useTranslations("admin.forms.common");
+  const tVal = useTranslations("admin.forms.validation");
+  const movementFormSchema = useMemo(
+    () => createMovementFormSchema({ wholeNumber: tVal("wholeNumber") }),
+    [tVal],
+  );
   const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [loading, setLoading] = useState(false);
 

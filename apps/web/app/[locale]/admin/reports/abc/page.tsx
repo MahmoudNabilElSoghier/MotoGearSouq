@@ -33,7 +33,7 @@ export default function AdminAbcAnalysisPage() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
-          <p className="mt-1 text-sm text-muted">Pareto inventory categorization based on revenue contribution</p>
+          <p className="mt-1 text-sm text-muted">{t("subtitle")}</p>
         </div>
         <div className="flex items-center gap-2 bg-card border border-border rounded-xl p-1">
           {["30d", "90d", "365d"].map((p) => (

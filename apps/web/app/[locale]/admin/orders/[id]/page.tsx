@@ -61,6 +61,7 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
   const tRiskLevels = useTranslations("admin.orders");
   const tPayment = useTranslations("admin.orders.detail.payment");
   const tDash = useTranslations("admin.dashboard");
+  const tCommon = useTranslations("admin.forms.common");
   const isAr = locale === "ar";
   const nf = new Intl.NumberFormat(isAr ? "ar-EG-u-nu-latn" : "en-US");
   const formatEgp = (val: number) => `${nf.format(val)} EGP`;
@@ -134,11 +135,11 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
     setErrorMsg(null);
     try {
       await markOrderPaid(id);
-      setSuccessMsg(isAr ? "تم تحديث حالة الدفع إلى مدفوع" : "Payment marked as paid successfully");
+      setSuccessMsg(tPayment("markPaidSuccess"));
       await fetchOrder();
       await fetchTransactions();
     } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : "Failed to mark paid");
+      setErrorMsg(err instanceof Error ? err.message : tPayment("markPaidError"));
     } finally {
       setActionLoading(false);
     }
@@ -151,13 +152,13 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
     setErrorMsg(null);
     try {
       await refundOrder(id, refundReason);
-      setSuccessMsg(isAr ? "تم استرداد المبلغ بنجاح" : "Refund processed successfully");
+      setSuccessMsg(tPayment("refundSuccess"));
       setShowRefundModal(false);
       setRefundReason("");
       await fetchOrder();
       await fetchTransactions();
     } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : "Failed to process refund");
+      setErrorMsg(err instanceof Error ? err.message : tPayment("refundError"));
     } finally {
       setActionLoading(false);
     }
@@ -182,11 +183,11 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
   if (!order) {
     return (
       <div className="p-8 text-center text-muted">
-        <p>Order not found</p>
+        <p>{t("notFound")}</p>
         <Button variant="secondary" className="mt-4" asChild>
           <Link href={`/${locale}/admin/orders`} className="inline-flex items-center gap-2">
             <ArrowLeft className="w-4 h-4" />
-            Back to orders
+            {t("backToOrders")}
           </Link>
         </Button>
       </div>
@@ -204,7 +205,7 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
           className="inline-flex items-center gap-2 font-semibold text-accent hover:underline"
         >
           {isAr ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
-          <span>{isAr ? "العودة للطلبات" : "Back to orders"}</span>
+          <span>{t("backToOrders")}</span>
         </Link>
         <Button variant="secondary" size="sm" onClick={() => window.print()} className="inline-flex items-center gap-2">
           <Printer className="w-4 h-4" />
@@ -311,7 +312,7 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
           const rows: { label: string; value: string; score: number; ok?: boolean }[] = [
             {
               label: tRisk("breakdown.accountAge"),
-              value: `${nf.format(bd.accountAge?.days ?? 0)} ${isAr ? "يوم" : "days"}`,
+              value: tRisk("daysUnit", { count: nf.format(bd.accountAge?.days ?? 0) }),
               score: bd.accountAge?.score ?? 0,
             },
             {
@@ -375,7 +376,7 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
                   <thead>
                     <tr className="border-b border-border text-muted text-xs">
                       <th className="px-4 py-2.5 font-semibold text-start">{tRisk("breakdownTitle")}</th>
-                      <th className="px-4 py-2.5 font-semibold text-start">{isAr ? "القيمة" : "Value"}</th>
+                      <th className="px-4 py-2.5 font-semibold text-start">{tRisk("value")}</th>
                       <th className="px-4 py-2.5 font-semibold text-end">{tRisk("score")}</th>
                     </tr>
                   </thead>
@@ -519,13 +520,13 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
                 <Input
                   value={refundReason}
                   onChange={(e) => setRefundReason(e.target.value)}
-                  placeholder={isAr ? "سبب الاسترداد..." : "Reason for refund..."}
+                  placeholder={`${tPayment("refundReason")}...`}
                 />
               </div>
               <div className="flex justify-end gap-3 pt-2">
                 <Button variant="secondary" onClick={() => setShowRefundModal(false)} className="inline-flex items-center gap-2">
                   <X className="w-4 h-4" />
-                  {isAr ? "إلغاء" : "Cancel"}
+                  {tCommon("cancel")}
                 </Button>
                 <Button
                   variant="primary"
@@ -553,11 +554,11 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border text-muted">
-                  <th className="px-4 py-3 font-medium text-start">Product</th>
-                  <th className="px-4 py-3 font-medium text-start">Code</th>
-                  <th className="px-4 py-3 font-medium text-start">Qty</th>
-                  <th className="px-4 py-3 font-medium text-start">Unit Price</th>
-                  <th className="px-4 py-3 font-medium text-end">Line Total</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("itemsTable.product")}</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("itemsTable.code")}</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("itemsTable.qty")}</th>
+                  <th className="px-4 py-3 font-medium text-start">{t("itemsTable.unitPrice")}</th>
+                  <th className="px-4 py-3 font-medium text-end">{t("itemsTable.lineTotal")}</th>
                 </tr>
               </thead>
               <tbody>

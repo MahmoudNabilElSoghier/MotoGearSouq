@@ -134,7 +134,7 @@ export function InventoryTable({ rows, onRefresh }: InventoryTableProps) {
                       </span>
                     ) : (
                       <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-400">
-                        {locale === "ar" ? "متوفر" : "In stock"}
+                        {t("inStock")}
                       </span>
                     )}
                   </td>

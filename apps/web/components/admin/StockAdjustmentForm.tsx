@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -23,21 +23,41 @@ interface StockAdjustmentFormProps {
 }
 
 // String fields (ProductForm pattern) — converted on submit.
-const adjustmentFormSchema = z.object({
-  productId: z.string().min(1, "Product is required"),
-  branchId: z.string().min(1, "Branch is required"),
-  quantityDelta: z
-    .string()
-    .regex(/^-?\d+$/, "Must be a whole number")
-    .refine((v) => parseInt(v, 10) !== 0, "Delta cannot be zero"),
-  notes: z.string().optional(),
-});
+type AdjustmentMessages = {
+  productRequired: string;
+  branchRequired: string;
+  wholeNumber: string;
+  deltaNonZero: string;
+};
 
-type AdjustmentFormValues = z.infer<typeof adjustmentFormSchema>;
+function createAdjustmentFormSchema(m: AdjustmentMessages) {
+  return z.object({
+    productId: z.string().min(1, m.productRequired),
+    branchId: z.string().min(1, m.branchRequired),
+    quantityDelta: z
+      .string()
+      .regex(/^-?\d+$/, m.wholeNumber)
+      .refine((v) => parseInt(v, 10) !== 0, m.deltaNonZero),
+    notes: z.string().optional(),
+  });
+}
+
+type AdjustmentFormValues = z.infer<ReturnType<typeof createAdjustmentFormSchema>>;
 
 export function StockAdjustmentForm({ onSuccess, onCancel }: StockAdjustmentFormProps) {
   const t = useTranslations("admin.stockMovements");
   const tCommon = useTranslations("admin.forms.common");
+  const tVal = useTranslations("admin.forms.validation");
+  const adjustmentFormSchema = useMemo(
+    () =>
+      createAdjustmentFormSchema({
+        productRequired: tVal("productRequired"),
+        branchRequired: tVal("branchRequired"),
+        wholeNumber: tVal("wholeNumber"),
+        deltaNonZero: tVal("deltaNonZero"),
+      }),
+    [tVal],
+  );
   const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);

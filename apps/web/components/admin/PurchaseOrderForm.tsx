@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -25,31 +25,54 @@ interface PurchaseOrderFormProps {
 }
 
 // String-tolerant fields (same approach as ProductForm) — converted on submit.
-const amountStr = z.string().regex(/^\d+(\.\d{1,2})?$/, "Invalid amount");
+type PurchaseMessages = {
+  invalidAmount: string;
+  supplierRequired: string;
+  branchRequired: string;
+  productRequired: string;
+  quantityMinOne: string;
+  itemsRequired: string;
+};
 
-const purchaseFormSchema = z.object({
-  supplierId: z.string().min(1, "Supplier is required"),
-  branchId: z.string().min(1, "Branch is required"),
-  shippingCost: amountStr,
-  customsCost: amountStr,
-  notes: z.string().optional(),
-  expectedDeliveryDate: z.string().optional(),
-  items: z
-    .array(
-      z.object({
-        productId: z.string().min(1, "Product is required"),
-        quantity: z.string().regex(/^[1-9]\d*$/, "Quantity must be at least 1"),
-        unitCost: amountStr,
-      }),
-    )
-    .min(1, "At least one item is required"),
-});
+function createPurchaseFormSchema(m: PurchaseMessages) {
+  const amountStr = z.string().regex(/^\d+(\.\d{1,2})?$/, m.invalidAmount);
+  return z.object({
+    supplierId: z.string().min(1, m.supplierRequired),
+    branchId: z.string().min(1, m.branchRequired),
+    shippingCost: amountStr,
+    customsCost: amountStr,
+    notes: z.string().optional(),
+    expectedDeliveryDate: z.string().optional(),
+    items: z
+      .array(
+        z.object({
+          productId: z.string().min(1, m.productRequired),
+          quantity: z.string().regex(/^[1-9]\d*$/, m.quantityMinOne),
+          unitCost: amountStr,
+        }),
+      )
+      .min(1, m.itemsRequired),
+  });
+}
 
-type PurchaseFormValues = z.infer<typeof purchaseFormSchema>;
+type PurchaseFormValues = z.infer<ReturnType<typeof createPurchaseFormSchema>>;
 
 export function PurchaseOrderForm({ onSuccess, onCancel }: PurchaseOrderFormProps) {
   const t = useTranslations("admin.purchases");
   const tCommon = useTranslations("admin.forms.common");
+  const tVal = useTranslations("admin.forms.validation");
+  const purchaseFormSchema = useMemo(
+    () =>
+      createPurchaseFormSchema({
+        invalidAmount: tVal("invalidAmount"),
+        supplierRequired: tVal("supplierRequired"),
+        branchRequired: tVal("branchRequired"),
+        productRequired: tVal("productRequired"),
+        quantityMinOne: tVal("quantityMinOne"),
+        itemsRequired: t("form.itemsRequired"),
+      }),
+    [t, tVal],
+  );
   const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [loading, setLoading] = useState(false);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);

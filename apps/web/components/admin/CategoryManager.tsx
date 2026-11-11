@@ -206,7 +206,7 @@ export function CategoryManager({ tree, onSuccess }: { tree: PartCategory[]; onS
           {category.slug}
         </span>
         <span className="rounded-full bg-bg px-2 py-0.5 text-xs text-muted">
-          {nf.format(category._count?.products ?? 0)} {locale === "ar" ? "منتج" : "products"}
+          {t("productCount", { count: nf.format(category._count?.products ?? 0) })}
         </span>
         <span className="ms-auto flex gap-3 text-sm">
           <button

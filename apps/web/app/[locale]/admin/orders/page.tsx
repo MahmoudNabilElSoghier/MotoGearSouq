@@ -140,7 +140,7 @@ export default function AdminOrdersPage() {
       phone: t("table.phone"),
       total: t("table.total"),
       status: t("table.status"),
-      paymentStatus: isAr ? "حالة الدفع" : "Payment Status",
+      paymentStatus: t("table.paymentStatus"),
       paymentMethod: t("table.paymentMethod"),
       createdAt: t("table.date"),
     };
@@ -163,14 +163,14 @@ export default function AdminOrdersPage() {
         <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
         <Button variant="secondary" onClick={handleExportCsv} className="inline-flex items-center gap-2">
           <Download className="w-4 h-4" />
-          <span>{isAr ? "تصدير CSV" : "Export CSV"}</span>
+          <span>{t("actions.exportCsv")}</span>
         </Button>
       </div>
 
       {/* Filters row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 rounded-xl border border-border bg-card p-4">
         <div>
-          <label className="block text-xs font-semibold text-muted mb-1">{isAr ? "بحث" : "Search"}</label>
+          <label className="block text-xs font-semibold text-muted mb-1">{t("filter.search")}</label>
           <div className="relative">
             <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
             <Input
@@ -183,7 +183,7 @@ export default function AdminOrdersPage() {
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-muted mb-1">{isAr ? "حالة الطلب" : "Order Status"}</label>
+          <label className="block text-xs font-semibold text-muted mb-1">{t("filters.orderStatus")}</label>
           <select
             value={statusFilter}
             onChange={(e) => {
@@ -202,7 +202,7 @@ export default function AdminOrdersPage() {
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-muted mb-1">{isAr ? "حالة الدفع" : "Payment Status"}</label>
+          <label className="block text-xs font-semibold text-muted mb-1">{t("table.paymentStatus")}</label>
           <select
             value={paymentStatusFilter}
             onChange={(e) => {
@@ -220,7 +220,7 @@ export default function AdminOrdersPage() {
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-muted mb-1">{isAr ? "طريقة الدفع" : "Payment Method"}</label>
+          <label className="block text-xs font-semibold text-muted mb-1">{t("table.paymentMethod")}</label>
           <select
             value={paymentMethodFilter}
             onChange={(e) => {
@@ -240,7 +240,7 @@ export default function AdminOrdersPage() {
 
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <label className="block text-xs font-semibold text-muted mb-1">{isAr ? "من" : "From"}</label>
+            <label className="block text-xs font-semibold text-muted mb-1">{t("filters.from")}</label>
             <Input
               type="date"
               value={dateFrom}
@@ -248,7 +248,7 @@ export default function AdminOrdersPage() {
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-muted mb-1">{isAr ? "إلى" : "To"}</label>
+            <label className="block text-xs font-semibold text-muted mb-1">{t("filters.to")}</label>
             <Input
               type="date"
               value={dateTo}
@@ -279,7 +279,7 @@ export default function AdminOrdersPage() {
                   <th className="px-5 py-3 font-semibold text-start">{t("riskLabel")}</th>
                   <th className="px-5 py-3 font-semibold text-start">{t("table.paymentMethod")}</th>
                   <th className="px-5 py-3 font-semibold text-start">{t("table.date")}</th>
-                  <th className="px-5 py-3 font-semibold text-end">{isAr ? "إجراء" : "Action"}</th>
+                  <th className="px-5 py-3 font-semibold text-end">{t("table.action")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/50">

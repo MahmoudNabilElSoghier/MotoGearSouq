@@ -18,42 +18,24 @@ import { Loader2, Check, X, Store, Users, ArrowLeft } from "lucide-react";
 
 type Banner = { type: "success" | "error"; message: string } | null;
 
-function relativeTime(dateStr: string, isAr: boolean): string {
-  const diffMs = Date.now() - new Date(dateStr).getTime();
-  const mins = Math.floor(diffMs / 60000);
-  if (mins < 1) return isAr ? "الآن" : "Just now";
-  if (mins < 60) {
-    if (!isAr) return `${mins} min ago`;
-    if (mins === 1) return "منذ دقيقة";
-    if (mins === 2) return "منذ دقيقتين";
-    if (mins <= 10) return `منذ ${mins} دقائق`;
-    return `منذ ${mins} دقيقة`;
-  }
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) {
-    if (!isAr) return `${hours}h ago`;
-    if (hours === 1) return "منذ ساعة";
-    if (hours === 2) return "منذ ساعتين";
-    if (hours <= 10) return `منذ ${hours} ساعات`;
-    return `منذ ${hours} ساعة`;
-  }
-  const days = Math.floor(hours / 24);
-  if (days < 30) {
-    if (!isAr) return `${days}d ago`;
-    if (days === 1) return "أمس";
-    if (days === 2) return "منذ يومين";
-    if (days <= 10) return `منذ ${days} أيام`;
-    return `منذ ${days} يوم`;
-  }
-  return new Date(dateStr).toLocaleDateString(isAr ? "ar-EG" : "en-US");
-}
-
 export default function AdminPendingCustomersPage() {
   const t = useTranslations("admin.customers");
   const tPending = useTranslations("admin.customers.pending");
   const locale = useLocale();
   const isAr = locale === "ar";
   const nf = new Intl.NumberFormat(isAr ? "ar-EG-u-nu-latn" : "en-US");
+
+  const relativeTime = (dateStr: string): string => {
+    const diffMs = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diffMs / 60000);
+    if (mins < 1) return tPending("justNow");
+    if (mins < 60) return tPending("minutesAgo", { count: mins });
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return tPending("hoursAgo", { count: hours });
+    const days = Math.floor(hours / 24);
+    if (days < 30) return tPending("daysAgo", { count: days });
+    return new Date(dateStr).toLocaleDateString(isAr ? "ar-EG" : "en-US");
+  };
 
   const [customerPage, setCustomerPage] = useState<AdminCustomerPage | null>(null);
   const [loading, setLoading] = useState(true);
@@ -185,7 +167,7 @@ export default function AdminPendingCustomersPage() {
                 </div>
                 <div className="flex items-center justify-between gap-3">
                   <dt className="text-muted">{tPending("card.appliedAt")}</dt>
-                  <dd className="text-muted text-xs">{relativeTime(c.createdAt, isAr)}</dd>
+                  <dd className="text-muted text-xs">{relativeTime(c.createdAt)}</dd>
                 </div>
               </dl>
 

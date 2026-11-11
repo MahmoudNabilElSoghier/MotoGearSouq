@@ -606,7 +606,9 @@
         "total": "Total",
         "status": "Status",
         "paymentMethod": "Payment Method",
-        "date": "Date"
+        "date": "Date",
+        "paymentStatus": "Payment Status",
+        "action": "Action"
       },
       "filter": {
         "all": "All Statuses",
@@ -647,7 +649,9 @@
             "amountVsLimit": "Amount / Limit",
             "sameIpToday": "Orders from same IP today",
             "sameDeviceToday": "Orders from same device today"
-          }
+          },
+          "daysUnit": "{count} days",
+          "value": "Value"
         },
         "statusActions": {
           "label": "Change Status",
@@ -667,7 +671,20 @@
           "refundConfirm": "Refund this payment? This action cannot be undone.",
           "refundReason": "Refund reason",
           "transactions": "Transactions",
-          "noTransactions": "No transactions yet"
+          "noTransactions": "No transactions yet",
+          "markPaidSuccess": "Payment marked as paid successfully",
+          "markPaidError": "Failed to mark paid",
+          "refundSuccess": "Refund processed successfully",
+          "refundError": "Failed to process refund"
+        },
+        "notFound": "Order not found",
+        "backToOrders": "Back to orders",
+        "itemsTable": {
+          "product": "Product",
+          "code": "Code",
+          "qty": "Qty",
+          "unitPrice": "Unit Price",
+          "lineTotal": "Line Total"
         }
       },
       "paymentMethods": {
@@ -690,10 +707,14 @@
         "searchPlaceholder": "Order number or phone",
         "all": "All Statuses",
         "allPayments": "All Payment Statuses",
-        "allMethods": "All Payment Methods"
+        "allMethods": "All Payment Methods",
+        "orderStatus": "Order Status",
+        "from": "From",
+        "to": "To"
       },
       "actions": {
-        "view": "View"
+        "view": "View",
+        "exportCsv": "Export CSV"
       }
     },
     "reports": {
@@ -764,7 +785,8 @@
         "name": "Product Name",
         "revenue": "Revenue",
         "unitsSold": "Units Sold",
-        "cumulative": "Cumulative %"
+        "cumulative": "Cumulative %",
+        "subtitle": "Pareto inventory categorization based on revenue contribution"
       },
       "deadStock": {
         "title": "Dead Stock",
@@ -847,6 +869,19 @@
         "save": "Save",
         "edit": "Edit",
         "delete": "Delete"
+      },
+      "validation": {
+        "invalidAmount": "Invalid amount",
+        "supplierRequired": "Supplier is required",
+        "branchRequired": "Branch is required",
+        "productRequired": "Product is required",
+        "quantityMinOne": "Quantity must be at least 1",
+        "wholeNumber": "Must be a whole number",
+        "deltaNonZero": "Delta cannot be zero",
+        "codeRequired": "Code is required",
+        "nameRequired": "Name is required",
+        "countryRequired": "Country is required",
+        "wholeNumberNonNegative": "Must be a whole number, 0 or more"
       }
     },
     "dashboard": {
@@ -868,7 +903,9 @@
       "statusConfirmed": "Confirmed",
       "statusShipped": "Shipped",
       "statusDelivered": "Delivered",
-      "statusCancelled": "Cancelled"
+      "statusCancelled": "Cancelled",
+      "loadError": "Failed to load dashboard data. Please try again.",
+      "reload": "Reload Page"
     },
     "products": {
       "metaNew": "Add Product | MotoGearSouq",
@@ -979,7 +1016,8 @@
         "saving": "Saving...",
         "saveError": "An error occurred while saving the category",
         "validationFailed": "Validation failed — {details}"
-      }
+      },
+      "productCount": "{count} products"
     },
     "branches": {
       "title": "Branches",
@@ -1028,7 +1066,8 @@
         "createdOk": "Branch added successfully",
         "updatedOk": "Branch updated successfully",
         "saveError": "An error occurred while saving the branch",
-        "validationFailed": "Validation failed — {details}"
+        "validationFailed": "Validation failed — {details}",
+        "nameEnPh": "e.g. Maadi Branch"
       }
     },
     "employees": {
@@ -1071,7 +1110,8 @@
         "createdOk": "Employee added successfully",
         "updatedOk": "Employee updated successfully",
         "saveError": "An error occurred while saving the employee",
-        "validationFailed": "Validation failed — {details}"
+        "validationFailed": "Validation failed — {details}",
+        "nameEnPh": "e.g. Ahmed Mohamed"
       },
       "formRoles": {
         "cashier": "Cashier",
@@ -1155,7 +1195,8 @@
       "form": {
         "validationFailed": "Validation failed — {details}",
         "saveError": "Failed to save"
-      }
+      },
+      "inStock": "In stock"
     },
     "payments": {
       "title": "Payments",
@@ -1308,7 +1349,11 @@
           "taxNumber": "Tax Number",
           "commercialRegister": "Commercial Register",
           "appliedAt": "Applied On"
-        }
+        },
+        "justNow": "Just now",
+        "minutesAgo": "{count, plural, other {# min ago}}",
+        "hoursAgo": "{count, plural, other {#h ago}}",
+        "daysAgo": "{count, plural, other {#d ago}}"
       }
     },
     "common": {
@@ -1359,7 +1404,8 @@
         "saving": "Saving...",
         "save": "Save",
         "validationFailed": "Validation failed — {details}",
-        "saveError": "Failed to save supplier"
+        "saveError": "Failed to save supplier",
+        "countryPh": "e.g. Taiwan"
       }
     },
     "purchases": {

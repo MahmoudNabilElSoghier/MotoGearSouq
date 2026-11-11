@@ -12,6 +12,7 @@ import { Loader2, Pencil, Trash2 } from "lucide-react";
 export default function AdminBrandsPage() {
   const t = useTranslations("admin.brands");
   const tCommon = useTranslations("admin.forms.common");
+  const tGlobal = useTranslations("common");
   const locale = useLocale();
   const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
 
@@ -53,7 +54,7 @@ export default function AdminBrandsPage() {
       <div>
         <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>
         <p className="mt-1 text-sm text-muted">
-          {loading ? (locale === "ar" ? "جاري التحميل..." : "Loading...") : t("countLine", { count: nf.format(brands.length) })}
+          {loading ? tGlobal("loading") : t("countLine", { count: nf.format(brands.length) })}
         </p>
       </div>
 

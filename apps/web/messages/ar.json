@@ -638,7 +638,8 @@
         "name": "اسم المنتج",
         "revenue": "الإيرادات",
         "unitsSold": "القطع المباعة",
-        "cumulative": "النسبة التراكمية %"
+        "cumulative": "النسبة التراكمية %",
+        "subtitle": "تصنيف باريتو للمخزون حسب مساهمة الإيرادات"
       },
       "deadStock": {
         "title": "تحليل البضاعة الراكدة",
@@ -721,6 +722,19 @@
         "save": "حفظ",
         "edit": "تعديل",
         "delete": "حذف"
+      },
+      "validation": {
+        "invalidAmount": "المبلغ غير صالح",
+        "supplierRequired": "المورد مطلوب",
+        "branchRequired": "الفرع مطلوب",
+        "productRequired": "المنتج مطلوب",
+        "quantityMinOne": "الكمية يجب أن تكون 1 على الأقل",
+        "wholeNumber": "يجب أن يكون رقمًا صحيحًا",
+        "deltaNonZero": "لا يمكن أن يكون التغيير صفرًا",
+        "codeRequired": "الكود مطلوب",
+        "nameRequired": "الاسم مطلوب",
+        "countryRequired": "الدولة مطلوبة",
+        "wholeNumberNonNegative": "يجب أن يكون رقمًا صحيحًا (0 أو أكثر)"
       }
     },
     "dashboard": {
@@ -742,7 +756,9 @@
       "statusConfirmed": "مؤكد",
       "statusShipped": "تم الشحن",
       "statusDelivered": "تم التوصيل",
-      "statusCancelled": "ملغي"
+      "statusCancelled": "ملغي",
+      "loadError": "حدث خطأ أثناء تحميل البيانات، يرجى المحاولة مرة أخرى.",
+      "reload": "إعادة تحميل"
     },
     "products": {
       "metaNew": "إضافة منتج | MotoGearSouq",
@@ -853,7 +869,8 @@
         "saving": "جاري الحفظ...",
         "saveError": "حدث خطأ أثناء حفظ التصنيف",
         "validationFailed": "فشل التحقق — {details}"
-      }
+      },
+      "productCount": "{count} منتج"
     },
     "branches": {
       "title": "الفروع",
@@ -902,7 +919,8 @@
         "createdOk": "تم إضافة الفرع بنجاح",
         "updatedOk": "تم تحديث الفرع بنجاح",
         "saveError": "حدث خطأ أثناء حفظ الفرع",
-        "validationFailed": "فشل التحقق — {details}"
+        "validationFailed": "فشل التحقق — {details}",
+        "nameEnPh": "مثال: Maadi Branch"
       }
     },
     "employees": {
@@ -945,7 +963,8 @@
         "createdOk": "تم إضافة الموظف بنجاح",
         "updatedOk": "تم تحديث الموظف بنجاح",
         "saveError": "حدث خطأ أثناء حفظ الموظف",
-        "validationFailed": "فشل التحقق — {details}"
+        "validationFailed": "فشل التحقق — {details}",
+        "nameEnPh": "مثال: Ahmed Mohamed"
       },
       "formRoles": {
         "cashier": "كاشير (Cashier)",
@@ -1029,7 +1048,8 @@
       "form": {
         "validationFailed": "فشل التحقق — {details}",
         "saveError": "فشل الحفظ"
-      }
+      },
+      "inStock": "متوفر"
     },
     "payments": {
       "title": "المدفوعات",
@@ -1129,7 +1149,9 @@
         "total": "الإجمالي",
         "status": "الحالة",
         "paymentMethod": "طريقة الدفع",
-        "date": "التاريخ"
+        "date": "التاريخ",
+        "paymentStatus": "حالة الدفع",
+        "action": "إجراء"
       },
       "filter": {
         "all": "كل الحالات",
@@ -1170,7 +1192,9 @@
             "amountVsLimit": "المبلغ / الحد",
             "sameIpToday": "طلبات من نفس IP اليوم",
             "sameDeviceToday": "طلبات من نفس الجهاز اليوم"
-          }
+          },
+          "daysUnit": "{count} يوم",
+          "value": "القيمة"
         },
         "statusActions": {
           "label": "تغيير الحالة",
@@ -1190,17 +1214,34 @@
           "refundConfirm": "هل تريد استرداد هذا المبلغ؟ لا يمكن التراجع عن هذا الإجراء.",
           "refundReason": "سبب الاسترداد",
           "transactions": "المعاملات",
-          "noTransactions": "لا توجد معاملات بعد"
+          "noTransactions": "لا توجد معاملات بعد",
+          "markPaidSuccess": "تم تحديث حالة الدفع إلى مدفوع",
+          "markPaidError": "فشل تعليم الدفعة كمدفوعة",
+          "refundSuccess": "تم استرداد المبلغ بنجاح",
+          "refundError": "فشل استرداد المبلغ"
+        },
+        "notFound": "الطلب غير موجود",
+        "backToOrders": "العودة للطلبات",
+        "itemsTable": {
+          "product": "المنتج",
+          "code": "الكود",
+          "qty": "الكمية",
+          "unitPrice": "سعر الوحدة",
+          "lineTotal": "الإجمالي"
         }
       },
       "filters": {
         "searchPlaceholder": "بحث برقم الطلب أو الهاتف",
         "all": "كل الحالات",
         "allPayments": "كل حالات الدفع",
-        "allMethods": "كل طرق الدفع"
+        "allMethods": "كل طرق الدفع",
+        "orderStatus": "حالة الطلب",
+        "from": "من",
+        "to": "إلى"
       },
       "actions": {
-        "view": "عرض"
+        "view": "عرض",
+        "exportCsv": "تصدير CSV"
       }
     },
     "table": {
@@ -1241,7 +1282,7 @@
         "level": "المستوى",
         "breakdownTitle": "عنصر التقييم",
         "flagged": "أوردر عالي المخاطر — راجع قبل الشحن",
-          "ipAddress": "عنوان IP",
+        "ipAddress": "عنوان IP",
         "userAgent": "بصمة الجهاز",
         "breakdown": {
           "accountAge": "عمر الحساب",
@@ -1418,7 +1459,11 @@
           "taxNumber": "الرقم الضريبي",
           "commercialRegister": "السجل التجاري",
           "appliedAt": "تاريخ التقديم"
-        }
+        },
+        "justNow": "الآن",
+        "minutesAgo": "{count, plural, one {منذ دقيقة} two {منذ دقيقتين} few {منذ # دقائق} many {منذ # دقيقة} other {منذ # دقيقة}}",
+        "hoursAgo": "{count, plural, one {منذ ساعة} two {منذ ساعتين} few {منذ # ساعات} many {منذ # ساعة} other {منذ # ساعة}}",
+        "daysAgo": "{count, plural, one {أمس} two {منذ يومين} few {منذ # أيام} many {منذ # يوم} other {منذ # يوم}}"
       }
     },
     "common": {
@@ -1469,7 +1514,8 @@
         "saving": "جارٍ الحفظ...",
         "save": "حفظ",
         "validationFailed": "فشل التحقق — {details}",
-        "saveError": "فشل حفظ المورد"
+        "saveError": "فشل حفظ المورد",
+        "countryPh": "مثال: تايوان"
       }
     },
     "purchases": {

@@ -68,7 +68,7 @@ export default function AdminHomePage() {
       .catch((err) => {
         if (!isMounted) return;
         console.error("Dashboard data fetch failed:", err);
-        setError(isAr ? "حدث خطأ أثناء تحميل البيانات، يرجى المحاولة مرة أخرى." : "Failed to load dashboard data. Please try again.");
+        setError(t("loadError"));
       })
       .finally(() => {
         if (isMounted) setLoading(false);
@@ -77,7 +77,7 @@ export default function AdminHomePage() {
     return () => {
       isMounted = false;
     };
-  }, [isAr]);
+  }, [isAr, t]);
 
   if (loading) {
     return (
@@ -93,7 +93,7 @@ export default function AdminHomePage() {
         <AlertTriangle className="w-12 h-12 text-red-500" />
         <p className="text-lg font-bold text-red-500">{error}</p>
         <Button onClick={() => window.location.reload()}>
-          {isAr ? "إعادة تحميل" : "Reload Page"}
+          {t("reload")}
         </Button>
       </div>
     );

@@ -155,7 +155,7 @@ export function BranchForm({ mode = "create", initialData, onSuccess, onCancel }
           <Input label={t("form.code")} {...register("code")} error={errors.code?.message} placeholder="BR-CAI-02" disabled={mode === "edit"} />
           <Input label={t("form.slug")} {...register("slug")} error={errors.slug?.message} placeholder="cairo-maadi" disabled={mode === "edit"} />
           <Input label={t("form.nameAr")} {...register("nameAr")} error={errors.nameAr?.message} placeholder={t("form.phNameAr")} />
-          <Input label={t("form.nameEn")} {...register("nameEn")} error={errors.nameEn?.message} placeholder="Maadi Branch" />
+          <Input label={t("form.nameEn")} {...register("nameEn")} error={errors.nameEn?.message} placeholder={t("form.nameEnPh")} />
 
           <div>
             <label className="block text-sm font-medium text-fg mb-1">{t("form.type")}</label>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -22,22 +22,42 @@ interface SupplierFormProps {
 // Form-level schema: mirrors the API createSupplierSchema but keeps
 // leadTimeDays as a string (same approach as ProductForm — avoids the
 // z.coerce "" → 0 pitfall; converted on submit).
-const supplierFormSchema = z.object({
-  code: z.string().min(1, "Code is required"),
-  name: z.string().min(1, "Name is required"),
-  nameAr: z.string().optional(),
-  nameEn: z.string().optional(),
-  phone: z.string().optional(),
-  email: z.string().email().optional().or(z.literal("")),
-  country: z.string().min(1, "Country is required"),
-  leadTimeDays: z.string().regex(/^\d+$/, "Must be a whole number ≥ 0"),
-});
+type SupplierMessages = {
+  codeRequired: string;
+  nameRequired: string;
+  countryRequired: string;
+  wholeNumberNonNegative: string;
+};
 
-type SupplierFormValues = z.infer<typeof supplierFormSchema>;
+function createSupplierFormSchema(m: SupplierMessages) {
+  return z.object({
+    code: z.string().min(1, m.codeRequired),
+    name: z.string().min(1, m.nameRequired),
+    nameAr: z.string().optional(),
+    nameEn: z.string().optional(),
+    phone: z.string().optional(),
+    email: z.string().email().optional().or(z.literal("")),
+    country: z.string().min(1, m.countryRequired),
+    leadTimeDays: z.string().regex(/^\d+$/, m.wholeNumberNonNegative),
+  });
+}
+
+type SupplierFormValues = z.infer<ReturnType<typeof createSupplierFormSchema>>;
 
 export function SupplierForm({ mode = "create", initialData, onSuccess, onCancel }: SupplierFormProps) {
   const t = useTranslations("admin.suppliers");
   const tCommon = useTranslations("admin.forms.common");
+  const tVal = useTranslations("admin.forms.validation");
+  const supplierFormSchema = useMemo(
+    () =>
+      createSupplierFormSchema({
+        codeRequired: tVal("codeRequired"),
+        nameRequired: tVal("nameRequired"),
+        countryRequired: tVal("countryRequired"),
+        wholeNumberNonNegative: tVal("wholeNumberNonNegative"),
+      }),
+    [tVal],
+  );
   const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -142,7 +162,7 @@ export function SupplierForm({ mode = "create", initialData, onSuccess, onCancel
             placeholder="sales@supplier.com"
             dir="ltr"
           />
-          <Input label={t("form.country")} {...register("country")} error={errors.country?.message} placeholder="Taiwan" />
+          <Input label={t("form.country")} {...register("country")} error={errors.country?.message} placeholder={t("form.countryPh")} />
           <Input
             label={t("form.leadTimeDays")}
             {...register("leadTimeDays")}

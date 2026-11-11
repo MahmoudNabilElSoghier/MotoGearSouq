@@ -158,7 +158,7 @@ export function EmployeeForm({ mode = "create", initialData, onSuccess, onCancel
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input label={t("form.empNo")} {...register("employeeNumber")} error={errors.employeeNumber?.message} placeholder="EMP-001" disabled={mode === "edit"} />
           <Input label={t("form.nameAr")} {...register("nameAr")} error={errors.nameAr?.message} placeholder={t("form.phNameAr")} />
-          <Input label={t("form.nameEn")} {...register("nameEn")} error={errors.nameEn?.message} placeholder="Ahmed Mohamed" />
+          <Input label={t("form.nameEn")} {...register("nameEn")} error={errors.nameEn?.message} placeholder={t("form.nameEnPh")} />
           <Input label={t("form.nationalId")} {...register("nationalId")} error={errors.nationalId?.message} placeholder="29501010101010" />
           <Input label={t("form.phone")} {...register("phone")} error={errors.phone?.message} placeholder="01001234567" />
           <Input label={t("form.email")} {...register("email")} error={errors.email?.message} placeholder="ahmed@motogearsouq.com" />

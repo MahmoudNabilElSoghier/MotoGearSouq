@@ -22,9 +22,9 @@ export const landingSectionSchema = z.object({
   titleEn: z.string().min(1, "العنوان بالإنجليزية مطلوب"),
   subtitleAr: z.string().optional().nullable(),
   subtitleEn: z.string().optional().nullable(),
-  ctaLabelAr: z.string().min(1, "نص زر الإجراء بالعربية مطلوب"),
-  ctaLabelEn: z.string().min(1, "نص زر الإجراء بالإنجليزية مطلوب"),
-  ctaLink: z.string().min(1, "رابط زر الإجراء مطلوب"),
+  ctaLabelAr: z.string().optional().nullable(),
+  ctaLabelEn: z.string().optional().nullable(),
+  ctaLink: z.string().optional().nullable(),
   order: orderField,
 });
 

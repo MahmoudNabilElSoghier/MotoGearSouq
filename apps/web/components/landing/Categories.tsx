@@ -210,18 +210,25 @@ export default async function Categories({
                   ))}
                 </div>
 
-                <div className="mt-6">
-                  <Button
-                    variant="primary"
-                    asChild
-                    className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-brand-red hover:bg-red-700"
-                  >
-                    <Link href={section.ctaLink}>
-                      <ArrowRight className="w-4 h-4" />
-                      {isAr ? section.ctaLabelAr : section.ctaLabelEn}
-                    </Link>
-                  </Button>
-                </div>
+                {(() => {
+                  const ctaLabel = isAr ? section.ctaLabelAr : section.ctaLabelEn;
+                  const ctaLink = section.ctaLink;
+                  if (!ctaLabel || !ctaLink) return null;
+                  return (
+                    <div className="mt-6">
+                      <Button
+                        variant="primary"
+                        asChild
+                        className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-brand-red hover:bg-red-700"
+                      >
+                        <Link href={ctaLink}>
+                          <ArrowRight className="w-4 h-4" />
+                          {ctaLabel}
+                        </Link>
+                      </Button>
+                    </div>
+                  );
+                })()}
               </div>
             ))}
           </div>

@@ -13,9 +13,9 @@ interface SectionWithCards {
   titleEn: string;
   subtitleAr: string | null;
   subtitleEn: string | null;
-  ctaLabelAr: string;
-  ctaLabelEn: string;
-  ctaLink: string;
+  ctaLabelAr: string | null;
+  ctaLabelEn: string | null;
+  ctaLink: string | null;
   order: number;
   createdAt: Date;
   updatedAt: Date;
@@ -61,9 +61,9 @@ export class LandingService {
       titleEn: string;
       subtitleAr?: string | null;
       subtitleEn?: string | null;
-      ctaLabelAr: string;
-      ctaLabelEn: string;
-      ctaLink: string;
+      ctaLabelAr?: string | null;
+      ctaLabelEn?: string | null;
+      ctaLink?: string | null;
       order?: string | number;
     },
   ): Promise<DbResult<LandingSection>> {
@@ -81,9 +81,9 @@ export class LandingService {
             titleEn: input.titleEn,
             subtitleAr: input.subtitleAr ?? null,
             subtitleEn: input.subtitleEn ?? null,
-            ctaLabelAr: input.ctaLabelAr,
-            ctaLabelEn: input.ctaLabelEn,
-            ctaLink: input.ctaLink,
+            ctaLabelAr: input.ctaLabelAr ?? null,
+            ctaLabelEn: input.ctaLabelEn ?? null,
+            ctaLink: input.ctaLink ?? null,
             order: input.order != null ? Number(input.order) : 0,
           },
         });
@@ -94,9 +94,9 @@ export class LandingService {
           titleEn: created.titleEn,
           subtitleAr: created.subtitleAr ?? null,
           subtitleEn: created.subtitleEn ?? null,
-          ctaLabelAr: created.ctaLabelAr,
-          ctaLabelEn: created.ctaLabelEn,
-          ctaLink: created.ctaLink,
+          ctaLabelAr: created.ctaLabelAr ?? null,
+          ctaLabelEn: created.ctaLabelEn ?? null,
+          ctaLink: created.ctaLink ?? null,
           order: created.order,
           createdAt: created.createdAt.toISOString(),
           updatedAt: created.updatedAt.toISOString(),
@@ -109,9 +109,9 @@ export class LandingService {
         titleEn: input.titleEn,
         subtitleAr: input.subtitleAr ?? null,
         subtitleEn: input.subtitleEn ?? null,
-        ctaLabelAr: input.ctaLabelAr,
-        ctaLabelEn: input.ctaLabelEn,
-        ctaLink: input.ctaLink,
+        ctaLabelAr: input.ctaLabelAr ?? null,
+        ctaLabelEn: input.ctaLabelEn ?? null,
+        ctaLink: input.ctaLink ?? null,
         order: input.order != null ? Number(input.order) : 0,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -127,9 +127,9 @@ export class LandingService {
       titleEn?: string;
       subtitleAr?: string | null;
       subtitleEn?: string | null;
-      ctaLabelAr?: string;
-      ctaLabelEn?: string;
-      ctaLink?: string;
+      ctaLabelAr?: string | null;
+      ctaLabelEn?: string | null;
+      ctaLink?: string | null;
       order?: string | number;
     },
   ): Promise<DbResult<LandingSection | null>> {
@@ -152,9 +152,16 @@ export class LandingService {
               input.subtitleEn !== undefined
                 ? input.subtitleEn
                 : existing.subtitleEn,
-            ctaLabelAr: input.ctaLabelAr ?? existing.ctaLabelAr,
-            ctaLabelEn: input.ctaLabelEn ?? existing.ctaLabelEn,
-            ctaLink: input.ctaLink ?? existing.ctaLink,
+            ctaLabelAr:
+              input.ctaLabelAr !== undefined
+                ? input.ctaLabelAr
+                : existing.ctaLabelAr,
+            ctaLabelEn:
+              input.ctaLabelEn !== undefined
+                ? input.ctaLabelEn
+                : existing.ctaLabelEn,
+            ctaLink:
+              input.ctaLink !== undefined ? input.ctaLink : existing.ctaLink,
             order: input.order != null ? Number(input.order) : existing.order,
           },
         });
@@ -170,9 +177,9 @@ export class LandingService {
           titleEn: withCards.titleEn,
           subtitleAr: withCards.subtitleAr ?? null,
           subtitleEn: withCards.subtitleEn ?? null,
-          ctaLabelAr: withCards.ctaLabelAr,
-          ctaLabelEn: withCards.ctaLabelEn,
-          ctaLink: withCards.ctaLink,
+          ctaLabelAr: withCards.ctaLabelAr ?? null,
+          ctaLabelEn: withCards.ctaLabelEn ?? null,
+          ctaLink: withCards.ctaLink ?? null,
           order: withCards.order,
           createdAt: withCards.createdAt.toISOString(),
           updatedAt: withCards.updatedAt.toISOString(),
@@ -310,9 +317,9 @@ function mapSection(s: SectionWithCards): LandingSection {
     titleEn: s.titleEn,
     subtitleAr: s.subtitleAr ?? null,
     subtitleEn: s.subtitleEn ?? null,
-    ctaLabelAr: s.ctaLabelAr,
-    ctaLabelEn: s.ctaLabelEn,
-    ctaLink: s.ctaLink,
+    ctaLabelAr: s.ctaLabelAr ?? null,
+    ctaLabelEn: s.ctaLabelEn ?? null,
+    ctaLink: s.ctaLink ?? null,
     order: s.order,
     createdAt: s.createdAt.toISOString(),
     updatedAt: s.updatedAt.toISOString(),

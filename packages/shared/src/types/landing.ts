@@ -24,9 +24,9 @@ export interface LandingSection {
   titleEn: string;
   subtitleAr?: string | null;
   subtitleEn?: string | null;
-  ctaLabelAr: string;
-  ctaLabelEn: string;
-  ctaLink: string;
+  ctaLabelAr?: string | null;
+  ctaLabelEn?: string | null;
+  ctaLink?: string | null;
   order: number;
   createdAt: Dateish;
   updatedAt: Dateish;
@@ -39,8 +39,8 @@ export interface LandingSectionInput {
   titleEn: string;
   subtitleAr?: string | null;
   subtitleEn?: string | null;
-  ctaLabelAr: string;
-  ctaLabelEn: string;
-  ctaLink: string;
+  ctaLabelAr?: string | null;
+  ctaLabelEn?: string | null;
+  ctaLink?: string | null;
   order?: string | number;
 }

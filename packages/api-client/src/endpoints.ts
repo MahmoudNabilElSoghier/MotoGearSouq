@@ -331,9 +331,9 @@ export interface LandingSectionRow {
   titleEn: string;
   subtitleAr: string | null;
   subtitleEn: string | null;
-  ctaLabelAr: string;
-  ctaLabelEn: string;
-  ctaLink: string;
+  ctaLabelAr: string | null;
+  ctaLabelEn: string | null;
+  ctaLink: string | null;
   order: number;
   createdAt: string;
   updatedAt: string;
@@ -363,9 +363,9 @@ export interface UpdateLandingSectionInput {
   titleEn?: string;
   subtitleAr?: string | null;
   subtitleEn?: string | null;
-  ctaLabelAr?: string;
-  ctaLabelEn?: string;
-  ctaLink?: string;
+  ctaLabelAr?: string | null;
+  ctaLabelEn?: string | null;
+  ctaLink?: string | null;
   order?: number;
 }
 

@@ -14,6 +14,7 @@ import {
   updateLandingCard,
   removeLandingCard,
   uploadDocument,
+  ApiError,
   type LandingSectionRow,
   type LandingCardRow,
 } from "@motogearsouq/api-client";
@@ -22,6 +23,7 @@ import { Loader2, Trash2, Plus, Save, ChevronRight, Tag, Link as LinkIcon, Globe
 
 export default function AdminLandingPage() {
   const t = useTranslations("admin.landing");
+  const tCommon = useTranslations("common");
   const [sections, setSections] = useState<LandingSectionRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<Set<string>>(new Set());
@@ -29,6 +31,22 @@ export default function AdminLandingPage() {
   const [openMode, setOpenMode] = useState<"section" | "cards">("section");
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [banner, setBanner] = useState<{ type: "success" | "error"; message: string } | null>(null);
+
+  const getErrorMessage = (err: unknown): string => {
+    if (err instanceof ApiError) {
+      const errBody = err.body as { message?: string; issues?: Array<{ path?: string | string[]; message?: string }> };
+      if (errBody?.issues && Array.isArray(errBody.issues) && errBody.issues.length > 0) {
+        const details = errBody.issues
+          .map((i) => `${Array.isArray(i.path) ? i.path.join(".") : i.path || ""}: ${i.message}`)
+          .join("; ");
+        return tCommon("validationFailed", { details });
+      }
+      if (errBody?.message) return errBody.message;
+      if (err.message) return err.message;
+    }
+    if (err instanceof Error) return err.message;
+    return String(err);
+  };
 
   useEffect(() => {
     getLandingSections()
@@ -57,24 +75,16 @@ export default function AdminLandingPage() {
       await updateLandingSection(id, {
         titleAr: section.titleAr.trim(),
         titleEn: section.titleEn.trim(),
-        subtitleAr: section.subtitleAr?.trim() ? section.subtitleAr : undefined,
-        subtitleEn: section.subtitleEn?.trim() ? section.subtitleEn : undefined,
-        ctaLabelAr: section.ctaLabelAr.trim(),
-        ctaLabelEn: section.ctaLabelEn.trim(),
-        ctaLink: section.ctaLink.trim(),
+        subtitleAr: section.subtitleAr?.trim() ? section.subtitleAr : null,
+        subtitleEn: section.subtitleEn?.trim() ? section.subtitleEn : null,
+        ctaLabelAr: section.ctaLabelAr?.trim() ? section.ctaLabelAr : null,
+        ctaLabelEn: section.ctaLabelEn?.trim() ? section.ctaLabelEn : null,
+        ctaLink: section.ctaLink?.trim() ? section.ctaLink : null,
         order: Number(section.order),
       });
       setBanner({ type: "success", message: t("saved") });
     } catch (error: unknown) {
-      const msg =
-        error &&
-        typeof error === "object" &&
-        "body" in error &&
-        (error as { body?: { message?: string } }).body?.message
-          ? (error as { body: { message: string } }).body.message
-          : error instanceof Error
-            ? error.message
-            : String(error);
+      const msg = getErrorMessage(error);
       console.error("Save failed:", msg);
       setBanner({ type: "error", message: msg });
       setSaving((prev) => {
@@ -156,13 +166,7 @@ export default function AdminLandingPage() {
       setSections(data);
       setBanner({ type: "success", message: t("created") });
     } catch (err: unknown) {
-      const msg =
-        err && typeof err === "object" && "body" in err &&
-        (err as { body?: { message?: string } }).body?.message
-          ? (err as { body: { message: string } }).body.message
-          : err instanceof Error
-            ? err.message
-            : String(err);
+      const msg = getErrorMessage(err);
       console.error("Create section failed:", msg);
       setBanner({ type: "error", message: msg });
     } finally {

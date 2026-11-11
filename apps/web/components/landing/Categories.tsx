@@ -43,11 +43,9 @@ type CategoryCardData = {
 function SectionHeader({ tag, title }: { tag: "h2" | "h3"; title: string }) {
   const TagEl = tag;
   return (
-    <div className="flex items-center justify-between gap-4 mb-5 md:mb-6">
-      <div className="flex min-w-0 items-center gap-3">
-        <span className="block h-1 w-8 shrink-0 bg-brand-red" aria-hidden="true" />
-        <TagEl className="text-xl font-bold text-fg truncate">{title}</TagEl>
-      </div>
+    <div className="flex items-center gap-3 mb-4">
+      <span className="block h-1 w-8 shrink-0 bg-brand-red" aria-hidden="true" />
+      <TagEl className="text-xl font-bold text-fg truncate">{title}</TagEl>
       <LayoutGrid
         className="h-5 w-5 sm:h-6 sm:w-6 shrink-0 text-brand-red"
         aria-hidden="true"
@@ -104,7 +102,7 @@ function CategoryCard({
         </div>
 
         <div className="flex items-center justify-between w-full px-1 gap-2">
-          <span className="text-sm font-bold text-fg truncate">{title}</span>
+          <span className="text-xs sm:text-sm font-bold leading-tight text-fg">{title}</span>
           {isAr ? (
             <ChevronLeft
               className="w-4 h-4 shrink-0 text-muted transition-colors group-hover:text-brand-red"
@@ -122,7 +120,7 @@ function CategoryCard({
   );
 }
 
-const GRID_CLASSES = "grid grid-cols-3 gap-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-6";
+const GRID_CLASSES = "grid grid-cols-3 gap-2 sm:gap-4 md:grid-cols-4 lg:grid-cols-6 items-start";
 
 export default async function Categories({
   locale,
@@ -147,7 +145,7 @@ export default async function Categories({
   ];
 
   return (
-    <section id="categories" className="py-12 md:py-16 bg-bg scroll-mt-24">
+    <section id="categories" className="pt-4 md:pt-6 pb-12 md:pb-16 bg-bg scroll-mt-24">
       <Container size="xl">
         {sections.length === 0 ? (
           <>

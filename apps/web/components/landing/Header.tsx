@@ -34,7 +34,7 @@ export function Header() {
       alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
       width={150}
       height={60}
-      className="h-8 w-auto max-w-[140px] object-contain sm:h-10 sm:max-w-none"
+      className="h-10 w-auto max-w-[160px] object-contain sm:h-12 sm:max-w-none"
       priority={priority}
     />
   );
@@ -45,7 +45,7 @@ export function Header() {
         <Container size="xl" as="div">
           <div className="relative flex h-16 items-center justify-between gap-3 md:h-20">
             {/* Start: hamburger + logo (all breakpoints) */}
-            <div className="flex min-w-0 items-center gap-2 md:gap-3">
+            <div className="flex min-w-0 items-center gap-3 sm:gap-4">
               <button
                 type="button"
                 onClick={() => setSidebarOpen((v) => !v)}

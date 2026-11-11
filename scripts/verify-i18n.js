@@ -39,9 +39,21 @@ const ENGLISH_ONLY_RE = /^[A-Za-z\s.,!?'":;()&+\-]+$/;
 const ARABIC_ONLY_RE = /^[\u0600-\u06FF\s.,!?'":;()\-\u2014]+$/;
 const HAS_LATIN_RE = /[A-Za-z]/;
 
+// Remove ICU syntax ({count}, {count, plural, one {…} other {…}}, #) so that
+// message CONTENT is what gets language-checked, not the placeholder scaffolding.
+function stripIcu(v) {
+  let s = v;
+  let prev;
+  do {
+    prev = s;
+    s = s.replace(/\{[^{}]*\}/g, '');
+  } while (s !== prev);
+  return s.replace(/#/g, '').trim();
+}
+
 function isEnglishOnlyValue(v) {
   if (typeof v !== 'string') return false;
-  const t = v.trim();
+  const t = stripIcu(v);
   if (!t) return false;
   if (!/[A-Za-z]/.test(t)) return false;            // needs at least one letter
   if (!ENGLISH_ONLY_RE.test(t)) return false;
@@ -53,7 +65,7 @@ function isEnglishOnlyValue(v) {
 
 function isArabicOnlyValue(v) {
   if (typeof v !== 'string') return false;
-  const t = v.trim();
+  const t = stripIcu(v);
   if (!t) return false;
   if (!/[\u0600-\u06FF]/.test(t)) return false;      // needs at least one Arabic char
   if (HAS_LATIN_RE.test(t)) return false;           // mixed / contains English

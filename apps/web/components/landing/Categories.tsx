@@ -6,7 +6,16 @@ import {
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { ArrowRight, Bike, ChevronLeft, ChevronRight, Wrench, Shield, Tag } from "lucide-react";
+import {
+  ArrowRight,
+  Bike,
+  ChevronLeft,
+  ChevronRight,
+  LayoutGrid,
+  Shield,
+  Tag,
+  Wrench,
+} from "lucide-react";
 import { FadeIn } from "@/components/ui/FadeIn";
 
 const getCardIcon = (sectionSlug: string, cardTitle: string) => {
@@ -23,6 +32,98 @@ const getCardIcon = (sectionSlug: string, cardTitle: string) => {
   return Tag;
 };
 
+type CategoryCardData = {
+  id: string;
+  href: string;
+  title: string;
+  photo: string | null;
+  Icon: typeof Bike;
+};
+
+function SectionHeader({ tag, title }: { tag: "h2" | "h3"; title: string }) {
+  const TagEl = tag;
+  return (
+    <div className="flex items-center justify-between gap-4 mb-5 md:mb-6">
+      <div className="flex min-w-0 items-center gap-3">
+        <span className="block h-1 w-8 shrink-0 bg-brand-red" aria-hidden="true" />
+        <TagEl className="text-xl font-bold text-fg truncate">{title}</TagEl>
+      </div>
+      <LayoutGrid
+        className="h-5 w-5 sm:h-6 sm:w-6 shrink-0 text-brand-red"
+        aria-hidden="true"
+      />
+    </div>
+  );
+}
+
+function CategoryCard({
+  card,
+  isAr,
+  index,
+}: {
+  card: CategoryCardData;
+  isAr: boolean;
+  index: number;
+}) {
+  const { href, title, photo, Icon } = card;
+  return (
+    <FadeIn delay={Math.min(index * 0.05, 0.3)} className="h-full">
+      <Link
+        href={href}
+        className="group relative flex flex-col items-center gap-2"
+      >
+        <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-border bg-card">
+          {photo ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={photo}
+              alt={title}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-red/10 via-brand-red/5 to-transparent text-brand-red transition-transform duration-500 group-hover:scale-105">
+              <Icon
+                className="h-10 w-10 sm:h-12 sm:w-12"
+                strokeWidth={1.5}
+                aria-hidden="true"
+              />
+            </div>
+          )}
+
+          <div
+            className="absolute bottom-0 start-0 w-10 h-10 bg-brand-red flex items-end justify-start p-0.5 z-10 sm:w-12 sm:h-12 sm:p-1"
+            style={{
+              clipPath: isAr
+                ? "polygon(100% 100%, 0 100%, 100% 0)"
+                : "polygon(0 100%, 100% 100%, 0 0)",
+            }}
+            aria-hidden="true"
+          >
+            <Icon className="w-4 h-4 text-white sm:w-5 sm:h-5" />
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between w-full px-1 gap-2">
+          <span className="text-sm font-bold text-fg truncate">{title}</span>
+          {isAr ? (
+            <ChevronLeft
+              className="w-4 h-4 shrink-0 text-muted transition-colors group-hover:text-brand-red"
+              aria-hidden="true"
+            />
+          ) : (
+            <ChevronRight
+              className="w-4 h-4 shrink-0 text-muted transition-colors group-hover:text-brand-red"
+              aria-hidden="true"
+            />
+          )}
+        </div>
+      </Link>
+    </FadeIn>
+  );
+}
+
+const GRID_CLASSES = "grid grid-cols-3 gap-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-6";
+
 export default async function Categories({
   locale,
 }: {
@@ -38,26 +139,29 @@ export default async function Categories({
     sections = [];
   }
 
+  const fallbackCards: CategoryCardData[] = [
+    { id: "new-motorcycles", href: `/${locale}/products`, title: t("items.new-motorcycles.title"), photo: null, Icon: Bike },
+    { id: "used-motorcycles", href: `/${locale}/products`, title: t("items.used-motorcycles.title"), photo: null, Icon: Bike },
+    { id: "spare-parts", href: `/${locale}/products`, title: t("items.spare-parts.title"), photo: null, Icon: Wrench },
+    { id: "accessories", href: `/${locale}/products`, title: t("items.accessories.title"), photo: null, Icon: Shield },
+  ];
+
   return (
     <section id="categories" className="py-12 md:py-16 bg-bg scroll-mt-24">
       <Container size="xl">
-        <FadeIn>
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
-              {t("title")}
-            </h2>
-            <p className="text-muted text-lg">
-              {t("subtitle")}
-            </p>
-          </div>
-        </FadeIn>
-
         {sections.length === 0 ? (
-          <div className="rounded-xl border border-border bg-card p-16 text-center text-muted">
-            <p>{t("noSections")}</p>
-          </div>
+          <>
+            <FadeIn>
+              <SectionHeader tag="h2" title={t("title")} />
+            </FadeIn>
+            <div className={GRID_CLASSES}>
+              {fallbackCards.map((card, index) => (
+                <CategoryCard key={card.id} card={card} isAr={isAr} index={index} />
+              ))}
+            </div>
+          </>
         ) : (
-          <div className="space-y-12">
+          <div className="space-y-10 md:space-y-12">
             {sections.map((section) => (
               <div
                 key={section.slug}
@@ -65,79 +169,39 @@ export default async function Categories({
                 className="scroll-mt-24"
               >
                 <FadeIn>
-                  <h3 className="text-2xl md:text-3xl font-extrabold mb-4">
-                    {isAr ? section.titleAr : section.titleEn}
-                  </h3>
+                  <SectionHeader
+                    tag="h3"
+                    title={isAr ? section.titleAr : section.titleEn}
+                  />
                   {(section.subtitleAr || section.subtitleEn) && (
-                    <p className="text-muted text-base mb-8 max-w-2xl">
+                    <p className="mb-6 max-w-2xl text-sm text-muted">
                       {isAr ? section.subtitleAr : section.subtitleEn}
                     </p>
                   )}
                 </FadeIn>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                <div className={GRID_CLASSES}>
                   {section.cards.map((card, index) => {
-                    const IconComponent = getCardIcon(section.slug, card.titleEn);
+                    const Icon = getCardIcon(section.slug, card.titleEn);
                     const rawPhoto = card.photo;
                     const photo = rawPhoto
                       ? rawPhoto.startsWith("http") || rawPhoto.startsWith("/")
                         ? rawPhoto
                         : `${(process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000").replace(/\/api$/, "")}/${rawPhoto}`
                       : null;
-                    const title = isAr ? card.titleAr : card.titleEn;
                     return (
-                      <FadeIn
+                      <CategoryCard
                         key={card.id}
-                        delay={Math.min(index * 0.05, 0.3)}
-                        className="h-full"
-                      >
-                        <Link
-                          href={card.link}
-                          className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card hover:border-brand-red transition-all duration-300"
-                        >
-                          <div className="relative h-40 w-full overflow-hidden bg-muted">
-                            {photo ? (
-                              // eslint-disable-next-line @next/next/no-img-element
-                              <img
-                                src={photo}
-                                alt={title}
-                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                              />
-                            ) : (
-                              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-red/10 via-brand-red/5 to-transparent text-brand-red transition-transform duration-500 group-hover:scale-110">
-                                <IconComponent
-                                  className="h-14 w-14"
-                                  strokeWidth={1.5}
-                                  aria-hidden="true"
-                                />
-                              </div>
-                            )}
-                          </div>
-
-                          <div
-                            className="absolute right-0 bottom-12 h-16 w-16 bg-brand-red flex items-end justify-end p-2 z-10"
-                            style={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
-                            aria-hidden="true"
-                          >
-                            <IconComponent className="h-5 w-5 text-white" />
-                          </div>
-
-                          <div className="flex items-center justify-between p-4 bg-card z-20 border-t border-border">
-                            <span className="font-bold text-fg">{title}</span>
-                            {isAr ? (
-                              <ChevronLeft
-                                className="h-5 w-5 text-muted transition-colors group-hover:text-brand-red"
-                                aria-hidden="true"
-                              />
-                            ) : (
-                              <ChevronRight
-                                className="h-5 w-5 text-muted transition-colors group-hover:text-brand-red"
-                                aria-hidden="true"
-                              />
-                            )}
-                          </div>
-                        </Link>
-                      </FadeIn>
+                        card={{
+                          id: card.id,
+                          href: card.link,
+                          title: isAr ? card.titleAr : card.titleEn,
+                          photo,
+                          Icon,
+                        }}
+                        isAr={isAr}
+                        index={index}
+                      />
                     );
                   })}
                 </div>

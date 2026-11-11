@@ -1313,9 +1313,9 @@
         "contact": "اتصل بنا",
         "store": "المتجر"
       },
-      "addSection": "Add Section",
-      "created": "Section created",
-      "errorCreate": "Failed to create section",
+      "addSection": "إضافة قسم",
+      "created": "تم إضافة القسم",
+      "errorCreate": "فشل إضافة القسم",
       "deleted": "تم حذف القسم",
       "errorDelete": "فشل حذف القسم",
       "dismiss": "إغلاق",

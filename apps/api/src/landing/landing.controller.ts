@@ -21,16 +21,22 @@ import {
   landingCardSchema,
   updateLandingCardSchema,
   updateLandingSectionSchema,
+  createLandingSlideSchema,
+  updateLandingSlideSchema,
   type LandingCardInput,
   type LandingSectionInput,
   type UpdateLandingCardInput,
   type UpdateLandingSectionInput,
+  type CreateLandingSlideInput,
+  type UpdateLandingSlideInput,
 } from "@motogearsouq/shared";
 import { LandingService } from "./landing.service";
 
 const sectionBody = () => new ZodValidationPipe(updateLandingSectionSchema);
 const cardBody = () => new ZodValidationPipe(landingCardSchema);
 const cardUpdateBody = () => new ZodValidationPipe(updateLandingCardSchema);
+const slideBody = () => new ZodValidationPipe(createLandingSlideSchema);
+const slideUpdateBody = () => new ZodValidationPipe(updateLandingSlideSchema);
 
 @ApiTags("landing")
 @Controller("landing")
@@ -43,6 +49,51 @@ export class LandingController {
   @ApiOperation({ summary: "List all landing sections with cards (public)" })
   async getSections() {
     return this.landing.getLandingSections();
+  }
+
+  // ---------- Hero slides ----------
+
+  @Get("slides")
+  @ApiOperation({ summary: "List active hero slides, ordered (public)" })
+  getActiveSlides() {
+    return this.landing.findActiveSlides();
+  }
+
+  @Get("slides/admin")
+  @UseGuards(AdminAuthGuard)
+  @ApiHeader({ name: "x-admin-api-key", required: false })
+  @ApiOperation({ summary: "List all hero slides incl. inactive (admin)" })
+  getAllSlides() {
+    return this.landing.findAllSlides();
+  }
+
+  @Post("slides")
+  @UseGuards(AdminAuthGuard)
+  @ApiHeader({ name: "x-admin-api-key", required: false })
+  @ApiOperation({ summary: "Create hero slide (admin)" })
+  createSlide(@Body(slideBody()) body: CreateLandingSlideInput) {
+    return this.landing.createSlide(body);
+  }
+
+  @Put("slides/:id")
+  @UseGuards(AdminAuthGuard)
+  @ApiHeader({ name: "x-admin-api-key", required: false })
+  @ApiParam({ name: "id" })
+  @ApiOperation({ summary: "Update hero slide (admin)" })
+  updateSlide(
+    @Param("id") id: string,
+    @Body(slideUpdateBody()) body: UpdateLandingSlideInput,
+  ) {
+    return this.landing.updateSlide(id, body);
+  }
+
+  @Delete("slides/:id")
+  @UseGuards(AdminAuthGuard)
+  @ApiHeader({ name: "x-admin-api-key", required: false })
+  @ApiParam({ name: "id" })
+  @ApiOperation({ summary: "Delete hero slide (admin)" })
+  removeSlide(@Param("id") id: string) {
+    return this.landing.deleteSlide(id);
   }
 
   @Post()

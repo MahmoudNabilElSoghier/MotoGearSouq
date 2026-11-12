@@ -4,6 +4,7 @@ import { PrismaService } from "../prisma/prisma.service";
 import {
   type LandingCard,
   type LandingSection,
+  type LandingSlide,
 } from "@motogearsouq/shared";
 
 interface SectionWithCards {
@@ -307,6 +308,182 @@ export class LandingService {
       () => ({ id }),
     );
   }
+
+  // ---------- Hero slides ----------
+
+  async findAllSlides(): Promise<DbResult<LandingSlide[]>> {
+    return withDb(
+      this.prisma,
+      async (db) => {
+        const slides = await db.landingSlide.findMany({
+          orderBy: { order: "asc" },
+        });
+        return slides.map(mapSlide);
+      },
+      () => [],
+    );
+  }
+
+  async findActiveSlides(): Promise<DbResult<LandingSlide[]>> {
+    return withDb(
+      this.prisma,
+      async (db) => {
+        const slides = await db.landingSlide.findMany({
+          where: { isActive: true },
+          orderBy: { order: "asc" },
+        });
+        return slides.map(mapSlide);
+      },
+      () => [],
+    );
+  }
+
+  async createSlide(
+    input: {
+      titleAr: string;
+      titleEn: string;
+      subtitleAr?: string | null;
+      subtitleEn?: string | null;
+      image?: string | null;
+      ctaPrimaryLabelAr?: string | null;
+      ctaPrimaryLabelEn?: string | null;
+      ctaPrimaryLink?: string | null;
+      ctaSecondaryLabelAr?: string | null;
+      ctaSecondaryLabelEn?: string | null;
+      ctaSecondaryLink?: string | null;
+      order?: string | number;
+      isActive?: boolean;
+    },
+  ): Promise<DbResult<LandingSlide>> {
+    return withDb(
+      this.prisma,
+      async (db) => {
+        const created = await db.landingSlide.create({
+          data: {
+            titleAr: input.titleAr,
+            titleEn: input.titleEn,
+            subtitleAr: input.subtitleAr ?? null,
+            subtitleEn: input.subtitleEn ?? null,
+            image: input.image ?? null,
+            ctaPrimaryLabelAr: input.ctaPrimaryLabelAr ?? null,
+            ctaPrimaryLabelEn: input.ctaPrimaryLabelEn ?? null,
+            ctaPrimaryLink: input.ctaPrimaryLink ?? null,
+            ctaSecondaryLabelAr: input.ctaSecondaryLabelAr ?? null,
+            ctaSecondaryLabelEn: input.ctaSecondaryLabelEn ?? null,
+            ctaSecondaryLink: input.ctaSecondaryLink ?? null,
+            order: input.order != null ? Number(input.order) : 0,
+            isActive: input.isActive ?? true,
+          },
+        });
+        return mapSlide(created);
+      },
+      () => mapSlide(createTempSlide(input)),
+    );
+  }
+
+  async updateSlide(
+    id: string,
+    input: {
+      titleAr?: string;
+      titleEn?: string;
+      subtitleAr?: string | null;
+      subtitleEn?: string | null;
+      image?: string | null;
+      ctaPrimaryLabelAr?: string | null;
+      ctaPrimaryLabelEn?: string | null;
+      ctaPrimaryLink?: string | null;
+      ctaSecondaryLabelAr?: string | null;
+      ctaSecondaryLabelEn?: string | null;
+      ctaSecondaryLink?: string | null;
+      order?: string | number;
+      isActive?: boolean;
+    },
+  ): Promise<DbResult<LandingSlide | null>> {
+    return withDb(
+      this.prisma,
+      async (db) => {
+        const existing = await db.landingSlide.findUnique({ where: { id } });
+        if (!existing) throw new NotFoundException("Landing slide not found");
+        const updated = await db.landingSlide.update({
+          where: { id },
+          data: {
+            titleAr: input.titleAr ?? existing.titleAr,
+            titleEn: input.titleEn ?? existing.titleEn,
+            subtitleAr:
+              input.subtitleAr !== undefined
+                ? input.subtitleAr
+                : existing.subtitleAr,
+            subtitleEn:
+              input.subtitleEn !== undefined
+                ? input.subtitleEn
+                : existing.subtitleEn,
+            image: input.image !== undefined ? input.image : existing.image,
+            ctaPrimaryLabelAr:
+              input.ctaPrimaryLabelAr !== undefined
+                ? input.ctaPrimaryLabelAr
+                : existing.ctaPrimaryLabelAr,
+            ctaPrimaryLabelEn:
+              input.ctaPrimaryLabelEn !== undefined
+                ? input.ctaPrimaryLabelEn
+                : existing.ctaPrimaryLabelEn,
+            ctaPrimaryLink:
+              input.ctaPrimaryLink !== undefined
+                ? input.ctaPrimaryLink
+                : existing.ctaPrimaryLink,
+            ctaSecondaryLabelAr:
+              input.ctaSecondaryLabelAr !== undefined
+                ? input.ctaSecondaryLabelAr
+                : existing.ctaSecondaryLabelAr,
+            ctaSecondaryLabelEn:
+              input.ctaSecondaryLabelEn !== undefined
+                ? input.ctaSecondaryLabelEn
+                : existing.ctaSecondaryLabelEn,
+            ctaSecondaryLink:
+              input.ctaSecondaryLink !== undefined
+                ? input.ctaSecondaryLink
+                : existing.ctaSecondaryLink,
+            order: input.order != null ? Number(input.order) : existing.order,
+            isActive: input.isActive ?? existing.isActive,
+          },
+        });
+        return mapSlide(updated);
+      },
+      () => null,
+    );
+  }
+
+  async deleteSlide(id: string): Promise<DbResult<{ id: string }>> {
+    return withDb(
+      this.prisma,
+      async (db) => {
+        const existing = await db.landingSlide.findUnique({ where: { id } });
+        if (!existing) throw new NotFoundException("Landing slide not found");
+        await db.landingSlide.delete({ where: { id } });
+        return { id };
+      },
+      () => ({ id }),
+    );
+  }
+
+  async reorderSlides(
+    orderedIds: string[],
+  ): Promise<DbResult<{ updated: number }>> {
+    return withDb(
+      this.prisma,
+      async (db) => {
+        let updated = 0;
+        for (const [index, id] of orderedIds.entries()) {
+          await db.landingSlide.update({
+            where: { id },
+            data: { order: index },
+          });
+          updated += 1;
+        }
+        return { updated };
+      },
+      () => ({ updated: 0 }),
+    );
+  }
 }
 
 function mapSection(s: SectionWithCards): LandingSection {
@@ -352,5 +529,79 @@ function mapCard(c: {
     order: c.order,
     createdAt: c.createdAt.toISOString(),
     updatedAt: c.updatedAt.toISOString(),
+  };
+}
+
+function mapSlide(s: {
+  id: string;
+  titleAr: string;
+  titleEn: string;
+  subtitleAr: string | null;
+  subtitleEn: string | null;
+  image: string | null;
+  ctaPrimaryLabelAr: string | null;
+  ctaPrimaryLabelEn: string | null;
+  ctaPrimaryLink: string | null;
+  ctaSecondaryLabelAr: string | null;
+  ctaSecondaryLabelEn: string | null;
+  ctaSecondaryLink: string | null;
+  order: number;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}): LandingSlide {
+  return {
+    id: s.id,
+    titleAr: s.titleAr,
+    titleEn: s.titleEn,
+    subtitleAr: s.subtitleAr ?? null,
+    subtitleEn: s.subtitleEn ?? null,
+    image: s.image ?? null,
+    ctaPrimaryLabelAr: s.ctaPrimaryLabelAr ?? null,
+    ctaPrimaryLabelEn: s.ctaPrimaryLabelEn ?? null,
+    ctaPrimaryLink: s.ctaPrimaryLink ?? null,
+    ctaSecondaryLabelAr: s.ctaSecondaryLabelAr ?? null,
+    ctaSecondaryLabelEn: s.ctaSecondaryLabelEn ?? null,
+    ctaSecondaryLink: s.ctaSecondaryLink ?? null,
+    order: s.order,
+    isActive: s.isActive,
+    createdAt: s.createdAt.toISOString(),
+    updatedAt: s.updatedAt.toISOString(),
+  };
+}
+
+// Mock-mode fallback when the database is unreachable (withDb pattern).
+function createTempSlide(input: {
+  titleAr: string;
+  titleEn: string;
+  subtitleAr?: string | null;
+  subtitleEn?: string | null;
+  image?: string | null;
+  ctaPrimaryLabelAr?: string | null;
+  ctaPrimaryLabelEn?: string | null;
+  ctaPrimaryLink?: string | null;
+  ctaSecondaryLabelAr?: string | null;
+  ctaSecondaryLabelEn?: string | null;
+  ctaSecondaryLink?: string | null;
+  order?: string | number;
+  isActive?: boolean;
+}) {
+  return {
+    id: `tmp-${Date.now()}`,
+    titleAr: input.titleAr,
+    titleEn: input.titleEn,
+    subtitleAr: input.subtitleAr ?? null,
+    subtitleEn: input.subtitleEn ?? null,
+    image: input.image ?? null,
+    ctaPrimaryLabelAr: input.ctaPrimaryLabelAr ?? null,
+    ctaPrimaryLabelEn: input.ctaPrimaryLabelEn ?? null,
+    ctaPrimaryLink: input.ctaPrimaryLink ?? null,
+    ctaSecondaryLabelAr: input.ctaSecondaryLabelAr ?? null,
+    ctaSecondaryLabelEn: input.ctaSecondaryLabelEn ?? null,
+    ctaSecondaryLink: input.ctaSecondaryLink ?? null,
+    order: input.order != null ? Number(input.order) : 0,
+    isActive: input.isActive ?? true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 }

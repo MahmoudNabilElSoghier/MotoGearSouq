@@ -497,6 +497,67 @@ async function main() {
     }
   }
 
+  // ---------- Hero slider slides (idempotent: only when none exist) ----------
+  // Links use the literal "{locale}" token — the HeroSlider swaps it for the
+  // active locale at render time. CTA2 of slide 1 uses the same WhatsApp
+  // placeholder number as apps/web/lib/config.ts (do not change until launch).
+  const heroSlides = [
+    {
+      titleAr: "قطع غيار أصلية وأداء موثوق",
+      titleEn: "Genuine Parts & Trusted Performance",
+      subtitleAr: "أكثر من 35 سنة خبرة. قطع غيار أصلية وخدمة صيانة معتمدة",
+      subtitleEn: "35+ years of expertise. Genuine parts and certified maintenance",
+      image: "/images/hero-bg.jpg",
+      ctaPrimaryLabelAr: "شوف الموديلات",
+      ctaPrimaryLabelEn: "View Models",
+      ctaPrimaryLink: "/{locale}/products",
+      ctaSecondaryLabelAr: "كلمنا على واتساب",
+      ctaSecondaryLabelEn: "Chat on WhatsApp",
+      ctaSecondaryLink: "https://wa.me/201012345678",
+      order: 1,
+      isActive: true,
+    },
+    {
+      titleAr: "قريباً — تطبيق MotoGearSouq",
+      titleEn: "Coming Soon — MotoGearSouq App",
+      subtitleAr:
+        "اطلب قطع غيارك من موبايلك في ثواني. سجّل اهتمامك وهنبلغك أول ما ينزل",
+      subtitleEn:
+        "Order your spare parts from your phone in seconds. Register your interest to get notified",
+      image: null,
+      ctaPrimaryLabelAr: "احجز مكانك",
+      ctaPrimaryLabelEn: "Reserve your spot",
+      ctaPrimaryLink: "/{locale}/contact",
+      ctaSecondaryLabelAr: "اعرف أكثر",
+      ctaSecondaryLabelEn: "Learn more",
+      ctaSecondaryLink: "/{locale}/about",
+      order: 2,
+      isActive: true,
+    },
+    {
+      titleAr: "خدمة صيانة معتمدة",
+      titleEn: "Certified Maintenance Service",
+      subtitleAr: "فريق متخصص في كل الفروع. احجز موعد صيانتك الآن",
+      subtitleEn: "Specialist team at every branch. Book your maintenance appointment",
+      image: null,
+      ctaPrimaryLabelAr: "احجز صيانة",
+      ctaPrimaryLabelEn: "Book Maintenance",
+      ctaPrimaryLink: "/{locale}/contact",
+      ctaSecondaryLabelAr: "الفروع",
+      ctaSecondaryLabelEn: "Branches",
+      ctaSecondaryLink: "/{locale}/branches",
+      order: 3,
+      isActive: true,
+    },
+  ];
+  const existingSlideCount = await prisma.landingSlide.count();
+  if (existingSlideCount === 0) {
+    for (const slide of heroSlides) {
+      await prisma.landingSlide.create({ data: slide });
+    }
+    console.log(`  [landing] ${heroSlides.length} hero slides created`);
+  }
+
   const branchByCode = new Map<string, { id: string; slug: string }>();
   const seededBranches: { id: string; code: string; displayOrder: number }[] = [];
   for (const branch of seedBranches) {
@@ -857,6 +918,7 @@ async function main() {
     managersLinked,
     seededDocuments,
     seededShippingRates,
+    heroSlides: await prisma.landingSlide.count(),
     adminUser,
   });
 }

@@ -12,3 +12,4 @@ export * from "./analytics";
 export * from "./order";
 export * from "./customer-auth";
 export * from "./landing";
+export * from "./landing-slide";

@@ -85,6 +85,28 @@ model LandingCard {
   @@index([order])
 }
 
+model LandingSlide {
+  id                  String   @id @default(cuid())
+  titleAr             String
+  titleEn             String
+  subtitleAr          String?
+  subtitleEn          String?
+  image               String? // optional — falls back to gradient
+  ctaPrimaryLabelAr   String?
+  ctaPrimaryLabelEn   String?
+  ctaPrimaryLink      String?
+  ctaSecondaryLabelAr String?
+  ctaSecondaryLabelEn String?
+  ctaSecondaryLink    String?
+  order               Int      @default(0)
+  isActive            Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([order])
+  @@index([isActive])
+}
+
 model Testimonial {
   id        String   @id @default(cuid())
   name      String

@@ -131,6 +131,11 @@ export function HeroSlider() {
                   className="relative z-10 flex flex-col items-center justify-center py-12 md:py-16 text-center md:text-right w-full"
                 >
                   <div className="max-w-2xl md:max-w-3xl">
+                    {(slide.titleAr.includes("قريباً") || slide.titleEn.toLowerCase().includes("coming soon")) && (
+                      <span className="inline-block mb-4 px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider bg-brand-red text-white shadow-lg">
+                        {isAr ? "قريباً جداً" : "Coming Soon"}
+                      </span>
+                    )}
                     <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-8 text-white">
                       {title}
                     </h1>

@@ -364,6 +364,7 @@ enum DocumentEntityType {
   ORDER
   CUSTOMER
   LANDING_CARD
+  LANDING_SLIDE
 }
 
 enum DocumentStatus {

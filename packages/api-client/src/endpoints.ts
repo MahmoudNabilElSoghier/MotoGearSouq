@@ -424,6 +424,71 @@ export const deleteSection = (
 ): Promise<ApiResponse<{ id: string }>> =>
   apiSend<{ id: string }>("DELETE", `/landing/${encode(id)}`);
 
+// ---------- Landing hero slides ----------
+
+export interface LandingSlideRow {
+  id: string;
+  titleAr: string;
+  titleEn: string;
+  subtitleAr: string | null;
+  subtitleEn: string | null;
+  image: string | null;
+  ctaPrimaryLabelAr: string | null;
+  ctaPrimaryLabelEn: string | null;
+  ctaPrimaryLink: string | null;
+  ctaSecondaryLabelAr: string | null;
+  ctaSecondaryLabelEn: string | null;
+  ctaSecondaryLink: string | null;
+  order: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateLandingSlideInput {
+  titleAr: string;
+  titleEn: string;
+  subtitleAr?: string | null;
+  subtitleEn?: string | null;
+  image?: string | null;
+  ctaPrimaryLabelAr?: string | null;
+  ctaPrimaryLabelEn?: string | null;
+  ctaPrimaryLink?: string | null;
+  ctaSecondaryLabelAr?: string | null;
+  ctaSecondaryLabelEn?: string | null;
+  ctaSecondaryLink?: string | null;
+  order?: number;
+  isActive?: boolean;
+}
+
+export type UpdateLandingSlideInput = Partial<CreateLandingSlideInput>;
+
+export const getLandingSlides = (): Promise<LandingSlideRow[]> =>
+  apiGet<LandingSlideRow[]>("/landing/slides");
+
+export const getAllLandingSlides = (): Promise<LandingSlideRow[]> =>
+  apiGet<LandingSlideRow[]>("/landing/slides/admin");
+
+export const createLandingSlide = (
+  input: CreateLandingSlideInput,
+): Promise<ApiResponse<LandingSlideRow>> =>
+  apiSend<LandingSlideRow>("POST", "/landing/slides", input);
+
+export const updateLandingSlide = (
+  id: string,
+  input: UpdateLandingSlideInput,
+): Promise<ApiResponse<LandingSlideRow | null>> =>
+  apiSend<LandingSlideRow | null>(
+    "PUT",
+    `/landing/slides/${encode(id)}`,
+    input,
+  );
+
+export const deleteLandingSlide = (
+  id: string,
+): Promise<ApiResponse<{ id: string }>> =>
+  apiSend<{ id: string }>("DELETE", `/landing/slides/${encode(id)}`);
+
 // ---------- ERP: suppliers, purchase orders, stock movements (Sprint 2) ----------
 
 export interface Supplier {

@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
+import { SlidesManager } from "@/components/admin/landing/SlidesManager";
 import {
   addLandingCard,
   addLandingSection,
@@ -266,6 +267,7 @@ export default function AdminLandingPage() {
 
   return (
     <div className="space-y-6">
+      <SlidesManager />
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-col gap-1">
           <h1 className="text-2xl font-extrabold text-fg">{t("title")}</h1>

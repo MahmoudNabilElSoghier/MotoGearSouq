@@ -92,6 +92,7 @@ export class DocumentsController {
             "ORDER",
             "CUSTOMER",
             "LANDING_CARD",
+            "LANDING_SLIDE",
           ],
         },
         entityId: { type: "string" },

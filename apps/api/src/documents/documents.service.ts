@@ -16,7 +16,8 @@ export type DocumentEntityType =
   | "EMPLOYEE"
   | "ORDER"
   | "CUSTOMER"
-  | "LANDING_CARD";
+  | "LANDING_CARD"
+  | "LANDING_SLIDE";
 
 export interface DocumentRecord {
   id: string;

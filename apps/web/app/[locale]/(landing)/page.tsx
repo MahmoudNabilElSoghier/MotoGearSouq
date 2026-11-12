@@ -1,4 +1,4 @@
-import { Hero } from "@/components/landing/Hero";
+import { HeroSlider } from "@/components/landing/HeroSlider";
 import { TrustBar } from "@/components/landing/TrustBar";
 import Categories from "@/components/landing/Categories";
 import { HowToOrder } from "@/components/landing/HowToOrder";
@@ -18,17 +18,17 @@ export default async function Home({
   const { locale } = await params;
   return (
     <>
-      <Hero />
+      <HeroSlider />
       <TrustBar />
       <Categories locale={locale} />
       <HowToOrder />
       <MerchantBanner />
-      <Brands />
+      {/* <Brands /> */}
       <WhyUs />
-      <ShowroomGallery />
+      {/* <ShowroomGallery /> */}
       <Testimonials />
-      <Branches />
-      <Contact />
+      {/* <Branches /> */}
+      {/* <Contact /> */}
     </>
   );
 }

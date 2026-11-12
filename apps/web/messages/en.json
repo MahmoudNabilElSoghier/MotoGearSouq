@@ -110,7 +110,10 @@
     "bgAlt": "Hero background",
     "subheadline": "Over 35 years in the motorcycle world — we offer new and used bikes, genuine spare parts, and reliable maintenance service across all our branches.",
     "ctaPrimary": "View models",
-    "ctaSecondary": "Chat with us on WhatsApp"
+    "ctaSecondary": "Chat with us on WhatsApp",
+    "prevSlide": "Previous slide",
+    "nextSlide": "Next slide",
+    "goToSlide": "Go to slide {index}"
   },
   "trustBar": {
     "years": {

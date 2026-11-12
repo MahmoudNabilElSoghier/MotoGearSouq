@@ -51,7 +51,7 @@ export function Header() {
                 onClick={() => setSidebarOpen((v) => !v)}
                 aria-label={tHeader("menuToggle")}
                 aria-expanded={sidebarOpen}
-                aria-controls="landing-sidebar"
+                aria-controls="app-sidebar"
                 className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-bg/60 text-fg transition-colors hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
                 <Menu className="h-5 w-5" aria-hidden="true" />

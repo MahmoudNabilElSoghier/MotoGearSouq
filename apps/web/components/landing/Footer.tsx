@@ -144,7 +144,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-border pt-8 text-center text-sm text-muted">
-          {tFooter("copyright")}
+          {tFooter("copyright", { year: new Date().getFullYear() })}
         </div>
       </Container>
     </footer>

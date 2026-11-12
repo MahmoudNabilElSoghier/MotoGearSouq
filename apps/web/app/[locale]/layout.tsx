@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Cairo } from "next/font/google";
 import { notFound } from "next/navigation";
-import { getMessages } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import Script from "next/script";
@@ -39,26 +39,26 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  const t = await getTranslations("meta");
   return {
     metadataBase: new URL(siteUrl),
-    title: meta.title,
-    description: meta.description,
+    title: t("title"),
+    description: t("description"),
     keywords: meta.keywords,
     alternates: {
       languages: { ar: "/ar", en: "/en" },
     },
     openGraph: {
-      title: "MotoGearSouq",
-      description:
-        "قطع غيار أصلية، دراجات جديدة ومستعملة، وخدمة صيانة معتمدة من أكبر ماركات العالم. 35+ سنة خبرة.",
+      title: t("ogTitle"),
+      description: t("ogDescription"),
       locale: locale === "en" ? "en_US" : "ar_EG",
       type: "website",
       siteName: "MotoGearSouq",
     },
     twitter: {
       card: "summary_large_image",
-      title: "MotoGearSouq",
-      description: "قطع غيار أصلية، دراجات جديدة ومستعملة، وخدمة صيانة معتمدة.",
+      title: t("ogTitle"),
+      description: t("ogDescription"),
     },
     robots: {
       index: true,
@@ -78,6 +78,7 @@ export default async function LocaleLayout({
   if (!locales.includes(locale as Locale)) notFound();
 
   const messages = await getMessages();
+  const t = await getTranslations("common");
 
   return (
     <html
@@ -93,7 +94,7 @@ export default async function LocaleLayout({
               href="#main-content"
               className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:start-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-accent-strong focus:text-white focus:rounded-lg"
             >
-              تخطَّ إلى المحتوى الرئيسي
+              {t("skipToContent")}
             </a>
             {children}
             <MobileBottomNav />

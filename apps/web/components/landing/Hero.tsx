@@ -1,5 +1,8 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
+import { MessageCircle, ShoppingBag } from "lucide-react";
+import { WHATSAPP_NUMBER } from "@/lib/config";
 import { Container } from "@/components/ui/Container";
 
 export function Hero() {
@@ -37,6 +40,24 @@ export function Hero() {
           <p className="text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed mb-0 max-w-2xl mx-auto md:mx-0">
             {t("subheadline")}
           </p>
+          <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center md:justify-start">
+            <Link
+              href={`/${locale}/products`}
+              className="rounded-lg font-semibold inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold bg-brand-red hover:bg-red-700 text-white"
+            >
+              <ShoppingBag className="w-5 h-5" aria-hidden="true" />
+              {t("ctaPrimary")}
+            </Link>
+            <Link
+              href={`https://wa.me/${WHATSAPP_NUMBER}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg font-semibold inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-bold bg-white/5 backdrop-blur-sm border border-white/20 text-white hover:bg-white/10 transition-colors"
+            >
+              <MessageCircle className="w-5 h-5" aria-hidden="true" />
+              {t("ctaSecondary")}
+            </Link>
+          </div>
         </div>
       </Container>
     </section>

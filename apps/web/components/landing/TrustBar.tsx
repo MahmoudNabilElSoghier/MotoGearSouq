@@ -37,7 +37,7 @@ export function TrustBar() {
   return (
     <section className="relative z-20 -mt-10 md:-mt-12 py-4 sm:py-6 px-4 sm:px-6">
       <div className="rounded-2xl bg-card border border-border overflow-hidden max-w-4xl mx-auto shadow-sm">
-        <div className="grid grid-cols-4 gap-px bg-border/50">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-border/50">
           {items.map((item, index) => {
             const Icon = item.icon;
             return (

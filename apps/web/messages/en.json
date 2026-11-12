@@ -289,7 +289,7 @@
   },
   "footer": {
     "tagline": "Official Digital Partner of ELSAAD Motorcycle",
-    "copyright": "© 2025 MotoGearSouq — Official Digital Partner of ELSAAD Motorcycle",
+    "copyright": "© {year} MotoGearSouq — Official Digital Partner of ELSAAD Motorcycle",
     "quickLinks": "Quick links",
     "followUs": "Follow us",
     "privacy": "Privacy Policy",

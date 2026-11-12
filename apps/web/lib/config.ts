@@ -1,7 +1,7 @@
 import type { CompanyConfig } from "@/types";
 
 // TODO: replace with real number from client before launch
-const WHATSAPP_NUMBER = "201012345678";
+export const WHATSAPP_NUMBER = "201012345678";
 
 export const company: CompanyConfig = {
   name: "MotoGearSouq",

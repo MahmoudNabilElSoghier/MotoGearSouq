@@ -900,6 +900,59 @@ async function main() {
 
   const adminUser = await seedAdminUser();
 
+  const slideCount = await prisma.landingSlide.count();
+  if (slideCount === 0) {
+    await prisma.landingSlide.createMany({
+      data: [
+        {
+          titleAr: "قطع غيار أصلية وأداء موثوق",
+          titleEn: "Genuine Parts & Trusted Performance",
+          subtitleAr: "أكثر من 35 سنة خبرة. قطع غيار أصلية وخدمة صيانة معتمدة",
+          subtitleEn: "35+ years of expertise. Genuine parts and certified maintenance",
+          image: "/images/hero-bg.jpg",
+          ctaPrimaryLabelAr: "شوف الموديلات",
+          ctaPrimaryLabelEn: "View Models",
+          ctaPrimaryLink: "/{locale}/products",
+          ctaSecondaryLabelAr: "كلمنا على واتساب",
+          ctaSecondaryLabelEn: "Chat on WhatsApp",
+          ctaSecondaryLink: "https://wa.me/201000000000",
+          order: 0,
+          isActive: true,
+        },
+        {
+          titleAr: "قريباً — تطبيق MotoGearSouq",
+          titleEn: "Coming Soon — MotoGearSouq App",
+          subtitleAr: "اطلب قطع غيارك من موبايلك في ثواني. سجّل اهتمامك وهنبلغك أول ما ينزل",
+          subtitleEn: "Order your spare parts from your phone in seconds. Register your interest to get notified",
+          image: null,
+          ctaPrimaryLabelAr: "احجز مكانك",
+          ctaPrimaryLabelEn: "Reserve your spot",
+          ctaPrimaryLink: "/{locale}/contact",
+          ctaSecondaryLabelAr: "اعرف أكثر",
+          ctaSecondaryLabelEn: "Learn more",
+          ctaSecondaryLink: "/{locale}/about",
+          order: 1,
+          isActive: true,
+        },
+        {
+          titleAr: "خدمة صيانة معتمدة",
+          titleEn: "Certified Maintenance Service",
+          subtitleAr: "فريق متخصص في كل الفروع. احجز موعد صيانتك الآن",
+          subtitleEn: "Specialist team at every branch. Book your maintenance appointment",
+          image: null,
+          ctaPrimaryLabelAr: "احجز صيانة",
+          ctaPrimaryLabelEn: "Book Maintenance",
+          ctaPrimaryLink: "/{locale}/contact",
+          ctaSecondaryLabelAr: "الفروع",
+          ctaSecondaryLabelEn: "Branches",
+          ctaSecondaryLink: "/{locale}/branches",
+          order: 2,
+          isActive: true,
+        },
+      ],
+    });
+  }
+
   console.log("Seed complete:", {
     source: jsonBrands || jsonProducts ? "prisma/data/*.json" : "lib/mock (demo)",
     landingCategories: contentCategories.length,

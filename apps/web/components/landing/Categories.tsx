@@ -86,12 +86,13 @@ function CategoryCard({
       >
         <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-border bg-card">
           {image ? (
+            /* object-cover = full bleed (heroes, banners), object-contain = show entire image (cards, products) */
             <Image
               src={image}
               alt={title}
               fill
               sizes="(min-width: 1024px) 16vw, (min-width: 768px) 25vw, 33vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              className="object-contain p-2 sm:p-3 transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-red/10 via-brand-red/5 to-transparent text-brand-red transition-transform duration-500 group-hover:scale-105">

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useCart } from "@/lib/cart-store";
 import { Button } from "@/components/ui/Button";
 import { ShoppingCart, Check, Minus, Plus } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 
 interface ProductAddToCartProps {
   product: {
@@ -17,7 +17,7 @@ interface ProductAddToCartProps {
 }
 
 export function ProductAddToCart({ product }: ProductAddToCartProps) {
-  const locale = useLocale();
+  const t = useTranslations("cart");
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const addItem = useCart((state) => state.addItem);
@@ -42,7 +42,7 @@ export function ProductAddToCart({ product }: ProductAddToCartProps) {
   return (
     <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6">
       <div className="flex items-baseline justify-between">
-        <span className="text-sm text-muted">{locale === "ar" ? "السعر" : "Price"}</span>
+        <span className="text-sm text-muted">{t("price")}</span>
         <span className="text-2xl font-extrabold text-accent" dir="ltr">
           {price.toFixed(2)} EGP
         </span>
@@ -50,7 +50,7 @@ export function ProductAddToCart({ product }: ProductAddToCartProps) {
 
       <div className="flex items-center gap-3">
         <label htmlFor="qty" className="text-sm font-medium text-fg">
-          {locale === "ar" ? "الكمية" : "Quantity"}
+          {t("quantity")}
         </label>
         <div className="flex items-center rounded-lg border border-border bg-bg overflow-hidden">
           <button
@@ -88,12 +88,12 @@ export function ProductAddToCart({ product }: ProductAddToCartProps) {
         {added ? (
           <>
             <Check className="w-5 h-5 text-emerald-400" />
-            <span>{locale === "ar" ? "تمت الإضافة!" : "Added to Cart!"}</span>
+            <span>{t("addedToCart")}</span>
           </>
         ) : (
           <>
             <ShoppingCart className="w-5 h-5" />
-            <span>{locale === "ar" ? "إضافة إلى السلة" : "Add to Cart"}</span>
+            <span>{t("addToCart")}</span>
           </>
         )}
       </Button>

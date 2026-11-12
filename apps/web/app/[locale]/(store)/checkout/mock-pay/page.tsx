@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { completeMockPayment } from "@motogearsouq/api-client";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
@@ -10,9 +10,9 @@ import { CheckCircle2, XCircle, Loader2, CreditCard } from "lucide-react";
 
 function MockPayContent() {
   const locale = useLocale();
+  const t = useTranslations("checkout");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const isAr = locale === "ar";
 
   const orderNumber = searchParams.get("order") || "";
   const providerRef = searchParams.get("ref") || "";
@@ -22,7 +22,7 @@ function MockPayContent() {
 
   const handleComplete = async (success: boolean) => {
     if (!providerRef) {
-      setErrorMsg(isAr ? "رقم مرجع الدفع غير موجود" : "Payment reference not found");
+      setErrorMsg(t("mock.refMissing"));
       return;
     }
 
@@ -38,7 +38,7 @@ function MockPayContent() {
       }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "";
-      setErrorMsg(message || (isAr ? "فشل محاكاة الدفع" : "Failed to simulate payment"));
+      setErrorMsg(message || t("mock.failed"));
       setLoading(false);
     }
   };
@@ -53,16 +53,16 @@ function MockPayContent() {
 
           <div>
             <h1 className="text-2xl font-extrabold text-fg">
-              {isAr ? "بوابة الدفع الوهمية (محاكاة)" : "Mock Payment Gateway (Simulation)"}
+              {t("mock.title")}
             </h1>
             <p className="mt-2 text-sm text-muted">
-              {isAr ? "أنت تقوم بمحاكاة عملية دفع إلكتروني للطلب رقم:" : "You are simulating an online payment for order:"}
+              {t("mock.subtitle")}
             </p>
             <p className="mt-1 font-mono text-lg font-bold text-accent" dir="ltr">
               {orderNumber}
             </p>
             <p className="mt-1 text-xs text-muted" dir="ltr">
-              Ref: {providerRef}
+              {t("mock.refLabel")} {providerRef}
             </p>
           </div>
 
@@ -80,7 +80,7 @@ function MockPayContent() {
               className="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
             >
               {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-5 h-5" />}
-              {isAr ? "محاكاة دفع ناجح (Paid)" : "Simulate Success (Paid)"}
+              {t("mock.simulateSuccess")}
             </Button>
 
             <Button
@@ -90,7 +90,7 @@ function MockPayContent() {
               className="flex items-center justify-center gap-2 border-red-500/30 text-red-400 hover:bg-red-500/10"
             >
               {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <XCircle className="w-5 h-5" />}
-              {isAr ? "محاكاة فشل الدفع (Failed)" : "Simulate Failure (Failed)"}
+              {t("mock.simulateFailure")}
             </Button>
           </div>
         </div>
@@ -100,8 +100,9 @@ function MockPayContent() {
 }
 
 export default function MockPayPage() {
+  const tCommon = useTranslations("common");
   return (
-    <Suspense fallback={<div className="py-20 text-center">Loading...</div>}>
+    <Suspense fallback={<div className="py-20 text-center">{tCommon("loading")}</div>}>
       <MockPayContent />
     </Suspense>
   );

@@ -3,7 +3,7 @@
 import { useCart } from "@/lib/cart-store";
 import { Button } from "@/components/ui/Button";
 import { ShoppingCart, Check } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 interface AddToCartButtonProps {
@@ -18,7 +18,7 @@ interface AddToCartButtonProps {
 }
 
 export function AddToCartButton({ product, className }: AddToCartButtonProps) {
-  const locale = useLocale();
+  const t = useTranslations("cart");
   const addItem = useCart((state) => state.addItem);
   const [added, setAdded] = useState(false);
 
@@ -46,12 +46,12 @@ export function AddToCartButton({ product, className }: AddToCartButtonProps) {
       {added ? (
         <>
           <Check className="w-4 h-4 text-emerald-400" />
-          <span>{locale === "ar" ? "تمت" : "Added"}</span>
+          <span>{t("added")}</span>
         </>
       ) : (
         <>
           <ShoppingCart className="w-4 h-4" />
-          <span>{locale === "ar" ? "أضف" : "Add"}</span>
+          <span>{t("add")}</span>
         </>
       )}
     </Button>

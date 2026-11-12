@@ -37,6 +37,7 @@ function codLimitFor(successfulDeliveries: number): number {
 
 export default function CheckoutPage() {
   const locale = useLocale();
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const { items } = useCart();
   const { customer, isLoading: authLoading, isInitialized, init } = useCustomerAuth();
@@ -103,7 +104,7 @@ export default function CheckoutPage() {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
         <Loader2 className="w-8 h-8 animate-spin text-accent" aria-hidden />
-        <span className="sr-only">Loading</span>
+        <span className="sr-only">{tCommon("loading")}</span>
       </div>
     );
   }
@@ -118,6 +119,8 @@ type CheckoutFormProps = {
 
 function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
   const t = useTranslations("checkout");
+  const tCart = useTranslations("cart");
+  const tPay = useTranslations("customerAuth.orders.paymentMethods");
   const locale = useLocale();
   const router = useRouter();
   const isAr = locale === "ar";
@@ -149,13 +152,13 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
   });
 
   const streetRegister = register("address", {
-    required: isAr ? "العنوان مطلوب" : "Address is required",
+    required: t("addressRequired"),
   });
   const cityRegister = register("city", {
-    required: isAr ? "المدينة مطلوبة" : "City is required",
+    required: t("cityRequired"),
   });
   const governorateRegister = register("governorate", {
-    required: isAr ? "المحافظة مطلوبة" : "Governorate is required",
+    required: t("governorateRequired"),
   });
 
   // Any manual edit of an address field means the user is typing a new address.
@@ -247,7 +250,7 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
   }, [addressToast]);
 
   const formatLimit = (limit: number) =>
-    Number.isFinite(limit) ? nf.format(limit) : isAr ? "بلا حدود" : "Unlimited";
+    Number.isFinite(limit) ? nf.format(limit) : t("unlimited");
 
   const onSubmit = async (data: CheckoutFormValues) => {
     setSubmitting(true);
@@ -287,16 +290,11 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
         }
         router.push(`/${locale}/orders/${createdOrderNumber}`);
       } else {
-        throw new Error(isAr ? "فشل إنشاء الطلب" : "Failed to create order");
+        throw new Error(t("createOrderFailed"));
       }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "";
-      setErrorMsg(
-        message ||
-          (isAr
-            ? "حدث خطأ أثناء إتمام الطلب. يرجى المحاولة مرة أخرى."
-            : "An error occurred while placing the order. Please try again.")
-      );
+      setErrorMsg(message || t("placeOrderError"));
     } finally {
       setSubmitting(false);
     }
@@ -306,7 +304,7 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
     <main id="main-content" className="flex-1 py-12 md:py-16">
       <Container>
         <h1 className="mb-8 text-3xl md:text-4xl font-extrabold text-fg">
-          {isAr ? "إتمام الطلب والدفع" : "Checkout & Payment"}
+          {t("heading")}
         </h1>
 
         {errorMsg && (
@@ -410,7 +408,7 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
               </div>
             )}
             <h2 className="text-xl font-bold text-fg">
-              {isAr ? "بيانات الشحن والتواصل" : "Shipping & Contact Details"}
+              {t("shippingDetails")}
             </h2>
 
             {/* Signed-in customer (read-only) */}
@@ -440,7 +438,7 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
 
             <div>
               <Input
-                label={isAr ? "العنوان بالتفصيل" : "Street Address"}
+                label={t("address")}
                 {...streetRegister}
                 ref={(el) => {
                   streetRegister.ref(el);
@@ -450,7 +448,7 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
                   streetRegister.onChange(e);
                   flipToNewAddress();
                 }}
-                placeholder={isAr ? "شارع الجمهورية، عمارة 12" : "12 El Gomhoreya St"}
+                placeholder={t("addressPlaceholder")}
               />
               {errors.address && (
                 <span className="mt-1 text-xs text-red-400">{errors.address.message}</span>
@@ -460,13 +458,13 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
             <div className="grid gap-4 md:grid-cols-2">
               <div>
                 <Input
-                  label={isAr ? "المدينة / المركز" : "City / Center"}
+                  label={t("cityCenter")}
                   {...cityRegister}
                   onChange={(e) => {
                     cityRegister.onChange(e);
                     flipToNewAddress();
                   }}
-                  placeholder={isAr ? "المنصورة" : "Mansoura"}
+                  placeholder={t("cityPlaceholder")}
                 />
                 {errors.city && (
                   <span className="mt-1 text-xs text-red-400">{errors.city.message}</span>
@@ -475,13 +473,13 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
 
               <div>
                 <Input
-                  label={isAr ? "المحافظة" : "Governorate"}
+                  label={t("governorate")}
                   {...governorateRegister}
                   onChange={(e) => {
                     governorateRegister.onChange(e);
                     flipToNewAddress();
                   }}
-                  placeholder={isAr ? "الدقهلية" : "Dakahlia"}
+                  placeholder={t("governoratePlaceholder")}
                 />
                 {errors.governorate && (
                   <span className="mt-1 text-xs text-red-400">{errors.governorate.message}</span>
@@ -492,22 +490,18 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
             {/* Payment Method Selector */}
             <div className="space-y-3">
               <label className="block text-sm font-medium text-fg">
-                {isAr ? "طريقة الدفع" : "Payment Method"}
+                {t("paymentMethod")}
               </label>
               <div className="grid gap-3 sm:grid-cols-3">
-                {[
-                  { id: "cod", labelAr: "الدفع عند الاستلام", labelEn: "Cash on Delivery" },
-                  { id: "mock", labelAr: "الدفع الإلكتروني (تجريبي)", labelEn: "Online Payment (Mock)" },
-                  { id: "instapay", labelAr: "انستاباي (InstaPay)", labelEn: "InstaPay" },
-                ].map((m) => {
-                  const disabled = m.id === "cod" && codExceeded;
+                {(["cod", "mock", "instapay"] as const).map((id) => {
+                  const disabled = id === "cod" && codExceeded;
                   return (
                     <label
-                      key={m.id}
+                      key={id}
                       className={`flex items-center gap-3 p-4 rounded-xl border transition-colors ${
                         disabled
                           ? "border-border bg-bg text-muted opacity-60 cursor-not-allowed"
-                          : paymentMethod === m.id
+                          : paymentMethod === id
                             ? "border-accent bg-accent/10 text-fg font-semibold cursor-pointer"
                             : "border-border bg-bg text-muted hover:border-border/80 cursor-pointer"
                       }`}
@@ -515,13 +509,13 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
                       <input
                         type="radio"
                         name="paymentMethod"
-                        value={m.id}
-                        checked={paymentMethod === m.id}
+                        value={id}
+                        checked={paymentMethod === id}
                         disabled={disabled}
-                        onChange={() => setPaymentMethod(m.id)}
+                        onChange={() => setPaymentMethod(id)}
                         className="accent-accent"
                       />
-                      <span className="text-sm">{isAr ? m.labelAr : m.labelEn}</span>
+                      <span className="text-sm">{tPay(id)}</span>
                     </label>
                   );
                 })}
@@ -539,8 +533,8 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
                 {codExceeded ? (
                   <p className="mt-1">
                     {t("codLimitExceeded", {
-                      total: `${nf.format(tot)} ${isAr ? "ج.م" : "EGP"}`,
-                      limit: `${nf.format(codLimit)} ${isAr ? "ج.م" : "EGP"}`,
+                      total: nf.format(tot),
+                      limit: nf.format(codLimit),
                     })}
                   </p>
                 ) : (
@@ -566,13 +560,13 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
 
             <div>
               <label htmlFor="notes" className="mb-1.5 block text-sm font-medium text-fg">
-                {isAr ? "ملاحظات التوصيل (اختياري)" : "Delivery Notes (Optional)"}
+                {t("notesOptional")}
               </label>
               <textarea
                 id="notes"
                 rows={3}
                 {...register("notes")}
-                placeholder={isAr ? "أي تعليمات خاصة للمندوب..." : "Any special instructions for courier..."}
+                placeholder={t("notesPlaceholder")}
                 className="w-full rounded-lg border border-border bg-bg px-4 py-3 text-fg placeholder:text-muted focus:border-accent focus:outline-none"
               />
             </div>
@@ -587,19 +581,13 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
               {submitting ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>{isAr ? "جاري تأكيد الطلب..." : "Placing order..."}</span>
+                  <span>{t("submitting")}</span>
                 </>
               ) : (
                 <>
                   <CheckCircle2 className="w-5 h-5" />
                   <span>
-                    {paymentMethod === "cod"
-                      ? isAr
-                        ? "تأكيد الطلب (الدفع عند الاستلام)"
-                        : "Confirm Order (COD)"
-                      : isAr
-                        ? "تأكيد الطلب والدفع"
-                        : "Confirm Order & Pay"}
+                    {paymentMethod === "cod" ? t("confirmCod") : t("confirmPay")}
                   </span>
                 </>
               )}
@@ -610,7 +598,7 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
           <aside className="space-y-4 lg:sticky lg:top-6 lg:self-start">
             <div className="rounded-xl border border-border bg-card p-6 space-y-4">
               <h2 className="text-xl font-bold text-fg">
-                {isAr ? "ملخص المنتجات" : "Products Summary"}
+                {t("productsSummary")}
               </h2>
 
               <ul className="max-h-60 overflow-y-auto space-y-3 divide-y divide-border/50 text-sm">
@@ -631,13 +619,13 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
 
               <div className="space-y-2 border-t border-border pt-4 text-sm">
                 <div className="flex justify-between text-muted">
-                  <span>{isAr ? "المجموع الفرعي" : "Subtotal"}</span>
+                  <span>{tCart("subtotal")}</span>
                   <span className="font-semibold text-fg" dir="ltr">
                     {nf.format(sub)} {isAr ? "ج.م" : "EGP"}
                   </span>
                 </div>
                 <div className="flex justify-between text-muted">
-                  <span>{isAr ? "ضريبة القيمة المضافة (14%)" : "Estimated VAT (14%)"}</span>
+                  <span>{t("vatEstimated")}</span>
                   <span className="font-semibold text-fg" dir="ltr">
                     {nf.format(tax)} {isAr ? "ج.م" : "EGP"}
                   </span>
@@ -645,7 +633,7 @@ function CheckoutForm({ customer, savedAddresses }: CheckoutFormProps) {
               </div>
 
               <div className="flex justify-between text-lg font-extrabold text-fg border-t border-border pt-3">
-                <span>{isAr ? "الإجمالي الكلي" : "Total"}</span>
+                <span>{tCart("total")}</span>
                 <span className="text-accent" dir="ltr">
                   {nf.format(tot)} {isAr ? "ج.م" : "EGP"}
                 </span>

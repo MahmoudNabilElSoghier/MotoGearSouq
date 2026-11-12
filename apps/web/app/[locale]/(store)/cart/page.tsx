@@ -12,6 +12,7 @@ import { Container } from "@/components/ui/Container";
 export default function CartPage() {
   const locale = useLocale();
   const isAr = locale === "ar";
+  const t = useTranslations("cart");
   const tCheckout = useTranslations("checkout");
   const nf = new Intl.NumberFormat(isAr ? "ar-EG-u-nu-latn" : "en-US");
 
@@ -37,17 +38,15 @@ export default function CartPage() {
               <ShoppingCart className="w-10 h-10" />
             </div>
             <h1 className="text-2xl font-extrabold text-fg">
-              {isAr ? "سلة الشراء فارغة" : "Your cart is empty"}
+              {t("empty")}
             </h1>
             <p className="mt-2 text-muted max-w-sm">
-              {isAr
-                ? "لم تقم بإضافة أي قطع غيار إلى سلة الشراء بعد. تصفح الكتالوج لاختيار ما تحتاجه."
-                : "You haven't added any spare parts to your cart yet. Browse the catalog to find what you need."}
+              {t("emptyBody")}
             </p>
             <div className="mt-6">
               <Button variant="primary" asChild>
                 <Link href={`/${locale}/products`} className="inline-flex items-center gap-2">
-                  <span>{isAr ? "تصفح قطع الغيار" : "Browse spare parts"}</span>
+                  <span>{t("emptyCta")}</span>
                   {isAr ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
                 </Link>
               </Button>
@@ -63,11 +62,11 @@ export default function CartPage() {
       <Container>
         <div className="mb-8 flex items-center justify-between">
           <h1 className="text-3xl md:text-4xl font-extrabold text-fg">
-            {isAr ? "سلة الشراء" : "Shopping Cart"}
+            {t("title")}
           </h1>
           <Button variant="ghost" size="sm" onClick={clearCart} className="text-red-400 hover:text-red-500 inline-flex items-center gap-1.5">
             <Trash2 className="w-3.5 h-3.5" />
-            {isAr ? "إفراغ السلة" : "Clear cart"}
+            {t("clear")}
           </Button>
         </div>
 
@@ -119,7 +118,7 @@ export default function CartPage() {
                       type="button"
                       onClick={() => removeItem(item.productId)}
                       className="p-2 text-muted hover:text-red-400 transition-colors"
-                      aria-label={isAr ? "حذف القطعة" : "Remove item"}
+                      aria-label={t("remove")}
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>
@@ -133,18 +132,18 @@ export default function CartPage() {
           <aside className="space-y-4 lg:sticky lg:top-6 lg:self-start">
             <div className="rounded-xl border border-border bg-card p-6 space-y-4">
               <h2 className="text-xl font-bold text-fg">
-                {isAr ? "ملخص الطلب" : "Order Summary"}
+                {tCheckout("orderSummary")}
               </h2>
 
               <div className="space-y-2 border-t border-b border-border py-4 text-sm">
                 <div className="flex justify-between text-muted">
-                  <span>{isAr ? "المجموع الفرعي" : "Subtotal"}</span>
+                  <span>{t("subtotal")}</span>
                   <span className="font-semibold text-fg" dir="ltr">
                     {nf.format(sub)} {isAr ? "ج.م" : "EGP"}
                   </span>
                 </div>
                 <div className="flex justify-between text-muted">
-                  <span>{isAr ? "ضريبة القيمة المضافة (14% مقدرة)" : "Estimated VAT (14%)"}</span>
+                  <span>{tCheckout("vatEstimated")}</span>
                   <span className="font-semibold text-fg" dir="ltr">
                     {nf.format(tax)} {isAr ? "ج.م" : "EGP"}
                   </span>
@@ -152,7 +151,7 @@ export default function CartPage() {
               </div>
 
               <div className="flex justify-between text-lg font-extrabold text-fg">
-                <span>{isAr ? "الإجمالي الكلي" : "Total"}</span>
+                <span>{t("total")}</span>
                 <span className="text-accent" dir="ltr">
                   {nf.format(tot)} {isAr ? "ج.م" : "EGP"}
                 </span>
@@ -170,7 +169,7 @@ export default function CartPage() {
                     }}
                     className="inline-flex items-center justify-center gap-2"
                   >
-                    <span>{isAr ? "إتمام الطلب" : "Proceed to Checkout"}</span>
+                    <span>{t("checkout")}</span>
                     {isAr ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
                   </Link>
                 </Button>

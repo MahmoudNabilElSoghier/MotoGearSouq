@@ -113,7 +113,7 @@
     "ctaSecondary": "كلمنا على واتساب",
     "prevSlide": "الشريحة السابقة",
     "nextSlide": "الشريحة التالية",
-    "goToSlide": "اذهب إلى الشريحة {index}"
+    "goToSlide": "الشريحة {index} من {total}"
   },
   "trustBar": {
     "years": {

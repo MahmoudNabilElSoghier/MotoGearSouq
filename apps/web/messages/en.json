@@ -113,7 +113,7 @@
     "ctaSecondary": "Chat with us on WhatsApp",
     "prevSlide": "Previous slide",
     "nextSlide": "Next slide",
-    "goToSlide": "Go to slide {index}"
+    "goToSlide": "Slide {index} of {total}"
   },
   "trustBar": {
     "years": {

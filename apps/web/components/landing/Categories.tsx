@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/Button";
 import {
   ArrowRight,
   Bike,
-  ChevronLeft,
   ChevronRight,
   LayoutGrid,
   Shield,
@@ -84,7 +83,7 @@ function CategoryCard({
         href={link}
         className="group relative flex flex-col items-center gap-2"
       >
-        <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-border bg-card">
+        <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-border bg-brand-red/5">
           {image ? (
             /* object-cover = full bleed (heroes, banners), object-contain = show entire image (cards, products) */
             <Image
@@ -92,7 +91,7 @@ function CategoryCard({
               alt={title}
               fill
               sizes="(min-width: 1024px) 16vw, (min-width: 768px) 25vw, 33vw"
-              className="object-contain p-2 sm:p-3 transition-transform duration-500 group-hover:scale-105"
+              className="object-contain p-3 sm:p-4 w-full h-full transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-red/10 via-brand-red/5 to-transparent text-brand-red transition-transform duration-500 group-hover:scale-105">
@@ -105,7 +104,7 @@ function CategoryCard({
           )}
 
           <div
-            className="absolute bottom-0 start-0 w-10 h-10 bg-brand-red flex items-end justify-start p-0.5 z-10 sm:w-12 sm:h-12 sm:p-1"
+            className="absolute bottom-0 start-0 w-8 h-8 bg-brand-red flex items-end justify-start p-0.5 z-10 sm:w-10 sm:h-10 sm:p-1"
             style={{
               clipPath: isAr
                 ? "polygon(100% 100%, 0 100%, 100% 0)"
@@ -117,26 +116,20 @@ function CategoryCard({
           </div>
         </div>
 
-        <div className="flex items-center justify-between w-full px-1 gap-2">
-          <span className="text-xs sm:text-sm font-bold leading-tight text-fg">{title}</span>
-          {isAr ? (
-            <ChevronLeft
-              className="w-4 h-4 shrink-0 text-muted transition-colors group-hover:text-brand-red"
-              aria-hidden="true"
-            />
-          ) : (
-            <ChevronRight
-              className="w-4 h-4 shrink-0 text-muted transition-colors group-hover:text-brand-red"
-              aria-hidden="true"
-            />
-          )}
+        <div className="flex items-center justify-between w-full px-1 mt-2 gap-2">
+          <span className="text-xs sm:text-sm font-bold text-fg leading-tight line-clamp-2">{title}</span>
+          <ChevronRight
+            className="w-4 h-4 shrink-0 text-muted rtl:rotate-180 transition-colors group-hover:text-brand-red"
+            aria-hidden="true"
+          />
         </div>
       </Link>
     </FadeIn>
   );
 }
 
-const GRID_CLASSES = "grid grid-cols-3 gap-2 sm:gap-4 md:grid-cols-4 lg:grid-cols-6 items-start";
+const GRID_CLASSES =
+  "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 items-start";
 
 export default async function Categories({
   locale,
@@ -161,7 +154,7 @@ export default async function Categories({
   ];
 
   return (
-    <section id="categories" className="pt-4 md:pt-6 pb-12 md:pb-16 bg-bg scroll-mt-24">
+    <section id="categories" className="pt-6 sm:pt-8 pb-12 md:pb-16 bg-bg scroll-mt-24">
       <Container size="xl">
         {sections.length === 0 ? (
           <>

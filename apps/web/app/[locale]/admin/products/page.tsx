@@ -9,7 +9,7 @@ import { FormBanner } from "@/components/admin/FormBanner";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 import { getProducts, deleteProduct, totalStock, type ProductPage } from "@motogearsouq/api-client";
 import type { Product } from "@motogearsouq/shared";
-import { Loader2, Plus, Pencil, Trash2, ArrowLeft, ArrowRight } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, ArrowLeft, ArrowRight, Upload } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 export default function AdminProductsPage() {
@@ -79,12 +79,20 @@ export default function AdminProductsPage() {
             {result ? t("countLine", { count: nf.format(result.total) }) : tCommon("loading")}
           </p>
         </div>
-        <Button asChild size="sm">
-          <Link href={`/${locale}/admin/products/new`} className="inline-flex items-center gap-2">
-            <Plus className="w-3.5 h-3.5" />
-            {t("add")}
-          </Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button asChild size="sm" variant="outline">
+            <Link href={`/${locale}/admin/products/import`} className="inline-flex items-center gap-2">
+              <Upload className="w-3.5 h-3.5" />
+              {locale === "ar" ? "استيراد بالملف" : "Bulk Import"}
+            </Link>
+          </Button>
+          <Button asChild size="sm">
+            <Link href={`/${locale}/admin/products/new`} className="inline-flex items-center gap-2">
+              <Plus className="w-3.5 h-3.5" />
+              {t("add")}
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {banner && <FormBanner type={banner.type} message={banner.message} onClose={() => setBanner(null)} />}

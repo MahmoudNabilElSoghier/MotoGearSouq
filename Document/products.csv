@@ -1,0 +1,51 @@
+﻿SKU,Product Name AR,Product Name EN,OEM Code,Brand,Vehicle Type,Model,Part Category,Retail Price,Wholesale Price,Stock Quantity,Stock Status,Image URL
+SYM-FD3-BRK-01,تيل فرامل أمامي سيم فيدل 3,SYM Fiddle 3 Front Brake Pads,OEM-SYM-9982,SYM,سكوتر,Fiddle 3,الفرامل,250,190,15,متاح,https://example.com/sym-brake.jpg
+SYM-FD3-BLT-01,سير سحب سيم فيدل 3,SYM Fiddle 3 CVT Drive Belt,OEM-SYM-7761,SYM,سكوتر,Fiddle 3,نقل الحركة,450,350,0,غير متاح (قريباً),https://example.com/sym-belt.jpg
+SYM-FD3-FLT-01,فلتر هواء سيم فيدل 3,SYM Fiddle 3 Air Filter,OEM-SYM-3321,SYM,سكوتر,Fiddle 3,التغذية والوقود,120,90,20,متاح,https://example.com/sym-filter.jpg
+SYM-FD3-LGT-01,كشاف أمامي سيم فيدل 3,SYM Fiddle 3 Headlight Assembly,OEM-SYM-1122,SYM,سكوتر,Fiddle 3,الكهرباء والإضاءة,850,700,5,متاح,https://example.com/sym-headlight.jpg
+SYM-FD3-SPK-01,بوجيه سيم فيدل 3,SYM Fiddle 3 Spark Plug,OEM-SYM-NGK,SYM,سكوتر,Fiddle 3,الكهرباء والإضاءة,80,60,0,غير متاح (قريباً),https://example.com/sym-spark.jpg
+SYM-SSR-BRK-01,تيل فرامل خلفي سيمفوني إس آر,Symphony SR Rear Brake Pads,OEM-SYM-8871,SYM,سكوتر,Symphony SR,الفرامل,260,200,10,متاح,https://example.com/ssr-brake.jpg
+SYM-SSR-MIR-01,مراية يمين سيمفوني إس آر,Symphony SR Right Mirror,OEM-SYM-6654,SYM,سكوتر,Symphony SR,الفايبر والهيكل,150,110,0,غير متاح (قريباً),https://example.com/ssr-mirror.jpg
+SYM-SSR-RLR-01,طقم بكر سحب سيمفوني إس آر,Symphony SR Variator Rollers,OEM-SYM-4432,SYM,سكوتر,Symphony SR,نقل الحركة,180,140,25,متاح,https://example.com/ssr-rollers.jpg
+SYM-SSR-CRB-01,كاربراتير سيمفوني إس آر 150,Symphony SR 150 Carburetor,OEM-SYM-2211,SYM,سكوتر,Symphony SR,التغذية والوقود,950,800,3,متاح,https://example.com/ssr-carb.jpg
+SYM-SSR-CDI-01,وحدة CDI سيمفوني إس آر,Symphony SR CDI Unit,OEM-SYM-9900,SYM,سكوتر,Symphony SR,الكهرباء والإضاءة,350,280,0,غير متاح (قريباً),https://example.com/ssr-cdi.jpg
+BAJ-BOX-LGT-02,فانوس خلفي باجاج بوكسر 150,Bajaj Boxer 150 Tail Light,OEM-BAJ-1234,Bajaj,موتوسيكل,Boxer 150,الكهرباء والإضاءة,180,140,0,غير متاح (قريباً),https://example.com/bajaj-tail.jpg
+BAJ-BOX-CHN-01,طقم آلات جر باجاج بوكسر 150,Bajaj Boxer 150 Chain Sprocket Kit,OEM-BAJ-5544,Bajaj,موتوسيكل,Boxer 150,نقل الحركة,550,450,12,متاح,https://example.com/bajaj-chain.jpg
+BAJ-BOX-BRK-02,تيل فرامل خلفي بوكسر 150,Bajaj Boxer 150 Rear Brake Shoe,OEM-BAJ-3321,Bajaj,موتوسيكل,Boxer 150,الفرامل,130,95,30,متاح,https://example.com/bajaj-brakeshoes.jpg
+BAJ-BOX-CBL-01,سلك دبرياج بوكسر 150,Bajaj Boxer 150 Clutch Cable,OEM-BAJ-7765,Bajaj,موتوسيكل,Boxer 150,نقل الحركة,70,50,0,غير متاح (قريباً),https://example.com/bajaj-cable.jpg
+BAJ-BOX-CYL-01,طقم سلندر كامل بوكسر 150,Bajaj Boxer 150 Cylinder Kit,OEM-BAJ-8899,Bajaj,موتوسيكل,Boxer 150,أجزاء المحرك,1200,950,5,متاح,https://example.com/bajaj-cylinder.jpg
+BAJ-BOX-PST-01,بستم وشنبر بوكسر 150,Bajaj Boxer 150 Piston & Rings,OEM-BAJ-8890,Bajaj,موتوسيكل,Boxer 150,أجزاء المحرك,450,350,0,غير متاح (قريباً),https://example.com/bajaj-piston.jpg
+BAJ-PUL-SPK-01,بوجيه باجاج بلسر 180,Bajaj Pulsar 180 Spark Plug,OEM-BAJ-NGK2,Bajaj,موتوسيكل,Pulsar 180,الكهرباء والإضاءة,120,90,0,غير متاح (قريباً),https://example.com/pul-spark.jpg
+BAJ-PUL-BRK-01,تيل فرامل أمامي بلسر 180,Bajaj Pulsar 180 Front Brake Pads,OEM-BAJ-1122,Bajaj,موتوسيكل,Pulsar 180,الفرامل,190,140,20,متاح,https://example.com/pul-brake.jpg
+BAJ-PUL-FLT-01,فلتر زيت بلسر 180,Bajaj Pulsar 180 Oil Filter,OEM-BAJ-5566,Bajaj,موتوسيكل,Pulsar 180,سوائل وزيوت,60,40,50,متاح,https://example.com/pul-oilfilter.jpg
+BAJ-PUL-LGT-01,إشارة يمين بلسر 180,Bajaj Pulsar 180 Right Indicator,OEM-BAJ-3344,Bajaj,موتوسيكل,Pulsar 180,الكهرباء والإضاءة,110,80,0,غير متاح (قريباً),https://example.com/pul-indicator.jpg
+HAO-HJ4-LGT-01,كشاف أمامي هوجان 4,Haojue 4 Headlight,OEM-HAO-1100,Haojue,موتوسيكل,Haojian 4,الكهرباء والإضاءة,450,350,15,متاح,https://example.com/hj4-headlight.jpg
+HAO-HJ4-CRB-01,كاربراتير هوجان 4,Haojue 4 Carburetor,OEM-HAO-2200,Haojue,موتوسيكل,Haojian 4,التغذية والوقود,380,300,0,غير متاح (قريباً),https://example.com/hj4-carb.jpg
+HAO-HJ4-EXH-01,شكمان كامل هوجان 4,Haojue 4 Exhaust Pipe,OEM-HAO-3300,Haojue,موتوسيكل,Haojian 4,أجزاء المحرك,850,700,5,متاح,https://example.com/hj4-exhaust.jpg
+HAO-HJ4-SET-01,كرسي (مقعد) هوجان 4,Haojue 4 Seat Assembly,OEM-HAO-4400,Haojue,موتوسيكل,Haojian 4,الفايبر والهيكل,400,320,8,متاح,https://example.com/hj4-seat.jpg
+HAO-HJ4-SHK-01,مساعدين أمامي هوجان 4,Haojue 4 Front Shock Absorber,OEM-HAO-5500,Haojue,موتوسيكل,Haojian 4,العفشة والمساعدين,650,550,0,غير متاح (قريباً),https://example.com/hj4-shock.jpg
+DAY-D40-TNK-01,تانك بنزين دايون 40,Dayun 40 Fuel Tank,OEM-DAY-TNK,Dayun,موتوسيكل,Dayun 40,الفايبر والهيكل,750,600,0,غير متاح (قريباً),https://example.com/d40-tank.jpg
+DAY-D40-IGN-01,موبينة تكرير دايون 40,Dayun 40 Ignition Coil,OEM-DAY-IGN,Dayun,موتوسيكل,Dayun 40,الكهرباء والإضاءة,150,110,22,متاح,https://example.com/d40-coil.jpg
+DAY-D40-CBL-01,سلك بنزين دايون 40,Dayun 40 Throttle Cable,OEM-DAY-CBL,Dayun,موتوسيكل,Dayun 40,التغذية والوقود,50,35,40,متاح,https://example.com/d40-cable.jpg
+DAY-D40-BRK-01,ماستر فرامل دايون 40,Dayun 40 Brake Master Cylinder,OEM-DAY-BRK,Dayun,موتوسيكل,Dayun 40,الفرامل,280,220,10,متاح,https://example.com/d40-master.jpg
+BAJ-TUK-CLT-01,ورق دبرياج توكتوك باجاج 4 شوط,Bajaj Tuk-Tuk 4S Clutch Plates,OEM-TUK-CLT,Bajaj,توكتوك,Bajaj RE 4-Stroke,نقل الحركة,300,240,0,غير متاح (قريباً),https://example.com/tuk-clutch.jpg
+BAJ-TUK-BRK-01,تيل فرامل توكتوك باجاج,Bajaj Tuk-Tuk Brake Shoes,OEM-TUK-BRK,Bajaj,توكتوك,Bajaj RE 4-Stroke,الفرامل,220,170,35,متاح,https://example.com/tuk-brake.jpg
+BAJ-TUK-OIL-01,فلتر زيت توكتوك باجاج,Bajaj Tuk-Tuk Oil Filter,OEM-TUK-OIL,Bajaj,توكتوك,Bajaj RE 4-Stroke,سوائل وزيوت,80,60,0,غير متاح (قريباً),https://example.com/tuk-oilfilter.jpg
+BAJ-TUK-CBL-01,سلك غيارات توكتوك باجاج,Bajaj Tuk-Tuk Gear Cable,OEM-TUK-CBL1,Bajaj,توكتوك,Bajaj RE 4-Stroke,نقل الحركة,150,110,25,متاح,https://example.com/tuk-gearcable.jpg
+BAJ-TUK-LGT-01,فانوس أمامي توكتوك باجاج,Bajaj Tuk-Tuk Headlight,OEM-TUK-LGT,Bajaj,توكتوك,Bajaj RE 4-Stroke,الكهرباء والإضاءة,450,360,12,متاح,https://example.com/tuk-headlight.jpg
+BAJ-TUK-SHK-01,مساعد أمامي توكتوك باجاج,Bajaj Tuk-Tuk Front Shock,OEM-TUK-SHK,Bajaj,توكتوك,Bajaj RE 4-Stroke,العفشة والمساعدين,550,450,0,غير متاح (قريباً),https://example.com/tuk-shock.jpg
+PIA-APE-CLT-01,سلك دبرياج توكتوك بياجيو,Piaggio Ape Clutch Cable,OEM-PIA-112,Piaggio,توكتوك,Piaggio Ape,نقل الحركة,120,90,10,متاح,https://example.com/pia-clutch.jpg
+PIA-APE-BRK-01,طنبورة فرامل توكتوك بياجيو,Piaggio Ape Brake Drum,OEM-PIA-223,Piaggio,توكتوك,Piaggio Ape,الفرامل,600,480,0,غير متاح (قريباً),https://example.com/pia-drum.jpg
+CMG-TRC-AXL-01,كارونة خلفية تروسيكل CMG 200cc,CMG 200cc Rear Axle Differential,OEM-CMG-AXL,CMG,تروسيكل,CMG 200cc,نقل الحركة,2500,2100,0,غير متاح (قريباً),https://example.com/cmg-axle.jpg
+CMG-TRC-CRB-01,كاربراتير تروسيكل CMG 200,CMG 200cc Carburetor,OEM-CMG-CRB,CMG,تروسيكل,CMG 200cc,التغذية والوقود,450,350,15,متاح,https://example.com/cmg-carb.jpg
+CMG-TRC-SPR-01,سوستة عفشة خلفية تروسيكل CMG,CMG Tricycle Rear Leaf Spring,OEM-CMG-SPR,CMG,تروسيكل,CMG 200cc,العفشة والمساعدين,850,700,20,متاح,https://example.com/cmg-spring.jpg
+CMG-TRC-LGT-01,فانوس خلفي تروسيكل CMG,CMG Tricycle Tail Light,OEM-CMG-LGT,CMG,تروسيكل,CMG 200cc,الكهرباء والإضاءة,160,120,0,غير متاح (قريباً),https://example.com/cmg-tail.jpg
+CMG-TRC-SHF-01,عمود كردان تروسيكل CMG,CMG Tricycle Drive Shaft,OEM-CMG-SHF,CMG,تروسيكل,CMG 200cc,نقل الحركة,950,780,5,متاح,https://example.com/cmg-shaft.jpg
+DAY-TRC-CYL-01,سلندر كامل تروسيكل دايون 200,Dayun 200cc Tricycle Cylinder Kit,OEM-DAY-CYL2,Dayun,تروسيكل,Dayun 200cc,أجزاء المحرك,1400,1150,0,غير متاح (قريباً),https://example.com/day-cyl.jpg
+DAY-TRC-BRK-01,تيل فرامل تروسيكل دايون,Dayun Tricycle Brake Shoes,OEM-DAY-BRK2,Dayun,تروسيكل,Dayun 200cc,الفرامل,150,110,40,متاح,https://example.com/day-brake.jpg
+DAY-TRC-TNK-01,تانك بنزين تروسيكل دايون,Dayun Tricycle Fuel Tank,OEM-DAY-TNK2,Dayun,تروسيكل,Dayun 200cc,الفايبر والهيكل,800,650,4,متاح,https://example.com/day-tank.jpg
+DAY-TRC-BAT-01,بطارية 12 فولت تروسيكل دايون,Dayun Tricycle 12V Battery,OEM-DAY-BAT,Dayun,تروسيكل,Dayun 200cc,الكهرباء والإضاءة,900,750,0,غير متاح (قريباً),https://example.com/day-battery.jpg
+ACC-GEN-HLM-01,خوذة رأس أمان قياسية,Standard Safety Helmet,OEM-ACC-HLM,General,موتوسيكل,All Models,إكسسوارات,600,450,30,متاح,https://example.com/helmet.jpg
+ACC-GEN-CVR-01,غطاء موتوسيكل مقاوم للمياه,Waterproof Motorcycle Cover,OEM-ACC-CVR,General,موتوسيكل,All Models,إكسسوارات,250,190,0,غير متاح (قريباً),https://example.com/cover.jpg
+ACC-GEN-LCK-01,قفل ديسك أمان,Brake Disc Security Lock,OEM-ACC-LCK,General,سكوتر,All Models,إكسسوارات,180,130,50,متاح,https://example.com/lock.jpg
+CHM-GEN-OIL-01,زيت محرك موتول 10W40,Motul 10W40 Engine Oil,OEM-MOT-10W40,Motul,موتوسيكل,All Models,سوائل وزيوت,350,290,100,متاح,https://example.com/motul.jpg

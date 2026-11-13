@@ -143,6 +143,7 @@ model MachineModel {
   brand       Brand    @relation(fields: [brandId], references: [id], onDelete: Cascade)
   name        String
   nameAr      String?
+  nameEn      String?
   slug        String
   category    String   @default("دراجات نارية")
   yearFrom    Int?
@@ -155,6 +156,7 @@ model MachineModel {
   compatibilities ProductCompatibility[]
 
   @@unique([brandId, slug])
+  @@unique([brandId, nameEn])
   @@index([brandId])
   @@index([category])
 }
@@ -219,6 +221,7 @@ model Product {
   // Store catalog type: new | used | spare-parts | accessories
   type            String        @default("spare-parts")
   isFeatured      Boolean       @default(false)
+  isComingSoon    Boolean       @default(false)
   onSale          Boolean       @default(false)
   discountPercent Decimal?      @db.Decimal(5, 2)
   active          Boolean       @default(true)

@@ -1049,3 +1049,19 @@ export const uploadDocument = (
   });
 };
 
+export interface BulkImportResult {
+  successCount: number;
+  errorCount: number;
+  errors: Array<{ row: number; sku?: string; error: string }>;
+}
+
+export const bulkImportProducts = async (file: File): Promise<BulkImportResult> => {
+  const formData = new FormData();
+  formData.append("file", file);
+  const res = await request<BulkImportResult>("/products/bulk-import", {
+    method: "POST",
+    body: formData,
+  });
+  return res.data;
+};
+

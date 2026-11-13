@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -9,8 +10,11 @@ import {
   Post,
   Put,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiHeader, ApiOperation, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { productFormSchema, type ProductFormValues } from "@motogearsouq/shared";
 import { AdminAuthGuard } from "../common/guards/admin-auth.guard";
@@ -158,5 +162,15 @@ export class ProductsController {
   })
   remove(@Param("id") id: string) {
     return this.products.remove(id);
+  }
+
+  @Post("bulk-import")
+  @UseGuards(AdminAuthGuard)
+  @ApiHeader({ name: "x-admin-api-key", required: false })
+  @UseInterceptors(FileInterceptor("file"))
+  @ApiOperation({ summary: "Bulk import products from CSV/Excel file (admin)" })
+  async bulkImport(@UploadedFile() file: Express.Multer.File | undefined) {
+    if (!file) throw new BadRequestException('Missing multipart field "file"');
+    return this.products.bulkImport(file.buffer);
   }
 }

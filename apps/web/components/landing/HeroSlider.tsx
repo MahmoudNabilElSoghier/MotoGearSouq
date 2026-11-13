@@ -80,12 +80,12 @@ export function HeroSlider() {
   return (
     <section
       id="hero"
-      className="relative pt-6 sm:pt-8 pb-20 sm:pb-24 scroll-mt-24"
+      className="relative pt-6 sm:pt-8 pb-16 sm:pb-20 scroll-mt-24"
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl">
           <div
-            className="overflow-hidden min-h-[460px] sm:min-h-[520px] md:min-h-[560px]"
+            className="overflow-hidden min-h-[380px] sm:min-h-[420px] md:min-h-[480px]"
             ref={emblaRef}
           >
             <div className="flex">
@@ -108,7 +108,7 @@ export function HeroSlider() {
                 return (
                   <div
                     key={slide.id}
-                    className="relative shrink-0 w-full min-h-[460px] sm:min-h-[520px] md:min-h-[560px] flex items-center"
+                    className="relative shrink-0 w-full min-h-[380px] sm:min-h-[420px] md:min-h-[480px] flex items-center"
                   >
                     {/* Background: image when set, otherwise a dark gradient */}
                     {slide.image ? (
@@ -130,28 +130,28 @@ export function HeroSlider() {
                     {/* Bottom gradient fade to blend into next section */}
                     <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
 
-                    <div className="relative z-10 flex flex-col items-center justify-center w-full px-6 sm:px-10 md:px-14 py-12 sm:py-16 md:py-20 text-center md:text-end rtl:md:text-right">
+                    <div className="relative z-10 flex flex-col items-center justify-center w-full px-6 sm:px-12 py-10 sm:py-14 text-center md:text-end rtl:md:text-right">
                       <div className="max-w-xl">
                         {(slide.titleAr.includes("قريباً") || slide.titleEn.toLowerCase().includes("coming soon")) && (
                           <span className="inline-block mb-4 px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider bg-brand-red text-white shadow-lg">
                             {isAr ? "قريباً جداً" : "Coming Soon"}
                           </span>
                         )}
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-8 text-white">
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 text-white">
                           {title}
                         </h1>
                         {subtitle && (
-                          <p className="text-sm sm:text-base md:text-lg text-white/85 leading-relaxed mb-0 max-w-xl">
+                          <p className="text-xs sm:text-sm md:text-base text-white/85 leading-relaxed mb-0 max-w-md">
                             {subtitle}
                           </p>
                         )}
                         {(primaryLabel && primaryLink) ||
                         (secondaryLabel && secondaryLink) ? (
-                          <div className="flex flex-col sm:flex-row gap-3 mt-6 sm:mt-8">
+                          <div className="flex flex-col w-full gap-2 sm:flex-row sm:w-auto sm:gap-3 mt-4 sm:mt-6">
                             {primaryLabel && primaryLink && (
                               <Link
                                 href={primaryLink}
-                                className="px-6 py-3 text-sm sm:text-base font-bold bg-brand-red hover:bg-red-700 text-white rounded-lg inline-flex items-center gap-2"
+                                className="px-5 py-2.5 text-sm font-bold bg-brand-red hover:bg-red-700 text-white rounded-lg inline-flex items-center gap-2"
                               >
                                 {primaryLabel}
                               </Link>
@@ -162,7 +162,7 @@ export function HeroSlider() {
                                 {...(secondaryLink.startsWith("http")
                                   ? { target: "_blank", rel: "noopener noreferrer" }
                                   : {})}
-                                className="px-6 py-3 text-sm sm:text-base font-bold bg-white/10 backdrop-blur border border-white/30 text-white rounded-lg hover:bg-white/20 transition-colors inline-flex items-center gap-2"
+                                className="px-5 py-2.5 text-sm font-bold bg-white/10 backdrop-blur border border-white/30 text-white rounded-lg hover:bg-white/20 transition-colors inline-flex items-center gap-2"
                               >
                                 {secondaryLabel}
                               </Link>

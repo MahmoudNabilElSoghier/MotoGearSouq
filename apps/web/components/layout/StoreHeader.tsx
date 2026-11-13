@@ -49,7 +49,7 @@ export function StoreHeader() {
       alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
       width={150}
       height={60}
-      className="h-10 w-auto object-contain md:h-12"
+      className="h-10 w-auto max-w-[160px] object-contain sm:h-12 sm:max-w-none"
       priority={priority}
     />
   );
@@ -130,8 +130,8 @@ export function StoreHeader() {
       <header className="sticky top-0 z-50 border-b border-border bg-bg/80 backdrop-blur">
         <Container size="xl" as="div">
           <div className="relative flex h-16 items-center justify-between gap-3 md:h-20">
-            {/* Start: hamburger + logo (desktop) */}
-            <div className="flex items-center gap-2 md:gap-3">
+            {/* Start: hamburger + logo (all breakpoints) */}
+            <div className="flex min-w-0 items-center gap-3 sm:gap-4">
               <button
                 type="button"
                 onClick={() => setSidebarOpen((v) => !v)}
@@ -142,7 +142,7 @@ export function StoreHeader() {
               >
                 <Menu className="h-5 w-5" aria-hidden="true" />
               </button>
-              <Link href={`/${locale}`} className="hidden md:flex">
+              <Link href={`/${locale}`} className="flex min-w-0 items-center">
                 {renderLogo(true)}
               </Link>
             </div>
@@ -150,7 +150,7 @@ export function StoreHeader() {
             {/* Center: desktop nav */}
             <nav
               aria-label={tHeader("navAria")}
-              className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-3 md:flex lg:gap-5"
+              className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-3 lg:flex lg:gap-5"
             >
               {centerLinks.map(({ href, label, icon: Icon }) => (
                 <Link
@@ -164,16 +164,8 @@ export function StoreHeader() {
               ))}
             </nav>
 
-            {/* Center: mobile logo */}
-            <Link
-              href={`/${locale}`}
-              className="absolute left-1/2 -translate-x-1/2 md:hidden"
-            >
-              {renderLogo(false)}
-            </Link>
-
             {/* End: locale switcher & theme toggle + cart + login/account */}
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
               <div className="flex items-center gap-1.5">
                 <LocaleSwitcher />
                 <ThemeToggle />

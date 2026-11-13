@@ -54,9 +54,9 @@ interface CategoryCardData {
 function SectionHeader({ tag, title }: { tag: "h2" | "h3"; title: string }) {
   const TagEl = tag;
   return (
-    <div className="flex items-center justify-between mb-4">
+    <div className="flex items-center justify-between mb-3 md:mb-4">
       <div className="flex flex-col gap-1.5">
-        <TagEl className="text-xl font-bold text-fg truncate">{title}</TagEl>
+        <TagEl className="text-lg md:text-xl font-bold text-fg truncate">{title}</TagEl>
         <span className="block h-1 w-8 bg-brand-red" aria-hidden="true" />
       </div>
       <LayoutGrid
@@ -83,7 +83,7 @@ function CategoryCard({
         href={link}
         className="group relative flex flex-col items-center gap-2"
       >
-        <div className="relative w-full aspect-square rounded-xl overflow-hidden border border-border bg-brand-red/5">
+        <div className="relative w-full aspect-square rounded-lg overflow-hidden border border-border bg-brand-red/5">
           {image ? (
             /* object-cover = full bleed (heroes, banners), object-contain = show entire image (cards, products) */
             <Image
@@ -104,7 +104,7 @@ function CategoryCard({
           )}
 
           <div
-            className="absolute bottom-0 start-0 w-8 h-8 bg-brand-red flex items-end justify-start p-0.5 z-10 sm:w-10 sm:h-10 sm:p-1"
+            className="absolute bottom-0 start-0 w-6 h-6 bg-brand-red flex items-end justify-start p-0.5 z-10 sm:w-8 sm:h-8 sm:p-1"
             style={{
               clipPath: isAr
                 ? "polygon(100% 100%, 0 100%, 100% 0)"
@@ -116,10 +116,10 @@ function CategoryCard({
           </div>
         </div>
 
-        <div className="flex items-center justify-between w-full px-1 mt-2 gap-2">
+        <div className="flex items-center justify-between w-full px-1 mt-1.5 sm:mt-2 gap-2">
           <span className="text-xs sm:text-sm font-bold text-fg leading-tight line-clamp-2">{title}</span>
           <ChevronRight
-            className="w-4 h-4 shrink-0 text-muted rtl:rotate-180 transition-colors group-hover:text-brand-red"
+            className="w-3 h-3 sm:w-4 sm:h-4 shrink-0 text-muted rtl:rotate-180 transition-colors group-hover:text-brand-red"
             aria-hidden="true"
           />
         </div>
@@ -129,7 +129,7 @@ function CategoryCard({
 }
 
 const GRID_CLASSES =
-  "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 items-start";
+  "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 items-start";
 
 export default async function Categories({
   locale,
@@ -154,7 +154,7 @@ export default async function Categories({
   ];
 
   return (
-    <section id="categories" className="pt-6 sm:pt-8 pb-12 md:pb-16 bg-bg scroll-mt-24">
+    <section id="categories" className="pt-8 pb-12 bg-bg scroll-mt-24">
       <Container size="xl">
         {sections.length === 0 ? (
           <>
@@ -181,7 +181,7 @@ export default async function Categories({
                     title={isAr ? section.titleAr : section.titleEn}
                   />
                   {(section.subtitleAr || section.subtitleEn) && (
-                    <p className="mb-6 max-w-2xl text-sm text-muted">
+                    <p className="mb-4 max-w-2xl text-sm text-muted">
                       {isAr ? section.subtitleAr : section.subtitleEn}
                     </p>
                   )}

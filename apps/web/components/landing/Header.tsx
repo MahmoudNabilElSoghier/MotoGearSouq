@@ -64,7 +64,7 @@ export function Header() {
             {/* Center: desktop nav */}
             <nav
               aria-label={tHeader("navAria")}
-              className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-3 md:flex lg:gap-5"
+              className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-3 lg:flex lg:gap-5"
             >
               {centerLinks.map(({ href, label, icon: Icon }) => (
                 <Link

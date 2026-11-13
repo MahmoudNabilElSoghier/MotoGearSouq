@@ -1690,7 +1690,17 @@
       "shipped": "Shipped",
       "delivered": "Delivered",
       "cancelled": "Cancelled"
-    }
+    },
+    "metaTitle": "Order #{orderNumber} | MotoGearSouq",
+    "whatsappInquiry": "Hello, inquiring about order status for #{orderNumber}",
+    "continueShopping": "Continue shopping",
+    "timeline": "Order Timeline",
+    "itemsTitle": "Ordered Items",
+    "item": "Item",
+    "qty": "Qty",
+    "price": "Price",
+    "totalAmount": "Total Amount",
+    "whatsappHelp": "Have questions about your order? Contact us directly via WhatsApp."
   },
   "customerAuth": {
     "login": {
@@ -1917,6 +1927,8 @@
     "submitButton": "Track order",
     "or": "or",
     "loginButton": "Log in to your account",
-    "loginNote": "Log in to see all your orders in one place."
+    "loginNote": "Log in to see all your orders in one place.",
+    "metaTitle": "Track your order | MotoGearSouq",
+    "whatsappReturn": "Hello, I'd like to return or exchange order #{orderNumber}"
   }
 }

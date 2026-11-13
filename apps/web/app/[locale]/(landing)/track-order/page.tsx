@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { LogIn, Package } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -12,11 +13,9 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "trackOrder" });
   return {
-    title:
-      locale === "ar"
-        ? "تتبع طلبك | MotoGearSouq"
-        : "Track your order | MotoGearSouq",
+    title: t("metaTitle"),
   };
 }
 

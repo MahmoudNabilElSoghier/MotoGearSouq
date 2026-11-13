@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { trackOrder } from "@motogearsouq/api-client";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -13,24 +14,29 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, orderNumber } = await params;
+  const t = await getTranslations({ locale, namespace: "order" });
   return {
-    title: locale === "ar" ? `طلب رقم ${orderNumber} | MotoGearSouq` : `Order #${orderNumber} | MotoGearSouq`,
+    title: t("metaTitle", { orderNumber }),
   };
 }
 
-const statusMap: Record<string, { labelAr: string; labelEn: string; color: string }> = {
-  pending: { labelAr: "قيد المراجعة", labelEn: "Pending", color: "bg-amber-500/15 text-amber-400 border-amber-500/30" },
-  confirmed: { labelAr: "مؤكد", labelEn: "Confirmed", color: "bg-blue-500/15 text-blue-400 border-blue-500/30" },
-  shipped: { labelAr: "تم الشحن", labelEn: "Shipped", color: "bg-purple-500/15 text-purple-400 border-purple-500/30" },
-  delivered: { labelAr: "تم التوصيل", labelEn: "Delivered", color: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" },
-  cancelled: { labelAr: "ملغي", labelEn: "Cancelled", color: "bg-red-500/15 text-red-400 border-red-500/30" },
+const statusColors: Record<string, string> = {
+  pending: "bg-amber-500/15 text-amber-400 border-amber-500/30",
+  confirmed: "bg-blue-500/15 text-blue-400 border-blue-500/30",
+  shipped: "bg-purple-500/15 text-purple-400 border-purple-500/30",
+  delivered: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+  cancelled: "bg-red-500/15 text-red-400 border-red-500/30",
 };
 
 const steps = ["pending", "confirmed", "shipped", "delivered"];
 
+const knownStatuses = ["pending", "confirmed", "shipped", "delivered", "cancelled"];
+
 export default async function OrderTrackingPage({ params }: PageProps) {
   const { locale, orderNumber } = await params;
   const isAr = locale === "ar";
+  const t = await getTranslations({ locale, namespace: "order" });
+  const tTrack = await getTranslations({ locale, namespace: "trackOrder" });
   const nf = new Intl.NumberFormat(isAr ? "ar-EG-u-nu-latn" : "en-US");
 
   let order;
@@ -42,16 +48,11 @@ export default async function OrderTrackingPage({ params }: PageProps) {
 
   if (!order) notFound();
 
-  const currentStatusInfo = statusMap[order.status] || {
-    labelAr: order.status,
-    labelEn: order.status,
-    color: "bg-card text-muted",
-  };
+  const statusLabel = (status: string) =>
+    knownStatuses.includes(status) ? t(`statuses.${status}`) : status;
 
   const stepIndex = steps.indexOf(order.status);
-  const waText = isAr
-    ? `مرحبًا، أستفسر عن حالة الطلب رقم ${order.orderNumber}`
-    : `Hello, inquiring about order status for #${order.orderNumber}`;
+  const waText = t("whatsappInquiry", { orderNumber: order.orderNumber });
   const waHref = `${company.whatsappUrl}?text=${encodeURIComponent(waText)}`;
 
   return (
@@ -62,7 +63,7 @@ export default async function OrderTrackingPage({ params }: PageProps) {
             href={`/${locale}/products`}
             className="font-semibold text-accent hover:underline"
           >
-            ← {isAr ? "متابعة التسوق" : "Continue shopping"}
+            ← {t("continueShopping")}
           </Link>
           <span className="rounded-full border border-border bg-card px-3 py-1 font-mono text-xs text-muted" dir="ltr">
             {order.orderNumber}
@@ -73,18 +74,18 @@ export default async function OrderTrackingPage({ params }: PageProps) {
           {/* Header Status */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-6">
             <div>
-              <p className="text-sm text-muted">{isAr ? "رقم الطلب" : "Order Number"}</p>
+              <p className="text-sm text-muted">{t("orderNumber")}</p>
               <h1 className="text-2xl md:text-3xl font-extrabold text-fg" dir="ltr">
                 {order.orderNumber}
               </h1>
               <p className="mt-1 text-xs text-muted">
-                {isAr ? "تاريخ الطلب: " : "Order Date: "}
+                {tTrack("orderDate")}:{" "}
                 <span dir="ltr">{new Date(order.createdAt).toLocaleString(isAr ? "ar-EG" : "en-US")}</span>
               </p>
             </div>
             <div>
-              <span className={`inline-block rounded-full border px-4 py-1.5 text-sm font-bold ${currentStatusInfo.color}`}>
-                {isAr ? currentStatusInfo.labelAr : currentStatusInfo.labelEn}
+              <span className={`inline-block rounded-full border px-4 py-1.5 text-sm font-bold ${statusColors[order.status] ?? "bg-card text-muted"}`}>
+                {statusLabel(order.status)}
               </span>
             </div>
           </div>
@@ -93,13 +94,12 @@ export default async function OrderTrackingPage({ params }: PageProps) {
           {order.status !== "cancelled" && (
             <div className="space-y-4">
               <h2 className="text-lg font-bold text-fg">
-                {isAr ? "مراحل الطلب" : "Order Timeline"}
+                {t("timeline")}
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {steps.map((st, idx) => {
                   const isDone = stepIndex >= idx;
                   const isCurrent = order.status === st;
-                  const stInfo = statusMap[st];
                   return (
                     <div
                       key={st}
@@ -118,7 +118,7 @@ export default async function OrderTrackingPage({ params }: PageProps) {
                         {st === "delivered" && <PackageCheck className="w-5 h-5" />}
                       </div>
                       <span className="text-xs font-semibold">
-                        {isAr ? stInfo?.labelAr : stInfo?.labelEn}
+                        {statusLabel(st)}
                       </span>
                     </div>
                   );
@@ -130,16 +130,16 @@ export default async function OrderTrackingPage({ params }: PageProps) {
           {/* Items List */}
           <div className="space-y-4">
             <h2 className="text-lg font-bold text-fg">
-              {isAr ? "المنتجات المطلوبة" : "Ordered Items"}
+              {t("itemsTitle")}
             </h2>
             <div className="overflow-hidden rounded-xl border border-border bg-bg">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border text-muted">
-                    <th className="px-4 py-3 font-medium text-start">{isAr ? "القطعة" : "Item"}</th>
-                    <th className="px-4 py-3 font-medium text-start">{isAr ? "الكمية" : "Qty"}</th>
-                    <th className="px-4 py-3 font-medium text-start">{isAr ? "السعر" : "Price"}</th>
-                    <th className="px-4 py-3 font-medium text-end">{isAr ? "الإجمالي" : "Total"}</th>
+                    <th className="px-4 py-3 font-medium text-start">{t("item")}</th>
+                    <th className="px-4 py-3 font-medium text-start">{t("qty")}</th>
+                    <th className="px-4 py-3 font-medium text-start">{t("price")}</th>
+                    <th className="px-4 py-3 font-medium text-end">{t("total")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -167,20 +167,20 @@ export default async function OrderTrackingPage({ params }: PageProps) {
             <div>
               {order.estimatedDelivery && (
                 <p className="text-sm text-muted">
-                  {isAr ? "التوصيل المتوقع: " : "Estimated Delivery: "}
+                  {t("estimatedDelivery")}:{" "}
                   <span className="font-semibold text-fg" dir="ltr">
                     {new Date(order.estimatedDelivery).toLocaleDateString(isAr ? "ar-EG" : "en-US")}
                   </span>
                 </p>
               )}
               <p className="text-xs text-muted mt-1">
-                {isAr ? "الهاتف المسجل: " : "Registered phone: "}
+                {tTrack("registeredPhone")}:{" "}
                 <span dir="ltr">{order.phone}</span>
               </p>
             </div>
 
             <div className="text-start sm:text-end">
-              <p className="text-sm text-muted">{isAr ? "الإجمالي الكلي" : "Total Amount"}</p>
+              <p className="text-sm text-muted">{t("totalAmount")}</p>
               <p className="text-2xl font-extrabold text-accent" dir="ltr">
                 {nf.format(order.total)} {isAr ? "ج.م" : "EGP"}
               </p>
@@ -190,7 +190,7 @@ export default async function OrderTrackingPage({ params }: PageProps) {
           {/* WhatsApp support */}
           <div className="rounded-xl border border-border bg-bg p-6 text-center space-y-3">
             <p className="text-sm text-muted">
-              {isAr ? "هل لديك أي استفسار بشأن طلبك؟ تواصل معنا مباشرة عبر واتساب." : "Have questions about your order? Contact us directly via WhatsApp."}
+              {t("whatsappHelp")}
             </p>
             <Button variant="primary" asChild>
               <a
@@ -200,7 +200,7 @@ export default async function OrderTrackingPage({ params }: PageProps) {
                 className="inline-flex items-center gap-2"
               >
                 <MessageCircle className="w-4 h-4" />
-                <span>{isAr ? "تواصل عبر واتساب" : "Chat on WhatsApp"}</span>
+                <span>{t("contactWhatsApp")}</span>
               </a>
             </Button>
           </div>

@@ -2060,7 +2060,17 @@
       "shipped": "تم الشحن",
       "delivered": "تم التوصيل",
       "cancelled": "ملغي"
-    }
+    },
+    "metaTitle": "طلب رقم {orderNumber} | MotoGearSouq",
+    "whatsappInquiry": "مرحبًا، أستفسر عن حالة الطلب رقم {orderNumber}",
+    "continueShopping": "متابعة التسوق",
+    "timeline": "مراحل الطلب",
+    "itemsTitle": "المنتجات المطلوبة",
+    "item": "القطعة",
+    "qty": "الكمية",
+    "price": "السعر",
+    "totalAmount": "الإجمالي الكلي",
+    "whatsappHelp": "هل لديك أي استفسار بشأن طلبك؟ تواصل معنا مباشرة عبر واتساب."
   },
   "customerAuth": {
     "login": {
@@ -2287,6 +2297,8 @@
     "submitButton": "تتبع الطلب",
     "or": "أو",
     "loginButton": "تسجيل الدخول إلى حسابك",
-    "loginNote": "سجّل الدخول لرؤية جميع طلباتك في مكان واحد."
+    "loginNote": "سجّل الدخول لرؤية جميع طلباتك في مكان واحد.",
+    "metaTitle": "تتبع طلبك | MotoGearSouq",
+    "whatsappReturn": "مرحبًا، أستفسر عن إرجاع أو استبدال الطلب رقم {orderNumber}"
   }
 }

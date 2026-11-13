@@ -66,11 +66,7 @@ export function OrderLookupForm({ mode, submitLabel, warning }: OrderLookupFormP
     }
   };
 
-  const waText = result
-    ? isAr
-      ? `مرحبًا، أستفسر عن إرجاع أو استبدال الطلب رقم ${result.orderNumber}`
-      : `Hello, I'd like to return or exchange order #${result.orderNumber}`
-    : "";
+  const waText = result ? t("whatsappReturn", { orderNumber: result.orderNumber }) : "";
   const waHref = `${company.whatsappUrl}?text=${encodeURIComponent(waText)}`;
 
   return (

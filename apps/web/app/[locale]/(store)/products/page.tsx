@@ -45,12 +45,10 @@ type Nameable = { name: string; nameAr?: string | null };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "products" });
   return {
-    title: locale === "ar" ? "قطع الغيار | MotoGearSouq" : "Spare Parts | MotoGearSouq",
-    description:
-      locale === "ar"
-        ? "كتالوج قطع الغيار الأصلية — فلاتر، كابلات، بوجيهات، سلاسل وأكثر لكل ماركات الدراجات النارية."
-        : "Genuine spare parts catalog for all motorcycle brands.",
+    title: t("metaTitle"),
+    description: t("metaDescription"),
   };
 }
 
@@ -59,17 +57,11 @@ function toFirst(value?: string | string[]): string {
   return value ?? "";
 }
 
-function stockBadge(stock: number, reorderLevel: number, locale: string) {
-  if (stock <= 0) return { label: locale === "ar" ? "غير متوفر" : "Out of stock", classes: "bg-red-500/15 text-red-400" };
-  if (stock <= reorderLevel)
-    return { label: locale === "ar" ? "كمية محدودة" : "Low stock", classes: "bg-amber-500/15 text-amber-400" };
-  return { label: locale === "ar" ? "متوفر" : "In stock", classes: "bg-emerald-500/15 text-emerald-400" };
-}
-
 export default async function ProductsPage({ params, searchParams }: PageProps) {
   const { locale } = await params;
   const sp = await searchParams;
   const t = await getTranslations({ locale, namespace: "products" });
+  const tCommon = await getTranslations({ locale, namespace: "common" });
   const nf = new Intl.NumberFormat(locale === "ar" ? "ar-EG-u-nu-latn" : "en-US");
   const isAr = locale === "ar";
 
@@ -352,7 +344,12 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
           <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6">
             {result.items.map((product) => {
               const stock = totalStock(product);
-              const badge = stockBadge(stock, product.reorderLevel, locale);
+              const badge =
+                stock <= 0
+                  ? { label: tCommon("stock.outOfStock"), classes: "bg-red-500/15 text-red-400" }
+                  : stock <= product.reorderLevel
+                    ? { label: tCommon("stock.low"), classes: "bg-amber-500/15 text-amber-400" }
+                    : { label: tCommon("stock.inStock"), classes: "bg-emerald-500/15 text-emerald-400" };
               const imageUrl = product.imageUrl || product.images?.[0]?.url;
               return (
                 <li key={product.id} className="h-full">
@@ -400,7 +397,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
                             {nf.format(product.retailPrice)} {isAr ? "ج.م" : "EGP"}
                           </span>
                         ) : (
-                          (isAr ? "عند التواصل" : "Contact for price")
+                          tCommon("contactPrice")
                         )}
                       </p>
                       <AddToCartButton product={{ id: product.id, code: product.code, name: product.name, retailPrice: product.retailPrice, taxRate: product.taxRate }} />
@@ -426,14 +423,13 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
                   : "text-fg hover:border-accent"
               }`}
             >
-              {isAr ? "السابق" : "Previous"}
+              {tCommon("prev")}
             </Link>
             <span className="text-muted">
-              {isAr ? (
-                <>صفحة <span dir="ltr">{nf.format(result.page)}</span> من <span dir="ltr">{nf.format(result.totalPages)}</span></>
-              ) : (
-                <>Page <span dir="ltr">{nf.format(result.page)}</span> of <span dir="ltr">{nf.format(result.totalPages)}</span></>
-              )}
+              {tCommon("pageOf", {
+                page: nf.format(result.page),
+                total: nf.format(result.totalPages),
+              })}
             </span>
             <Link
               href={buildHref(currentFlow, result.page + 1)}
@@ -444,7 +440,7 @@ export default async function ProductsPage({ params, searchParams }: PageProps) 
                   : "text-fg hover:border-accent"
               }`}
             >
-              {isAr ? "التالي" : "Next"}
+              {tCommon("next")}
             </Link>
           </nav>
         )}

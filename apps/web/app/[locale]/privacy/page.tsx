@@ -1,16 +1,27 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { Container } from "@/components/ui/Container";
 import { company } from "@/lib/config";
 
-export const metadata: Metadata = {
-  title: "سياسة الخصوصية | MotoGearSouq",
-  description:
-    "كيف نجمع بياناتك وكيف نستخدمها عند تواصلك مع موقع MotoGearSouq.",
-};
+type PageProps = { params: Promise<{ locale: string }> };
 
-export default function PrivacyPage() {
-  const lastUpdated = new Date().toLocaleDateString("ar-EG", {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "privacy" });
+  return {
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+  };
+}
+
+const sections = ["intro", "dataCollected", "howUsed", "sharing", "cookies", "rights"] as const;
+
+export default async function PrivacyPage({ params }: PageProps) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "privacy" });
+  const tCommon = await getTranslations({ locale, namespace: "common" });
+  const lastUpdated = new Date().toLocaleDateString(locale === "ar" ? "ar-EG" : "en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -20,73 +31,22 @@ export default function PrivacyPage() {
     <main id="main-content" className="flex-1 py-16 md:py-24">
       <Container size="md">
         <h1 className="text-3xl md:text-4xl font-extrabold mb-4">
-          سياسة الخصوصية
+          {t("heading")}
         </h1>
-        <p className="text-muted mb-12">آخر تحديث: {lastUpdated}</p>
+        <p className="text-muted mb-12">{t("lastUpdated", { date: lastUpdated })}</p>
 
         <div className="space-y-10">
-          <section>
-            <h2 className="text-xl font-bold text-fg mb-3">مقدمة</h2>
-            <p className="text-muted leading-relaxed">
-              نحن في MotoGearSouq، الشريك الرقمي الرسمي لشركة السعد للدراجات النارية نحترم خصوصيتك. توضح هذه السياسة
-              ما نجمعه من بيانات عند استخدامك لموقعنا وكيف نستخدمها ونحميها.
-            </p>
-          </section>
+          {sections.map((key) => (
+            <section key={key}>
+              <h2 className="text-xl font-bold text-fg mb-3">{t(`sections.${key}.title`)}</h2>
+              <p className="text-muted leading-relaxed">{t(`sections.${key}.body`)}</p>
+            </section>
+          ))}
 
           <section>
-            <h2 className="text-xl font-bold text-fg mb-3">
-              البيانات التي نجمعها
-            </h2>
+            <h2 className="text-xl font-bold text-fg mb-3">{t("sections.contact.title")}</h2>
             <p className="text-muted leading-relaxed">
-              نجمع البيانات التي ترسلها بنفسك عبر نموذج التواصل فقط: اسمك،
-              رقم موبايلك، ونص رسالتك (اختياري). لا نجمع أي بيانات أخرى عبر
-              هذا الموقع.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold text-fg mb-3">
-              كيف نستخدم البيانات
-            </h2>
-            <p className="text-muted leading-relaxed">
-              نستخدم بياناتك للتواصل معك وردّ على استفسارك فقط. لا نستخدمها
-              لأي غرض تسويقي دون موافقتك.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold text-fg mb-3">
-              مشاركة البيانات
-            </h2>
-            <p className="text-muted leading-relaxed">
-              لا نشارك بياناتك مع أي طرف ثالث، ولا نبيعها، ولا نستخدمها خارج
-              نطاق الرد على تواصلك معنا.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold text-fg mb-3">
-              ملفات تعريف الارتباط (Cookies)
-            </h2>
-            <p className="text-muted leading-relaxed">
-              قد نستخدم Google Analytics لفهم زيارات الموقع بشكل عام (أرقام
-              مجمّعة فقط دون تعريفك الشخصي). يمكنك تعطيل الكوكيز من إعدادات
-              متصفحك في أي وقت.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold text-fg mb-3">حقوقك</h2>
-            <p className="text-muted leading-relaxed">
-              يحق لك في أي وقت طلب حذف بياناتك التي أرسلتها إلينا. يكفي
-              مراسلتنا على البريد الإلكتروني أدناه وسننفذ الطلب دون تعقيد.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold text-fg mb-3">التواصل</h2>
-            <p className="text-muted leading-relaxed">
-              لأي استفسار حول هذه السياسة أو بياناتك، تواصل معنا على:{" "}
+              {t("sections.contact.body")}{" "}
               <a href={`mailto:${company.email}`} className="text-accent hover:underline" dir="ltr">
                 {company.email}
               </a>
@@ -99,7 +59,7 @@ export default function PrivacyPage() {
             href="/"
             className="inline-flex items-center gap-2 text-accent font-semibold hover:underline"
           >
-            <span aria-hidden="true">←</span> العودة للرئيسية
+            <span aria-hidden="true">←</span> {tCommon("backToHome")}
           </Link>
         </div>
       </Container>

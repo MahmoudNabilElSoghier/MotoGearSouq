@@ -3,7 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Image as ImageIcon, X } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export type LightboxItem = {
   src: string;
@@ -27,6 +27,7 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
   const closeRef = React.useRef<HTMLButtonElement>(null);
   const [imgFailed, setImgFailed] = React.useState(false);
   const locale = useLocale();
+  const t = useTranslations("lightbox");
 
   const item = items[index];
   const prev = () => onNavigate((index - 1 + items.length) % items.length);
@@ -63,7 +64,7 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="عرض صورة المعرض"
+      aria-label={t("dialog")}
       className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
@@ -74,7 +75,7 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
         ref={closeRef}
         type="button"
         onClick={onClose}
-        aria-label="إغلاق"
+        aria-label={t("close")}
         className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       >
         <X className="w-6 h-6" />
@@ -85,7 +86,7 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
           <button
             type="button"
             onClick={prev}
-            aria-label="الصورة السابقة"
+            aria-label={t("prev")}
             className="absolute end-4 md:end-8 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             {locale === "ar" ? <ChevronRight className="w-7 h-7" /> : <ChevronLeft className="w-7 h-7" />}
@@ -93,7 +94,7 @@ export function Lightbox({ items, index, onClose, onNavigate }: LightboxProps) {
           <button
             type="button"
             onClick={next}
-            aria-label="الصورة التالية"
+            aria-label={t("next")}
             className="absolute start-4 md:start-8 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             {locale === "ar" ? <ChevronLeft className="w-7 h-7" /> : <ChevronRight className="w-7 h-7" />}

@@ -26,6 +26,7 @@ export default async function ModelDetailPage({ params }: PageProps) {
   const t = await getTranslations({ locale, namespace: "modelDetail" });
   const tBrand = await getTranslations({ locale, namespace: "brandDetail" });
   const tProd = await getTranslations({ locale, namespace: "productDetail" });
+  const tCommon = await getTranslations({ locale, namespace: "common" });
   const bikeModel = await getModelBySlug(slug, modelSlug);
   const isAr = locale === "ar";
   if (!bikeModel) notFound();
@@ -122,7 +123,7 @@ export default async function ModelDetailPage({ params }: PageProps) {
                               : "bg-red-500/15 text-red-400"
                           }`}
                         >
-                          {stock > 0 ? (isAr ? "متوفر" : "In stock") : (isAr ? "غير متوفر" : "Out of stock")}
+                          {stock > 0 ? tCommon("stock.inStock") : tCommon("stock.outOfStock")}
                         </span>
                       </div>
                       <h3 className="font-bold text-fg group-hover:text-accent">
@@ -134,7 +135,7 @@ export default async function ModelDetailPage({ params }: PageProps) {
                             {nf.format(product.retailPrice)} {isAr ? "ج.م" : "EGP"}
                           </span>
                         ) : (
-                          (isAr ? "عند التواصل" : "Contact for price")
+                          tCommon("contactPrice")
                         )}
                       </p>
                     </Link>

@@ -377,7 +377,10 @@
     "stockUnavailable": "غير متوفر حاليًا",
     "whatsappCta": "استعلم على واتساب",
     "branchPrompt": "أو زر أقرب فرع من",
-    "branchesLink": "الفروع"
+    "branchesLink": "الفروع",
+    "inventoryBranch": "الفرع",
+    "inventoryQty": "الكمية",
+    "inventoryStatus": "الحالة"
   },
   "brandsPage": {
     "metaTitle": "الماركات | MotoGearSouq",
@@ -2280,7 +2283,9 @@
     "findOrder": "ابحث عن طلبك",
     "findOrderDesc": "أدخل رقم الهاتف المستخدم في الطلب ورقم الطلب أو رقم التتبع — نفس البيانات التي تستخدمها في صفحة تتبع الطلبات.",
     "submitButton": "ابحث عن طلبي",
-    "whichOrderProblem": "ما هو الطلب الذي تريد إرجاعه أو استبداله؟"
+    "whichOrderProblem": "ما هو الطلب الذي تريد إرجاعه أو استبداله؟",
+    "whereMetaTitle": "أين طلبي؟ | MotoGearSouq",
+    "returnMetaTitle": "إرجاع أو استبدال | MotoGearSouq"
   },
   "trackOrder": {
     "phoneLabel": "رقم الهاتف",
@@ -2300,5 +2305,16 @@
     "loginNote": "سجّل الدخول لرؤية جميع طلباتك في مكان واحد.",
     "metaTitle": "تتبع طلبك | MotoGearSouq",
     "whatsappReturn": "مرحبًا، أستفسر عن إرجاع أو استبدال الطلب رقم {orderNumber}"
+  },
+  "error": {
+    "heading": "حصلت مشكلة تقنية",
+    "text": "حاول تحدّث الصفحة، أو كلمنا لو المشكلة استمرت.",
+    "retry": "حاول تاني",
+    "home": "ارجع للرئيسية"
+  },
+  "opengraph": {
+    "headline": "الشريك الرقمي الرسمي للسعد",
+    "subtitle": "قطع غيار أصلية · صيانة معتمدة · تقسيط",
+    "footer": "الشريك الرقمي الرسمي للسعد — 35 عاماً من الخبرة"
   }
 }

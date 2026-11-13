@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { getTranslations } from "next-intl/server";
 
 export const size = {
   width: 1200,
@@ -11,7 +12,7 @@ type Props = { params: Promise<{ locale: string }> };
 
 export default async function Image({ params }: Props) {
   const { locale } = await params;
-  const isAr = locale === "ar";
+  const t = await getTranslations({ locale, namespace: "opengraph" });
 
   const arabicFont = await fetch(
     new URL("https://fonts.gstatic.com/s/cairo/v28/SLXgc1nY6HkvangtZmpQdkhzfH5lkSs2SgRjCAGMQ1z0hOA-W1Q.ttf")
@@ -90,7 +91,7 @@ export default async function Image({ params }: Props) {
               lineHeight: 1.1,
             }}
           >
-            {isAr ? "الشريك الرقمي الرسمي للسعد" : "MotoGearSouq"}
+            {t("headline")}
           </div>
           <div
             style={{
@@ -99,7 +100,7 @@ export default async function Image({ params }: Props) {
               fontWeight: 500,
             }}
           >
-            {isAr ? "قطع غيار أصلية · صيانة معتمدة · تقسيط" : "Genuine Spare Parts & Certified Maintenance"}
+            {t("subtitle")}
           </div>
         </div>
 
@@ -113,7 +114,7 @@ export default async function Image({ params }: Props) {
             color: "#6B7280",
           }}
         >
-          <div>{isAr ? "الشريك الرقمي الرسمي للسعد — 35 عاماً من الخبرة" : "35 Years of Excellence in Egypt"}</div>
+          <div>{t("footer")}</div>
           <div style={{ color: "#E63946", fontWeight: 600 }}>motogearsouq.com</div>
         </div>
       </div>

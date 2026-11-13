@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { Phone, Package } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { company } from "@/lib/config";
@@ -14,20 +15,25 @@ type PageProps = { params: Promise<{ locale: string; slug: string }> };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, slug } = await params;
+  const t = await getTranslations({ locale, namespace: "productDetail" });
   const product = await getProductByCode(slug);
-  if (!product) return { title: locale === "ar" ? "قطعة غير موجودة | MotoGearSouq" : "Part not found | MotoGearSouq" };
+  if (!product) return { title: t("metaNotFound") };
   return {
-    title: locale === "ar" ? `${product.name} | قطع الغيار | MotoGearSouq` : `${product.name} | Spare Parts | MotoGearSouq`,
+    title: t("metaTitle", { name: product.name }),
     description:
       product.description ??
-      (locale === "ar"
-        ? `${product.name} — كود ${product.code}${product.oemCode ? `، كود OEM ${product.oemCode}` : ""}. متاح في فروع السعد للدراجات النارية.`
-        : `${product.name} — code ${product.code}${product.oemCode ? `, OEM code ${product.oemCode}` : ""}. Available at ELSAAD branches.`),
+      t("metaDescription", {
+        name: product.name,
+        code: product.code,
+        oemPart: product.oemCode ? t("metaOem", { oem: product.oemCode }) : "",
+      }),
   };
 }
 
 export default async function ProductDetailPage({ params }: PageProps) {
   const { locale, slug } = await params;
+  const t = await getTranslations({ locale, namespace: "productDetail" });
+  const tCommon = await getTranslations({ locale, namespace: "common" });
   const product = await getProductByCode(slug);
   if (!product) notFound();
 
@@ -36,9 +42,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
   const stock = totalStock(product);
   const imageUrl = product.imageUrl || product.images?.[0]?.url;
 
-  const waText = locale === "ar"
-    ? `مرحبًا، عايز أستفسر عن قطعة "${product.name}" (كود ${product.code}) على موقع MotoGearSouq.`
-    : `Hello, I would like to inquire about "${product.name}" (code ${product.code}) on MotoGearSouq website.`;
+  const waText = t("whatsappText", { name: product.name, code: product.code });
   const waHref = `${company.whatsappUrl}?text=${encodeURIComponent(waText)}`;
 
   return (
@@ -48,7 +52,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
           href={`/${locale}/products`}
           className="mb-6 inline-flex items-center gap-2 font-semibold text-accent hover:underline"
         >
-          <span aria-hidden="true">←</span> {locale === "ar" ? "كل قطع الغيار" : "All spare parts"}
+          <span aria-hidden="true">←</span> {t("backToParts")}
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
@@ -111,7 +115,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             {product.description && (
               <section aria-labelledby="product-desc">
                 <h2 id="product-desc" className="mb-2 text-lg font-bold text-fg">
-                  {locale === "ar" ? "الوصف" : "Description"}
+                  {t("descriptionTitle")}
                 </h2>
                 <p className="leading-relaxed text-muted text-sm">{product.description}</p>
               </section>
@@ -120,7 +124,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             {product.compatibilities && product.compatibilities.length > 0 && (
               <section aria-labelledby="product-fit">
                 <h2 id="product-fit" className="mb-3 text-lg font-bold text-fg">
-                  {locale === "ar" ? "يركب على" : "Compatible with"}
+                  {t("fitsTitle")}
                 </h2>
                 <ul className="flex flex-wrap gap-2">
                   {product.compatibilities.map((compat) => (
@@ -134,7 +138,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                         </Link>
                       ) : (
                         <span className="inline-block rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted">
-                          {compat.model?.name ?? (locale === "ar" ? "موديل" : "Model")}
+                          {compat.model?.name ?? t("modelFallback")}
                         </span>
                       )}
                     </li>
@@ -145,20 +149,20 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
             <section aria-labelledby="product-stock">
               <h2 id="product-stock" className="mb-3 text-lg font-bold text-fg">
-                {locale === "ar" ? "التوفر حسب الفرع" : "Branch Availability"}
+                {t("stockTitle")}
               </h2>
               {!product.inventory || product.inventory.length === 0 ? (
                 <p className="rounded-xl border border-border bg-card px-4 py-6 text-muted text-sm">
-                  {locale === "ar" ? "لا توجد كميات مسجلة حاليًا — تواصل معنا للتوفر أو الطلب مسبقًا." : "No inventory quantities recorded currently — contact us for availability or pre-order."}
+                  {t("noInventory")}
                 </p>
               ) : (
                 <div className="overflow-hidden rounded-xl border border-border bg-card">
                   <table className="w-full text-xs md:text-sm">
                     <thead>
                       <tr className="border-b border-border text-muted">
-                        <th className="px-3 py-2 font-medium text-start">{locale === "ar" ? "الفرع" : "Branch"}</th>
-                        <th className="px-3 py-2 font-medium text-start">{locale === "ar" ? "الكمية" : "Quantity"}</th>
-                        <th className="px-3 py-2 font-medium text-start">{locale === "ar" ? "الحالة" : "Status"}</th>
+                        <th className="px-3 py-2 font-medium text-start">{t("inventoryBranch")}</th>
+                        <th className="px-3 py-2 font-medium text-start">{t("inventoryQty")}</th>
+                        <th className="px-3 py-2 font-medium text-start">{t("inventoryStatus")}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -173,11 +177,11 @@ export default async function ProductDetailPage({ params }: PageProps) {
                           <td className="px-3 py-2.5">
                             {row.quantity <= 0 ? (
                               <span className="rounded-full bg-red-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-red-400">
-                                {locale === "ar" ? "غير متوفر" : "Out of stock"}
+                                {tCommon("stock.outOfStock")}
                               </span>
                             ) : (
                               <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400">
-                                {locale === "ar" ? "متوفر" : "In stock"}
+                                {tCommon("stock.inStock")}
                               </span>
                             )}
                           </td>
@@ -204,12 +208,8 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 />
                 <span className={stock > 0 ? "text-fg" : "text-red-400"}>
                   {stock > 0
-                    ? (locale === "ar" ? (
-                        <>متوفر — <span dir="ltr">{nf.format(stock)}</span> {product.unitOfMeasure} في الفروع</>
-                      ) : (
-                        <>In stock — <span dir="ltr">{nf.format(stock)}</span> {product.unitOfMeasure} across branches</>
-                      ))
-                    : (locale === "ar" ? "غير متوفر حاليًا" : "Currently out of stock")}
+                    ? t("stockAvailable", { qty: nf.format(stock), unit: product.unitOfMeasure })
+                    : t("stockUnavailable")}
                 </span>
               </div>
 
@@ -220,14 +220,13 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#20bd5a]"
               >
                 <Phone className="w-4 h-4" />
-                {locale === "ar" ? "استعلم على واتساب" : "Inquire on WhatsApp"}
+                {t("whatsappCta")}
               </a>
               <p className="mt-3 text-center text-xs text-muted">
-                {locale === "ar" ? (
-                  <>أو زر أقرب فرع من <Link href={`/${locale}/#branches`} className="text-accent hover:underline">الفروع</Link></>
-                ) : (
-                  <>Or visit our nearest <Link href={`/${locale}/#branches`} className="text-accent hover:underline">branch</Link></>
-                )}
+                {t("branchPrompt")}{" "}
+                <Link href={`/${locale}/#branches`} className="text-accent hover:underline">
+                  {t("branchesLink")}
+                </Link>
               </p>
             </div>
 

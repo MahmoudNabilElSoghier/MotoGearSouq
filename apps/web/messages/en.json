@@ -377,7 +377,10 @@
     "stockUnavailable": "Currently out of stock",
     "whatsappCta": "Inquire on WhatsApp",
     "branchPrompt": "Or visit your nearest branch at",
-    "branchesLink": "our branches"
+    "branchesLink": "our branches",
+    "inventoryBranch": "Branch",
+    "inventoryQty": "Quantity",
+    "inventoryStatus": "Status"
   },
   "brandsPage": {
     "metaTitle": "Brands | MotoGearSouq",
@@ -1910,7 +1913,9 @@
     "findOrder": "Find your order",
     "findOrderDesc": "Enter the phone number on the order and your order or tracking number — the same details you use on the order tracking page.",
     "submitButton": "Find my order",
-    "whichOrderProblem": "Which order do you want to return or exchange?"
+    "whichOrderProblem": "Which order do you want to return or exchange?",
+    "whereMetaTitle": "Where is my order? | MotoGearSouq",
+    "returnMetaTitle": "Return or exchange | MotoGearSouq"
   },
   "trackOrder": {
     "phoneLabel": "Phone number",
@@ -1930,5 +1935,16 @@
     "loginNote": "Log in to see all your orders in one place.",
     "metaTitle": "Track your order | MotoGearSouq",
     "whatsappReturn": "Hello, I'd like to return or exchange order #{orderNumber}"
+  },
+  "error": {
+    "heading": "Something went wrong",
+    "text": "Try refreshing the page, or contact us if the problem persists.",
+    "retry": "Try again",
+    "home": "Back to home"
+  },
+  "opengraph": {
+    "headline": "MotoGearSouq",
+    "subtitle": "Genuine Spare Parts & Certified Maintenance",
+    "footer": "35 Years of Excellence in Egypt"
   }
 }

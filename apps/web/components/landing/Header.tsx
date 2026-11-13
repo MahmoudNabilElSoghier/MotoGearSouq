@@ -17,6 +17,7 @@ export function Header() {
   const locale = useLocale();
   const tNav = useTranslations("nav");
   const tHeader = useTranslations("header");
+  const tCommon = useTranslations("common");
 
   const centerLinks = [
     { href: `/${locale}`, label: tNav("home"), icon: Home },
@@ -31,7 +32,7 @@ export function Header() {
           ? "/brand/Logo_Icon_Name_AR_Large.png"
           : "/brand/Logo_Icon_Name_EN_Large.png"
       }
-      alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
+      alt={tCommon("logoAlt")}
       width={150}
       height={60}
       className="h-10 w-auto max-w-[160px] object-contain sm:h-12 sm:max-w-none"

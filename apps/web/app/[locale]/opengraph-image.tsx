@@ -1,5 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getTranslations } from "next-intl/server";
+import { readFile } from "fs/promises";
+import { join } from "path";
 
 export const size = {
   width: 1200,
@@ -14,9 +16,12 @@ export default async function Image({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "opengraph" });
 
-  const arabicFont = await fetch(
-    new URL("https://fonts.gstatic.com/s/cairo/v28/SLXgc1nY6HkvangtZmpQdkhzfH5lkSs2SgRjCAGMQ1z0hOA-W1Q.ttf")
-  ).then((res) => res.arrayBuffer());
+  const cairoRegular = await readFile(
+    join(process.cwd(), "assets/fonts/Cairo-Regular.ttf")
+  );
+  const cairoBold = await readFile(
+    join(process.cwd(), "assets/fonts/Cairo-Bold.ttf")
+  );
 
   return new ImageResponse(
     (
@@ -124,7 +129,13 @@ export default async function Image({ params }: Props) {
       fonts: [
         {
           name: "Cairo",
-          data: arabicFont,
+          data: cairoRegular,
+          style: "normal",
+          weight: 400,
+        },
+        {
+          name: "Cairo",
+          data: cairoBold,
           style: "normal",
           weight: 700,
         },

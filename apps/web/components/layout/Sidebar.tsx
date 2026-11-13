@@ -109,7 +109,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                 ? "/brand/Logo_Icon_Name_AR_Large.png"
                 : "/brand/Logo_Icon_Name_EN_Large.png"
             }
-            alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
+            alt={tCommon("logoAlt")}
             width={130}
             height={48}
             className="h-9 w-auto object-contain"

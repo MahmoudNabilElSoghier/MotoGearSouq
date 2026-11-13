@@ -21,6 +21,7 @@ type Banner = { type: "success" | "error"; message: string } | null;
 export default function AdminPendingCustomersPage() {
   const t = useTranslations("admin.customers");
   const tPending = useTranslations("admin.customers.pending");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const isAr = locale === "ar";
   const nf = new Intl.NumberFormat(isAr ? "ar-EG-u-nu-latn" : "en-US");
@@ -69,7 +70,7 @@ export default function AdminPendingCustomersPage() {
       setApproveTarget(null);
       await fetchPending();
     } catch (err) {
-      setBanner({ type: "error", message: err instanceof Error ? err.message : "حدث خطأ" });
+      setBanner({ type: "error", message: err instanceof Error ? err.message : tCommon("errorFallback") });
       setApproveTarget(null);
     } finally {
       setActionBusy(false);
@@ -85,7 +86,7 @@ export default function AdminPendingCustomersPage() {
       setRejectTarget(null);
       await fetchPending();
     } catch (err) {
-      setBanner({ type: "error", message: err instanceof Error ? err.message : "حدث خطأ" });
+      setBanner({ type: "error", message: err instanceof Error ? err.message : tCommon("errorFallback") });
       setRejectTarget(null);
     } finally {
       setActionBusy(false);

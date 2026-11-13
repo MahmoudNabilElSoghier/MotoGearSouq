@@ -17,6 +17,7 @@ interface AdminSidebarProps {
 export function AdminSidebar({ locale, dbConfigured }: AdminSidebarProps) {
   const t = useTranslations("admin.layout");
   const tNav = useTranslations("admin.nav");
+  const tCommon = useTranslations("common");
   const pathname = usePathname();
   const { collapsed, mobileOpen, toggleCollapsed, closeMobile } = useAdminSidebar();
 
@@ -56,7 +57,7 @@ export function AdminSidebar({ locale, dbConfigured }: AdminSidebarProps) {
                   ? "/brand/Logo_Icon_Name_AR_Large.png"
                   : "/brand/Logo_Icon_Name_EN_Large.png"
               }
-              alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
+              alt={tCommon("logoAlt")}
               width={120}
               height={48}
               className="mb-2 h-auto max-h-16 w-full max-w-full object-contain"

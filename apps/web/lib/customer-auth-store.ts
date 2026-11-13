@@ -22,9 +22,9 @@ interface CustomerAuthState {
   isLoading: boolean;
   isInitialized: boolean;
   init: () => Promise<void>;
-  login: (identifier: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  registerRetail: (data: RetailInput) => Promise<{ success: boolean; error?: string }>;
-  registerWholesale: (data: WholesaleInput) => Promise<{ success: boolean; error?: string; message?: string }>;
+  login: (identifier: string, password: string) => Promise<{ success: boolean; error?: string; network?: boolean }>;
+  registerRetail: (data: RetailInput) => Promise<{ success: boolean; error?: string; network?: boolean }>;
+  registerWholesale: (data: WholesaleInput) => Promise<{ success: boolean; error?: string; message?: string; network?: boolean }>;
   logout: () => Promise<void>;
   setCustomer: (c: CustomerUser | null) => void;
 }
@@ -62,12 +62,12 @@ export const useCustomerAuth = create<CustomerAuthState>()((set, get) => ({
         body: JSON.stringify({ identifier, password }),
       });
       const data = await res.json();
-      if (!res.ok) return { success: false, error: data.message || "حدث خطأ" };
+      if (!res.ok) return { success: false, error: data.message };
       set({ customer: data.data.customer });
       mergeCartAfterLogin();
       return { success: true };
     } catch {
-      return { success: false, error: "تعذر الاتصال بالخادم" };
+      return { success: false, network: true };
     } finally {
       set({ isLoading: false });
     }
@@ -83,12 +83,12 @@ export const useCustomerAuth = create<CustomerAuthState>()((set, get) => ({
         body: JSON.stringify(input),
       });
       const data = await res.json();
-      if (!res.ok) return { success: false, error: data.message || "حدث خطأ" };
+      if (!res.ok) return { success: false, error: data.message };
       set({ customer: data.data.customer });
       mergeCartAfterLogin();
       return { success: true };
     } catch {
-      return { success: false, error: "تعذر الاتصال بالخادم" };
+      return { success: false, network: true };
     } finally {
       set({ isLoading: false });
     }
@@ -103,10 +103,10 @@ export const useCustomerAuth = create<CustomerAuthState>()((set, get) => ({
         body: JSON.stringify(input),
       });
       const data = await res.json();
-      if (!res.ok) return { success: false, error: data.message || "حدث خطأ" };
+      if (!res.ok) return { success: false, error: data.message };
       return { success: true, message: data.data.message };
     } catch {
-      return { success: false, error: "تعذر الاتصال بالخادم" };
+      return { success: false, network: true };
     } finally {
       set({ isLoading: false });
     }

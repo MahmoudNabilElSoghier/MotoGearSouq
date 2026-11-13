@@ -27,6 +27,7 @@ function safeNext(next: string | null, fallback: string): string {
 export default function LoginPage() {
   const t = useTranslations("customerAuth.login");
   const tGoogle = useTranslations("customerAuth.google");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -68,6 +69,10 @@ export default function LoginPage() {
     setError(null);
     const result = await login(data.identifier || data.phone || "", data.password);
     if (!result.success) {
+      if (result.network) {
+        setError(tCommon("networkError"));
+        return;
+      }
       const raw = result.error || "";
       if (raw.includes("قيد المراجعة")) setError(t("errors.pending"));
       else if (raw.includes("رفض")) setError(t("errors.rejected"));
@@ -88,7 +93,7 @@ export default function LoginPage() {
           <div className="mb-8 text-center">
             <Image
               src={locale === "ar" ? "/brand/Logo_Icon_Name_Desc_AR_Large.png" : "/brand/Logo_Icon_Name_Desc_EN_Large.png"}
-              alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
+              alt={tCommon("logoAlt")}
               width={250}
               height={100}
               className="max-w-[250px] w-full h-auto object-contain mx-auto"

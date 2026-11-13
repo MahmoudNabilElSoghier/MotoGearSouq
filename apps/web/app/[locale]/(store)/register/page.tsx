@@ -35,6 +35,7 @@ export default function RegisterPage() {
   const t = useTranslations("customerAuth.register");
   const tLogin = useTranslations("customerAuth.login");
   const tGoogle = useTranslations("customerAuth.google");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -74,7 +75,8 @@ export default function RegisterPage() {
     setError(null);
     const result = await registerRetail(data);
     if (!result.success) {
-      setError(result.error || "حدث خطأ");
+      if (result.network) setError(tCommon("networkError"));
+      else setError(result.error || tCommon("errorFallback"));
       return;
     }
     // Sync any guest cart items (localStorage) into the authenticated server cart.
@@ -87,7 +89,8 @@ export default function RegisterPage() {
     setError(null);
     const result = await registerWholesale(data);
     if (!result.success) {
-      setError(result.error || "حدث خطأ");
+      if (result.network) setError(tCommon("networkError"));
+      else setError(result.error || tCommon("errorFallback"));
       return;
     }
     wholesaleForm.reset();
@@ -114,7 +117,7 @@ export default function RegisterPage() {
           <div className="mb-6 text-center">
             <Image
               src={locale === "ar" ? "/brand/Logo_Icon_Name_Desc_AR_Large.png" : "/brand/Logo_Icon_Name_Desc_EN_Large.png"}
-              alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
+              alt={tCommon("logoAlt")}
               width={250}
               height={100}
               className="max-w-[250px] w-full h-auto object-contain mx-auto"

@@ -21,6 +21,7 @@ export function StoreHeader() {
   const tHeader = useTranslations("header");
   const tAccount = useTranslations("customerAuth.account");
   const tLogin = useTranslations("customerAuth.login");
+  const tCommon = useTranslations("common");
   const customer = useCustomerAuth((s) => s.customer);
 
   useEffect(() => {
@@ -46,7 +47,7 @@ export function StoreHeader() {
           ? "/brand/Logo_Icon_Name_AR_Large.png"
           : "/brand/Logo_Icon_Name_EN_Large.png"
       }
-      alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
+      alt={tCommon("logoAlt")}
       width={150}
       height={60}
       className="h-10 w-auto max-w-[160px] object-contain sm:h-12 sm:max-w-none"

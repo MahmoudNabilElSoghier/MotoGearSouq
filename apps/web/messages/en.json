@@ -39,7 +39,10 @@
       "outOfStock": "Out of stock",
       "low": "Low stock"
     },
-    "errorGeneric": "Something went wrong"
+    "errorGeneric": "Something went wrong",
+    "logoAlt": "MotoGearSouq",
+    "errorFallback": "Something went wrong",
+    "networkError": "Unable to connect to the server"
   },
   "switcher": {
     "languageAria": "Choose language",
@@ -113,7 +116,8 @@
     "ctaSecondary": "Chat with us on WhatsApp",
     "prevSlide": "Previous slide",
     "nextSlide": "Next slide",
-    "goToSlide": "Slide {index} of {total}"
+    "goToSlide": "Slide {index} of {total}",
+    "comingSoon": "Coming Soon"
   },
   "trustBar": {
     "years": {
@@ -1809,7 +1813,8 @@
       },
       "errors": {
         "invalidToken": "Invalid reset link",
-        "resetFailed": "Password reset failed, try again"
+        "resetFailed": "Password reset failed, try again",
+        "passwordMin": "Password must be at least 6 characters"
       },
       "messages": {
         "passwordUpdated": "Password updated successfully"

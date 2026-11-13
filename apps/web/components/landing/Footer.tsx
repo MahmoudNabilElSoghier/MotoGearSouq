@@ -9,6 +9,7 @@ import { MessageCircle } from "lucide-react";
 export function Footer() {
   const tFooter = useTranslations("footer");
   const tNav = useTranslations("navigation");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
 
   const NAV_ICONS: Record<string, React.ElementType> = {
@@ -39,7 +40,7 @@ export function Footer() {
               <Link href="/" className="inline-block">
                 <Image
                   src={locale === "ar" ? "/brand/Logo_Icon_Name_Desc_AR_Large.png" : "/brand/Logo_Icon_Name_Desc_EN_Large.png"}
-                  alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
+                  alt={tCommon("logoAlt")}
                   width={200}
                   height={80}
                   className="h-20 w-auto object-contain"

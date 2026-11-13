@@ -13,6 +13,7 @@ import { FormBanner } from "@/components/admin/FormBanner";
 export default function ForgotPasswordPage() {
   const t = useTranslations("customerAuth.forgotPassword");
   const tLogin = useTranslations("customerAuth.login");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -58,7 +59,7 @@ export default function ForgotPasswordPage() {
           <div className="mb-8">
             <Image
               src={locale === "ar" ? "/brand/Logo_Icon_Name_Desc_AR_Large.png" : "/brand/Logo_Icon_Name_Desc_EN_Large.png"}
-              alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
+              alt={tCommon("logoAlt")}
               width={250}
               height={100}
               className="max-w-[250px] w-full h-auto object-contain mx-auto mb-6"

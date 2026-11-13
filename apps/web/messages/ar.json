@@ -39,7 +39,10 @@
       "outOfStock": "نفد المخزون",
       "low": "مخزون منخفض"
     },
-    "errorGeneric": "حدث خطأ ما"
+    "errorGeneric": "حدث خطأ ما",
+    "logoAlt": "موتوغير سوق",
+    "errorFallback": "حدث خطأ",
+    "networkError": "تعذر الاتصال بالخادم"
   },
   "switcher": {
     "languageAria": "اختيار اللغة",
@@ -113,7 +116,8 @@
     "ctaSecondary": "كلمنا على واتساب",
     "prevSlide": "الشريحة السابقة",
     "nextSlide": "الشريحة التالية",
-    "goToSlide": "الشريحة {index} من {total}"
+    "goToSlide": "الشريحة {index} من {total}",
+    "comingSoon": "قريباً جداً"
   },
   "trustBar": {
     "years": {
@@ -2179,7 +2183,8 @@
       },
       "errors": {
         "invalidToken": "رابط إعادة التعيين غير صالح",
-        "resetFailed": "فشل إعادة تعيين كلمة المرور، حاول تاني"
+        "resetFailed": "فشل إعادة تعيين كلمة المرور، حاول تاني",
+        "passwordMin": "كلمة المرور يجب أن تكون 6 أحرف على الأقل"
       },
       "messages": {
         "passwordUpdated": "تم تحديث كلمة المرور بنجاح"

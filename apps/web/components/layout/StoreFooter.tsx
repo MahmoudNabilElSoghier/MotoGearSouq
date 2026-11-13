@@ -9,6 +9,7 @@ export async function StoreFooter() {
   const locale = await getLocale();
   const tFooter = await getTranslations("footer");
   const tNav = await getTranslations("navigation");
+  const tCommon = await getTranslations("common");
 
   const navItems = [
     { label: tNav("shop"), href: `/${locale}/products` },
@@ -27,7 +28,7 @@ export async function StoreFooter() {
               <Link href={`/${locale}`} className="inline-block">
                 <Image
                   src={locale === "ar" ? "/brand/Logo_Icon_Name_Desc_AR_Large.png" : "/brand/Logo_Icon_Name_Desc_EN_Large.png"}
-                  alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
+                  alt={tCommon("logoAlt")}
                   width={200}
                   height={80}
                   className="h-20 w-auto object-contain"

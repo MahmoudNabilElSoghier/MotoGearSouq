@@ -11,6 +11,7 @@ interface GoogleButtonProps {
 
 export function GoogleButton({ mode, next }: GoogleButtonProps) {
   const t = useTranslations("customerAuth.google");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,7 +35,7 @@ export function GoogleButton({ mode, next }: GoogleButtonProps) {
 
       window.location.href = json.data.authUrl;
     } catch (err) {
-      setError(err instanceof Error ? err.message : "حدث خطأ");
+      setError(err instanceof Error ? err.message : tCommon("errorFallback"));
       setLoading(false);
     }
   };

@@ -13,14 +13,10 @@ import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { FormBanner } from "@/components/admin/FormBanner";
 
-const resetSchema = z.object({
-  newPassword: z.string().min(6, "كلمة المرور يجب أن تكون 6 أحرف على الأقل"),
-  confirmPassword: z.string(),
-});
-
 export default function ResetPasswordPage() {
   const t = useTranslations("customerAuth.resetPassword");
   const tLogin = useTranslations("customerAuth.login");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -29,6 +25,11 @@ export default function ResetPasswordPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  const resetSchema = z.object({
+    newPassword: z.string().min(6, t("errors.passwordMin")),
+    confirmPassword: z.string(),
+  });
 
   const {
     register,
@@ -85,7 +86,7 @@ export default function ResetPasswordPage() {
           <div className="mb-8">
             <Image
               src={locale === "ar" ? "/brand/Logo_Icon_Name_Desc_AR_Large.png" : "/brand/Logo_Icon_Name_Desc_EN_Large.png"}
-              alt={locale === "ar" ? "موتوغير سوق" : "MotoGearSouq"}
+              alt={tCommon("logoAlt")}
               width={250}
               height={100}
               className="max-w-[250px] w-full h-auto object-contain mx-auto mb-6"

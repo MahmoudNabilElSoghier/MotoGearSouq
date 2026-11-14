@@ -24,7 +24,7 @@ export function ShowroomGallery() {
   return (
     <section
       id="showroom"
-      className="py-12 md:py-16 bg-white dark:bg-brand-dark border-y border-border dark:border-brand-silver/20 scroll-mt-24 relative overflow-hidden"
+      className="py-6 sm:py-10 md:py-16 bg-white dark:bg-brand-dark border-y border-border dark:border-brand-silver/20 scroll-mt-24 relative overflow-hidden"
     >
       {/* Subtle radial gradient decoration */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(252,163,17,0.05),transparent_70%)] dark:opacity-20 pointer-events-none" />

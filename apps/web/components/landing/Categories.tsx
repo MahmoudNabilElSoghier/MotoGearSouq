@@ -53,16 +53,16 @@ interface CategoryCardData {
 function SectionHeader({ tag, title }: { tag: "h2" | "h3"; title: string }) {
   const TagEl = tag;
   return (
-    <div className="flex items-center justify-between mb-4">
+    <div className="flex items-center justify-between mb-3">
       <div className="flex items-center gap-2">
         <span
-          className="block h-1 w-6 bg-brand-red rounded-full"
+          className="block h-1 w-5 bg-brand-red rounded-full"
           aria-hidden="true"
         />
-        <TagEl className="text-lg font-bold text-fg">{title}</TagEl>
+        <TagEl className="text-base sm:text-lg font-bold text-fg">{title}</TagEl>
       </div>
       <LayoutGrid
-        className="w-5 h-5 shrink-0 text-brand-red"
+        className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 text-brand-red"
         aria-hidden="true"
       />
     </div>
@@ -118,10 +118,10 @@ function CategoryCard({
           </div>
         </div>
 
-        <div className="flex items-center justify-between w-full px-0.5 mt-1.5">
-          <span className="text-[10px] sm:text-xs font-bold text-fg truncate">{title}</span>
+        <div className="flex items-center justify-between w-full px-0.5 mt-1">
+          <span className="text-[9px] sm:text-xs font-bold text-fg truncate">{title}</span>
           <ChevronRight
-            className="w-3 h-3 text-muted rtl:rotate-180 transition-colors group-hover:text-brand-red shrink-0"
+            className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-muted rtl:rotate-180 transition-colors group-hover:text-brand-red shrink-0"
             aria-hidden="true"
           />
         </div>

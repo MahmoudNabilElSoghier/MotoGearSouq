@@ -24,7 +24,7 @@ export function Branches() {
   const selectedAddress = t(`items.${selectedBranch.id}.address`);
 
   return (
-    <section id="branches" className="py-12 md:py-16 bg-card border-y border-border scroll-mt-24">
+    <section id="branches" className="py-6 sm:py-10 md:py-16 bg-card border-y border-border scroll-mt-24">
       <Container size="xl">
         <FadeIn>
           <div className="text-center max-w-2xl mx-auto mb-12">

@@ -31,7 +31,7 @@ export function Hero() {
       {/* Bottom gradient fade to blend into next section */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
 
-      <Container size="xl" className="relative z-10 flex flex-col items-center justify-center py-12 md:py-16 text-center md:text-right">
+      <Container size="xl" className="relative z-10 flex flex-col items-center justify-center py-6 sm:py-10 md:py-16 text-center md:text-right">
         <div className="max-w-2xl md:max-w-3xl">
           <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-8 text-white">
             {t("headlinePrefix")}

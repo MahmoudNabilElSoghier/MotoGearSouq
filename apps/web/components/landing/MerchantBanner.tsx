@@ -12,7 +12,7 @@ export function MerchantBanner() {
   const locale = useLocale();
 
   return (
-    <section className="py-12 md:py-16 bg-bg">
+    <section className="py-6 sm:py-10 md:py-16 bg-bg">
       <Container size="xl">
         <FadeIn>
           <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-dark via-neutral-900 to-brand-red p-8 md:p-12 text-white shadow-2xl border border-white/15">

@@ -53,7 +53,7 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="relative overflow-hidden py-12 md:py-16 bg-bg scroll-mt-24">
+    <section id="contact" className="relative overflow-hidden py-6 sm:py-10 md:py-16 bg-bg scroll-mt-24">
       {/* Faint accent glow, top-right — matches the OG image style */}
       {/* Decorative glow: physical (aesthetic only) */}
       <div

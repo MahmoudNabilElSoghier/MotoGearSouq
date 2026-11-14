@@ -80,10 +80,10 @@ export function HeroSlider() {
   return (
     <section
       id="hero"
-      className="relative pt-6 sm:pt-8 pb-16 sm:pb-20 scroll-mt-24"
+      className="relative pt-0 sm:pt-4 pb-4 sm:pb-20 scroll-mt-24"
     >
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl">
+      <div className="mx-auto max-w-5xl px-0 sm:px-6 lg:px-8">
+        <div className="relative rounded-none sm:rounded-3xl overflow-hidden shadow-2xl">
           <div
             className="overflow-hidden min-h-[380px] sm:min-h-[420px] md:min-h-[480px]"
             ref={emblaRef}
@@ -206,10 +206,11 @@ export function HeroSlider() {
               <ChevronRight className="w-6 h-6" aria-hidden="true" />
             )}
           </button>
+
         </div>
 
-        {/* Dots — below the card; active one is a brand-red pill */}
-        <div className="relative z-30 flex items-center justify-center gap-2 mt-4">
+        {/* Dots — outside the card, between image and TrustBar */}
+        <div className="relative z-30 mt-2 flex items-center justify-center gap-2">
           {slides.map((slide, index) => (
             <button
               key={slide.id}
@@ -220,10 +221,10 @@ export function HeroSlider() {
                 total: slides.length,
               })}
               aria-current={index === selected ? "true" : undefined}
-              className={`h-2 rounded-full transition-all ${
+              className={`h-1.5 rounded-full transition-all ${
                 index === selected
-                  ? "bg-brand-red w-8"
-                  : "bg-white/50 hover:bg-white/80 w-2"
+                  ? "bg-brand-red w-4"
+                  : "bg-white/50 hover:bg-white/80 w-1.5"
               }`}
             />
           ))}

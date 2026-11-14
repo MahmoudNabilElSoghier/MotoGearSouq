@@ -85,7 +85,7 @@ function CategoryCard({
         href={link}
         className="group relative flex flex-col items-center gap-1 w-full h-full"
       >
-        <div className="relative w-full aspect-square rounded-lg sm:rounded-xl overflow-hidden bg-brand-red/5 border border-border">
+        <div className="relative w-full aspect-square rounded-lg sm:rounded-xl overflow-hidden bg-muted/30 border border-border">
           {image ? (
             /* object-cover = full bleed (heroes, banners), object-contain = show entire image (cards, products) */
             <Image
@@ -96,9 +96,9 @@ function CategoryCard({
               className="object-contain p-2 w-full h-full transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center text-brand-red/40 transition-transform duration-500 group-hover:scale-105">
+            <div className="flex h-full w-full items-center justify-center text-muted/40 transition-transform duration-500 group-hover:scale-105">
               <Icon
-                className="h-8 w-8 sm:h-10 sm:w-10"
+                className="h-6 w-6 sm:h-8 sm:w-8"
                 strokeWidth={1.5}
                 aria-hidden="true"
               />
@@ -118,8 +118,8 @@ function CategoryCard({
           </div>
         </div>
 
-        <div className="flex items-center justify-between w-full px-1 mt-1">
-          <span className="text-xs sm:text-sm font-bold text-fg line-clamp-1">{title}</span>
+        <div className="flex items-center justify-between w-full px-0.5 mt-1.5">
+          <span className="text-[10px] sm:text-xs font-bold text-fg truncate">{title}</span>
           <ChevronRight
             className="w-3 h-3 text-muted rtl:rotate-180 transition-colors group-hover:text-brand-red shrink-0"
             aria-hidden="true"
@@ -194,7 +194,7 @@ export default async function Categories({
   const list = cards.length > 0 ? cards : fallbackCards;
 
   return (
-    <section id="categories" className="pt-4 pb-6 md:pb-12 bg-bg scroll-mt-24">
+    <section id="categories" className="pt-2 sm:pt-4 pb-6 md:pb-12 bg-bg scroll-mt-24">
       <Container size="xl">
         <FadeIn>
           <SectionHeader tag="h2" title={t("title")} />

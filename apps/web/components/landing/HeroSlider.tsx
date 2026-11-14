@@ -210,7 +210,7 @@ export function HeroSlider() {
         </div>
 
         {/* Dots — outside the card, between image and TrustBar */}
-        <div className="relative z-30 mt-2 flex items-center justify-center gap-2">
+        <div className="relative z-30 mt-2 mb-3 flex items-center justify-center gap-2">
           {slides.map((slide, index) => (
             <button
               key={slide.id}

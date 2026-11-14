@@ -35,7 +35,7 @@ export function TrustBar() {
   ];
 
   return (
-    <section className="relative z-20 -mt-6 sm:-mt-12 mb-6">
+    <section className="relative z-20 -mt-4 sm:-mt-10 mb-6">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
         <div className="rounded-2xl bg-card border border-border overflow-hidden shadow-xl">
           <div className="grid grid-cols-4 gap-px bg-border/50">
@@ -43,11 +43,11 @@ export function TrustBar() {
               const Icon = item.icon;
               return (
                 <FadeIn key={item.id} delay={Math.min(index * 0.05, 0.3)} className="h-full">
-                  <div className="h-full bg-card flex flex-col items-center justify-center gap-2 sm:gap-3 py-3 px-1 sm:py-4 sm:px-2 text-center">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 mb-1 sm:mb-2 rounded-full bg-brand-red/10 text-brand-red flex items-center justify-center shrink-0">
+                  <div className="h-full bg-card flex flex-col items-center justify-center gap-2 sm:gap-3 py-3 px-0.5 sm:py-4 sm:px-2 text-center">
+                    <div className="w-7 h-7 sm:w-9 sm:h-9 mb-1 sm:mb-2 rounded-full bg-brand-red/10 text-brand-red flex items-center justify-center shrink-0">
                       <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
-                    <h3 className="text-[10px] sm:text-xs font-bold leading-tight text-center text-fg">
+                    <h3 className="text-[9px] sm:text-xs leading-[1.1] whitespace-normal font-bold text-center text-fg">
                       {item.title}
                     </h3>
                     <p className="text-[8px] sm:text-[10px] text-muted leading-tight text-center mt-1">
